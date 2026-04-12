@@ -1,24 +1,19 @@
 import { 
-  LayoutDashboard, UserSearch, Send, FileText, BarChart3, Bot, 
-  Settings, BookOpen, Shield, Globe
+  Zap, Search, MessageSquare, Trophy, DollarSign, Settings
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-const mainNav = [
-  { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { id: "leads", label: "Leads", icon: UserSearch },
-  { id: "research", label: "Research", icon: Globe },
-  { id: "outreach", label: "Outreach", icon: Send },
-  { id: "proposals", label: "Proposals", icon: FileText },
-  { id: "workflows", label: "AI Workflows", icon: Bot },
-  { id: "analytics", label: "Analytics", icon: BarChart3 },
+const phases = [
+  { id: "command", label: "Command Center", icon: Zap, num: null },
+  { id: "find_work", label: "Find Work", icon: Search, num: "1" },
+  { id: "get_work", label: "Get Work", icon: MessageSquare, num: "2" },
+  { id: "win_work", label: "Win Work", icon: Trophy, num: "3" },
+  { id: "get_paid", label: "Get Paid", icon: DollarSign, num: "4" },
 ];
 
-const secondaryNav = [
-  { id: "knowledge", label: "Knowledge", icon: BookOpen },
-  { id: "admin", label: "Admin", icon: Shield },
+const utilityNav = [
   { id: "settings", label: "Settings", icon: Settings },
 ];
 
@@ -45,10 +40,10 @@ export default function Sidebar({ activeView, onViewChange }) {
         <nav className="py-4 px-3 space-y-6">
           <div>
             <div className="px-2 mb-2 text-[10px] font-semibold text-muted-foreground/60 tracking-wider uppercase">
-              Sales
+              Workflow
             </div>
             <div className="space-y-0.5">
-              {mainNav.map((item) => {
+              {phases.map((item) => {
                 const Icon = item.icon;
                 const isActive = activeView === item.id;
                 return (
@@ -62,10 +57,13 @@ export default function Sidebar({ activeView, onViewChange }) {
                         : "text-foreground/60 hover:text-foreground hover:bg-secondary/50"
                     )}
                   >
+                    {item.num && (
+                      <span className={cn("text-[10px] font-bold font-mono w-4", isActive ? "text-primary" : "text-muted-foreground")}>{item.num}</span>
+                    )}
                     <Icon className={cn("w-[18px] h-[18px] shimmer-icon", isActive ? "metallic-gold-icon" : "metallic-silver-icon")} />
                     {item.label}
                   </button>
-              );
+                );
               })}
             </div>
           </div>
@@ -75,7 +73,7 @@ export default function Sidebar({ activeView, onViewChange }) {
               System
             </div>
             <div className="space-y-0.5">
-              {secondaryNav.map((item) => {
+              {utilityNav.map((item) => {
                 const Icon = item.icon;
                 const isActive = activeView === item.id;
                 return (

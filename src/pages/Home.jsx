@@ -9,7 +9,7 @@ import MobileNav from "../components/MobileNav";
 import MobileTabBar from "../components/mobile/MobileTabBar";
 
 export default function Home() {
-  const [activeView, setActiveView] = useState("dashboard");
+  const [activeView, setActiveView] = useState("command");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [chatOpen, setChatOpen] = useState(true);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);

@@ -1,11 +1,12 @@
-import { LayoutDashboard, UserSearch, Globe, Send } from "lucide-react";
+import { Zap, Search, MessageSquare, Trophy, DollarSign } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const tabs = [
-  { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { id: "leads", label: "Leads", icon: UserSearch },
-  { id: "research", label: "Research", icon: Globe },
-  { id: "outreach", label: "Outreach", icon: Send },
+  { id: "command", label: "Home", icon: Zap },
+  { id: "find_work", label: "Find", icon: Search },
+  { id: "get_work", label: "Get", icon: MessageSquare },
+  { id: "win_work", label: "Win", icon: Trophy },
+  { id: "get_paid", label: "Paid", icon: DollarSign },
 ];
 
 export default function MobileTabBar({ activeView, onViewChange }) {

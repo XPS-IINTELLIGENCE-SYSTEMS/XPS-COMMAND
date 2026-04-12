@@ -1,17 +1,15 @@
 import { 
-  LayoutDashboard, UserSearch, Send, FileText, BarChart3, Bot, Settings, Globe
+  Zap, Search, MessageSquare, Trophy, DollarSign, Settings
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, desc: "Overview" },
-  { id: "leads", label: "Leads", icon: UserSearch, desc: "Hot prospects" },
-  { id: "research", label: "Research", icon: Globe, desc: "Web scraping & intel" },
-  { id: "outreach", label: "Outreach", icon: Send, desc: "AI emails & calls" },
-  { id: "proposals", label: "Proposals", icon: FileText, desc: "Send quotes" },
-  { id: "analytics", label: "Analytics", icon: BarChart3, desc: "Performance" },
-  { id: "workflows", label: "AI Workflows", icon: Bot, desc: "Automations" },
-  { id: "settings", label: "Settings", icon: Settings, desc: "Account" },
+  { id: "command", label: "Command Center", icon: Zap, desc: "AI daily briefing" },
+  { id: "find_work", label: "1. Find Work", icon: Search, desc: "Lead gen & prospecting" },
+  { id: "get_work", label: "2. Get Work", icon: MessageSquare, desc: "Outreach & communication" },
+  { id: "win_work", label: "3. Win Work", icon: Trophy, desc: "Bids, proposals & closing" },
+  { id: "get_paid", label: "4. Get Paid", icon: DollarSign, desc: "Invoicing & collections" },
+  { id: "settings", label: "Settings", icon: Settings, desc: "Account & integrations" },
 ];
 
 export default function MobileNav({ activeView, onViewChange }) {

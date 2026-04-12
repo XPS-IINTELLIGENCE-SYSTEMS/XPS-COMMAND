@@ -1,5 +1,7 @@
-import { useState, useEffect, useRef } from "react";
-import { Send, Shield, Plus, Loader2, Sparkles, Globe, Pencil, Database, Code, Image, Search } from "lucide-react";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { Send, Shield, Plus, Loader2, Sparkles, Globe, Pencil, Database, Code, Image, Search, GitBranch, Layers } from "lucide-react";
+import AgentTab from "./chat/AgentTab";
+import SubAgentChat from "./chat/SubAgentChat";
 import { Button } from "@/components/ui/button";
 import { base44 } from "@/api/base44Client";
 import ReactMarkdown from "react-markdown";
@@ -94,6 +96,31 @@ export default function ChatPanel() {
   const [loading, setLoading] = useState(false);
   const [initializing, setInitializing] = useState(true);
   const scrollRef = useRef(null);
+
+  // Parallel agent instances
+  const [agents, setAgents] = useState([
+    { id: "main", name: "Open Claw", type: "main", status: "active" },
+  ]);
+  const [activeAgentId, setActiveAgentId] = useState("main");
+  const [nextSubId, setNextSubId] = useState(1);
+
+  const spawnSubAgent = useCallback((name, task) => {
+    const id = `sub_${nextSubId}`;
+    const agentName = name || `Sub-Agent ${nextSubId}`;
+    setAgents(prev => [...prev, { id, name: agentName, type: "sub", status: "spawning", task: task || "" }]);
+    setNextSubId(n => n + 1);
+    setActiveAgentId(id);
+    return id;
+  }, [nextSubId]);
+
+  const removeSubAgent = useCallback((id) => {
+    setAgents(prev => prev.filter(a => a.id !== id));
+    if (activeAgentId === id) setActiveAgentId("main");
+  }, [activeAgentId]);
+
+  const updateSubAgentStatus = useCallback((id, status) => {
+    setAgents(prev => prev.map(a => a.id === id ? { ...a, status } : a));
+  }, []);
 
   useEffect(() => {
     initConversation();
@@ -194,25 +221,40 @@ export default function ChatPanel() {
         </Button>
       </div>
 
-      {/* Capabilities bar */}
-      <div className="px-3 py-1.5 border-b border-border flex items-center gap-2 overflow-x-auto">
-        {[
-          { icon: Globe, label: "Web Browse", color: "text-xps-blue" },
-          { icon: Code, label: "UI Edit", color: "text-xps-green" },
-          { icon: Image, label: "Image Gen", color: "text-xps-purple" },
-          { icon: Database, label: "Data", color: "text-xps-orange" },
-        ].map((cap) => {
-          const Icon = cap.icon;
-          return (
-            <div key={cap.label} className="flex items-center gap-1 text-[9px] text-muted-foreground whitespace-nowrap">
-              <Icon className={`w-2.5 h-2.5 ${cap.color}`} />
-              {cap.label}
-            </div>
-          );
-        })}
+      {/* Agent tabs bar */}
+      <div className="px-2 py-1.5 border-b border-border flex items-center gap-1.5 overflow-x-auto">
+        {agents.map((agent) => (
+          <AgentTab
+            key={agent.id}
+            agent={agent}
+            isActive={activeAgentId === agent.id}
+            onClick={() => setActiveAgentId(agent.id)}
+            onClose={() => removeSubAgent(agent.id)}
+          />
+        ))}
+        <button
+          onClick={() => spawnSubAgent()}
+          className="flex items-center gap-1 px-1.5 py-1 rounded-md text-[10px] text-muted-foreground hover-metallic whitespace-nowrap"
+          title="Spawn sub-agent"
+        >
+          <GitBranch className="w-2.5 h-2.5" />
+          <Plus className="w-2.5 h-2.5" />
+        </button>
+        <div className="ml-auto flex items-center gap-1 text-[9px] text-muted-foreground">
+          <Layers className="w-2.5 h-2.5 text-xps-purple" />
+          {agents.length - 1} sub
+        </div>
       </div>
 
-      {/* Messages */}
+      {/* Messages / Sub-agent view */}
+      {activeAgentId !== "main" ? (
+        <div className="flex-1 overflow-hidden">
+          <SubAgentChat
+            agent={agents.find(a => a.id === activeAgentId)}
+            onStatusChange={updateSubAgentStatus}
+          />
+        </div>
+      ) : (
       <div ref={scrollRef} className="flex-1 overflow-y-auto p-3 space-y-3">
         {initializing ? (
           <div className="flex items-center justify-center h-full">
@@ -242,6 +284,13 @@ export default function ChatPanel() {
                 );
               })}
             </div>
+            <button
+              onClick={() => spawnSubAgent("Research Agent", "Research competitors in the epoxy flooring market")}
+              className="mt-3 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-xps-purple/10 border border-xps-purple/20 hover:border-xps-purple/40 transition-colors text-left w-full"
+            >
+              <GitBranch className="w-3 h-3 text-xps-purple" />
+              <span className="text-[10px] text-foreground">Spawn a parallel sub-agent</span>
+            </button>
           </div>
         ) : (
           messages.map((msg, i) => {
@@ -250,9 +299,10 @@ export default function ChatPanel() {
           })
         )}
       </div>
+      )}
 
       {/* Input */}
-      <div className="p-3 border-t border-border">
+      <div className={`p-3 border-t border-border ${activeAgentId !== "main" ? "hidden" : ""}`}>
         <div className="flex gap-2">
           <input
             value={input}
@@ -271,7 +321,7 @@ export default function ChatPanel() {
             {loading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
           </Button>
         </div>
-        <div className="flex items-center gap-3 mt-2">
+        <div className="flex items-center gap-2 mt-2">
           <div className="flex items-center gap-1 text-[9px] text-muted-foreground">
             <Globe className="w-2.5 h-2.5 text-xps-blue" /> Web
           </div>
@@ -283,6 +333,14 @@ export default function ChatPanel() {
           </div>
           <div className="flex items-center gap-1 text-[9px] text-muted-foreground">
             <Image className="w-2.5 h-2.5 text-xps-purple" /> Gen
+          </div>
+          <div className="ml-auto">
+            <button
+              onClick={() => spawnSubAgent()}
+              className="flex items-center gap-1 text-[9px] text-xps-purple hover:text-foreground transition-colors"
+            >
+              <GitBranch className="w-2.5 h-2.5" /> Sub-Agent
+            </button>
           </div>
         </div>
       </div>

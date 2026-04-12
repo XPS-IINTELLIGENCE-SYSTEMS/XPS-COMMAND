@@ -149,17 +149,10 @@ export default function ChatPanel({ mobile = false }) {
     setMessages([]);
     setConversation(null);
     try {
-      const convos = await base44.agents.listConversations({ agent_name: currentAgentName });
-      let conv;
-      if (convos && convos.length > 0) {
-        conv = await base44.agents.getConversation(convos[0].id);
-        setMessages(conv.messages || []);
-      } else {
-        conv = await base44.agents.createConversation({
-          agent_name: currentAgentName,
-          metadata: { name: currentAgentName === "xps_assistant" ? "XPS Command Session" : "SEO Marketing Session" },
-        });
-      }
+      const conv = await base44.agents.createConversation({
+        agent_name: currentAgentName,
+        metadata: { name: currentAgentName === "xps_assistant" ? "XPS Command Session" : "SEO Marketing Session" },
+      });
       setConversation(conv);
     } catch (err) {
       console.error("Failed to init conversation:", err);
@@ -167,14 +160,6 @@ export default function ChatPanel({ mobile = false }) {
       setInitializing(false);
     }
   };
-
-  useEffect(() => {
-    if (!conversation?.id) return;
-    const unsub = base44.agents.subscribeToConversation(conversation.id, (data) => {
-      setMessages(data.messages || []);
-    });
-    return () => unsub();
-  }, [conversation?.id]);
 
   const handleSend = async () => {
     if (!input.trim() || !conversation || loading) return;

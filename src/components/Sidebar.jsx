@@ -42,9 +42,11 @@ export default function Sidebar({ activeView, onViewChange }) {
       {/* Logo */}
       <div className="px-4 py-4 border-b border-sidebar-border">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-md metallic-gold-bg flex items-center justify-center">
-            <Shield className="w-4 h-4 text-background" />
-          </div>
+          <img
+            src="https://media.base44.com/images/public/69db3269c791af3f48cfaee9/583965fcb_IMAGEWITHWHITEOUTLINE.jpg"
+            alt="XPS Logo"
+            className="w-9 h-9 object-contain"
+          />
           <div>
             <div className="text-xs font-bold metallic-gold tracking-wider">XPS INTELLIGENCE</div>
             <div className="text-[9px] metallic-gold tracking-widest">COMMAND CENTER</div>

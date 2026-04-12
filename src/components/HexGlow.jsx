@@ -9,19 +9,18 @@ export default function HexGlow() {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
+    const parent = canvas.parentElement;
+    if (!parent) return;
     const ctx = canvas.getContext("2d");
     let running = true;
 
     const resize = () => {
-      const parent = canvas.parentElement;
-      if (parent) {
-        canvas.width = parent.offsetWidth;
-        canvas.height = parent.offsetHeight;
-      }
+      canvas.width = parent.offsetWidth;
+      canvas.height = parent.offsetHeight;
     };
     resize();
     const ro = new ResizeObserver(resize);
-    ro.observe(canvas.parentElement);
+    ro.observe(parent);
 
     // Hex grid params (match CSS: 56px wide, 100px tall)
     const HEX_W = 56;
@@ -52,7 +51,7 @@ export default function HexGlow() {
     };
 
     const handleMove = (e) => {
-      const rect = canvas.getBoundingClientRect();
+      const rect = parent.getBoundingClientRect();
       mouseRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
       // Spawn a ripple on move (throttled by existing ripples)
       if (ripples.current.length < 3) {
@@ -68,7 +67,7 @@ export default function HexGlow() {
     };
 
     const handleClick = (e) => {
-      const rect = canvas.getBoundingClientRect();
+      const rect = parent.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
       ripples.current.push({
@@ -80,8 +79,8 @@ export default function HexGlow() {
       });
     };
 
-    canvas.addEventListener("mousemove", handleMove);
-    canvas.addEventListener("click", handleClick);
+    parent.addEventListener("mousemove", handleMove);
+    parent.addEventListener("click", handleClick);
 
     const animate = () => {
       if (!running) return;
@@ -153,8 +152,8 @@ export default function HexGlow() {
     return () => {
       running = false;
       cancelAnimationFrame(frameRef.current);
-      canvas.removeEventListener("mousemove", handleMove);
-      canvas.removeEventListener("click", handleClick);
+      parent.removeEventListener("mousemove", handleMove);
+      parent.removeEventListener("click", handleClick);
       ro.disconnect();
     };
   }, []);
@@ -162,7 +161,7 @@ export default function HexGlow() {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 z-[1] pointer-events-auto"
+      className="absolute inset-0 z-[1] pointer-events-none"
       style={{ mixBlendMode: "screen" }}
     />
   );

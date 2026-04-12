@@ -221,6 +221,30 @@
   animation: metallic-glow 1.5s ease infinite;
 }
 
+/* iPhone safe area support */
+.safe-top {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Touch-friendly tap targets on mobile */
+@media (max-width: 767px) {
+  button, a, [role="button"] {
+    min-height: 36px;
+    min-width: 36px;
+  }
+  /* Prevent text size adjust on orientation change */
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  /* Smooth momentum scrolling */
+  .overflow-y-auto, .overflow-auto {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 6px;

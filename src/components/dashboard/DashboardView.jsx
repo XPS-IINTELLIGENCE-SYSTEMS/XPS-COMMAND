@@ -36,14 +36,14 @@ const recentActivity = [
 
 export default function DashboardView() {
   return (
-    <div className="p-6 space-y-6 overflow-y-auto h-full">
+    <div className="p-4 md:p-6 space-y-4 md:space-y-6 overflow-y-auto h-full">
       <div>
         <h1 className="text-xl font-bold text-foreground">Good morning, Marcus</h1>
         <p className="text-xs text-muted-foreground mt-0.5">Here's your sales intelligence briefing for today.</p>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3">
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (
@@ -63,8 +63,8 @@ export default function DashboardView() {
       </div>
 
       {/* Charts */}
-      <div className="grid grid-cols-3 gap-3">
-        <div className="col-span-2 bg-card rounded-lg border border-border p-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-3">
+        <div className="md:col-span-2 bg-card rounded-lg border border-border p-3 md:p-4">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h3 className="text-sm font-semibold text-foreground">Revenue Pipeline</h3>
@@ -115,7 +115,7 @@ export default function DashboardView() {
       </div>
 
       {/* Bottom section */}
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3">
         <div className="bg-card rounded-lg border border-border p-4">
           <h3 className="text-sm font-semibold text-foreground mb-3">Top Leads</h3>
           <div className="space-y-2.5">

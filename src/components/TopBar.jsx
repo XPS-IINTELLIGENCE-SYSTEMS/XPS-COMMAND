@@ -1,4 +1,4 @@
-import { Search, Settings, Bell, MapPin, Sun, Moon } from "lucide-react";
+import { Search, Settings, Bell, Sun, Moon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
 const viewTitles = {
@@ -17,6 +17,7 @@ const viewTitles = {
   admin: "Admin",
   settings: "Settings",
   editor: "Editor Studio",
+  operator: "Operator",
 };
 
 export default function TopBar({ activeView, children, theme, onThemeToggle }) {
@@ -55,10 +56,7 @@ export default function TopBar({ activeView, children, theme, onThemeToggle }) {
           <Bell className="w-4 h-4 metallic-silver-icon" />
           <span className="absolute -top-0.5 -right-0.5 w-2 h-2 metallic-gold-bg rounded-full" />
         </button>
-        <div className="flex items-center gap-1.5 text-xs text-foreground">
-          <MapPin className="w-3 h-3 metallic-silver-icon" />
-          Tampa, FL
-        </div>
+
         <div className="w-7 h-7 rounded-full metallic-gold-bg flex items-center justify-center text-[10px] font-bold text-background">
           MR
         </div>

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const stats = [
   { value: "60+", label: "LOCATIONS" },
-  { value: "200+", label: "SALES STAFF" },
+  { value: "200+", label: "XTREME TEAM" },
   { value: "50K+", label: "LEADS MANAGED" },
   { value: "$120M+", label: "REVENUE TRACKED" },
 ];

@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 
 const stats = [
   { value: "60+", label: "LOCATIONS" },
-  { value: "200+", label: "SALES STAFF" },
+  { value: "200+", label: "XTREME TEAM" },
   { value: "50K+", label: "LEADS" },
   { value: "24/7", label: "AI SUPPORT" },
 ];

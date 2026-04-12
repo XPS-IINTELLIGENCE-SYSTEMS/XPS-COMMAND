@@ -1,4 +1,4 @@
-import { MapPin, ArrowRight, Building } from "lucide-react";
+import { MapPin, ArrowRight, Warehouse } from "lucide-react";
 import { Link } from "react-router-dom";
 import LandingNav from "../components/landing/LandingNav";
 import PageHexGlow from "../components/PageHexGlow";
@@ -51,8 +51,8 @@ export default function Coverage() {
       {/* HQ Callout */}
       <div className="max-w-5xl mx-auto px-6 pb-8">
         <div className="shimmer-card bg-card border border-primary/30 rounded-2xl p-6 md:p-8 cursor-default flex flex-col items-center text-center">
-          <div className="shimmer-icon-container w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center transition-all duration-300 mb-3">
-            <Building className="w-6 h-6 metallic-gold-icon shimmer-icon" />
+          <div className="shimmer-icon-container w-20 h-14 rounded-xl bg-primary/10 flex items-center justify-center transition-all duration-300 mb-3">
+            <Warehouse className="w-10 h-10 metallic-gold-icon shimmer-icon" />
           </div>
           <h3 className="text-base font-bold text-foreground">XPS Headquarters & Training Center</h3>
           <span className="text-xs metallic-gold font-semibold mt-1">2200 NW 32nd Street, Suite 700 · Pompano Beach, FL 33069</span>

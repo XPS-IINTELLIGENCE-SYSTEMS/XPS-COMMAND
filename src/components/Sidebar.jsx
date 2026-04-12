@@ -5,8 +5,10 @@ import { ChevronRight } from "lucide-react";
 
 const phases = [
   { id: "start_here", label: "Start Here", num: null, desc: "Get set up in minutes" },
-  { id: "command", label: "Dashboard", num: null, desc: "AI daily briefing" },
-  { id: "find_work", label: "Find Work", num: "1", desc: "Leads & prospecting" },
+  { id: "command", label: "Dashboard", num: null, desc: "Pipeline & metrics" },
+  { id: "crm", label: "CRM Pipeline", num: null, desc: "Manage all leads" },
+  { id: "analytics", label: "Analytics", num: null, desc: "Charts & revenue" },
+  { id: "find_work", label: "Find Work", num: "1", desc: "Signal-based prospecting" },
   { id: "get_work", label: "Get Work", num: "2", desc: "Outreach & comms" },
   { id: "win_work", label: "Win Work", num: "3", desc: "Proposals & closing" },
   { id: "do_work", label: "Do Work", num: "4", desc: "Jobs & execution" },
@@ -15,9 +17,7 @@ const phases = [
 ];
 
 const utilityNav = [
-  { id: "crm", label: "CRM Pipeline" },
-  { id: "analytics", label: "Analytics" },
-  { id: "admin", label: "Admin" },
+  { id: "admin", label: "Admin Tools" },
   { id: "settings", label: "Settings" },
 ];
 

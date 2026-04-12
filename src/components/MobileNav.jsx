@@ -2,15 +2,15 @@ import { cn } from "@/lib/utils";
 import NavIcon from "./shared/NavIcon";
 
 const navItems = [
-  { id: "command", label: "Dashboard", sub: "Pipeline overview" },
-  { id: "crm", label: "CRM Pipeline", sub: "Manage leads" },
-  { id: "analytics", label: "Analytics", sub: "Charts & metrics" },
-  { id: "find_work", label: "Find Work", sub: "Leads & prospecting" },
+  { id: "command", label: "Dashboard", sub: "Pipeline & metrics" },
+  { id: "crm", label: "CRM Pipeline", sub: "Manage all leads" },
+  { id: "analytics", label: "Analytics", sub: "Charts & revenue" },
+  { id: "find_work", label: "Find Work", sub: "Signal-based prospecting" },
   { id: "get_work", label: "Get Work", sub: "Outreach & comms" },
   { id: "win_work", label: "Win Work", sub: "Proposals & closing" },
   { id: "do_work", label: "Do Work", sub: "Jobs & execution" },
   { id: "get_paid", label: "Get Paid", sub: "Invoice & collect" },
-  { id: "admin", label: "Admin", sub: "AI command interface" },
+  { id: "admin", label: "Admin Tools", sub: "Scrapers & command interface" },
   { id: "settings", label: "Settings", sub: "Account & preferences" },
 ];
 
@@ -48,7 +48,7 @@ export default function MobileNav({ activeView, onViewChange }) {
                 )}>
                   {item.label}
                 </div>
-                <div className="text-[11px] text-muted-foreground">{item.desc}</div>
+                <div className="text-[11px] text-muted-foreground">{item.sub}</div>
               </div>
             </button>
           );

@@ -6,45 +6,71 @@ Deno.serve(async (req) => {
     const user = await base44.auth.me();
     if (!user) return Response.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const { location, industry, keywords, count, vertical } = await req.json();
+    const { location, industry, keywords, count, vertical, signal_type } = await req.json();
 
     if (!location) {
       return Response.json({ error: 'location is required (city, state or zip)' }, { status: 400 });
     }
 
-    const targetCount = Math.min(count || 25, 50); // max 50 per batch
-    const searchKeywords = keywords || 'commercial buildings, warehouses, retail stores, restaurants, hospitals, schools, fitness centers, automotive dealerships';
+    const targetCount = Math.min(count || 25, 50);
     const targetVertical = vertical || 'All';
+    const signals = signal_type || 'all';
 
-    // Step 1: Find leads via AI web search
+    // Build a buying-signal focused prompt
     const scrapeResult = await base44.integrations.Core.InvokeLLM({
-      prompt: `You are a B2B lead generation specialist for an epoxy and polished concrete flooring company.
+      prompt: `You are an elite B2B commercial intelligence analyst for XPS Xtreme Polishing Systems, a nationwide epoxy/polished concrete flooring contractor.
 
-FIND ${targetCount} REAL BUSINESSES in ${location} that are potential customers for flooring services.
+YOUR MISSION: Find ${targetCount} HIGH-INTENT COMMERCIAL PROSPECTS in ${location} using BUYING SIGNALS — not just business directories.
+
+${signals === 'all' || signals === 'permits' ? `
+## SIGNAL 1: CONSTRUCTION PERMITS & NEW BUILDS
+Search for recent construction permits, new building permits, tenant improvement permits, and commercial renovation permits in ${location}. These indicate active construction where flooring will be needed.
+Look for: "building permit ${location}", "commercial construction permit ${location}", "tenant improvement ${location}", "new commercial construction ${location}"
+` : ''}
+
+${signals === 'all' || signals === 'filings' ? `
+## SIGNAL 2: NEW BUSINESS FILINGS & EXPANSIONS
+Search for newly registered businesses, new LLC filings, franchise openings, and business expansions in ${location}. New businesses need new floors.
+Look for: "new business filing ${location}", "new LLC ${location}", "franchise opening ${location}", "business expansion ${location}", "new store opening ${location}"
+` : ''}
+
+${signals === 'all' || signals === 'real_estate' ? `
+## SIGNAL 3: COMMERCIAL REAL ESTATE & LEASES
+Search for commercial properties recently sold, leased, or under renovation in ${location}. Property transitions often trigger flooring work.
+Look for: "commercial property sold ${location}", "commercial lease ${location}", "warehouse for sale ${location}", "retail space lease ${location}"
+` : ''}
+
+${signals === 'all' || signals === 'facilities' ? `
+## SIGNAL 4: FACILITY UPGRADES & COMPLAINTS
+Search for businesses with aging facilities, floor damage complaints in reviews, health code violations related to flooring, or planned renovations.
+Look for: reviews mentioning "floor", "dirty", "cracked", "renovation planned", health inspection reports
+` : ''}
 
 Target industry: ${industry || 'commercial, industrial, retail, food & bev, healthcare, automotive, warehouse'}
 Target vertical: ${targetVertical}
-Keywords to search: ${searchKeywords}
+${keywords ? `Additional keywords: ${keywords}` : ''}
 
-For EACH lead, provide:
-- company: Business name (REAL businesses that exist)
-- contact_name: Decision maker name if findable (Facility Manager, Owner, GM, VP Operations)
-- email: Email if discoverable (info@, contact@, or personal)
-- phone: Phone number
+For EACH prospect found, provide:
+- company: Real business name
+- contact_name: Decision maker (Facility Manager, Owner, GM, VP Operations, Property Manager, General Contractor)
+- email: Email if discoverable
+- phone: Phone number if findable
 - vertical: Best match from [Retail, Food & Bev, Warehouse, Automotive, Healthcare, Fitness, Education, Industrial, Residential, Government, Other]
 - location: Full address or city, state
-- square_footage: Estimated square footage based on business type
-- estimated_value: Estimated deal value based on XPS pricing ($3-15/sqft depending on service type)
-- source: How you found them (Google Maps, Yelp, Business Directory, LinkedIn, Permit Database, etc.)
-- notes: Why they're a good prospect (new construction, old floors, expanding, etc.)
+- square_footage: Estimated square footage (be specific based on business type — warehouse 20K-100K, restaurant 2K-5K, etc.)
+- estimated_value: Calculated as sqft × per-sqft rate: Standard $5, Industrial $7, Healthcare $12, Food $8, Metallic $10, Garage $4
+- source: SPECIFIC source (e.g. "Building Permit #2024-1234", "New LLC Filing Jan 2024", "Commercial Lease Listing on LoopNet", "Google Review mentioning floor damage")
+- notes: WHY this is a hot prospect — what buying signal triggered this? Be specific.
+- signal_type: Which signal category (Permit, New Filing, Real Estate, Facility Issue, Expansion)
+- urgency: Rate 1-5 how time-sensitive this opportunity is (5 = construction underway, 1 = someday maybe)
 
-IMPORTANT: Prioritize businesses that are:
-1. Recently opened or expanding (new floors needed)
-2. In industries with high flooring turnover (food, warehouse, auto)
-3. Businesses with visible floor issues in reviews (complaints about floors, cleanliness)
-4. Companies that recently got building permits
-
-Find REAL businesses with real addresses. Quality over quantity.`,
+CRITICAL RULES:
+1. PRIORITIZE BUYING SIGNALS over directory listings. A business with a fresh building permit is 10x more valuable than a random warehouse.
+2. Include the SPECIFIC signal that makes each lead valuable (permit number, filing date, listing URL, review quote).
+3. Estimate square footage REALISTICALLY based on business type and location.
+4. Calculate estimated_value using XPS pricing matrix, not random numbers.
+5. If you can't find real buying signals, find businesses with INDICATORS of need (old buildings, expanding, multi-location).
+6. NEVER return generic "info@company.com" unless it's the real email. Leave blank if unknown.`,
       add_context_from_internet: true,
       model: "gemini_3_flash",
       response_json_schema: {
@@ -64,11 +90,22 @@ Find REAL businesses with real addresses. Quality over quantity.`,
                 square_footage: { type: "number" },
                 estimated_value: { type: "number" },
                 source: { type: "string" },
-                notes: { type: "string" }
+                notes: { type: "string" },
+                signal_type: { type: "string" },
+                urgency: { type: "number" }
               }
             }
           },
-          search_summary: { type: "string" },
+          market_summary: { type: "string" },
+          signal_breakdown: {
+            type: "object",
+            properties: {
+              permits_found: { type: "number" },
+              new_filings_found: { type: "number" },
+              real_estate_signals: { type: "number" },
+              facility_issues: { type: "number" }
+            }
+          },
           total_found: { type: "number" }
         }
       }
@@ -77,51 +114,67 @@ Find REAL businesses with real addresses. Quality over quantity.`,
     const leads = scrapeResult.leads || [];
     const createdLeads = [];
 
-    // Step 2: Create leads in CRM with scoring
+    // Create leads in CRM with enhanced scoring
     for (const lead of leads) {
-      // Calculate lead score
       let score = 0;
-      // Deal size scoring (30%)
+
+      // Deal size scoring (25%)
       const val = lead.estimated_value || 0;
-      if (val >= 200000) score += 30;
-      else if (val >= 50000) score += 25;
-      else if (val >= 10000) score += 20;
-      else score += 10;
-      // Vertical fit (20%)
-      const highValueVerticals = ['Warehouse', 'Industrial', 'Healthcare', 'Food & Bev'];
-      const midValueVerticals = ['Retail', 'Automotive', 'Education', 'Fitness'];
-      if (highValueVerticals.includes(lead.vertical)) score += 20;
-      else if (midValueVerticals.includes(lead.vertical)) score += 15;
+      if (val >= 200000) score += 25;
+      else if (val >= 50000) score += 20;
+      else if (val >= 10000) score += 15;
+      else score += 5;
+
+      // Buying signal strength (30%) — NEW: heaviest weight
+      const sig = (lead.signal_type || '').toLowerCase();
+      if (sig.includes('permit')) score += 30;
+      else if (sig.includes('filing') || sig.includes('new')) score += 25;
+      else if (sig.includes('real estate') || sig.includes('lease')) score += 22;
+      else if (sig.includes('facility') || sig.includes('issue')) score += 20;
       else score += 8;
-      // Contact quality (25%)
-      if (lead.email && lead.phone && lead.contact_name) score += 25;
-      else if (lead.email || lead.phone) score += 15;
+
+      // Urgency (15%)
+      const urg = lead.urgency || 1;
+      score += Math.min(urg * 3, 15);
+
+      // Contact quality (15%)
+      if (lead.email && lead.phone && lead.contact_name) score += 15;
+      else if (lead.email || lead.phone) score += 10;
+      else if (lead.contact_name) score += 5;
+
+      // Vertical fit (15%)
+      const highValue = ['Warehouse', 'Industrial', 'Healthcare', 'Food & Bev'];
+      const midValue = ['Retail', 'Automotive', 'Education', 'Fitness'];
+      if (highValue.includes(lead.vertical)) score += 15;
+      else if (midValue.includes(lead.vertical)) score += 10;
       else score += 5;
-      // Source quality (15%)
-      if (lead.source?.includes('Permit')) score += 15;
-      else if (lead.source?.includes('LinkedIn')) score += 12;
-      else if (lead.source?.includes('Google')) score += 10;
-      else score += 5;
-      // Notes quality bonus (10%)
-      if (lead.notes?.length > 50) score += 10;
-      else score += 5;
+
+      const finalScore = Math.min(score, 100);
 
       const created = await base44.entities.Lead.create({
         company: lead.company || "Unknown",
-        contact_name: lead.contact_name || "Facility Manager",
+        contact_name: lead.contact_name || "",
         email: lead.email || "",
         phone: lead.phone || "",
         vertical: lead.vertical || "Other",
         location: lead.location || location,
         square_footage: lead.square_footage || 0,
         estimated_value: lead.estimated_value || 0,
-        score: Math.min(score, 100),
+        score: finalScore,
         stage: "New",
-        source: `AI Scraper: ${lead.source || 'Web Search'}`,
-        ai_insight: lead.notes || "",
-        notes: `Auto-generated from AI Lead Scraper. Search: ${location}. ${lead.notes || ''}`
+        source: `Signal: ${lead.signal_type || 'Web'} | ${lead.source || 'AI Search'}`,
+        ai_insight: `[Signal: ${lead.signal_type || 'General'}] [Urgency: ${lead.urgency || '?'}/5] ${lead.notes || ''}`,
+        notes: `Buying signal: ${lead.source || 'N/A'}. ${lead.notes || ''}`
       });
-      createdLeads.push({ id: created.id, company: lead.company, score: Math.min(score, 100), value: lead.estimated_value });
+      createdLeads.push({
+        id: created.id,
+        company: lead.company,
+        score: finalScore,
+        value: lead.estimated_value,
+        signal: lead.signal_type,
+        urgency: lead.urgency,
+        source: lead.source
+      });
     }
 
     return Response.json({
@@ -129,7 +182,8 @@ Find REAL businesses with real addresses. Quality over quantity.`,
       total_found: leads.length,
       leads_created: createdLeads.length,
       leads: createdLeads.sort((a, b) => b.score - a.score),
-      search_summary: scrapeResult.search_summary || `Found ${leads.length} leads in ${location}`,
+      market_summary: scrapeResult.market_summary || `Found ${leads.length} signal-based leads in ${location}`,
+      signal_breakdown: scrapeResult.signal_breakdown || {},
       total_pipeline_value: createdLeads.reduce((sum, l) => sum + (l.value || 0), 0)
     });
   } catch (error) {

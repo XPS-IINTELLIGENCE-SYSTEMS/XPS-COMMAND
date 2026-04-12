@@ -2,14 +2,14 @@ import { Link } from "react-router-dom";
 
 export default function LandingNav() {
   return (
-    <nav className="flex items-center justify-between px-6 md:px-12 py-4 border-b border-border/50">
-      <Link to="/signin" className="flex items-center gap-4 transition-all duration-300 hover:scale-105">
+    <nav className="flex items-center justify-between px-4 md:px-12 py-3 md:py-4 border-b border-border/50">
+      <Link to="/signin" className="flex items-center gap-2 md:gap-4 transition-all duration-300 hover:scale-105 min-w-0">
         <img
           src="https://media.base44.com/images/public/69db3269c791af3f48cfaee9/583965fcb_IMAGEWITHWHITEOUTLINE.jpg"
           alt="XPS"
-          className="w-12 h-12 object-contain"
+          className="w-8 h-8 md:w-12 md:h-12 object-contain flex-shrink-0"
         />
-        <div>
+        <div className="hidden sm:block">
           <div className="text-base font-bold metallic-gold tracking-wider">XPS Xpress</div>
           <div className="text-[10px] text-muted-foreground tracking-widest uppercase">Xtreme Polishing Systems</div>
         </div>

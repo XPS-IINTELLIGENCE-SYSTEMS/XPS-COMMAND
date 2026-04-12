@@ -56,7 +56,7 @@ export default function Sidebar({ activeView, onViewChange }) {
       <nav className="flex-1 py-3 px-2 space-y-4">
         {navSections.map((section) => (
           <div key={section.label}>
-            <div className="px-2 mb-1.5 text-[10px] font-semibold text-muted-foreground tracking-wider">
+            <div className="px-2 mb-1.5 text-[10px] font-semibold text-white/50 tracking-wider">
               {section.label}
             </div>
             <div className="space-y-0.5">
@@ -71,10 +71,10 @@ export default function Sidebar({ activeView, onViewChange }) {
                       "w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-xs font-medium transition-all duration-200",
                       isActive
                         ? "metallic-gold-bg text-background"
-                        : "text-muted-foreground hover-metallic hover:text-foreground"
+                        : "text-white hover-metallic"
                     )}
                   >
-                    <Icon className={cn("w-3.5 h-3.5 flex-shrink-0", isActive && "text-background")} />
+                    <Icon className={cn("w-3.5 h-3.5 flex-shrink-0", isActive ? "text-background" : "metallic-silver-icon")} />
                     {item.label}
                   </button>
                 );

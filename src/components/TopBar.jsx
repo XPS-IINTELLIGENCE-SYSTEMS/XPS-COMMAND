@@ -22,7 +22,7 @@ export default function TopBar({ activeView }) {
   return (
     <div className="h-12 min-h-[48px] border-b border-border flex items-center justify-between px-4 bg-card/50">
       <div className="flex items-center gap-3">
-        <div className="text-sm font-medium text-foreground">
+        <div className="text-sm font-medium text-white">
           {viewTitles[activeView] || "Dashboard"}
         </div>
       </div>
@@ -38,15 +38,15 @@ export default function TopBar({ activeView }) {
       </div>
 
       <div className="flex items-center gap-3">
-        <button className="p-1.5 rounded-md hover:bg-secondary/50 text-muted-foreground hover:text-foreground transition-colors">
-          <Settings className="w-4 h-4" />
+        <button className="p-1.5 rounded-md hover:bg-secondary/50 text-white hover:text-white transition-colors">
+          <Settings className="w-4 h-4 metallic-silver-icon" />
         </button>
-        <button className="p-1.5 rounded-md hover:bg-secondary/50 text-muted-foreground hover:text-foreground transition-colors relative">
-          <Bell className="w-4 h-4" />
+        <button className="p-1.5 rounded-md hover:bg-secondary/50 text-white hover:text-white transition-colors relative">
+          <Bell className="w-4 h-4 metallic-silver-icon" />
           <span className="absolute -top-0.5 -right-0.5 w-2 h-2 metallic-gold-bg rounded-full" />
         </button>
-        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-          <MapPin className="w-3 h-3" />
+        <div className="flex items-center gap-1.5 text-xs text-white">
+          <MapPin className="w-3 h-3 metallic-silver-icon" />
           Tampa, FL
         </div>
         <div className="w-7 h-7 rounded-full metallic-gold-bg flex items-center justify-center text-[10px] font-bold text-background">

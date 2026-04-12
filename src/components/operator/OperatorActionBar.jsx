@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 const actions = [
   { id: "browser", label: "Web Browser", icon: Globe, color: "text-blue-400" },
   { id: "scraping", label: "Scraping", icon: Bug, color: "text-green-400" },
-  { id: "leads", label: "New Leads", icon: UserPlus, color: "text-emerald-400" },
+
   { id: "insights", label: "AI Insights", icon: Sparkles, color: "text-yellow-400" },
   { id: "image", label: "Image Gen", icon: Image, color: "text-pink-400" },
   { id: "video", label: "Video Gen", icon: Video, color: "text-purple-400" },

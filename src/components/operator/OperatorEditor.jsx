@@ -1,27 +1,16 @@
 import { useState } from "react";
 import OperatorActionBar from "./OperatorActionBar";
-import OperatorChat from "./OperatorChat";
-import OperatorPanel from "./OperatorPanel";
 
 export default function OperatorEditor() {
-  const [activePanel, setActivePanel] = useState("insights");
+  const [activePanel, setActivePanel] = useState(null);
 
   return (
     <div className="h-full flex flex-col overflow-hidden">
-      {/* Main workspace — split between panel and chat */}
-      <div className="flex-1 flex overflow-hidden">
-        {/* Left: Active tool panel */}
-        <div className="flex-1 border-r border-border overflow-hidden">
-          <OperatorPanel activePanel={activePanel} />
-        </div>
-        {/* Right: Chat agent */}
-        <div className="w-[380px] min-w-[380px] overflow-hidden">
-          <OperatorChat activePanel={activePanel} />
-        </div>
-      </div>
+      {/* Wide open canvas */}
+      <div className="flex-1 overflow-auto" />
 
       {/* Bottom: Action buttons */}
-      <OperatorActionBar activePanel={activePanel} onPanelChange={setActivePanel} />
+      <OperatorActionBar activePanel={activePanel} onPanelChange={(id) => setActivePanel(activePanel === id ? null : id)} />
     </div>
   );
 }

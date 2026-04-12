@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Bot, Play, Loader2, ChevronRight, Zap, Brain, Shield, Wrench, TrendingUp, BarChart3, CheckSquare, Lightbulb, Code2, DollarSign, Users, Megaphone, Share2, Star, Crown } from "lucide-react";
+import { Bot, Play, Loader2, ChevronRight, Zap, Brain, Shield, Wrench, TrendingUp, BarChart3, CheckSquare, Lightbulb, Code2, DollarSign, Users, Megaphone, Share2, Star, Crown, ScrollText } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { cn } from "@/lib/utils";
 
@@ -17,6 +17,7 @@ const AGENTS = [
   { id: "code_agent", name: "Systems Engineer", role: "Engineering", icon: Code2, color: "text-slate-400", desc: "Automation, workflows, system maintenance" },
   { id: "security", name: "Security Director", role: "Security", icon: Shield, color: "text-red-400", desc: "Access control, data protection, threat monitoring" },
   { id: "security_ops", name: "Security Ops Analyst", role: "Security", icon: Shield, color: "text-red-300", desc: "Threat hunting, incident response, vulnerability assessment" },
+  { id: "logging", name: "Logging Agent", role: "Audit", icon: ScrollText, color: "text-teal-400", desc: "Full audit trail, event tracking, activity history" },
   { id: "maintenance", name: "Maintenance Ops", role: "Infrastructure", icon: Wrench, color: "text-gray-400", desc: "Data cleanup, archival, performance optimization" },
   { id: "reputation", name: "Reputation Manager", role: "PR", icon: Star, color: "text-yellow-400", desc: "Reviews, testimonials, brand sentiment" },
   { id: "xps_assistant", name: "Operations Director", role: "Operations", icon: Bot, color: "text-primary", desc: "CRM, emails, SMS, calls, proposals, invoices" },

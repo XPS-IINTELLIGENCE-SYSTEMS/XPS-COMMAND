@@ -51,7 +51,7 @@ export default function Landing() {
         </div>
 
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold leading-none max-w-4xl" style={{ fontFamily: "'Montserrat', sans-serif" }}>
-          <span className="xps-solid-gold">XPS INTE</span><span className="xps-gold-slow-shimmer">LLIGENCE</span>
+          <span className="xps-gold-slow-shimmer">XPS INTELLIGENCE</span>
         </h1>
         <div className="text-sm md:text-lg tracking-[0.35em] font-semibold metallic-silver mt-2">CONTRACTOR ASSIST</div>
 

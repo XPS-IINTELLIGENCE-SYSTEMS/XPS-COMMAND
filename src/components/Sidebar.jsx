@@ -16,9 +16,41 @@ const phases = [
 ];
 
 const utilityNav = [
-  { id: "agents", label: "Agent Command" },
-  { id: "settings", label: "Settings" },
+  { id: "agents", label: "Agent Command", desc: "All agents & tools" },
+  { id: "settings", label: "Settings", desc: "Account & preferences" },
 ];
+
+function SidebarButton({ item, isActive, onClick }) {
+  return (
+    <button
+      onClick={onClick}
+      className={cn(
+        "shimmer-card w-full flex items-center gap-2.5 rounded-xl text-[13px] font-medium transition-all duration-200 px-2.5 py-2",
+        isActive
+          ? "bg-primary/10 border border-primary/25 text-primary"
+          : "text-foreground/60 hover:text-foreground hover:bg-secondary/50 border border-transparent"
+      )}
+    >
+      <div className="relative flex-shrink-0 w-7 h-7 flex items-center justify-center">
+        <NavIcon id={item.id} size="sm" active={isActive} />
+        {item.num && (
+          <div className={cn(
+            "absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full flex items-center justify-center text-[8px] font-black",
+            isActive ? "bg-primary text-background" : "bg-secondary border border-white/20 text-white/70"
+          )}>
+            {item.num}
+          </div>
+        )}
+      </div>
+      <div className="text-left min-w-0 flex-1">
+        <div className="text-[13px] font-semibold truncate">{item.label}</div>
+        {item.desc && (
+          <div className={cn("text-[9px] truncate", isActive ? "text-primary/60" : "text-muted-foreground/50")}>{item.desc}</div>
+        )}
+      </div>
+    </button>
+  );
+}
 
 export default function Sidebar({ activeView, onViewChange }) {
   return (
@@ -45,45 +77,15 @@ export default function Sidebar({ activeView, onViewChange }) {
             <div className="px-2 mb-3 text-[10px] font-semibold text-muted-foreground/60 tracking-wider uppercase">
               Workflow
             </div>
-            <div className="relative">
-              <div className="absolute left-[19px] top-6 bottom-6 w-px bg-gradient-to-b from-primary/30 via-white/10 to-primary/30 pointer-events-none" />
-
-              <div className="space-y-1 relative">
-                {phases.map((item) => {
-                  const isActive = activeView === item.id;
-                  const isNumbered = !!item.num;
-
-                  return (
-                    <button
-                      key={item.id}
-                      onClick={() => onViewChange(item.id)}
-                      className={cn(
-                        "shimmer-card w-full flex items-center gap-2.5 rounded-xl text-[13px] font-medium transition-all duration-200 px-2.5 py-2",
-                        isActive
-                          ? "bg-primary/10 border border-primary/25 text-primary"
-                          : "text-foreground/60 hover:text-foreground hover:bg-secondary/50 border border-transparent"
-                      )}
-                    >
-                      <div className="relative flex-shrink-0">
-                        <NavIcon id={item.id} size="sm" active={isActive} />
-                        {isNumbered && (
-                          <div className={cn(
-                            "absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full flex items-center justify-center text-[8px] font-black",
-                            isActive ? "bg-primary text-background" : "bg-secondary border border-white/20 text-white/70"
-                          )}>
-                            {item.num}
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="text-left min-w-0 flex-1">
-                        <div className="text-[13px] font-semibold truncate">{item.label}</div>
-                        <div className={cn("text-[9px] truncate", isActive ? "text-primary/60" : "text-muted-foreground/50")}>{item.desc}</div>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
+            <div className="space-y-1">
+              {phases.map((item) => (
+                <SidebarButton
+                  key={item.id}
+                  item={item}
+                  isActive={activeView === item.id}
+                  onClick={() => onViewChange(item.id)}
+                />
+              ))}
             </div>
           </div>
 
@@ -91,25 +93,15 @@ export default function Sidebar({ activeView, onViewChange }) {
             <div className="px-2 mb-2 text-[10px] font-semibold text-muted-foreground/60 tracking-wider uppercase">
               System
             </div>
-            <div className="space-y-0.5">
-              {utilityNav.map((item) => {
-                const isActive = activeView === item.id;
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => onViewChange(item.id)}
-                    className={cn(
-                      "shimmer-card w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-[13px] font-medium transition-all duration-150",
-                      isActive
-                        ? "bg-primary/10 text-primary"
-                        : "text-foreground/60 hover:text-foreground hover:bg-secondary/50"
-                    )}
-                  >
-                    <NavIcon id={item.id} size="sm" active={isActive} />
-                    {item.label}
-                  </button>
-                );
-              })}
+            <div className="space-y-1">
+              {utilityNav.map((item) => (
+                <SidebarButton
+                  key={item.id}
+                  item={item}
+                  isActive={activeView === item.id}
+                  onClick={() => onViewChange(item.id)}
+                />
+              ))}
             </div>
           </div>
         </nav>

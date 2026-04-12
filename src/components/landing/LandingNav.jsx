@@ -7,11 +7,11 @@ export default function LandingNav() {
         <img
           src="https://media.base44.com/images/public/69db3269c791af3f48cfaee9/583965fcb_IMAGEWITHWHITEOUTLINE.jpg"
           alt="XPS"
-          className="w-8 h-8 md:w-12 md:h-12 object-contain flex-shrink-0"
+          className="w-7 h-7 md:w-12 md:h-12 object-contain flex-shrink-0"
         />
-        <div className="hidden sm:block">
-          <div className="text-base font-bold metallic-gold tracking-wider">XPS Xpress</div>
-          <div className="text-[10px] text-muted-foreground tracking-widest uppercase">Xtreme Polishing Systems</div>
+        <div>
+          <div className="text-xs md:text-base font-bold metallic-gold tracking-wider leading-tight">XPS Intelligence</div>
+          <div className="hidden md:block text-[10px] text-muted-foreground tracking-widest uppercase">Xtreme Polishing Systems</div>
         </div>
       </Link>
       <div className="hidden md:flex items-center gap-10 text-base font-medium text-white">
@@ -22,12 +22,12 @@ export default function LandingNav() {
         <Link to="/about" className="hover:text-foreground cursor-pointer transition-all duration-300 hover:scale-110">About</Link>
       </div>
       <div className="flex items-center gap-2 md:gap-3">
-        <Link to="/signin" className="text-xs md:text-base font-medium text-white hover:text-white transition-all duration-300 hover:scale-110">
+        <Link to="/signin" className="text-[11px] md:text-base font-medium text-white/80 hover:text-white transition-all duration-300">
           Sign In
         </Link>
         <Link
           to="/signin"
-          className="px-2.5 py-1 md:px-4 md:py-2 rounded md:rounded-lg metallic-gold-bg text-background text-[11px] md:text-sm font-semibold md:font-bold hover:brightness-110 transition-all duration-300 hover:scale-105"
+          className="px-3 py-1 md:px-4 md:py-2 rounded-full metallic-gold-bg text-background text-[11px] md:text-sm font-semibold hover:brightness-110 transition-all duration-300"
         >
           Learn More
         </Link>

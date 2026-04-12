@@ -63,9 +63,9 @@ export default function Coverage() {
       </div>
 
       {/* Regions grid */}
-      <div className="max-w-5xl mx-auto px-6 pb-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div className="max-w-5xl mx-auto px-6 pb-20 flex flex-wrap justify-center gap-5">
         {regions.map((r) => (
-          <div key={r.name} className="shimmer-card bg-card border border-border rounded-2xl p-6 cursor-default flex flex-col items-center text-center">
+          <div key={r.name} className="shimmer-card bg-card border border-border rounded-2xl p-6 cursor-default flex flex-col items-center text-center w-full md:w-[calc(50%-10px)] lg:w-[calc(33.333%-14px)]">
             <div className="shimmer-icon-container w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center transition-all duration-300 mb-3">
               <MapPin className="w-4 h-4 metallic-gold-icon shimmer-icon" />
             </div>

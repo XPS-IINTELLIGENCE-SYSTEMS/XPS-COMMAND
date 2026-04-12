@@ -1,5 +1,5 @@
 import StartHereView from "./phases/StartHereView";
-import CommandCenterView from "./phases/CommandCenterView";
+import CommandCenterView from "./phases/CommandCenterView.jsx";
 import FindWorkView from "./phases/FindWorkView";
 import GetWorkView from "./phases/GetWorkView";
 import DoWorkView from "./phases/DoWorkView";

@@ -50,8 +50,8 @@ export default function Landing() {
           <span className="text-xs font-medium text-primary">AI-Powered Sales Intelligence Platform</span>
         </div>
 
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold leading-tight max-w-4xl">
-          <span className="xps-silver-gold-shimmer tracking-[0.35em]">XPS INTELLIGENCE</span>
+        <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight max-w-4xl">
+          <span className="xps-silver-gold-shimmer tracking-[0.25em]">XPS INTELLIGENCE</span>
         </h1>
 
         <p className="mt-6 text-sm md:text-base text-muted-foreground max-w-2xl leading-relaxed">

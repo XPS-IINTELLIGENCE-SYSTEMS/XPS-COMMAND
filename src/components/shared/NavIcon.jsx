@@ -1,8 +1,8 @@
 import { cn } from "@/lib/utils";
-import { Rocket, LayoutDashboard, Search, Megaphone, HardHat, DollarSign, Lightbulb, Settings, Zap, Trophy } from "lucide-react";
+import { Compass, LayoutDashboard, Search, Megaphone, HardHat, DollarSign, Lightbulb, Settings, Zap, Trophy } from "lucide-react";
 
 const ICON_MAP = {
-  start_here: Rocket,
+  start_here: Compass,
   command: LayoutDashboard,
   agent_hub: Zap,
   find_work: Search,

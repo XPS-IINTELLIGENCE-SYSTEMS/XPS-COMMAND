@@ -1,3 +1,5 @@
+import { Children, cloneElement } from "react";
+
 export default function WorkflowSection({ title, subtitle, children }) {
   return (
     <div className="space-y-4">
@@ -6,7 +8,9 @@ export default function WorkflowSection({ title, subtitle, children }) {
         {subtitle && <p className="text-xs text-white/50 mt-1">{subtitle}</p>}
       </div>
       <div className="space-y-3">
-        {children}
+        {Children.map(children, (child, i) =>
+          child ? cloneElement(child, { zigzag: i % 2 === 0 ? "left" : "right" }) : null
+        )}
       </div>
     </div>
   );

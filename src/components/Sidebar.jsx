@@ -1,16 +1,17 @@
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import NavIcon from "./shared/NavIcon";
+import { ChevronRight } from "lucide-react";
 
 const phases = [
-  { id: "start_here", label: "Start Here", num: null },
-  { id: "command", label: "Dashboard", num: null },
-  { id: "find_work", label: "Find Work", num: "1" },
-  { id: "get_work", label: "Get Work", num: "2" },
-  { id: "win_work", label: "Win Work", num: "3" },
-  { id: "do_work", label: "Do Work", num: "4" },
-  { id: "get_paid", label: "Get Paid", num: "5" },
-  { id: "tips", label: "Tips & Tricks", num: null },
+  { id: "start_here", label: "Start Here", num: null, desc: "Get set up in minutes" },
+  { id: "command", label: "Dashboard", num: null, desc: "AI daily briefing" },
+  { id: "find_work", label: "Find Work", num: "1", desc: "Leads & prospecting" },
+  { id: "get_work", label: "Get Work", num: "2", desc: "Outreach & comms" },
+  { id: "win_work", label: "Win Work", num: "3", desc: "Proposals & closing" },
+  { id: "do_work", label: "Do Work", num: "4", desc: "Jobs & execution" },
+  { id: "get_paid", label: "Get Paid", num: "5", desc: "Invoice & collect" },
+  { id: "tips", label: "Tips & Tricks", num: null, desc: "Pro knowledge" },
 ];
 
 const utilityNav = [
@@ -39,31 +40,55 @@ export default function Sidebar({ activeView, onViewChange }) {
       <ScrollArea className="flex-1">
         <nav className="py-4 px-3 space-y-6">
           <div>
-            <div className="px-2 mb-2 text-[10px] font-semibold text-muted-foreground/60 tracking-wider uppercase">
+            <div className="px-2 mb-3 text-[10px] font-semibold text-muted-foreground/60 tracking-wider uppercase">
               Workflow
             </div>
-            <div className="space-y-0.5">
-              {phases.map((item) => {
-                const isActive = activeView === item.id;
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => onViewChange(item.id)}
-                    className={cn(
-                      "shimmer-card w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-[13px] font-medium transition-all duration-150",
-                      isActive
-                        ? "bg-primary/10 text-primary"
-                        : "text-foreground/60 hover:text-foreground hover:bg-secondary/50"
-                    )}
-                  >
-                    <NavIcon id={item.id} size="sm" active={isActive} />
-                    {item.num && (
-                      <span className={cn("text-[10px] font-bold font-mono w-4", isActive ? "text-primary" : "text-muted-foreground")}>{item.num}</span>
-                    )}
-                    {item.label}
-                  </button>
-                );
-              })}
+            <div className="relative">
+              {/* Zig-zag connecting line */}
+              <div className="absolute left-[19px] top-6 bottom-6 w-px bg-gradient-to-b from-primary/30 via-white/10 to-primary/30 pointer-events-none" />
+
+              <div className="space-y-1 relative">
+                {phases.map((item, idx) => {
+                  const isActive = activeView === item.id;
+                  const isNumbered = !!item.num;
+                  const isOdd = isNumbered && parseInt(item.num) % 2 === 1;
+                  const isEven = isNumbered && parseInt(item.num) % 2 === 0;
+
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => onViewChange(item.id)}
+                      className={cn(
+                        "shimmer-card w-full flex items-center gap-2.5 rounded-xl text-[13px] font-medium transition-all duration-200",
+                        isActive
+                          ? "bg-primary/10 border border-primary/25 text-primary"
+                          : "text-foreground/60 hover:text-foreground hover:bg-secondary/50 border border-transparent",
+                        isOdd ? "ml-0 mr-3 pr-2 pl-2 py-2" : "",
+                        isEven ? "ml-3 mr-0 pl-2 pr-2 py-2" : "",
+                        !isNumbered ? "px-2.5 py-2" : ""
+                      )}
+                    >
+                      {/* Step dot on the line */}
+                      <div className="relative flex-shrink-0">
+                        <NavIcon id={item.id} size="sm" active={isActive} />
+                        {isNumbered && (
+                          <div className={cn(
+                            "absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full flex items-center justify-center text-[8px] font-black",
+                            isActive ? "bg-primary text-background" : "bg-secondary border border-white/20 text-white/70"
+                          )}>
+                            {item.num}
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="text-left min-w-0 flex-1">
+                        <div className="text-[13px] font-semibold truncate">{item.label}</div>
+                        <div className={cn("text-[9px] truncate", isActive ? "text-primary/60" : "text-muted-foreground/50")}>{item.desc}</div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
 

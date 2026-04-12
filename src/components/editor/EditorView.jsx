@@ -8,7 +8,7 @@ import WebBrowser from "./WebBrowser";
 
 export default function EditorView({ onCommand }) {
   return (
-    <div className="p-6 h-full overflow-y-auto">
+    <div className="p-3 md:p-6 h-full overflow-y-auto">
       <div className="mb-4">
         <h1 className="text-xl font-bold text-foreground">Editor Studio</h1>
         <p className="text-xs text-muted-foreground mt-0.5">Create and edit UI, images, video, and browse the web — all connected to the AI agent</p>

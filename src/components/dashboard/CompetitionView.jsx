@@ -20,7 +20,7 @@ const competitors = [
 
 export default function CompetitionView() {
   return (
-    <div className="p-6 space-y-6 overflow-y-auto h-full">
+    <div className="p-3 md:p-6 space-y-4 md:space-y-6 overflow-y-auto h-full">
       <div>
         <h1 className="text-xl font-bold text-foreground">Competition Intelligence</h1>
         <p className="text-xs text-muted-foreground mt-0.5">Public source competitor monitoring and market intelligence</p>

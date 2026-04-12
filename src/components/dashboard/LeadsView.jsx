@@ -19,33 +19,65 @@ export default function LeadsView() {
   const filtered = leads.filter(l => l.company.toLowerCase().includes(search.toLowerCase()) || l.contact.toLowerCase().includes(search.toLowerCase()));
 
   return (
-    <div className="p-6 space-y-4 overflow-y-auto h-full">
+    <div className="p-3 md:p-6 space-y-3 md:space-y-4 overflow-y-auto h-full">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-foreground">Lead Intelligence</h1>
-          <p className="text-xs text-muted-foreground mt-0.5">8 active leads across all territories</p>
+          <h1 className="text-lg md:text-xl font-bold text-foreground">Lead Intelligence</h1>
+          <p className="text-[10px] md:text-xs text-muted-foreground mt-0.5">{filtered.length} active leads</p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" className="text-xs gap-1.5">
-            <Filter className="w-3 h-3" /> Filter
+            <Filter className="w-3 h-3" /> <span className="hidden md:inline">Filter</span>
           </Button>
           <Button size="sm" className="text-xs gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90">
-            <Plus className="w-3 h-3" /> Add Lead
+            <Plus className="w-3 h-3" /> <span className="hidden md:inline">Add Lead</span>
           </Button>
         </div>
       </div>
 
-      <div className="relative max-w-md">
+      <div className="relative">
         <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
         <Input
-          placeholder="Search leads by company, contact, or vertical..."
+          placeholder="Search leads..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="pl-8 h-8 text-xs bg-secondary/50 border-border"
+          className="pl-8 h-9 text-sm bg-secondary/50 border-border"
         />
       </div>
 
-      <div className="bg-card rounded-lg border border-border overflow-hidden">
+      {/* Mobile: Card layout */}
+      <div className="md:hidden space-y-2">
+        {filtered.map((lead) => (
+          <div key={lead.company} className="bg-card rounded-lg border border-border p-3 active:bg-secondary/30 cursor-pointer">
+            <div className="flex items-start justify-between mb-2">
+              <div className="flex items-center gap-2 min-w-0">
+                <div className="w-8 h-8 rounded-md bg-secondary flex items-center justify-center flex-shrink-0">
+                  <Building2 className="w-4 h-4 text-muted-foreground" />
+                </div>
+                <div className="min-w-0">
+                  <div className="text-sm font-semibold text-primary truncate">{lead.company}</div>
+                  <div className="text-xs text-muted-foreground">{lead.contact}</div>
+                </div>
+              </div>
+              <span className="text-sm font-bold text-foreground flex-shrink-0">{lead.value}</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{lead.location}</span>
+                <span>·</span>
+                <span>{lead.vertical}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-foreground">Score: {lead.score}</span>
+                <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${lead.stageColor}`}>{lead.stage}</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop: Table layout */}
+      <div className="hidden md:block bg-card rounded-lg border border-border overflow-hidden">
         <table className="w-full">
           <thead>
             <tr className="border-b border-border">
@@ -88,9 +120,7 @@ export default function LeadsView() {
                   <span className="text-xs font-bold text-foreground">{lead.score}</span>
                 </td>
                 <td className="px-4 py-3 text-center">
-                  <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${lead.stageColor}`}>
-                    {lead.stage}
-                  </span>
+                  <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${lead.stageColor}`}>{lead.stage}</span>
                 </td>
                 <td className="px-4 py-3 text-right text-xs font-semibold text-foreground">{lead.value}</td>
               </tr>

@@ -24,7 +24,7 @@ const auditLog = [
 
 export default function AdminView() {
   return (
-    <div className="p-6 space-y-6 overflow-y-auto h-full">
+    <div className="p-3 md:p-6 space-y-4 md:space-y-6 overflow-y-auto h-full">
       <div>
         <h1 className="text-xl font-bold text-foreground">Admin Control Plane</h1>
         <p className="text-xs text-muted-foreground mt-0.5">System administration, security, and infrastructure management</p>
@@ -37,7 +37,7 @@ export default function AdminView() {
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6 mt-4">
-          <div className="grid grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3">
             {cards.map((card) => {
               const Icon = card.icon;
               return (

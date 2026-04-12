@@ -27,13 +27,13 @@ const territoryData = [
 
 export default function AnalyticsView() {
   return (
-    <div className="p-6 space-y-6 overflow-y-auto h-full">
+    <div className="p-3 md:p-6 space-y-4 md:space-y-6 overflow-y-auto h-full">
       <div>
         <h1 className="text-xl font-bold text-foreground">Analytics Center</h1>
         <p className="text-xs text-muted-foreground mt-0.5">Executive overview of sales performance and pipeline metrics</p>
       </div>
 
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3">
         {stats.map((stat) => (
           <div key={stat.label} className="bg-card rounded-lg border border-border p-4">
             <div className="text-[10px] text-muted-foreground">{stat.label}</div>
@@ -43,8 +43,8 @@ export default function AnalyticsView() {
         ))}
       </div>
 
-      <div className="grid grid-cols-3 gap-3">
-        <div className="col-span-2 bg-card rounded-lg border border-border p-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-3">
+        <div className="md:col-span-2 bg-card rounded-lg border border-border p-3 md:p-4">
           <h3 className="text-sm font-semibold text-foreground">Revenue vs Target</h3>
           <p className="text-[10px] text-muted-foreground mb-4">Monthly actual vs target revenue</p>
           <ResponsiveContainer width="100%" height={220}>

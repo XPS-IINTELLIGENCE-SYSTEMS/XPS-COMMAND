@@ -18,7 +18,7 @@ const recentDocs = [
 
 export default function KnowledgeView() {
   return (
-    <div className="p-6 space-y-6 overflow-y-auto h-full">
+    <div className="p-3 md:p-6 space-y-4 md:space-y-6 overflow-y-auto h-full">
       <div>
         <h1 className="text-xl font-bold text-foreground">Knowledge Base</h1>
         <p className="text-xs text-muted-foreground mt-0.5">Enterprise knowledge, training, and reference materials</p>
@@ -29,7 +29,7 @@ export default function KnowledgeView() {
         <Input placeholder="Search knowledge base..." className="pl-8 h-9 text-xs bg-secondary/50 border-border" />
       </div>
 
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-3">
         {categories.map((cat) => {
           const Icon = cat.icon;
           return (

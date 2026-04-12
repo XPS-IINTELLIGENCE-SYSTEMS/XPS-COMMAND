@@ -25,7 +25,7 @@ export default function ResearchView() {
   };
 
   return (
-    <div className="p-6 space-y-6 overflow-y-auto h-full">
+    <div className="p-3 md:p-6 space-y-4 md:space-y-6 overflow-y-auto h-full">
       <div>
         <h1 className="text-xl font-bold text-foreground">Research Lab</h1>
         <p className="text-xs text-muted-foreground mt-0.5">Manual web research and company intelligence discovery</p>
@@ -33,11 +33,11 @@ export default function ResearchView() {
 
       <div className="bg-card rounded-lg border border-border p-4">
         <h3 className="text-sm font-semibold text-foreground mb-3">New Research Job</h3>
-        <div className="flex gap-3">
-          <Input placeholder="Company name" value={companyName} onChange={(e) => setCompanyName(e.target.value)} className="h-9 text-xs bg-secondary/50" />
-          <Input placeholder="Website URL" value={url} onChange={(e) => setUrl(e.target.value)} className="h-9 text-xs bg-secondary/50" />
-          <Input placeholder="Geography (city, state)" value={geo} onChange={(e) => setGeo(e.target.value)} className="h-9 text-xs bg-secondary/50" />
-          <Button onClick={handleStartResearch} className="h-9 text-xs gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90 whitespace-nowrap">
+        <div className="flex flex-col md:flex-row gap-2 md:gap-3">
+          <Input placeholder="Company name" value={companyName} onChange={(e) => setCompanyName(e.target.value)} className="h-10 md:h-9 text-sm md:text-xs bg-secondary/50" />
+          <Input placeholder="Website URL" value={url} onChange={(e) => setUrl(e.target.value)} className="h-10 md:h-9 text-sm md:text-xs bg-secondary/50" />
+          <Input placeholder="City, State" value={geo} onChange={(e) => setGeo(e.target.value)} className="h-10 md:h-9 text-sm md:text-xs bg-secondary/50" />
+          <Button onClick={handleStartResearch} className="h-10 md:h-9 text-sm md:text-xs gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90 whitespace-nowrap">
             <FlaskConical className="w-3.5 h-3.5" /> Start Research
           </Button>
         </div>

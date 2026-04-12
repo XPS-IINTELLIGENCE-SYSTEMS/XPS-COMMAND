@@ -15,7 +15,7 @@ const connectors = [
 
 export default function ConnectorsView() {
   return (
-    <div className="p-6 space-y-6 overflow-y-auto h-full">
+    <div className="p-3 md:p-6 space-y-4 md:space-y-6 overflow-y-auto h-full">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-bold text-foreground">Connector Hub</h1>
@@ -26,7 +26,7 @@ export default function ConnectorsView() {
         </Button>
       </div>
 
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-3">
         {connectors.map((conn) => (
           <div key={conn.name} className="bg-card rounded-lg border border-border p-4 hover:border-primary/20 transition-colors cursor-pointer">
             <div className="flex items-start justify-between mb-3">

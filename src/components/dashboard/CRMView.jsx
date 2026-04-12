@@ -18,7 +18,7 @@ const stages = [
 
 export default function CRMView() {
   return (
-    <div className="p-6 space-y-6 overflow-y-auto h-full">
+    <div className="p-3 md:p-6 space-y-4 md:space-y-6 overflow-y-auto h-full">
       <div>
         <h1 className="text-xl font-bold text-foreground">CRM Dashboard</h1>
         <p className="text-xs text-muted-foreground mt-0.5">Customer relationship management and pipeline overview</p>
@@ -38,8 +38,8 @@ export default function CRMView() {
       </div>
 
       <div className="bg-card rounded-lg border border-border p-4">
-        <h3 className="text-sm font-semibold text-foreground mb-4">Pipeline Stages</h3>
-        <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
+        <h3 className="text-sm font-semibold text-foreground mb-3 md:mb-4">Pipeline Stages</h3>
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-2 md:gap-3">
           {stages.map((stage) => (
             <div key={stage.name} className={`bg-secondary/50 rounded-lg p-3 text-center border-t-2 ${stage.color}`}>
               <div className="text-[10px] text-muted-foreground mb-1">{stage.name}</div>

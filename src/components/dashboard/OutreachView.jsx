@@ -14,18 +14,41 @@ const templates = [
 
 export default function OutreachView() {
   return (
-    <div className="p-6 space-y-6 overflow-y-auto h-full">
+    <div className="p-3 md:p-6 space-y-4 md:space-y-6 overflow-y-auto h-full">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-foreground">Outreach Center</h1>
-          <p className="text-xs text-muted-foreground mt-0.5">Email and SMS templates, sequences, and campaign management</p>
+          <h1 className="text-lg md:text-xl font-bold text-foreground">Outreach Center</h1>
+          <p className="text-[10px] md:text-xs text-muted-foreground mt-0.5">Email and SMS templates</p>
         </div>
         <Button size="sm" className="text-xs gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90">
-          <Plus className="w-3 h-3" /> New Template
+          <Plus className="w-3 h-3" /> <span className="hidden md:inline">New Template</span><span className="md:hidden">New</span>
         </Button>
       </div>
 
-      <div className="bg-card rounded-lg border border-border overflow-hidden">
+      {/* Mobile: Card layout */}
+      <div className="md:hidden space-y-2">
+        {templates.map((t) => (
+          <div key={t.name} className="bg-card rounded-lg border border-border p-3 active:bg-secondary/30 cursor-pointer">
+            <div className="flex items-start justify-between mb-1.5">
+              <div className="flex items-center gap-2 min-w-0">
+                {t.type === "Email" ? <Mail className="w-4 h-4 text-muted-foreground flex-shrink-0" /> : <MessageSquare className="w-4 h-4 text-muted-foreground flex-shrink-0" />}
+                <span className="text-sm font-medium text-primary truncate">{t.name}</span>
+              </div>
+              <Pencil className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0 ml-2" />
+            </div>
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
+              <div className="flex items-center gap-2">
+                <span className="bg-secondary px-1.5 py-0.5 rounded text-[10px]">{t.type}</span>
+                <span className={t.status === "Active" ? "text-xps-green" : ""}>{t.status}</span>
+              </div>
+              <span>{t.uses} uses · {t.lastUsed}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop: Table layout */}
+      <div className="hidden md:block bg-card rounded-lg border border-border overflow-hidden">
         <table className="w-full">
           <thead>
             <tr className="border-b border-border">
@@ -48,9 +71,7 @@ export default function OutreachView() {
                 </td>
                 <td className="px-4 py-3 text-center text-xs text-muted-foreground">{t.type}</td>
                 <td className="px-4 py-3 text-center">
-                  <span className={`text-[10px] font-medium ${t.status === "Active" ? "text-xps-green" : "text-muted-foreground"}`}>
-                    {t.status}
-                  </span>
+                  <span className={`text-[10px] font-medium ${t.status === "Active" ? "text-xps-green" : "text-muted-foreground"}`}>{t.status}</span>
                 </td>
                 <td className="px-4 py-3 text-center text-xs text-foreground">{t.uses}</td>
                 <td className="px-4 py-3 text-center text-xs text-muted-foreground">{t.lastUsed}</td>

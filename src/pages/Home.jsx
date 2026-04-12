@@ -4,6 +4,7 @@ import Sidebar from "../components/Sidebar";
 import TopBar from "../components/TopBar";
 import ContentArea from "../components/ContentArea";
 import ChatPanel from "../components/ChatPanel";
+import MobileNav from "../components/MobileNav";
 
 export default function Home() {
   const [activeView, setActiveView] = useState("dashboard");
@@ -47,12 +48,12 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Mobile Sidebar Overlay */}
+      {/* Mobile Nav Overlay */}
       {mobileSidebarOpen && (
         <div className="md:hidden fixed inset-0 z-50 top-12">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setMobileSidebarOpen(false)} />
-          <div className="relative w-[260px] h-full bg-sidebar shadow-2xl animate-in slide-in-from-left duration-200">
-            <Sidebar activeView={activeView} onViewChange={handleMobileViewChange} />
+          <div className="relative w-full h-full bg-background shadow-2xl animate-in slide-in-from-left duration-200 overflow-y-auto">
+            <MobileNav activeView={activeView} onViewChange={handleMobileViewChange} />
           </div>
         </div>
       )}

@@ -19,31 +19,51 @@ const proposals = [
 
 export default function ProposalsView() {
   return (
-    <div className="p-6 space-y-6 overflow-y-auto h-full">
+    <div className="p-3 md:p-6 space-y-4 md:space-y-6 overflow-y-auto h-full">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-foreground">Proposal Engine</h1>
-          <p className="text-xs text-muted-foreground mt-0.5">AI powered proposals, estimates, and invoices</p>
+          <h1 className="text-lg md:text-xl font-bold text-foreground">Proposal Engine</h1>
+          <p className="text-[10px] md:text-xs text-muted-foreground mt-0.5">AI powered proposals & estimates</p>
         </div>
         <Button size="sm" className="text-xs gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90">
-          <Plus className="w-3 h-3" /> Create Proposal
+          <Plus className="w-3 h-3" /> <span className="hidden md:inline">Create Proposal</span><span className="md:hidden">New</span>
         </Button>
       </div>
 
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3">
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (
-            <div key={stat.label} className="bg-card rounded-lg border border-border p-4 hover:border-primary/20 transition-colors">
-              <Icon className="w-5 h-5 text-primary/70 mb-3" />
-              <div className="text-2xl font-bold text-foreground">{stat.value}</div>
+            <div key={stat.label} className="bg-card rounded-lg border border-border p-3 md:p-4 hover:border-primary/20 transition-colors">
+              <Icon className="w-5 h-5 text-primary/70 mb-2 md:mb-3" />
+              <div className="text-lg md:text-2xl font-bold text-foreground">{stat.value}</div>
               <div className="text-[10px] text-muted-foreground mt-0.5">{stat.label}</div>
             </div>
           );
         })}
       </div>
 
-      <div className="bg-card rounded-lg border border-border overflow-hidden">
+      {/* Mobile: Card layout */}
+      <div className="md:hidden space-y-2">
+        {proposals.map((p) => (
+          <div key={p.id} className="bg-card rounded-lg border border-border p-3 active:bg-secondary/30 cursor-pointer">
+            <div className="flex items-start justify-between mb-1.5">
+              <div className="min-w-0">
+                <div className="text-sm font-medium text-foreground truncate">{p.client}</div>
+                <div className="text-xs text-muted-foreground">{p.service}</div>
+              </div>
+              <span className="text-sm font-bold text-foreground flex-shrink-0 ml-2">{p.value}</span>
+            </div>
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-muted-foreground">{p.id} · {p.date}</span>
+              <span className={`font-medium ${p.statusColor}`}>{p.status}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop: Table layout */}
+      <div className="hidden md:block bg-card rounded-lg border border-border overflow-hidden">
         <table className="w-full">
           <thead>
             <tr className="border-b border-border">

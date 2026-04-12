@@ -27,7 +27,7 @@ export default function LandingNav() {
         </Link>
         <Link
           to="/signin"
-          className="px-5 py-2.5 rounded-lg metallic-gold-bg text-background text-base font-bold hover:brightness-110 transition-all duration-300 hover:scale-105"
+          className="px-3 py-1.5 md:px-5 md:py-2.5 rounded-lg metallic-gold-bg text-background text-sm md:text-base font-bold hover:brightness-110 transition-all duration-300 hover:scale-105"
         >
           Learn More
         </Link>

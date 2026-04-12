@@ -11,7 +11,7 @@ const STAT_ICONS = {
   get_paid: DollarSign,
 };
 
-export default function CommandCenterView() {
+export default function CommandCenterView({ onNavigate }) {
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState([
     { label: "Active Leads", value: "0", iconId: "find_work", trend: "—" },
@@ -51,14 +51,14 @@ export default function CommandCenterView() {
     // Needs attention actions
     const flagged = [];
     const unopened = proposals.filter(p => p.status === "Sent");
-    if (unopened.length > 0) flagged.push({ icon: AlertCircle, label: `${unopened.length} proposal(s) sent but not yet viewed`, phase: "WIN WORK" });
+    if (unopened.length > 0) flagged.push({ icon: AlertCircle, label: `${unopened.length} proposal(s) sent but not yet viewed`, phase: "WIN WORK", nav: "win_work" });
     const newLeads = leads.filter(l => l.stage === "New");
-    if (newLeads.length > 0) flagged.push({ icon: Mail, label: `${newLeads.length} new lead(s) haven't been contacted`, phase: "FIND WORK" });
+    if (newLeads.length > 0) flagged.push({ icon: Mail, label: `${newLeads.length} new lead(s) haven't been contacted`, phase: "FIND WORK", nav: "get_work" });
     const overdue = invoices.filter(i => i.status === "Overdue");
-    if (overdue.length > 0) flagged.push({ icon: DollarSign, label: `${overdue.length} invoice(s) overdue`, phase: "GET PAID" });
+    if (overdue.length > 0) flagged.push({ icon: DollarSign, label: `${overdue.length} invoice(s) overdue`, phase: "GET PAID", nav: "get_paid" });
     const draftProposals = proposals.filter(p => p.status === "Draft");
-    if (draftProposals.length > 0) flagged.push({ icon: Clock, label: `${draftProposals.length} draft proposal(s) need to be sent`, phase: "WIN WORK" });
-    if (flagged.length === 0) flagged.push({ icon: CheckCircle2, label: "All caught up — no urgent items!", phase: "COMMAND" });
+    if (draftProposals.length > 0) flagged.push({ icon: Clock, label: `${draftProposals.length} draft proposal(s) need to be sent`, phase: "WIN WORK", nav: "win_work" });
+    if (flagged.length === 0) flagged.push({ icon: CheckCircle2, label: "All caught up — no urgent items!", phase: "COMMAND", nav: null });
     setActions(flagged);
 
     // Recent wins
@@ -136,7 +136,11 @@ export default function CommandCenterView() {
                   {actions.map((action, i) => {
                     const Icon = action.icon;
                     return (
-                      <div key={i} className="shimmer-card flex items-center gap-3 p-3 md:p-4 rounded-xl bg-secondary/30 border border-border/50 hover:border-primary/30 transition-all">
+                      <button
+                        key={i}
+                        onClick={() => action.nav && onNavigate && onNavigate(action.nav)}
+                        className="shimmer-card w-full flex items-center gap-3 p-3 md:p-4 rounded-xl bg-secondary/30 border border-border/50 hover:border-primary/30 transition-all text-left"
+                      >
                         <div className="shimmer-icon-container w-8 h-8 rounded-lg bg-secondary flex items-center justify-center flex-shrink-0">
                           <Icon className="w-4 h-4 shimmer-icon metallic-silver-icon" />
                         </div>
@@ -144,7 +148,8 @@ export default function CommandCenterView() {
                           <p className="text-sm text-foreground font-medium">{action.label}</p>
                           <span className="text-xs text-muted-foreground tracking-wider">{action.phase}</span>
                         </div>
-                      </div>
+                        {action.nav && <ArrowRight className="w-4 h-4 text-white/20 flex-shrink-0" />}
+                      </button>
                     );
                   })}
                 </div>

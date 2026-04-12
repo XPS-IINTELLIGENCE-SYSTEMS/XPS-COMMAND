@@ -1,19 +1,53 @@
-import { ChevronRight, CheckCircle2, Compass, UserCircle, Link2, UserPlus, Send, FileText } from "lucide-react";
+import { useState, useEffect } from "react";
+import { ChevronRight, CheckCircle2, Compass, UserCircle, Link2, UserPlus, Send, FileText, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { base44 } from "@/api/base44Client";
 
-const steps = [
-  { title: "Set Up Your Profile", desc: "Company name, logo, contact info, and service areas", icon: UserCircle, done: false },
-  { title: "Connect Your Tools", desc: "Link Gmail, Calendar, Drive, and other integrations", icon: Link2, done: false },
-  { title: "Add Your First Lead", desc: "Import or create a prospect to get your pipeline started", icon: UserPlus, done: false },
-  { title: "Send Your First Outreach", desc: "Let AI draft and send a personalized email or text", icon: Send, done: false },
-  { title: "Generate a Proposal", desc: "Create a professional quote with AI in under 60 seconds", icon: FileText, done: false },
+const STEP_DEFS = [
+  { id: "profile", title: "Set Up Your Profile", desc: "Check your company name, contact info, and preferences", icon: UserCircle, nav: "settings" },
+  { id: "integrations", title: "Connect Your Tools", desc: "Link Gmail, Calendar, Drive, and other integrations", icon: Link2, nav: "settings" },
+  { id: "first_lead", title: "Add Your First Lead", desc: "Import or create a prospect to get your pipeline started", icon: UserPlus, nav: "find_work" },
+  { id: "first_outreach", title: "Send Your First Outreach", desc: "Let AI draft and send a personalized email or text", icon: Send, nav: "get_work" },
+  { id: "first_proposal", title: "Generate a Proposal", desc: "Create a professional quote with AI in under 60 seconds", icon: FileText, nav: "win_work" },
 ];
 
-export default function StartHereView() {
+export default function StartHereView({ onNavigate }) {
+  const [done, setDone] = useState({});
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    checkProgress();
+  }, []);
+
+  const checkProgress = async () => {
+    setLoading(true);
+    const [leads, emails, proposals, user] = await Promise.all([
+      base44.entities.Lead.list("-created_date", 1),
+      base44.entities.OutreachEmail.list("-created_date", 1),
+      base44.entities.Proposal.list("-created_date", 1),
+      base44.auth.me(),
+    ]);
+
+    setDone({
+      profile: !!user?.full_name,
+      integrations: false, // no way to check programmatically right now
+      first_lead: leads.length > 0,
+      first_outreach: emails.length > 0,
+      first_proposal: proposals.length > 0,
+    });
+    setLoading(false);
+  };
+
+  const completedCount = Object.values(done).filter(Boolean).length;
+
+  const handleClick = (step) => {
+    if (onNavigate) onNavigate(step.nav);
+  };
+
   return (
     <div className="h-full overflow-y-auto p-6 md:p-10">
       <div className="max-w-2xl mx-auto">
-        {/* Hero - Silver themed */}
+        {/* Hero */}
         <div className="text-center mb-12 pt-6">
           <div className="relative inline-flex items-center justify-center mb-6">
             <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/10 to-white/5 blur-xl scale-150" />
@@ -25,77 +59,58 @@ export default function StartHereView() {
             START HERE
           </h1>
           <p className="text-sm md:text-base text-white/50 max-w-md mx-auto leading-relaxed">
-            Five steps to go from zero to fully operational. Your AI business engine boots up in under 10 minutes.
+            Five steps to go from zero to fully operational.
           </p>
+          {!loading && (
+            <div className="mt-4 flex items-center justify-center gap-3">
+              <div className="h-2 w-48 rounded-full bg-secondary overflow-hidden">
+                <div className="h-full metallic-gold-bg rounded-full transition-all duration-500" style={{ width: `${(completedCount / 5) * 100}%` }} />
+              </div>
+              <span className="text-xs font-bold text-primary">{completedCount}/5</span>
+            </div>
+          )}
         </div>
 
-        {/* Zig-zag Steps */}
-        <div className="relative">
-          {/* Vertical connecting line */}
-          <div className="absolute left-1/2 -translate-x-px top-0 bottom-0 w-0.5 bg-gradient-to-b from-transparent via-white/15 to-transparent pointer-events-none hidden md:block" />
-
-          <div className="space-y-4 md:space-y-0">
-            {steps.map((step, i) => {
+        {loading ? (
+          <div className="flex justify-center py-12">
+            <Loader2 className="w-6 h-6 animate-spin text-primary" />
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {STEP_DEFS.map((step, i) => {
               const StepIcon = step.icon;
-              const isLeft = i % 2 === 0;
-
+              const isDone = done[step.id];
               return (
-                <div key={i} className="relative">
-                  {/* Mobile layout */}
-                  <div className="md:hidden shimmer-card flex items-center gap-4 p-5 rounded-xl bg-card/60 border border-white/10 hover:border-primary/30 transition-all cursor-pointer">
-                    <div className={cn(
-                      "w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0",
-                      step.done ? "bg-green-500/20" : "bg-gradient-to-br from-white/10 to-white/5 border border-white/10"
-                    )}>
-                      {step.done ? <CheckCircle2 className="w-5 h-5 text-green-400" /> : <StepIcon className="w-5 h-5 metallic-silver-icon" />}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-0.5">
-                        <span className="text-[10px] font-mono font-bold text-primary/70">0{i + 1}</span>
-                        <span className="text-sm font-semibold text-white">{step.title}</span>
-                      </div>
-                      <p className="text-[11px] text-white/50 leading-relaxed">{step.desc}</p>
-                    </div>
-                    <ChevronRight className="w-4 h-4 text-white/30 flex-shrink-0" />
-                  </div>
-
-                  {/* Desktop zig-zag layout */}
+                <button
+                  key={step.id}
+                  onClick={() => handleClick(step)}
+                  className={cn(
+                    "shimmer-card w-full flex items-center gap-4 p-5 rounded-xl border transition-all text-left",
+                    isDone
+                      ? "border-green-500/30 bg-green-500/5"
+                      : "border-white/10 bg-card/60 hover:border-primary/30"
+                  )}
+                >
                   <div className={cn(
-                    "hidden md:flex items-center py-4",
-                    isLeft ? "flex-row" : "flex-row-reverse"
+                    "w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0",
+                    isDone ? "bg-green-500/20" : "bg-gradient-to-br from-white/10 to-white/5 border border-white/10"
                   )}>
-                    {/* Card */}
-                    <div className={cn(
-                      "w-[45%] shimmer-card rounded-2xl bg-card/60 border border-white/10 hover:border-primary/30 transition-all cursor-pointer p-6 group",
-                      isLeft ? "text-right" : "text-left"
-                    )}>
-                      <div className={cn("flex items-center gap-3 mb-2", isLeft ? "justify-end" : "justify-start")}>
-                        <span className="text-[10px] font-mono font-bold text-primary/70 order-first">0{i + 1}</span>
-                        <span className="text-base font-semibold text-white">{step.title}</span>
-                      </div>
-                      <p className="text-xs text-white/50 leading-relaxed">{step.desc}</p>
-                    </div>
-
-                    {/* Center node */}
-                    <div className="w-[10%] flex justify-center relative z-10">
-                      <div className={cn(
-                        "w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300",
-                        step.done
-                          ? "bg-green-500/20 border border-green-500/30"
-                          : "bg-gradient-to-br from-white/10 to-white/5 border border-white/15 group-hover:border-primary/30"
-                      )}>
-                        {step.done ? <CheckCircle2 className="w-6 h-6 text-green-400" /> : <StepIcon className="w-6 h-6 metallic-silver-icon" />}
-                      </div>
-                    </div>
-
-                    {/* Empty space */}
-                    <div className="w-[45%]" />
+                    {isDone ? <CheckCircle2 className="w-5 h-5 text-green-400" /> : <StepIcon className="w-5 h-5 metallic-silver-icon" />}
                   </div>
-                </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <span className="text-[10px] font-mono font-bold text-primary/70">0{i + 1}</span>
+                      <span className={cn("text-sm font-semibold", isDone ? "text-green-400" : "text-white")}>{step.title}</span>
+                      {isDone && <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-green-500/20 text-green-400">DONE</span>}
+                    </div>
+                    <p className="text-[11px] text-white/50 leading-relaxed">{step.desc}</p>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-white/30 flex-shrink-0" />
+                </button>
               );
             })}
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

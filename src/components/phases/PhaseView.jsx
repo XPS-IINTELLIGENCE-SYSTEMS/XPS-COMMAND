@@ -16,7 +16,9 @@ export default function PhaseView({ phaseId, onChatCommand }) {
   };
 
   const handleExecute = async (payload) => {
-    // Build a rich command string from all the tool params
+    // The ToolModuleWorkspace now calls functions directly and shows results inline.
+    // We still forward a summary to the chat agent for awareness.
+    if (!payload) return;
     const parts = payload.map((item) => {
       const paramStr = Object.entries(item.params)
         .filter(([_, v]) => v && v.toString().trim())
@@ -25,17 +27,12 @@ export default function PhaseView({ phaseId, onChatCommand }) {
       return paramStr ? `${item.label} (${paramStr})` : item.label;
     });
 
-    const command = `Execute the following tools:\n${parts.map((p, i) => `${i + 1}. ${p}`).join("\n")}`;
+    const command = `User just executed tools inline:\n${parts.map((p, i) => `${i + 1}. ${p}`).join("\n")}`;
 
     if (onChatCommand) {
       onChatCommand(command);
     }
-
-    // Return to picker after firing
-    setTimeout(() => {
-      setMode("pick");
-      setSelectedTools([]);
-    }, 1500);
+    // Don't auto-return — user can click "Done" in the workspace
   };
 
   if (mode === "modules") {

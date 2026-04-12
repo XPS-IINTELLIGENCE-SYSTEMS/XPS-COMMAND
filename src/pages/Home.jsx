@@ -73,7 +73,7 @@ export default function Home() {
 
       <div className="flex-1 flex flex-col md:hidden overflow-hidden">
         <div className={`${mobileChatOpen ? 'h-[45%] min-h-[200px]' : 'flex-1'} overflow-hidden transition-all duration-300`}>
-          <ContentArea activeView={activeView} onChatCommand={handleChatCommand} />
+          <ContentArea activeView={activeView} onChatCommand={handleChatCommand} onNavigate={handleMobileViewChange} />
         </div>
         {mobileChatOpen && (
           <div className="flex-1 border-t border-border overflow-hidden">
@@ -101,7 +101,7 @@ export default function Home() {
               {chatOpen ? <PanelRightClose className="w-4 h-4" /> : <PanelRightOpen className="w-4 h-4" />}
             </button>
           </TopBar>
-          <ContentArea activeView={activeView} onChatCommand={handleChatCommand} />
+          <ContentArea activeView={activeView} onChatCommand={handleChatCommand} onNavigate={setActiveView} />
         </div>
       </div>
 

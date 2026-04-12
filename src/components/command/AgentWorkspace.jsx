@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { Globe, Image, Video, Code, Radar, Terminal, ArrowLeft, PanelRightOpen, PanelRightClose } from "lucide-react";
+import { Globe, Image, Video, Code, Radar, Terminal, MessageCircle, X, Minus } from "lucide-react";
 import AgentChat from "./AgentChat";
 import BrowserPanel from "./BrowserPanel";
 import ImageGenerator from "../editor/ImageGenerator";
@@ -9,7 +9,6 @@ import UIBuilder from "../editor/UIBuilder";
 import ShadowScraper from "../admin/ShadowScraper";
 import AdminChat from "../admin/AdminChat";
 
-// Map agent roles to the tools they get
 const AGENT_TOOLS = {
   xps_assistant: ["browser", "image", "video", "ui", "scraper", "terminal"],
   ceo_orchestrator: ["browser", "terminal", "scraper"],
@@ -40,66 +39,95 @@ const ALL_TOOLS = [
   { id: "terminal", label: "Terminal", icon: Terminal },
 ];
 
-export default function AgentWorkspace({ agent, onClose }) {
+export default function AgentWorkspace({ agent }) {
   const agentTools = AGENT_TOOLS[agent.id] || ["browser", "terminal"];
   const availableTools = ALL_TOOLS.filter(t => agentTools.includes(t.id));
   const [activeTool, setActiveTool] = useState(availableTools[0]?.id || "browser");
-  const [showTools, setShowTools] = useState(true);
+  const [chatOpen, setChatOpen] = useState(false);
+  const [chatMinimized, setChatMinimized] = useState(false);
+
+  const Icon = agent.icon;
 
   return (
     <div className="flex-1 flex flex-col h-full overflow-hidden">
-      {/* Top bar with agent name + tool tabs */}
-      <div className="flex items-center gap-1 px-2 py-1.5 border-b border-border bg-card/30 flex-shrink-0 overflow-x-auto">
-        <button onClick={onClose} className="p-1 rounded-md hover:bg-secondary/50 mr-1 flex-shrink-0">
-          <ArrowLeft className="w-3.5 h-3.5 text-muted-foreground" />
-        </button>
-        <div className="flex items-center gap-1.5 mr-3 flex-shrink-0">
-          <agent.icon className={`w-3.5 h-3.5 ${agent.color || "text-primary"}`} />
-          <span className="text-[10px] font-bold text-foreground truncate max-w-[100px]">{agent.name}</span>
+      {/* Tool tabs bar */}
+      <div className="flex items-center gap-0.5 px-2 py-1 border-b border-border bg-card/20 flex-shrink-0">
+        <div className="flex items-center gap-1.5 mr-2 flex-shrink-0">
+          <Icon className={cn("w-3.5 h-3.5", agent.color)} />
+          <span className="text-[10px] font-bold text-foreground">{agent.name}</span>
+          <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
         </div>
-        <div className="h-4 w-px bg-border flex-shrink-0" />
+        <div className="h-4 w-px bg-border flex-shrink-0 mr-1" />
         {availableTools.map(t => {
-          const Icon = t.icon;
+          const TIcon = t.icon;
           return (
             <button
               key={t.id}
-              onClick={() => { setActiveTool(t.id); setShowTools(true); }}
+              onClick={() => setActiveTool(t.id)}
               className={cn(
-                "flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-semibold transition-all whitespace-nowrap",
-                activeTool === t.id && showTools ? "bg-primary/15 text-primary" : "text-muted-foreground hover:text-foreground"
+                "flex items-center gap-1 px-2.5 py-1 rounded-md text-[10px] font-semibold transition-all whitespace-nowrap",
+                activeTool === t.id ? "bg-primary/15 text-primary" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
               )}
             >
-              <Icon className="w-3 h-3" />
-              <span className="hidden md:inline">{t.label}</span>
+              <TIcon className="w-3 h-3" />
+              {t.label}
             </button>
           );
         })}
+
+        {/* Chat toggle */}
         <button
-          onClick={() => setShowTools(!showTools)}
-          className="ml-auto p-1 rounded-md hover:bg-secondary/50 flex-shrink-0"
-          title={showTools ? "Hide tools" : "Show tools"}
+          onClick={() => { setChatOpen(!chatOpen); setChatMinimized(false); }}
+          className={cn(
+            "ml-auto flex items-center gap-1 px-2.5 py-1 rounded-md text-[10px] font-semibold transition-all",
+            chatOpen ? "bg-primary/15 text-primary" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+          )}
         >
-          {showTools ? <PanelRightClose className="w-3.5 h-3.5 text-muted-foreground" /> : <PanelRightOpen className="w-3.5 h-3.5 text-muted-foreground" />}
+          <MessageCircle className="w-3 h-3" />
+          Chat
         </button>
       </div>
 
-      {/* Split: Chat + Tool */}
-      <div className="flex-1 flex overflow-hidden">
-        {/* Agent Chat — always visible */}
-        <div className={cn("flex flex-col overflow-hidden border-r border-border", showTools ? "w-1/2 md:w-2/5" : "flex-1")}>
-          <AgentChat agent={agent} onClose={onClose} hideHeader />
+      {/* Full workspace area */}
+      <div className="flex-1 overflow-hidden relative">
+        {/* Tool takes full space */}
+        <div className="absolute inset-0">
+          {activeTool === "browser" && <BrowserPanel />}
+          {activeTool === "image" && <div className="p-4 h-full overflow-y-auto"><ImageGenerator /></div>}
+          {activeTool === "video" && <div className="p-4 h-full overflow-y-auto"><VideoCreator /></div>}
+          {activeTool === "ui" && <div className="p-4 h-full overflow-y-auto"><UIBuilder /></div>}
+          {activeTool === "scraper" && <ShadowScraper />}
+          {activeTool === "terminal" && <AdminChat />}
         </div>
 
-        {/* Tool Panel — toggleable */}
-        {showTools && (
-          <div className="flex-1 overflow-hidden">
-            {activeTool === "browser" && <BrowserPanel />}
-            {activeTool === "image" && <div className="p-4 h-full overflow-y-auto"><ImageGenerator /></div>}
-            {activeTool === "video" && <div className="p-4 h-full overflow-y-auto"><VideoCreator /></div>}
-            {activeTool === "ui" && <div className="p-4 h-full overflow-y-auto"><UIBuilder /></div>}
-            {activeTool === "scraper" && <ShadowScraper />}
-            {activeTool === "terminal" && <AdminChat />}
+        {/* Floating chat overlay */}
+        {chatOpen && !chatMinimized && (
+          <div className="absolute bottom-3 right-3 w-[380px] h-[500px] max-h-[70vh] max-w-[90vw] rounded-xl border border-border bg-card shadow-2xl shadow-black/40 flex flex-col overflow-hidden z-50">
+            {/* Chat header */}
+            <div className="flex items-center gap-2 px-3 py-2 border-b border-border bg-card/80 flex-shrink-0">
+              <Icon className={cn("w-3.5 h-3.5", agent.color)} />
+              <span className="text-[11px] font-bold text-foreground flex-1">{agent.name}</span>
+              <button onClick={() => setChatMinimized(true)} className="p-0.5 rounded hover:bg-secondary/50">
+                <Minus className="w-3 h-3 text-muted-foreground" />
+              </button>
+              <button onClick={() => setChatOpen(false)} className="p-0.5 rounded hover:bg-secondary/50">
+                <X className="w-3 h-3 text-muted-foreground" />
+              </button>
+            </div>
+            <div className="flex-1 overflow-hidden">
+              <AgentChat agent={agent} onClose={() => setChatOpen(false)} hideHeader />
+            </div>
           </div>
+        )}
+
+        {/* Minimized chat bubble */}
+        {chatOpen && chatMinimized && (
+          <button
+            onClick={() => setChatMinimized(false)}
+            className="absolute bottom-3 right-3 w-12 h-12 rounded-full metallic-gold-bg flex items-center justify-center shadow-lg shadow-black/30 z-50 hover:scale-110 transition-transform"
+          >
+            <MessageCircle className="w-5 h-5 text-background" />
+          </button>
         )}
       </div>
     </div>

@@ -30,7 +30,7 @@ export default function LandingNav() {
         </Link>
         <Link
           to="/signin"
-          className="px-3 py-1 md:px-4 md:py-2 rounded-full metallic-gold-bg text-background text-[11px] md:text-sm font-semibold hover:brightness-110 transition-all duration-300"
+          className="hidden md:inline-flex px-4 py-2 rounded-full metallic-gold-bg text-background text-sm font-semibold hover:brightness-110 transition-all duration-300"
         >
           Learn More
         </Link>

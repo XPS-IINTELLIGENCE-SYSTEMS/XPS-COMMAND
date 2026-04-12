@@ -35,12 +35,18 @@ export default function Landing() {
           and competitive insights — built for the polishing industry.
         </p>
 
-        <div className="flex items-center gap-4 mt-14">
+        <div className="flex flex-col sm:flex-row items-center gap-4 mt-14">
           <Link
             to="/signin"
             className="inline-flex items-center gap-2 px-5 py-2.5 md:px-8 md:py-4 rounded-lg md:rounded-xl metallic-gold-bg text-background text-sm md:text-lg font-semibold md:font-bold hover:brightness-110 transition-all duration-300 hover:scale-110"
           >
             See It In Action <ArrowRight className="w-4 h-4" />
+          </Link>
+          <Link
+            to="/signin"
+            className="md:hidden inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-primary/40 text-white/90 text-sm font-semibold hover:bg-primary/10 transition-all duration-300"
+          >
+            Learn More
           </Link>
         </div>
 

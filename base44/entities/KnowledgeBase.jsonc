@@ -1,0 +1,82 @@
+{
+  "name": "KnowledgeBase",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Document/data title"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Product Info",
+        "Service Details",
+        "Pricing",
+        "Training Materials",
+        "Brand Guidelines",
+        "Case Studies",
+        "Testimonials",
+        "Technical Specs",
+        "Competitor Intel",
+        "Market Data",
+        "Keywords & SEO",
+        "Video Assets",
+        "Image Assets",
+        "Custom"
+      ],
+      "description": "Knowledge category"
+    },
+    "content": {
+      "type": "string",
+      "description": "Full text content (AI-filtered and cleaned)"
+    },
+    "raw_content": {
+      "type": "string",
+      "description": "Original raw content before filtering"
+    },
+    "source_url": {
+      "type": "string",
+      "description": "Source URL if scraped"
+    },
+    "file_url": {
+      "type": "string",
+      "description": "Uploaded file URL"
+    },
+    "tags": {
+      "type": "string",
+      "description": "Comma-separated tags for search"
+    },
+    "ai_summary": {
+      "type": "string",
+      "description": "AI-generated summary"
+    },
+    "key_facts": {
+      "type": "string",
+      "description": "JSON string of extracted key facts"
+    },
+    "keywords_extracted": {
+      "type": "string",
+      "description": "Comma-separated keywords extracted by AI"
+    },
+    "quality_score": {
+      "type": "number",
+      "description": "AI quality/relevance score 0-100"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Raw",
+        "Filtering",
+        "Cleaned",
+        "Verified",
+        "Archived"
+      ],
+      "default": "Raw"
+    }
+  },
+  "required": [
+    "title",
+    "category",
+    "status"
+  ]
+}

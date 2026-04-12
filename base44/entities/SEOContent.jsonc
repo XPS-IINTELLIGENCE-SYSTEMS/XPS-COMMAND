@@ -1,0 +1,101 @@
+{
+  "name": "SEOContent",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Content title"
+    },
+    "content_type": {
+      "type": "string",
+      "enum": [
+        "Blog Post",
+        "Social Media Post",
+        "Ad Copy",
+        "Video Script",
+        "Landing Page",
+        "Email Campaign",
+        "Banner/Image",
+        "Meta Description",
+        "Press Release",
+        "Custom"
+      ],
+      "description": "Type of content"
+    },
+    "platform": {
+      "type": "string",
+      "enum": [
+        "Website",
+        "Instagram",
+        "Facebook",
+        "LinkedIn",
+        "TikTok",
+        "X/Twitter",
+        "YouTube",
+        "Google Ads",
+        "Meta Ads",
+        "Email",
+        "Other"
+      ],
+      "description": "Target platform"
+    },
+    "body": {
+      "type": "string",
+      "description": "Full content body (HTML/Markdown supported)"
+    },
+    "target_keywords": {
+      "type": "string",
+      "description": "Comma-separated target keywords"
+    },
+    "meta_title": {
+      "type": "string",
+      "description": "SEO meta title"
+    },
+    "meta_description": {
+      "type": "string",
+      "description": "SEO meta description"
+    },
+    "image_url": {
+      "type": "string",
+      "description": "Generated or attached image URL"
+    },
+    "video_url": {
+      "type": "string",
+      "description": "Generated video URL (HeyGen, etc.)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Draft",
+        "Review",
+        "Approved",
+        "Published",
+        "Scheduled",
+        "Archived"
+      ],
+      "default": "Draft"
+    },
+    "publish_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Scheduled publish date"
+    },
+    "performance_notes": {
+      "type": "string",
+      "description": "Performance tracking notes"
+    },
+    "competitor_reference": {
+      "type": "string",
+      "description": "Competitor content this was inspired by"
+    },
+    "campaign": {
+      "type": "string",
+      "description": "Campaign name this belongs to"
+    }
+  },
+  "required": [
+    "title",
+    "content_type",
+    "status"
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "name": "SEOCompetitor",
+  "type": "object",
+  "properties": {
+    "company_name": {
+      "type": "string",
+      "description": "Competitor company name"
+    },
+    "website_url": {
+      "type": "string",
+      "description": "Competitor website URL"
+    },
+    "keywords": {
+      "type": "string",
+      "description": "Comma-separated keywords they rank for"
+    },
+    "top_pages": {
+      "type": "string",
+      "description": "JSON string of their top-performing pages"
+    },
+    "social_profiles": {
+      "type": "string",
+      "description": "JSON string of social media profile URLs"
+    },
+    "content_strategy": {
+      "type": "string",
+      "description": "AI analysis of their content strategy"
+    },
+    "strengths": {
+      "type": "string",
+      "description": "Competitive strengths identified"
+    },
+    "weaknesses": {
+      "type": "string",
+      "description": "Competitive weaknesses/gaps we can exploit"
+    },
+    "last_scraped": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last time their site was analyzed"
+    },
+    "domain_authority": {
+      "type": "number",
+      "description": "Estimated domain authority score"
+    },
+    "monthly_traffic": {
+      "type": "string",
+      "description": "Estimated monthly traffic"
+    },
+    "ad_spend_estimate": {
+      "type": "string",
+      "description": "Estimated ad spend"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Internal notes"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Active",
+        "Monitoring",
+        "Archived"
+      ],
+      "default": "Active"
+    }
+  },
+  "required": [
+    "company_name",
+    "website_url",
+    "status"
+  ]
+}

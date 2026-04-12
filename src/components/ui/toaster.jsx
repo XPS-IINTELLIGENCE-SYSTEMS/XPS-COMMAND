@@ -11,6 +11,8 @@ import {
 export function Toaster() {
   const { toasts } = useToast();
 
+  if (!toasts.length) return null;
+
   return (
     <ToastProvider>
       {toasts.map(function ({ id, title, description, action, ...props }) {
@@ -30,4 +32,4 @@ export function Toaster() {
       <ToastViewport />
     </ToastProvider>
   );
-} 
+}

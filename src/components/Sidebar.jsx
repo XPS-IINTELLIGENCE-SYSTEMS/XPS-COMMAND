@@ -1,6 +1,6 @@
 import { 
   LayoutDashboard, Users, UserSearch, Bot, FlaskConical, Send, FileText, 
-  BarChart3, BookOpen, Eye, Link2, Shield, Settings, Search
+  BarChart3, BookOpen, Eye, Link2, Shield, Settings, Search, Pencil
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -16,6 +16,7 @@ const navSections = [
       { id: "outreach", label: "Outreach", icon: Send },
       { id: "proposals", label: "Proposals", icon: FileText },
       { id: "analytics", label: "Analytics", icon: BarChart3 },
+      { id: "editor", label: "Editor", icon: Pencil },
     ],
   },
   {

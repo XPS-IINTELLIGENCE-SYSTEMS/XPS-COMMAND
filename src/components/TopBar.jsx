@@ -15,6 +15,7 @@ const viewTitles = {
   connectors: "Connectors",
   admin: "Admin",
   settings: "Settings",
+  editor: "Editor Studio",
 };
 
 export default function TopBar({ activeView }) {

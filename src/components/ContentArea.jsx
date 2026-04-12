@@ -11,6 +11,7 @@ import ConnectorsView from "./dashboard/ConnectorsView";
 import AdminView from "./dashboard/AdminView";
 import SettingsView from "./dashboard/SettingsView";
 import AIAssistantView from "./dashboard/AIAssistantView";
+import EditorView from "./editor/EditorView";
 
 const views = {
   dashboard: DashboardView,
@@ -26,6 +27,7 @@ const views = {
   connectors: ConnectorsView,
   admin: AdminView,
   settings: SettingsView,
+  editor: EditorView,
 };
 
 export default function ContentArea({ activeView }) {

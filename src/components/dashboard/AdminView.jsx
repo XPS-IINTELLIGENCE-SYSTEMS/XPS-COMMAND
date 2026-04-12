@@ -1,4 +1,7 @@
+import { useState } from "react";
 import { Users, MapPin, Database, Shield, Bot, Box, GitBranch, Activity } from "lucide-react";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import AdminIntegrations from "../admin/AdminIntegrations";
 
 const cards = [
   { name: "Users & Roles", desc: "Manage 247 users across 4 role types", icon: Users, stat: "247 active" },
@@ -27,40 +30,53 @@ export default function AdminView() {
         <p className="text-xs text-muted-foreground mt-0.5">System administration, security, and infrastructure management</p>
       </div>
 
-      <div className="grid grid-cols-4 gap-3">
-        {cards.map((card) => {
-          const Icon = card.icon;
-          return (
-            <div key={card.name} className="bg-card rounded-lg border border-border p-4 hover:border-primary/20 transition-colors cursor-pointer">
-              <div className="flex items-center justify-between mb-2">
-                <Icon className="w-5 h-5 text-primary/70" />
-                <span className="text-[10px] text-muted-foreground">{card.stat}</span>
-              </div>
-              <div className="text-xs font-semibold text-foreground">{card.name}</div>
-              <p className="text-[10px] text-muted-foreground mt-1">{card.desc}</p>
-            </div>
-          );
-        })}
-      </div>
+      <Tabs defaultValue="overview" className="w-full">
+        <TabsList className="bg-secondary/50 border border-border">
+          <TabsTrigger value="overview" className="text-xs">Overview</TabsTrigger>
+          <TabsTrigger value="integrations" className="text-xs">Integrations</TabsTrigger>
+        </TabsList>
 
-      <div className="bg-card rounded-lg border border-border p-4">
-        <h3 className="text-sm font-semibold text-foreground mb-3">Recent Audit Log</h3>
-        <div className="space-y-2">
-          {auditLog.map((entry, i) => (
-            <div key={i} className="flex items-center justify-between py-2 border-b border-border/50 last:border-0">
-              <div className="flex items-center gap-3">
-                <span className={`text-[9px] font-semibold px-1.5 py-0.5 rounded ${
-                  entry.type === "Admin" ? "bg-primary/15 text-primary" : "bg-xps-blue/15 text-xps-blue"
-                }`}>
-                  {entry.type}
-                </span>
-                <span className="text-xs text-foreground">{entry.action}</span>
-              </div>
-              <span className="text-[10px] text-muted-foreground">{entry.time}</span>
+        <TabsContent value="overview" className="space-y-6 mt-4">
+          <div className="grid grid-cols-4 gap-3">
+            {cards.map((card) => {
+              const Icon = card.icon;
+              return (
+                <div key={card.name} className="bg-card rounded-lg border border-border p-4 hover:border-primary/20 transition-colors cursor-pointer">
+                  <div className="flex items-center justify-between mb-2">
+                    <Icon className="w-5 h-5 text-primary/70" />
+                    <span className="text-[10px] text-muted-foreground">{card.stat}</span>
+                  </div>
+                  <div className="text-xs font-semibold text-foreground">{card.name}</div>
+                  <p className="text-[10px] text-muted-foreground mt-1">{card.desc}</p>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="bg-card rounded-lg border border-border p-4">
+            <h3 className="text-sm font-semibold text-foreground mb-3">Recent Audit Log</h3>
+            <div className="space-y-2">
+              {auditLog.map((entry, i) => (
+                <div key={i} className="flex items-center justify-between py-2 border-b border-border/50 last:border-0">
+                  <div className="flex items-center gap-3">
+                    <span className={`text-[9px] font-semibold px-1.5 py-0.5 rounded ${
+                      entry.type === "Admin" ? "bg-primary/15 text-primary" : "bg-xps-blue/15 text-xps-blue"
+                    }`}>
+                      {entry.type}
+                    </span>
+                    <span className="text-xs text-foreground">{entry.action}</span>
+                  </div>
+                  <span className="text-[10px] text-muted-foreground">{entry.time}</span>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      </div>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="integrations" className="mt-4">
+          <AdminIntegrations />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

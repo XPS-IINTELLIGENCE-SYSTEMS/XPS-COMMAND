@@ -50,17 +50,13 @@ export default function Coverage() {
 
       {/* HQ Callout */}
       <div className="max-w-5xl mx-auto px-6 pb-8">
-        <div className="shimmer-card bg-card border border-primary/30 rounded-2xl p-6 md:p-8 cursor-default">
-          <div className="flex items-center gap-4 mb-3">
-            <div className="shimmer-icon-container w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center transition-all duration-300">
-              <Building className="w-6 h-6 metallic-gold-icon shimmer-icon" />
-            </div>
-            <div>
-              <h3 className="text-base font-bold text-foreground">XPS Headquarters & Training Center</h3>
-              <span className="text-xs metallic-gold font-semibold">2200 NW 32nd Street, Suite 700 · Pompano Beach, FL 33069</span>
-            </div>
+        <div className="shimmer-card bg-card border border-primary/30 rounded-2xl p-6 md:p-8 cursor-default flex flex-col items-center text-center">
+          <div className="shimmer-icon-container w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center transition-all duration-300 mb-3">
+            <Building className="w-6 h-6 metallic-gold-icon shimmer-icon" />
           </div>
-          <p className="text-sm text-muted-foreground leading-relaxed">
+          <h3 className="text-base font-bold text-foreground">XPS Headquarters & Training Center</h3>
+          <span className="text-xs metallic-gold font-semibold mt-1">2200 NW 32nd Street, Suite 700 · Pompano Beach, FL 33069</span>
+          <p className="text-sm text-muted-foreground leading-relaxed mt-3">
             Our flagship campus houses the XPS Xpress training center, product showroom, R&D lab, and corporate operations — the nerve center for nationwide contractor enablement and AI-powered sales intelligence.
           </p>
         </div>
@@ -69,17 +65,13 @@ export default function Coverage() {
       {/* Regions grid */}
       <div className="max-w-5xl mx-auto px-6 pb-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {regions.map((r) => (
-          <div key={r.name} className="shimmer-card bg-card border border-border rounded-2xl p-6 cursor-default">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="shimmer-icon-container w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center transition-all duration-300">
-                <MapPin className="w-4 h-4 metallic-gold-icon shimmer-icon" />
-              </div>
-              <div>
-                <h3 className="text-sm font-bold text-foreground">{r.name}</h3>
-                <span className="text-[10px] metallic-gold font-semibold">{r.locations} locations</span>
-              </div>
+          <div key={r.name} className="shimmer-card bg-card border border-border rounded-2xl p-6 cursor-default flex flex-col items-center text-center">
+            <div className="shimmer-icon-container w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center transition-all duration-300 mb-3">
+              <MapPin className="w-4 h-4 metallic-gold-icon shimmer-icon" />
             </div>
-            <p className="text-xs text-muted-foreground leading-relaxed">{r.cities}</p>
+            <h3 className="text-sm font-bold text-foreground">{r.name}</h3>
+            <span className="text-[10px] metallic-gold font-semibold">{r.locations} locations</span>
+            <p className="text-xs text-muted-foreground leading-relaxed mt-2">{r.cities}</p>
           </div>
         ))}
       </div>

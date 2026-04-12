@@ -13,7 +13,7 @@ export default function Landing() {
     <div className="min-h-screen bg-background text-foreground">
       {/* Nav */}
       <nav className="flex items-center justify-between px-6 md:px-12 py-4 border-b border-border/50">
-        <div className="flex items-center gap-3">
+        <Link to="/signin" className="flex items-center gap-3 transition-all duration-300 hover:scale-105">
           <img
             src="https://media.base44.com/images/public/69db3269c791af3f48cfaee9/583965fcb_IMAGEWITHWHITEOUTLINE.jpg"
             alt="XPS"
@@ -23,7 +23,7 @@ export default function Landing() {
             <div className="text-sm font-bold metallic-gold tracking-wider">XPS Xpress</div>
             <div className="text-[9px] text-muted-foreground tracking-widest uppercase">Xtreme Polishing Systems</div>
           </div>
-        </div>
+        </Link>
         <div className="hidden md:flex items-center gap-8 text-sm text-foreground">
           <span className="hover:text-foreground cursor-pointer transition-all duration-300 hover:scale-110">Platform</span>
           <span className="hover:text-foreground cursor-pointer transition-all duration-300 hover:scale-110">Solutions</span>

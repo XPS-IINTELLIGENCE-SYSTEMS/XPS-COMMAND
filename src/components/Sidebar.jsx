@@ -59,7 +59,7 @@ export default function Sidebar({ activeView, onViewChange }) {
       <nav className="flex-1 py-3 px-2 space-y-4">
         {navSections.map((section) => (
           <div key={section.label}>
-            <div className="px-2 mb-1.5 text-[10px] font-semibold text-white/50 tracking-wider">
+            <div className="px-2 mb-1.5 text-[10px] font-semibold text-foreground/40 tracking-wider">
               {section.label}
             </div>
             <div className="space-y-0.5">
@@ -73,8 +73,8 @@ export default function Sidebar({ activeView, onViewChange }) {
                     className={cn(
                       "w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-xs font-medium transition-all duration-200",
                       isActive
-                        ? "bg-white/[0.07] backdrop-blur-md border border-white/[0.12] shadow-[0_0_12px_rgba(212,175,55,0.15),inset_0_1px_0_rgba(255,255,255,0.05)] metallic-gold"
-                        : "text-white/80 hover-metallic"
+                        ? "bg-primary/10 backdrop-blur-md border border-primary/20 shadow-[0_0_12px_rgba(212,175,55,0.15)] metallic-gold"
+                        : "text-foreground/70 hover-metallic"
                     )}
                   >
                     <Icon className={cn("w-3.5 h-3.5 flex-shrink-0", isActive ? "metallic-gold-icon" : "metallic-silver-icon")} />

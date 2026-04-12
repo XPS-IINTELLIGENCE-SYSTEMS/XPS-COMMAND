@@ -1,4 +1,4 @@
-import { Search, Settings, Bell, MapPin } from "lucide-react";
+import { Search, Settings, Bell, MapPin, Sun, Moon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
 const viewTitles = {
@@ -19,13 +19,13 @@ const viewTitles = {
   editor: "Editor Studio",
 };
 
-export default function TopBar({ activeView, children }) {
+export default function TopBar({ activeView, children, theme, onThemeToggle }) {
   const toggleButtons = children ? (Array.isArray(children) ? children : [children]) : [];
   return (
     <div className="h-12 min-h-[48px] border-b border-border flex items-center justify-between px-4 bg-card/50">
       <div className="flex items-center gap-3">
         {toggleButtons[0]}
-        <div className="text-sm font-medium text-white">
+        <div className="text-sm font-medium text-foreground">
           {viewTitles[activeView] || "Dashboard"}
         </div>
       </div>
@@ -41,14 +41,21 @@ export default function TopBar({ activeView, children }) {
       </div>
 
       <div className="flex items-center gap-3">
-        <button className="p-1.5 rounded-md hover:bg-secondary/50 text-white hover:text-white transition-colors">
+        <button
+          onClick={onThemeToggle}
+          className="p-1.5 rounded-md hover:bg-secondary/50 text-foreground transition-colors"
+          title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+        >
+          {theme === 'dark' ? <Sun className="w-4 h-4 metallic-silver-icon" /> : <Moon className="w-4 h-4" />}
+        </button>
+        <button className="p-1.5 rounded-md hover:bg-secondary/50 text-foreground transition-colors">
           <Settings className="w-4 h-4 metallic-silver-icon" />
         </button>
-        <button className="p-1.5 rounded-md hover:bg-secondary/50 text-white hover:text-white transition-colors relative">
+        <button className="p-1.5 rounded-md hover:bg-secondary/50 text-foreground transition-colors relative">
           <Bell className="w-4 h-4 metallic-silver-icon" />
           <span className="absolute -top-0.5 -right-0.5 w-2 h-2 metallic-gold-bg rounded-full" />
         </button>
-        <div className="flex items-center gap-1.5 text-xs text-white">
+        <div className="flex items-center gap-1.5 text-xs text-foreground">
           <MapPin className="w-3 h-3 metallic-silver-icon" />
           Tampa, FL
         </div>

@@ -4,10 +4,10 @@ import {
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { id: "command", label: "Command Center", icon: Zap, desc: "AI daily briefing" },
+  { id: "command", label: "Dashboard", icon: Zap, desc: "AI daily briefing" },
   { id: "find_work", label: "1. Find Work", icon: Search, desc: "Lead gen & prospecting" },
   { id: "get_work", label: "2. Get Work", icon: MessageSquare, desc: "Outreach & communication" },
-  { id: "win_work", label: "3. Win Work", icon: Trophy, desc: "Bids, proposals & closing" },
+  { id: "do_work", label: "3. Do Work", icon: Trophy, desc: "Manage jobs & execution" },
   { id: "get_paid", label: "4. Get Paid", icon: DollarSign, desc: "Invoicing & collections" },
   { id: "tips", label: "Tips & Tricks", icon: Lightbulb, desc: "Pro knowledge & videos" },
   { id: "settings", label: "Settings", icon: Settings, desc: "Account & integrations" },

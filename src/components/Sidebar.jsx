@@ -6,10 +6,10 @@ import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 const phases = [
-  { id: "command", label: "Command Center", icon: Zap, num: null },
+  { id: "command", label: "Dashboard", icon: Zap, num: null },
   { id: "find_work", label: "Find Work", icon: Search, num: "1" },
   { id: "get_work", label: "Get Work", icon: MessageSquare, num: "2" },
-  { id: "win_work", label: "Win Work", icon: Trophy, num: "3" },
+  { id: "do_work", label: "Do Work", icon: Trophy, num: "3" },
   { id: "get_paid", label: "Get Paid", icon: DollarSign, num: "4" },
   { id: "tips", label: "Tips & Tricks", icon: Lightbulb, num: null },
 ];

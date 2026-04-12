@@ -5,7 +5,7 @@ const tabs = [
   { id: "command", label: "Home", icon: Zap },
   { id: "find_work", label: "Find", icon: Search },
   { id: "get_work", label: "Get", icon: MessageSquare },
-  { id: "win_work", label: "Win", icon: Trophy },
+  { id: "do_work", label: "Do", icon: Trophy },
   { id: "get_paid", label: "Paid", icon: DollarSign },
   { id: "tips", label: "Tips", icon: Lightbulb },
 ];

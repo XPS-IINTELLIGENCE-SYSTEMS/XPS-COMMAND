@@ -297,6 +297,52 @@
   100% { background-position: 0% 50%; }
 }
 
+/* Silver base with horizontal gold shimmer sweep */
+@keyframes gold-shimmer-sweep {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.xps-silver-gold-shimmer {
+  background: linear-gradient(
+    90deg,
+    #a8a8a8 0%,
+    #c0c0c0 15%,
+    #d0d0d0 25%,
+    #f5e6a3 40%,
+    #d4af37 50%,
+    #f5e6a3 60%,
+    #d0d0d0 75%,
+    #c0c0c0 85%,
+    #a8a8a8 100%
+  );
+  background-size: 250% 100%;
+  animation: gold-shimmer-sweep 3s ease-in-out infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.light .xps-silver-gold-shimmer {
+  background: linear-gradient(
+    90deg,
+    #64748b 0%,
+    #7a8599 15%,
+    #8b9aad 25%,
+    #b8860b 40%,
+    #d4af37 50%,
+    #b8860b 60%,
+    #8b9aad 75%,
+    #7a8599 85%,
+    #64748b 100%
+  );
+  background-size: 250% 100%;
+  animation: gold-shimmer-sweep 3s ease-in-out infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 .metallic-gold-silver-text {
   background: linear-gradient(135deg, #d4af37, #f5e6a3, #c0c0c0, #e8e8e8, #d4af37, #b8860b, #c0c0c0);
   background-size: 300% 300%;

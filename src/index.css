@@ -582,7 +582,7 @@
     rgba(120,120,120,0.15) 100%
   );
   background-size: 200% 100%;
-  animation: silver-border-pulse 1.5s ease-in-out infinite;
+  animation: silver-border-pulse 3s ease-in-out infinite;
 }
 
 @keyframes silver-border-pulse {

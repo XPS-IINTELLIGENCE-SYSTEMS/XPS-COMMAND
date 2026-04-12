@@ -346,12 +346,48 @@
 .dark .bg-card,
 .dark .bg-card\/50,
 .dark .bg-card\/80 {
-  outline: 0.5px solid rgba(160, 160, 160, 0.18);
+  outline: 1px solid rgba(160, 160, 160, 0.22);
 }
 
 .dark .rounded-2xl,
 .dark .rounded-xl {
-  outline: 0.5px solid rgba(160, 160, 160, 0.12);
+  outline: 1px solid rgba(160, 160, 160, 0.16);
+}
+
+/* Interactive silver glow on hover for cards and buttons */
+.dark .bg-card:hover,
+.dark .bg-card\/50:hover,
+.dark .bg-card\/80:hover,
+.dark .rounded-2xl:hover,
+.dark .rounded-xl:hover {
+  outline: 1px solid rgba(192, 192, 192, 0.45);
+  box-shadow: 0 0 8px rgba(192, 192, 192, 0.12), inset 0 0 8px rgba(192, 192, 192, 0.04);
+  transition: outline 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dark button:hover,
+.dark a:hover,
+.dark [role="button"]:hover {
+  outline: 1px solid rgba(192, 192, 192, 0.35);
+  box-shadow: 0 0 6px rgba(192, 192, 192, 0.1);
+  transition: outline 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Light mode interactive hover */
+.light .bg-card:hover,
+.light .rounded-2xl:hover,
+.light .rounded-xl:hover {
+  outline: 1px solid rgba(100, 100, 120, 0.25);
+  box-shadow: 0 0 6px rgba(100, 100, 120, 0.08);
+  transition: outline 0.2s ease, box-shadow 0.2s ease;
+}
+
+.light button:hover,
+.light a:hover,
+.light [role="button"]:hover {
+  outline: 1px solid rgba(100, 100, 120, 0.2);
+  box-shadow: 0 0 4px rgba(100, 100, 120, 0.06);
+  transition: outline 0.2s ease, box-shadow 0.2s ease;
 }
 
 .light .metallic-gold-silver-text {

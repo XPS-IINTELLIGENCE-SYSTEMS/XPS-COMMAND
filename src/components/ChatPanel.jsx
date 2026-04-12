@@ -124,9 +124,22 @@ export default function ChatPanel({ mobile = false }) {
 
   useEffect(() => {
     if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+      requestAnimationFrame(() => {
+        scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+      });
     }
   }, [messages]);
+
+  // Also scroll when messages content changes (streaming tokens)
+  useEffect(() => {
+    if (!scrollRef.current || messages.length === 0) return;
+    const lastMsg = messages[messages.length - 1];
+    if (lastMsg?.role === 'assistant') {
+      requestAnimationFrame(() => {
+        scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+      });
+    }
+  }, [messages.length > 0 && messages[messages.length - 1]?.content]);
 
   const initConversation = async () => {
     try {

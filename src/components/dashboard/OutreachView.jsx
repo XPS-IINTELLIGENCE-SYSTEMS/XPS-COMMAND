@@ -1,5 +1,10 @@
-import { Mail, MessageSquare, Plus, Pencil, Send, Users, ArrowUpRight } from "lucide-react";
+import { Mail, MessageSquare, Plus, Send, Users, ArrowUpRight, Phone, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { base44 } from "@/api/base44Client";
+import { useState } from "react";
+import { toast } from "sonner";
+import QuickSmsModal from "../outreach/QuickSmsModal";
+import QuickCallModal from "../outreach/QuickCallModal";
 
 const stats = [
   { label: "Emails Sent", value: "4,218", sub: "This month" },
@@ -18,6 +23,9 @@ const templates = [
 ];
 
 export default function OutreachView() {
+  const [smsOpen, setSmsOpen] = useState(false);
+  const [callOpen, setCallOpen] = useState(false);
+
   return (
     <div className="p-3 md:p-6 space-y-4 md:space-y-5 overflow-y-auto h-full">
       <div className="flex items-center justify-between">
@@ -42,14 +50,32 @@ export default function OutreachView() {
       </div>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-2 gap-2">
-        <button className="flex items-center gap-3 p-4 bg-primary/10 rounded-2xl border border-primary/20 active:scale-[0.98] transition-transform">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+        <button onClick={() => setSmsOpen(true)} className="flex items-center gap-3 p-4 bg-primary/10 rounded-2xl border border-primary/20 active:scale-[0.98] transition-transform">
           <div className="w-10 h-10 rounded-xl bg-primary/15 flex items-center justify-center">
-            <Send className="w-5 h-5 text-primary" />
+            <MessageSquare className="w-5 h-5 text-primary" />
+          </div>
+          <div className="text-left">
+            <div className="text-sm font-semibold text-foreground">AI SMS</div>
+            <div className="text-[11px] text-muted-foreground">Send smart text</div>
+          </div>
+        </button>
+        <button onClick={() => setCallOpen(true)} className="flex items-center gap-3 p-4 bg-card rounded-2xl border border-border active:scale-[0.98] transition-transform">
+          <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center">
+            <Phone className="w-5 h-5 text-muted-foreground" />
+          </div>
+          <div className="text-left">
+            <div className="text-sm font-semibold text-foreground">AI Call</div>
+            <div className="text-[11px] text-muted-foreground">AI voice outreach</div>
+          </div>
+        </button>
+        <button className="flex items-center gap-3 p-4 bg-card rounded-2xl border border-border active:scale-[0.98] transition-transform">
+          <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center">
+            <Send className="w-5 h-5 text-muted-foreground" />
           </div>
           <div className="text-left">
             <div className="text-sm font-semibold text-foreground">AI Mass Email</div>
-            <div className="text-[11px] text-muted-foreground">Send to filtered leads</div>
+            <div className="text-[11px] text-muted-foreground">Send to leads</div>
           </div>
         </button>
         <button className="flex items-center gap-3 p-4 bg-card rounded-2xl border border-border active:scale-[0.98] transition-transform">
@@ -58,10 +84,13 @@ export default function OutreachView() {
           </div>
           <div className="text-left">
             <div className="text-sm font-semibold text-foreground">AI Sequence</div>
-            <div className="text-[11px] text-muted-foreground">Multi-step drip campaign</div>
+            <div className="text-[11px] text-muted-foreground">Multi-step drip</div>
           </div>
         </button>
       </div>
+
+      {smsOpen && <QuickSmsModal onClose={() => setSmsOpen(false)} />}
+      {callOpen && <QuickCallModal onClose={() => setCallOpen(false)} />}
 
       {/* Templates */}
       <div>

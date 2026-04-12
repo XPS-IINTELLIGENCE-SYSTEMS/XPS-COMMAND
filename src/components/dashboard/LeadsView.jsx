@@ -1,7 +1,9 @@
-import { Search, Filter, Plus, Phone, Mail, Sparkles, ArrowUpRight, MapPin, Building2, ChevronDown } from "lucide-react";
+import { Search, Filter, Plus, Phone, Mail, Sparkles, ArrowUpRight, MapPin, Building2, ChevronDown, MessageSquare } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import QuickSmsModal from "../outreach/QuickSmsModal";
+import QuickCallModal from "../outreach/QuickCallModal";
 
 const leads = [
   { company: "Ace Hardware Distribution", contact: "Robert Chen", vertical: "Retail", location: "Tampa, FL", score: 92, stage: "Proposal", value: "$45,000", sqft: "12,000 sq ft", insight: "Viewed pricing 3x this week" },
@@ -25,6 +27,8 @@ function StageBadge({ stage }) {
 
 export default function LeadsView() {
   const [search, setSearch] = useState("");
+  const [smsTarget, setSmsTarget] = useState(null);
+  const [callTarget, setCallTarget] = useState(null);
   const filtered = leads.filter(l => l.company.toLowerCase().includes(search.toLowerCase()) || l.contact.toLowerCase().includes(search.toLowerCase()));
 
   return (
@@ -81,8 +85,11 @@ export default function LeadsView() {
 
             {/* Action bar */}
             <div className="flex items-center gap-2">
-              <button className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-semibold active:scale-[0.97] transition-transform">
+              <button onClick={() => setCallTarget(lead)} className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-semibold active:scale-[0.97] transition-transform">
                 <Phone className="w-3.5 h-3.5" /> Call
+              </button>
+              <button onClick={() => setSmsTarget(lead)} className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-secondary text-foreground text-xs font-medium border border-border active:scale-[0.97] transition-transform">
+                <MessageSquare className="w-3.5 h-3.5" /> SMS
               </button>
               <button className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-secondary text-foreground text-xs font-medium border border-border active:scale-[0.97] transition-transform">
                 <Mail className="w-3.5 h-3.5" /> Email
@@ -99,6 +106,9 @@ export default function LeadsView() {
           </div>
         ))}
       </div>
+
+      {smsTarget && <QuickSmsModal onClose={() => setSmsTarget(null)} prefillName={smsTarget.contact} />}
+      {callTarget && <QuickCallModal onClose={() => setCallTarget(null)} prefillName={callTarget.contact} />}
     </div>
   );
 }

@@ -215,27 +215,14 @@ export default function ChatPanel({ mobile = false }) {
       {/* Header */}
       <div className={`${mobile ? 'h-10 min-h-[40px]' : 'h-12 min-h-[48px]'} border-b border-border flex items-center justify-between px-3`}>
         <div className="flex items-center gap-2">
-          <div className={`${mobile ? 'w-6 h-6' : 'w-8 h-8'} rounded-lg bg-secondary flex items-center justify-center`}>
-            {currentAgentName === "seo_marketing" 
-              ? <TrendingUp className={`${mobile ? 'w-3 h-3' : 'w-4 h-4'} metallic-silver-icon`} />
-              : <Wrench className={`${mobile ? 'w-3 h-3' : 'w-4 h-4'} metallic-silver-icon`} />
-            }
-          </div>
-          <div>
-            <div className={`${mobile ? 'text-[10px]' : 'text-xs'} font-bold xps-gold-slow-shimmer`} style={{ fontFamily: "'Montserrat', sans-serif" }}>{activeAgentConfig.name}</div>
-            <div className="text-[9px] text-muted-foreground flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
-              {mobile ? 'Ready' : activeAgentConfig.fullName}
-            </div>
-          </div>
+          <AgentSwitcher activeAgent={currentAgentName} onSwitch={handleAgentSwitch} mobile={mobile} />
         </div>
         <Button variant="ghost" size="icon" className="shimmer-card h-7 w-7" onClick={handleNewChat}>
           <Plus className="w-3.5 h-3.5 shimmer-icon metallic-silver-icon" />
         </Button>
       </div>
 
-      {/* Agent Switcher */}
-      <AgentSwitcher activeAgent={currentAgentName} onSwitch={handleAgentSwitch} mobile={mobile} />
+
 
       {/* Agent tabs bar */}
       {!mobile && (

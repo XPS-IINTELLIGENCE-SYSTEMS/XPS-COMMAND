@@ -5,7 +5,7 @@ export default function OperatorSignIn() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    navigate("/admin-panel", { replace: true });
+    navigate("/custom-login", { replace: true });
   }, [navigate]);
 
   return null;

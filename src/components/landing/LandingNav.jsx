@@ -26,13 +26,13 @@ export default function LandingNav() {
       </div>
       <div className="flex items-center gap-2 md:gap-3">
         <Link
-          to="/dashboard"
+          to="/custom-login"
           className="text-sm md:text-lg font-medium text-white/80 hover:text-white transition-all duration-300"
         >
           Sign In
         </Link>
         <Link
-          to="/dashboard"
+          to="/custom-login"
           className="hidden md:inline-flex px-5 py-2.5 rounded-full metallic-gold-bg text-background text-base font-semibold hover:brightness-110 transition-all duration-300"
         >
           Learn More

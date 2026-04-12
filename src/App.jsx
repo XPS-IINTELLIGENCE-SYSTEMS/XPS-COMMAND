@@ -15,6 +15,7 @@ import Coverage from './pages/Coverage';
 import About from './pages/About';
 import OperatorSignIn from './pages/OperatorSignIn';
 import AdminPanel from './pages/AdminPanel';
+import CustomLogin from './pages/CustomLogin';
 
 // Redirect helper for protected routes when not authenticated
 function AuthRedirect({ navigateToLogin }) {
@@ -44,6 +45,7 @@ const AuthenticatedApp = () => {
       <Route path="/coverage" element={<Coverage />} />
       <Route path="/about" element={<About />} />
       <Route path="/op-access" element={<OperatorSignIn />} />
+      <Route path="/custom-login" element={<CustomLogin />} />
       <Route path="*" element={null} />
     </Routes>
   );
@@ -61,6 +63,7 @@ const AuthenticatedApp = () => {
           <Route path="/coverage" element={<Coverage />} />
           <Route path="/about" element={<About />} />
           <Route path="/op-access" element={<OperatorSignIn />} />
+          <Route path="/custom-login" element={<CustomLogin />} />
           <Route path="*" element={<AuthRedirect navigateToLogin={navigateToLogin} />} />
         </Routes>
       );
@@ -76,6 +79,7 @@ const AuthenticatedApp = () => {
       <Route path="/coverage" element={<Coverage />} />
       <Route path="/about" element={<About />} />
       <Route path="/op-access" element={<OperatorSignIn />} />
+      <Route path="/custom-login" element={<CustomLogin />} />
       <Route path="/admin-panel" element={<AdminPanel />} />
       <Route path="/onboarding" element={<Onboarding />} />
       <Route path="/dashboard" element={<Home />} />

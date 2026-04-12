@@ -37,7 +37,7 @@ export default function Landing() {
 
         <div className="flex flex-col sm:flex-row items-center gap-4 mt-14">
           <Link
-            to="/dashboard"
+            to="/custom-login"
             className="inline-flex items-center gap-2 px-6 py-3 md:px-10 md:py-5 rounded-lg md:rounded-xl metallic-gold-bg text-background text-base md:text-xl font-bold hover:brightness-110 transition-all duration-300 hover:scale-110"
           >
             See It In Action <ArrowRight className="w-4 h-4" />

@@ -1,4 +1,4 @@
-import { ArrowRight, Play, Shield } from "lucide-react";
+import { ArrowRight, Shield } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const stats = [
@@ -64,7 +64,7 @@ export default function Landing() {
         <div className="flex items-center gap-4 mt-10">
           <Link
             to="/signin"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-border text-foreground hover:bg-secondary/50 transition-colors font-semibold"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg metallic-gold-bg text-background font-semibold hover:brightness-110 transition-all"
           >
             See It In Action <ArrowRight className="w-4 h-4" />
           </Link>

@@ -192,9 +192,8 @@
 }
 
 .metallic-silver-bg {
-  background: linear-gradient(135deg, #8a8a8a, #b0b0b0, #e8e8e8, #c0c0c0, #a0a0a0, #d0d0d0, #8a8a8a);
-  background-size: 300% 300%;
-  animation: silver-shift 4s ease infinite;
+  background: linear-gradient(180deg, #c8c8c8 0%, #a8a8a8 40%, #8a8a8a 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), inset 0 -1px 0 rgba(0,0,0,0.2), 0 1px 3px rgba(0,0,0,0.3);
 }
 
 .hover-metallic {

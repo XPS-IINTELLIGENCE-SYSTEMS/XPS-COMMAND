@@ -43,13 +43,13 @@ export default function TopBar({ activeView }) {
         </button>
         <button className="p-1.5 rounded-md hover:bg-secondary/50 text-muted-foreground hover:text-foreground transition-colors relative">
           <Bell className="w-4 h-4" />
-          <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-primary rounded-full" />
+          <span className="absolute -top-0.5 -right-0.5 w-2 h-2 metallic-gold-bg rounded-full" />
         </button>
         <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
           <MapPin className="w-3 h-3" />
           Tampa, FL
         </div>
-        <div className="w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center text-[10px] font-bold text-primary">
+        <div className="w-7 h-7 rounded-full metallic-gold-bg flex items-center justify-center text-[10px] font-bold text-background">
           MR
         </div>
       </div>

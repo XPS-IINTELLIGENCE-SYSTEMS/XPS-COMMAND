@@ -42,12 +42,12 @@ export default function Sidebar({ activeView, onViewChange }) {
       {/* Logo */}
       <div className="px-4 py-4 border-b border-sidebar-border">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-md bg-primary/20 flex items-center justify-center">
-            <Shield className="w-4 h-4 text-primary" />
+          <div className="w-7 h-7 rounded-md metallic-gold-bg flex items-center justify-center">
+            <Shield className="w-4 h-4 text-background" />
           </div>
           <div>
-            <div className="text-xs font-bold text-foreground tracking-wider">XPS INTELLIGENCE</div>
-            <div className="text-[9px] text-muted-foreground tracking-widest">COMMAND CENTER</div>
+            <div className="text-xs font-bold metallic-gold tracking-wider">XPS INTELLIGENCE</div>
+            <div className="text-[9px] metallic-gold tracking-widest">COMMAND CENTER</div>
           </div>
         </div>
       </div>
@@ -68,13 +68,13 @@ export default function Sidebar({ activeView, onViewChange }) {
                     key={item.id}
                     onClick={() => onViewChange(item.id)}
                     className={cn(
-                      "w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-xs font-medium transition-all duration-150",
+                      "w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-xs font-medium transition-all duration-200",
                       isActive
-                        ? "bg-primary/15 text-primary"
-                        : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+                        ? "metallic-gold-bg text-background"
+                        : "text-muted-foreground hover-metallic hover:text-foreground"
                     )}
                   >
-                    <Icon className="w-3.5 h-3.5 flex-shrink-0" />
+                    <Icon className={cn("w-3.5 h-3.5 flex-shrink-0", isActive && "text-background")} />
                     {item.label}
                   </button>
                 );

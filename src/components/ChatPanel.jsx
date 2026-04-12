@@ -263,24 +263,7 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false }, ref) {
         </Button>
       </div>
 
-      {/* Agent tabs bar */}
-      {!mobile && (
-        <div className="px-2 py-1 border-b border-border flex items-center gap-1 overflow-x-auto min-h-[36px]">
-          {agents.map((agent) => (
-            <AgentTab
-              key={agent.id}
-              agent={agent}
-              isActive={activeAgentId === agent.id}
-              onClick={() => setActiveAgentId(agent.id)}
-              onClose={() => removeSubAgent(agent.id)}
-            />
-          ))}
-          <div className="ml-auto flex items-center gap-1 text-[9px] text-muted-foreground">
-            <Layers className="w-2.5 h-2.5 metallic-silver-icon" />
-            {agents.length - 1} helpers
-          </div>
-        </div>
-      )}
+
 
       {/* Messages / Sub-agent view */}
       {activeAgentId !== "main" && !mobile ? (

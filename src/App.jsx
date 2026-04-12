@@ -9,6 +9,10 @@ import Home from './pages/Home';
 import Landing from './pages/Landing';
 import SignIn from './pages/SignIn';
 import Onboarding from './pages/Onboarding';
+import Platform from './pages/Platform';
+import Solutions from './pages/Solutions';
+import Coverage from './pages/Coverage';
+import About from './pages/About';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -37,6 +41,10 @@ const AuthenticatedApp = () => {
   return (
     <Routes>
       <Route path="/" element={<Landing />} />
+      <Route path="/platform" element={<Platform />} />
+      <Route path="/solutions" element={<Solutions />} />
+      <Route path="/coverage" element={<Coverage />} />
+      <Route path="/about" element={<About />} />
       <Route path="/signin" element={<SignIn />} />
       <Route path="/onboarding" element={<Onboarding />} />
       <Route path="/dashboard" element={<Home />} />

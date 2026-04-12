@@ -72,11 +72,11 @@ export default function Sidebar({ activeView, onViewChange }) {
                     className={cn(
                       "w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-xs font-medium transition-all duration-200",
                       isActive
-                        ? "metallic-gold-bg text-background"
+                        ? "bg-white/[0.07] backdrop-blur-md border border-white/[0.12] shadow-[0_0_12px_rgba(212,175,55,0.15),inset_0_1px_0_rgba(255,255,255,0.05)] metallic-gold"
                         : "text-white/80 hover-metallic"
                     )}
                   >
-                    <Icon className={cn("w-3.5 h-3.5 flex-shrink-0", isActive ? "text-background" : "metallic-silver-icon")} />
+                    <Icon className={cn("w-3.5 h-3.5 flex-shrink-0", isActive ? "metallic-gold-icon" : "metallic-silver-icon")} />
                     {item.label}
                   </button>
                 );

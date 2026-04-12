@@ -24,14 +24,14 @@ export default function Landing() {
             <div className="text-[9px] text-muted-foreground tracking-widest uppercase">Xtreme Polishing Systems</div>
           </div>
         </div>
-        <div className="hidden md:flex items-center gap-8 text-sm text-white/70">
+        <div className="hidden md:flex items-center gap-8 text-sm text-foreground">
           <span className="hover:text-foreground cursor-pointer transition-colors">Platform</span>
           <span className="hover:text-foreground cursor-pointer transition-colors">Solutions</span>
           <span className="hover:text-foreground cursor-pointer transition-colors">Coverage</span>
           <span className="hover:text-foreground cursor-pointer transition-colors">About</span>
         </div>
         <div className="flex items-center gap-3">
-          <Link to="/signin" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <Link to="/signin" className="text-sm text-foreground hover:text-foreground transition-colors">
             Sign In
           </Link>
           <Link
@@ -55,7 +55,7 @@ export default function Landing() {
         </h1>
         <div className="text-sm md:text-lg tracking-[0.35em] font-semibold text-white/90 mt-2">CONTRACTOR ASSIST</div>
 
-        <p className="mt-6 text-sm md:text-base text-foreground/70 max-w-2xl leading-relaxed">
+        <p className="mt-6 text-sm md:text-base text-foreground max-w-2xl leading-relaxed">
           XPS Intelligence — Contractor Assist empowers 60+ locations and 200+ sales
           professionals with AI-driven CRM, lead intelligence, proposal automation,
           and competitive insights — built for the polishing industry.

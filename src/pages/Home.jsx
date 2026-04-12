@@ -46,7 +46,7 @@ export default function Home() {
       </div>
 
       {/* Right Chat Panel */}
-      <div className={`transition-all duration-300 ease-in-out ${chatOpen && activeView !== 'operator' ? 'w-[320px] min-w-[320px]' : 'w-0 min-w-0'} overflow-hidden`}>
+      <div className={`transition-all duration-300 ease-in-out ${chatOpen ? 'w-[320px] min-w-[320px]' : 'w-0 min-w-0'} overflow-hidden`}>
         <ChatPanel />
       </div>
     </div>

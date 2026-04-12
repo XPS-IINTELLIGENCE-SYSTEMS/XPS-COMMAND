@@ -26,9 +26,8 @@ export default function Home() {
   };
 
   return (
-    <div className="h-[100dvh] w-screen p-[2px] bg-background overflow-hidden">
-      <div className="absolute inset-0 rounded-none animated-silver-border pointer-events-none z-50" />
-      <div className="relative h-full w-full flex flex-col md:flex-row overflow-hidden bg-background rounded-sm">
+    <div className="h-[100dvh] w-screen overflow-hidden animated-silver-border">
+      <div className="h-full w-full flex flex-col md:flex-row overflow-hidden bg-background">
       {/* ========== MOBILE LAYOUT ========== */}
       {/* Mobile Header - iPhone safe area aware */}
       <div className="flex md:hidden items-center justify-between h-12 min-h-[48px] border-b border-border bg-card/80 backdrop-blur-md px-4 safe-top">

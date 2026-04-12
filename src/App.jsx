@@ -16,6 +16,12 @@ import About from './pages/About';
 import OperatorSignIn from './pages/OperatorSignIn';
 import AdminPanel from './pages/AdminPanel';
 
+// Redirect helper for protected routes when not authenticated
+function AuthRedirect({ navigateToLogin }) {
+  navigateToLogin();
+  return null;
+}
+
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
 
@@ -29,17 +35,39 @@ const AuthenticatedApp = () => {
   }
 
   // Handle authentication errors
+  // Public routes — always accessible without auth
+  const publicRoutes = (
+    <Routes>
+      <Route path="/" element={<Landing />} />
+      <Route path="/platform" element={<Platform />} />
+      <Route path="/solutions" element={<Solutions />} />
+      <Route path="/coverage" element={<Coverage />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/op-access" element={<OperatorSignIn />} />
+      <Route path="*" element={null} />
+    </Routes>
+  );
+
   if (authError) {
     if (authError.type === 'user_not_registered') {
       return <UserNotRegisteredError />;
     } else if (authError.type === 'auth_required') {
-      // Redirect to login automatically
-      navigateToLogin();
-      return null;
+      // Show public pages without auth, redirect for protected routes
+      return (
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          <Route path="/platform" element={<Platform />} />
+          <Route path="/solutions" element={<Solutions />} />
+          <Route path="/coverage" element={<Coverage />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/op-access" element={<OperatorSignIn />} />
+          <Route path="*" element={<AuthRedirect navigateToLogin={navigateToLogin} />} />
+        </Routes>
+      );
     }
   }
 
-  // Render the main app
+  // Render the main app (authenticated)
   return (
     <Routes>
       <Route path="/" element={<Landing />} />
@@ -47,7 +75,6 @@ const AuthenticatedApp = () => {
       <Route path="/solutions" element={<Solutions />} />
       <Route path="/coverage" element={<Coverage />} />
       <Route path="/about" element={<About />} />
-
       <Route path="/op-access" element={<OperatorSignIn />} />
       <Route path="/admin-panel" element={<AdminPanel />} />
       <Route path="/onboarding" element={<Onboarding />} />
@@ -55,7 +82,7 @@ const AuthenticatedApp = () => {
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
-};
+  };
 
 
 function App() {

@@ -2,6 +2,7 @@ import {
   LayoutDashboard, UserSearch, Send, FileText, BarChart3, Bot, 
   Settings, BookOpen, Shield, Globe
 } from "lucide-react";
+import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -26,17 +27,17 @@ export default function Sidebar({ activeView, onViewChange }) {
     <div className="w-full h-full bg-sidebar border-r border-sidebar-border flex flex-col">
       {/* Logo */}
       <div className="px-4 py-5 border-b border-sidebar-border">
-        <div className="flex items-center gap-2.5">
+        <Link to="/" className="flex items-center gap-2.5 transition-all duration-300 hover:scale-105">
           <img
             src="https://media.base44.com/images/public/69db3269c791af3f48cfaee9/583965fcb_IMAGEWITHWHITEOUTLINE.jpg"
             alt="XPS Logo"
             className="w-9 h-9 object-contain"
           />
           <div>
-            <div className="text-sm font-bold metallic-gold tracking-wider">XPS Xpress</div>
-            <div className="text-[10px] font-semibold metallic-silver tracking-widest">Xtreme Polishing Systems</div>
+            <div className="text-sm font-extrabold xps-gold-slow-shimmer tracking-wider" style={{ fontFamily: "'Montserrat', sans-serif" }}>XPS INTELLIGENCE</div>
+            <div className="text-[9px] font-semibold metallic-silver tracking-widest">XTREME POLISHING SYSTEMS</div>
           </div>
-        </div>
+        </Link>
       </div>
 
       {/* Navigation */}
@@ -55,16 +56,16 @@ export default function Sidebar({ activeView, onViewChange }) {
                     key={item.id}
                     onClick={() => onViewChange(item.id)}
                     className={cn(
-                      "w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-150",
+                      "shimmer-card w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-150",
                       isActive
                         ? "bg-primary/10 text-primary"
                         : "text-foreground/60 hover:text-foreground hover:bg-secondary/50"
                     )}
                   >
-                    <Icon className={cn("w-[18px] h-[18px]", isActive ? "text-primary" : "text-muted-foreground")} />
+                    <Icon className={cn("w-[18px] h-[18px] shimmer-icon", isActive ? "metallic-gold-icon" : "metallic-silver-icon")} />
                     {item.label}
                   </button>
-                );
+              );
               })}
             </div>
           </div>
@@ -82,13 +83,13 @@ export default function Sidebar({ activeView, onViewChange }) {
                     key={item.id}
                     onClick={() => onViewChange(item.id)}
                     className={cn(
-                      "w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-150",
+                      "shimmer-card w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-150",
                       isActive
                         ? "bg-primary/10 text-primary"
                         : "text-foreground/60 hover:text-foreground hover:bg-secondary/50"
                     )}
                   >
-                    <Icon className={cn("w-[18px] h-[18px]", isActive ? "text-primary" : "text-muted-foreground")} />
+                    <Icon className={cn("w-[18px] h-[18px] shimmer-icon", isActive ? "metallic-gold-icon" : "metallic-silver-icon")} />
                     {item.label}
                   </button>
                 );

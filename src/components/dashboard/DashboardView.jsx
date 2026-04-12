@@ -27,7 +27,7 @@ export default function DashboardView() {
       {/* Stats row */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3">
         {stats.map((stat) => (
-          <div key={stat.label} className="bg-card rounded-2xl border border-border p-3 md:p-4">
+          <div key={stat.label} className="shimmer-card bg-card rounded-2xl border border-border p-3 md:p-4 cursor-default">
             <div className="text-[11px] text-muted-foreground mb-1">{stat.label}</div>
             <div className="text-xl md:text-2xl font-bold text-foreground">{stat.value}</div>
             <div className="text-[11px] text-primary/80 mt-0.5">{stat.sub}</div>
@@ -39,7 +39,7 @@ export default function DashboardView() {
       <div>
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-primary" />
+            <Sparkles className="w-4 h-4 metallic-gold-icon" />
             <h2 className="text-sm font-bold text-foreground">AI-Prioritized Leads</h2>
           </div>
           <button className="flex items-center gap-1 text-xs text-primary font-medium">
@@ -48,7 +48,7 @@ export default function DashboardView() {
         </div>
         <div className="space-y-2">
           {hotLeads.map((lead) => (
-            <div key={lead.company} className="bg-card rounded-2xl border border-border p-3 md:p-4">
+            <div key={lead.company} className="shimmer-card bg-card rounded-2xl border border-border p-3 md:p-4 cursor-default">
               <div className="flex items-start justify-between mb-2">
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
@@ -89,14 +89,14 @@ export default function DashboardView() {
       </div>
 
       {/* Revenue chart */}
-      <div className="bg-card rounded-2xl border border-border p-3 md:p-4">
+      <div className="shimmer-card bg-card rounded-2xl border border-border p-3 md:p-4 cursor-default">
         <div className="flex items-center justify-between mb-3">
           <div>
             <h3 className="text-sm font-semibold text-foreground">Revenue Pipeline</h3>
             <p className="text-[11px] text-muted-foreground">6-month trend</p>
           </div>
           <div className="flex items-center gap-1 text-xs text-primary font-medium">
-            <TrendingUp className="w-3.5 h-3.5" /> +18%
+            <TrendingUp className="w-3.5 h-3.5 metallic-gold-icon" /> +18%
           </div>
         </div>
         <ResponsiveContainer width="100%" height={160}>
@@ -116,9 +116,9 @@ export default function DashboardView() {
       </div>
 
       {/* Today's schedule hint */}
-      <div className="bg-card rounded-2xl border border-border p-4 flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center flex-shrink-0">
-          <Clock className="w-5 h-5 text-muted-foreground" />
+      <div className="shimmer-card bg-card rounded-2xl border border-border p-4 flex items-center gap-3 cursor-default">
+        <div className="shimmer-icon-container w-10 h-10 rounded-xl bg-secondary flex items-center justify-center flex-shrink-0 transition-all duration-300">
+          <Clock className="w-5 h-5 metallic-silver-icon shimmer-icon" />
         </div>
         <div className="flex-1 min-w-0">
           <div className="text-sm font-medium text-foreground">No follow-ups scheduled</div>

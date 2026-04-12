@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Send, Plus, Loader2, Sparkles, Globe, Pencil, Database, Code, Image, Search, GitBranch, Layers } from "lucide-react";
+import { Send, Plus, Loader2, Sparkles, Globe, Pencil, Database, Code, Search, GitBranch, Layers, Bot, Wrench } from "lucide-react";
 import AgentTab from "./chat/AgentTab";
 import SubAgentChat from "./chat/SubAgentChat";
 import { Button } from "@/components/ui/button";
@@ -95,7 +95,7 @@ export default function ChatPanel({ mobile = false }) {
   const scrollRef = useRef(null);
 
   const [agents, setAgents] = useState([
-    { id: "main", name: "Contractor Assist", type: "main", status: "active" },
+    { id: "main", name: "XPS Agent", type: "main", status: "active" },
   ]);
   const [activeAgentId, setActiveAgentId] = useState("main");
   const [nextSubId, setNextSubId] = useState(1);
@@ -213,17 +213,19 @@ export default function ChatPanel({ mobile = false }) {
       {/* Header */}
       <div className={`${mobile ? 'h-10 min-h-[40px]' : 'h-12 min-h-[48px]'} border-b border-border flex items-center justify-between px-3`}>
         <div className="flex items-center gap-2">
-          <img src="https://media.base44.com/images/public/69db3269c791af3f48cfaee9/583965fcb_IMAGEWITHWHITEOUTLINE.jpg" alt="XPS" className={`${mobile ? 'w-5 h-5' : 'w-7 h-7'} object-contain`} />
+          <div className={`${mobile ? 'w-6 h-6' : 'w-8 h-8'} rounded-lg bg-secondary flex items-center justify-center`}>
+            <Wrench className={`${mobile ? 'w-3 h-3' : 'w-4 h-4'} metallic-silver-icon`} />
+          </div>
           <div>
-            <div className={`${mobile ? 'text-[10px]' : 'text-xs'} font-semibold text-foreground`}>XPS Intelligence</div>
-            <div className="text-[9px] text-xps-green flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-xps-green inline-block" />
-              {mobile ? 'Active' : 'Autonomous · Web · CRM · Code'}
+            <div className={`${mobile ? 'text-[10px]' : 'text-xs'} font-bold xps-gold-slow-shimmer`} style={{ fontFamily: "'Montserrat', sans-serif" }}>XPS AGENT</div>
+            <div className="text-[9px] text-muted-foreground flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
+              {mobile ? 'Ready' : 'Your AI Sales & Ops Crew'}
             </div>
           </div>
         </div>
-        <Button variant="ghost" size="icon" className="h-7 w-7" onClick={handleNewChat}>
-          <Plus className="w-3.5 h-3.5" />
+        <Button variant="ghost" size="icon" className="shimmer-card h-7 w-7" onClick={handleNewChat}>
+          <Plus className="w-3.5 h-3.5 shimmer-icon metallic-silver-icon" />
         </Button>
       </div>
 
@@ -239,17 +241,9 @@ export default function ChatPanel({ mobile = false }) {
               onClose={() => removeSubAgent(agent.id)}
             />
           ))}
-          <button
-            onClick={() => spawnSubAgent()}
-            className="flex items-center gap-1 px-1.5 py-1 rounded-md text-[10px] text-muted-foreground hover-metallic whitespace-nowrap"
-            title="Spawn sub-agent"
-          >
-            <GitBranch className="w-2.5 h-2.5" />
-            <Plus className="w-2.5 h-2.5" />
-          </button>
           <div className="ml-auto flex items-center gap-1 text-[9px] text-muted-foreground">
-            <Layers className="w-2.5 h-2.5 text-xps-purple" />
-            {agents.length - 1} sub
+            <Layers className="w-2.5 h-2.5 metallic-silver-icon" />
+            {agents.length - 1} helpers
           </div>
         </div>
       )}
@@ -272,10 +266,12 @@ export default function ChatPanel({ mobile = false }) {
             <div className="flex flex-col items-center justify-center h-full text-center px-4">
               {!mobile && (
                 <>
-                  <img src="https://media.base44.com/images/public/69db3269c791af3f48cfaee9/583965fcb_IMAGEWITHWHITEOUTLINE.jpg" alt="XPS" className="w-14 h-14 object-contain mb-3" />
-                  <h3 className="text-sm font-semibold text-foreground mb-1">XPS Contractor Assist</h3>
+                  <div className="w-14 h-14 rounded-2xl bg-secondary flex items-center justify-center mb-3 shimmer-card">
+                    <Wrench className="w-7 h-7 metallic-silver-icon shimmer-icon" />
+                  </div>
+                  <h3 className="text-sm font-bold xps-gold-slow-shimmer mb-1" style={{ fontFamily: "'Montserrat', sans-serif" }}>XPS AGENT</h3>
                   <p className="text-[10px] text-muted-foreground mb-4">
-                    Autonomous AI with web browsing, data analysis, and full CRM access.
+                    Your AI crew — handles research, emails, proposals, and follow-ups.
                   </p>
                 </>
               )}
@@ -286,9 +282,9 @@ export default function ChatPanel({ mobile = false }) {
                     <button
                       key={action.label}
                       onClick={() => setInput(action.label)}
-                      className="w-full flex items-center gap-2 px-3 py-2 rounded-lg bg-card border border-border hover:border-primary/30 transition-colors text-left"
+                      className="shimmer-card w-full flex items-center gap-2 px-3 py-2 rounded-lg bg-card border border-border hover:border-primary/30 transition-colors text-left"
                     >
-                      <Icon className="w-3 h-3 metallic-silver-icon flex-shrink-0" />
+                      <Icon className="w-3 h-3 metallic-silver-icon shimmer-icon flex-shrink-0" />
                       <span className="text-[10px] text-foreground">{action.label}</span>
                     </button>
                   );
@@ -338,9 +334,9 @@ export default function ChatPanel({ mobile = false }) {
             <div className="ml-auto">
               <button
                 onClick={() => spawnSubAgent()}
-                className="flex items-center gap-1 text-[9px] text-muted-foreground hover:text-foreground transition-colors"
+                className="shimmer-card flex items-center gap-1 text-[9px] text-muted-foreground hover:text-foreground transition-colors px-2 py-1 rounded-md"
               >
-                <GitBranch className="w-2.5 h-2.5 metallic-silver-icon" /> Sub-Agent
+                <GitBranch className="w-2.5 h-2.5 metallic-silver-icon shimmer-icon" /> Add Helper
               </button>
             </div>
           </div>

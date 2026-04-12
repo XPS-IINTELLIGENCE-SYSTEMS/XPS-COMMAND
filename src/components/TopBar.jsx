@@ -38,12 +38,12 @@ export default function TopBar({ activeView, children, theme, onThemeToggle }) {
       <div className="flex items-center gap-2">
         <button
           onClick={onThemeToggle}
-          className="p-2 rounded-xl hover:bg-secondary/50 text-muted-foreground transition-colors"
+          className="shimmer-card p-2 rounded-xl hover:bg-secondary/50 text-muted-foreground transition-colors"
         >
-          {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+          {theme === 'dark' ? <Sun className="w-4 h-4 shimmer-icon metallic-silver-icon" /> : <Moon className="w-4 h-4 shimmer-icon metallic-silver-icon" />}
         </button>
-        <button className="p-2 rounded-xl hover:bg-secondary/50 text-muted-foreground transition-colors relative">
-          <Bell className="w-4 h-4" />
+        <button className="shimmer-card p-2 rounded-xl hover:bg-secondary/50 text-muted-foreground transition-colors relative">
+          <Bell className="w-4 h-4 shimmer-icon metallic-silver-icon" />
           <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-primary rounded-full" />
         </button>
         <div className="w-8 h-8 rounded-xl bg-primary/15 flex items-center justify-center text-[11px] font-bold text-primary">

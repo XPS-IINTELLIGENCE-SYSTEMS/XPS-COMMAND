@@ -10,6 +10,7 @@ const viewTitles = {
   outreach: "Outreach",
   proposals: "Proposals",
   analytics: "Analytics",
+  reports: "AI Reports",
   knowledge: "Knowledge Base",
   competition: "Competition Watch",
   connectors: "Connectors",

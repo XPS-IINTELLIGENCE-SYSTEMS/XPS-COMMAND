@@ -12,6 +12,7 @@ import AdminView from "./dashboard/AdminView";
 import SettingsView from "./dashboard/SettingsView";
 import EditorView from "./editor/EditorView";
 import WorkflowView from "./workflow/WorkflowView";
+import ReportingDashboard from "./reporting/ReportingDashboard";
 
 const views = {
   dashboard: DashboardView,
@@ -22,6 +23,7 @@ const views = {
   outreach: OutreachView,
   proposals: ProposalsView,
   analytics: AnalyticsView,
+  reports: ReportingDashboard,
   knowledge: KnowledgeView,
   competition: CompetitionView,
   connectors: ConnectorsView,

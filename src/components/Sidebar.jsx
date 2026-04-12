@@ -16,6 +16,7 @@ const navSections = [
       { id: "outreach", label: "Outreach", icon: Send },
       { id: "proposals", label: "Proposals", icon: FileText },
       { id: "analytics", label: "Analytics", icon: BarChart3 },
+      { id: "reports", label: "AI Reports", icon: BarChart3 },
       { id: "editor", label: "Editor", icon: Pencil },
     ],
   },

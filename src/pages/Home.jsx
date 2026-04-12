@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { PanelLeftClose, PanelLeftOpen, PanelRightClose, PanelRightOpen, Menu, X, MessageSquare, Sun, Moon } from "lucide-react";
 import Sidebar from "../components/Sidebar";
+import HexGlow from "../components/HexGlow";
 import TopBar from "../components/TopBar";
 import ContentArea from "../components/ContentArea";
 import ChatPanel from "../components/ChatPanel";
@@ -80,16 +81,19 @@ export default function Home() {
       </div>
 
       {/* Desktop Center */}
-      <div className="hex-bg hidden md:flex flex-1 flex-col overflow-hidden">
-        <TopBar activeView={activeView} theme={theme} onThemeToggle={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
-          <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-1.5 rounded-md hover:bg-secondary/50 text-muted-foreground hover:text-foreground transition-colors" title={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}>
-            {sidebarOpen ? <PanelLeftClose className="w-4 h-4" /> : <PanelLeftOpen className="w-4 h-4" />}
-          </button>
-          <button onClick={() => setChatOpen(!chatOpen)} className="p-1.5 rounded-md hover:bg-secondary/50 text-muted-foreground hover:text-foreground transition-colors" title={chatOpen ? 'Collapse chat' : 'Expand chat'}>
-            {chatOpen ? <PanelRightClose className="w-4 h-4" /> : <PanelRightOpen className="w-4 h-4" />}
-          </button>
-        </TopBar>
-        <ContentArea activeView={activeView} />
+      <div className="hex-bg hidden md:flex flex-1 flex-col overflow-hidden relative">
+        <HexGlow />
+        <div className="relative z-[2] flex flex-col flex-1 overflow-hidden">
+          <TopBar activeView={activeView} theme={theme} onThemeToggle={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
+            <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-1.5 rounded-md hover:bg-secondary/50 text-muted-foreground hover:text-foreground transition-colors" title={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}>
+              {sidebarOpen ? <PanelLeftClose className="w-4 h-4" /> : <PanelLeftOpen className="w-4 h-4" />}
+            </button>
+            <button onClick={() => setChatOpen(!chatOpen)} className="p-1.5 rounded-md hover:bg-secondary/50 text-muted-foreground hover:text-foreground transition-colors" title={chatOpen ? 'Collapse chat' : 'Expand chat'}>
+              {chatOpen ? <PanelRightClose className="w-4 h-4" /> : <PanelRightOpen className="w-4 h-4" />}
+            </button>
+          </TopBar>
+          <ContentArea activeView={activeView} />
+        </div>
       </div>
 
       {/* Desktop Chat Panel */}

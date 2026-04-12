@@ -1,0 +1,76 @@
+{
+  "name": "ScheduledCall",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Call title / purpose"
+    },
+    "contact_name": {
+      "type": "string",
+      "description": "Person to call"
+    },
+    "phone_number": {
+      "type": "string",
+      "description": "Phone number to call"
+    },
+    "email": {
+      "type": "string",
+      "description": "Contact email"
+    },
+    "scheduled_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the call is scheduled"
+    },
+    "call_type": {
+      "type": "string",
+      "enum": [
+        "AI Phone Call",
+        "Manual Call",
+        "Follow-Up",
+        "Discovery",
+        "Closing"
+      ],
+      "description": "Type of call"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Scheduled",
+        "In Progress",
+        "Completed",
+        "Cancelled",
+        "No Answer",
+        "Rescheduled"
+      ],
+      "default": "Scheduled"
+    },
+    "talking_points": {
+      "type": "string",
+      "description": "Key points to cover on the call"
+    },
+    "call_script": {
+      "type": "string",
+      "description": "AI-generated call script"
+    },
+    "outcome": {
+      "type": "string",
+      "description": "Call outcome / notes"
+    },
+    "lead_id": {
+      "type": "string",
+      "description": "Associated lead ID"
+    },
+    "duration_minutes": {
+      "type": "number",
+      "description": "Call duration in minutes"
+    }
+  },
+  "required": [
+    "title",
+    "contact_name",
+    "scheduled_time",
+    "status"
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "name": "Proposal",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Proposal title"
+    },
+    "client_name": {
+      "type": "string",
+      "description": "Client company name"
+    },
+    "client_contact": {
+      "type": "string",
+      "description": "Client contact person"
+    },
+    "client_email": {
+      "type": "string",
+      "description": "Client email"
+    },
+    "service_type": {
+      "type": "string",
+      "enum": [
+        "Epoxy Floor Coating",
+        "Polished Concrete",
+        "Decorative Epoxy",
+        "Industrial Epoxy",
+        "Metallic Epoxy",
+        "Garage Coating",
+        "Healthcare Flooring",
+        "Rubber Floor Prep",
+        "Custom"
+      ],
+      "description": "Type of flooring service"
+    },
+    "square_footage": {
+      "type": "number",
+      "description": "Square footage of the project"
+    },
+    "price_per_sqft": {
+      "type": "number",
+      "description": "Price per square foot"
+    },
+    "total_value": {
+      "type": "number",
+      "description": "Total proposal value in dollars"
+    },
+    "scope_of_work": {
+      "type": "string",
+      "description": "Detailed scope of work"
+    },
+    "materials": {
+      "type": "string",
+      "description": "Materials and products to be used"
+    },
+    "timeline": {
+      "type": "string",
+      "description": "Project timeline and milestones"
+    },
+    "terms": {
+      "type": "string",
+      "description": "Payment terms and conditions"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Draft",
+        "Sent",
+        "Viewed",
+        "Approved",
+        "Rejected",
+        "Expired"
+      ],
+      "default": "Draft"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Internal notes"
+    },
+    "lead_id": {
+      "type": "string",
+      "description": "Associated lead ID"
+    }
+  },
+  "required": [
+    "title",
+    "client_name",
+    "service_type",
+    "total_value",
+    "status"
+  ]
+}

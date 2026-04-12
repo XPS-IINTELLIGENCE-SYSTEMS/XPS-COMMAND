@@ -1,0 +1,60 @@
+{
+  "name": "BusinessPlan",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Business plan title"
+    },
+    "executive_summary": {
+      "type": "string",
+      "description": "Executive summary"
+    },
+    "market_analysis": {
+      "type": "string",
+      "description": "Market analysis section"
+    },
+    "services_offered": {
+      "type": "string",
+      "description": "Services and products offered"
+    },
+    "target_market": {
+      "type": "string",
+      "description": "Target market description"
+    },
+    "competitive_advantage": {
+      "type": "string",
+      "description": "Competitive advantages"
+    },
+    "financial_projections": {
+      "type": "string",
+      "description": "Financial projections and forecasts"
+    },
+    "marketing_strategy": {
+      "type": "string",
+      "description": "Marketing and sales strategy"
+    },
+    "operations_plan": {
+      "type": "string",
+      "description": "Operations and staffing plan"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Draft",
+        "In Review",
+        "Final",
+        "Archived"
+      ],
+      "default": "Draft"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Internal notes"
+    }
+  },
+  "required": [
+    "title",
+    "status"
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "name": "Workflow",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Workflow name"
+    },
+    "description": {
+      "type": "string",
+      "description": "What this workflow does"
+    },
+    "steps": {
+      "type": "string",
+      "description": "JSON string of workflow steps: [{step_number, action, config, status}]"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Draft",
+        "Active",
+        "Paused",
+        "Completed",
+        "Failed"
+      ],
+      "default": "Draft"
+    },
+    "trigger": {
+      "type": "string",
+      "description": "What triggers this workflow (manual, schedule, event)"
+    },
+    "last_run": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last execution time"
+    },
+    "run_count": {
+      "type": "number",
+      "description": "Number of times this workflow has run"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Internal notes"
+    }
+  },
+  "required": [
+    "name",
+    "status"
+  ]
+}

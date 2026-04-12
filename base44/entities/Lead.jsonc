@@ -1,0 +1,90 @@
+{
+  "name": "Lead",
+  "type": "object",
+  "properties": {
+    "company": {
+      "type": "string",
+      "description": "Company name"
+    },
+    "contact_name": {
+      "type": "string",
+      "description": "Primary contact person"
+    },
+    "email": {
+      "type": "string",
+      "description": "Contact email"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Contact phone number"
+    },
+    "vertical": {
+      "type": "string",
+      "enum": [
+        "Retail",
+        "Food & Bev",
+        "Warehouse",
+        "Automotive",
+        "Healthcare",
+        "Fitness",
+        "Education",
+        "Industrial",
+        "Residential",
+        "Government",
+        "Other"
+      ],
+      "description": "Industry vertical"
+    },
+    "location": {
+      "type": "string",
+      "description": "City, State"
+    },
+    "square_footage": {
+      "type": "number",
+      "description": "Estimated square footage"
+    },
+    "estimated_value": {
+      "type": "number",
+      "description": "Estimated deal value"
+    },
+    "score": {
+      "type": "number",
+      "description": "AI lead score 0-100"
+    },
+    "stage": {
+      "type": "string",
+      "enum": [
+        "New",
+        "Contacted",
+        "Qualified",
+        "Proposal",
+        "Negotiation",
+        "Won",
+        "Lost"
+      ],
+      "default": "New"
+    },
+    "source": {
+      "type": "string",
+      "description": "Lead source (website, referral, AI, cold outreach, etc.)"
+    },
+    "ai_insight": {
+      "type": "string",
+      "description": "AI-generated insight about this lead"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Notes about the lead"
+    },
+    "last_contacted": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last contact date"
+    }
+  },
+  "required": [
+    "company",
+    "contact_name",
+    "stage"
+  ]
+}

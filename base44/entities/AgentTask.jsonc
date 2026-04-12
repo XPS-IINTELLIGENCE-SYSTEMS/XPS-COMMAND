@@ -1,0 +1,79 @@
+{
+  "name": "AgentTask",
+  "type": "object",
+  "properties": {
+    "task_description": {
+      "type": "string",
+      "description": "What the agent needs to do"
+    },
+    "task_type": {
+      "type": "string",
+      "enum": [
+        "Send Email",
+        "Send SMS",
+        "Schedule Call",
+        "Create Proposal",
+        "Create Invoice",
+        "Research",
+        "Follow-Up",
+        "Workflow",
+        "Business Plan",
+        "Calendar Event",
+        "Custom"
+      ],
+      "description": "Type of task"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Queued",
+        "In Progress",
+        "Completed",
+        "Failed",
+        "Cancelled"
+      ],
+      "default": "Queued"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "Low",
+        "Medium",
+        "High",
+        "Urgent"
+      ],
+      "default": "Medium"
+    },
+    "scheduled_for": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When to execute this task"
+    },
+    "completed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the task was completed"
+    },
+    "result": {
+      "type": "string",
+      "description": "Result or outcome of the task"
+    },
+    "error": {
+      "type": "string",
+      "description": "Error message if failed"
+    },
+    "related_entity_type": {
+      "type": "string",
+      "description": "Related entity type (Lead, Proposal, etc.)"
+    },
+    "related_entity_id": {
+      "type": "string",
+      "description": "Related entity ID"
+    }
+  },
+  "required": [
+    "task_description",
+    "task_type",
+    "status"
+  ]
+}

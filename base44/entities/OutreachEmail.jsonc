@@ -1,0 +1,71 @@
+{
+  "name": "OutreachEmail",
+  "type": "object",
+  "properties": {
+    "to_email": {
+      "type": "string",
+      "description": "Recipient email address"
+    },
+    "to_name": {
+      "type": "string",
+      "description": "Recipient name"
+    },
+    "subject": {
+      "type": "string",
+      "description": "Email subject line"
+    },
+    "body": {
+      "type": "string",
+      "description": "Email body (HTML supported)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Draft",
+        "Queued",
+        "Sent",
+        "Failed",
+        "Opened",
+        "Replied"
+      ],
+      "default": "Draft"
+    },
+    "email_type": {
+      "type": "string",
+      "enum": [
+        "Initial Outreach",
+        "Follow-Up",
+        "Proposal",
+        "Invoice",
+        "Thank You",
+        "Reactivation",
+        "Custom"
+      ],
+      "description": "Type of email"
+    },
+    "lead_id": {
+      "type": "string",
+      "description": "Associated lead ID"
+    },
+    "send_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Scheduled send time (if scheduled)"
+    },
+    "sent_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Actual send time"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Internal notes"
+    }
+  },
+  "required": [
+    "to_email",
+    "subject",
+    "body",
+    "status"
+  ]
+}

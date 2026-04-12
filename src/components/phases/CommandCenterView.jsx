@@ -53,9 +53,9 @@ export default function CommandCenterView() {
               </div>
               <div className="text-3xl md:text-4xl font-extrabold metallic-gold shimmer-icon">{stat.value}</div>
               <div className="text-[10px] md:text-xs text-muted-foreground tracking-wider mt-1 font-medium">{stat.label}</div>
-              <div className="flex items-center justify-center gap-1 mt-2">
-                <TrendingUp className="w-3 h-3 metallic-gold-icon" />
-                <span className="text-[10px] xps-gold-slow-shimmer font-semibold">{stat.trend}</span>
+              <div className="flex items-center justify-center gap-1.5 mt-3">
+                <TrendingUp className="w-5 h-5 metallic-gold-icon" />
+                <span className="text-base md:text-lg xps-gold-slow-shimmer font-bold">{stat.trend}</span>
               </div>
             </div>
           ))}

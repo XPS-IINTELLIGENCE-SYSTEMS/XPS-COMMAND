@@ -1,17 +1,53 @@
 import { useState, useEffect, useRef } from "react";
-import { Send, Bot, Plus, Loader2, Sparkles, Globe, Pencil, Database, Code, Image, Search } from "lucide-react";
+import { Send, Shield, Plus, Loader2, Sparkles, Globe, Pencil, Database, Code, Image, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { base44 } from "@/api/base44Client";
 import ReactMarkdown from "react-markdown";
 
-function MessageBubble({ message }) {
+function TypingText({ text }) {
+  const [displayed, setDisplayed] = useState("");
+  const [done, setDone] = useState(false);
+
+  useEffect(() => {
+    if (!text) return;
+    // If text is short or already seen, show immediately
+    if (text.length < 5) {
+      setDisplayed(text);
+      setDone(true);
+      return;
+    }
+    setDisplayed("");
+    setDone(false);
+    let i = 0;
+    const speed = Math.max(8, Math.min(25, 1500 / text.length));
+    const timer = setInterval(() => {
+      i += 1;
+      if (i >= text.length) {
+        setDisplayed(text);
+        setDone(true);
+        clearInterval(timer);
+      } else {
+        setDisplayed(text.slice(0, i));
+      }
+    }, speed);
+    return () => clearInterval(timer);
+  }, [text]);
+
+  return (
+    <ReactMarkdown className="text-xs leading-relaxed text-foreground/90 max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 [&_p]:my-1 [&_ul]:my-1 [&_ol]:my-1 [&_li]:my-0.5 [&_code]:text-primary [&_code]:bg-secondary [&_code]:px-1 [&_code]:rounded [&_a]:text-primary [&_strong]:text-foreground [&_h1]:text-sm [&_h2]:text-xs [&_h3]:text-xs">
+      {done ? text : displayed + "▍"}
+    </ReactMarkdown>
+  );
+}
+
+function MessageBubble({ message, isLatestAssistant }) {
   const isUser = message.role === "user";
 
   return (
     <div className={`flex gap-2.5 ${isUser ? "justify-end" : "justify-start"}`}>
       {!isUser && (
         <div className="w-6 h-6 rounded-md bg-primary/15 flex items-center justify-center flex-shrink-0 mt-0.5">
-          <Bot className="w-3.5 h-3.5 text-primary" />
+          <Shield className="w-3.5 h-3.5 text-primary" />
         </div>
       )}
       <div className={`max-w-[85%] ${isUser ? "order-first" : ""}`}>
@@ -30,19 +66,21 @@ function MessageBubble({ message }) {
           </div>
         )}
         {message.content && (
-          <div className={`rounded-xl px-3 py-2 ${
-            isUser 
-              ? "bg-primary text-primary-foreground" 
-              : "bg-card border border-border"
-          }`}>
-            {isUser ? (
+          isUser ? (
+            <div className="rounded-xl px-3 py-2 bg-primary text-primary-foreground">
               <p className="text-xs leading-relaxed">{message.content}</p>
-            ) : (
-              <ReactMarkdown className="text-xs prose prose-sm prose-invert max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 [&_p]:my-1 [&_ul]:my-1 [&_ol]:my-1 [&_li]:my-0.5 [&_code]:text-primary [&_code]:bg-secondary [&_code]:px-1 [&_code]:rounded [&_a]:text-primary">
-                {message.content}
-              </ReactMarkdown>
-            )}
-          </div>
+            </div>
+          ) : (
+            <div className="py-1">
+              {isLatestAssistant ? (
+                <TypingText text={message.content} />
+              ) : (
+                <ReactMarkdown className="text-xs leading-relaxed text-foreground/90 max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 [&_p]:my-1 [&_ul]:my-1 [&_ol]:my-1 [&_li]:my-0.5 [&_code]:text-primary [&_code]:bg-secondary [&_code]:px-1 [&_code]:rounded [&_a]:text-primary [&_strong]:text-foreground">
+                  {message.content}
+                </ReactMarkdown>
+              )}
+            </div>
+          )
         )}
       </div>
     </div>
@@ -141,7 +179,7 @@ export default function ChatPanel() {
       <div className="h-12 min-h-[48px] border-b border-border flex items-center justify-between px-3">
         <div className="flex items-center gap-2">
           <div className="w-6 h-6 rounded-md bg-primary/15 flex items-center justify-center">
-            <Bot className="w-3.5 h-3.5 text-primary" />
+            <Shield className="w-3.5 h-3.5 text-primary" />
           </div>
           <div>
             <div className="text-xs font-semibold text-foreground">Open Claw Agent</div>
@@ -183,7 +221,7 @@ export default function ChatPanel() {
         ) : messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center px-4">
             <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-3">
-              <Sparkles className="w-6 h-6 text-primary" />
+              <Shield className="w-6 h-6 text-primary" />
             </div>
             <h3 className="text-sm font-semibold text-foreground mb-1">Open Claw Agent</h3>
             <p className="text-[10px] text-muted-foreground mb-4">
@@ -206,7 +244,10 @@ export default function ChatPanel() {
             </div>
           </div>
         ) : (
-          messages.map((msg, i) => <MessageBubble key={i} message={msg} />)
+          messages.map((msg, i) => {
+            const isLatestAssistant = msg.role === "assistant" && i === messages.length - 1;
+            return <MessageBubble key={i} message={msg} isLatestAssistant={isLatestAssistant} />;
+          })
         )}
       </div>
 

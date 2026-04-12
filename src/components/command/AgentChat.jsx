@@ -3,7 +3,7 @@ import { ArrowLeft, Send, Loader2, Bot } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import ReactMarkdown from "react-markdown";
 
-export default function AgentChat({ agent, onClose }) {
+export default function AgentChat({ agent, onClose, hideHeader = false }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [conversation, setConversation] = useState(null);
@@ -51,6 +51,7 @@ export default function AgentChat({ agent, onClose }) {
   return (
     <div className="flex-1 flex flex-col h-full overflow-hidden">
       {/* Header */}
+      {!hideHeader && (
       <div className="flex items-center gap-3 px-4 py-3 border-b border-border bg-card/30 flex-shrink-0">
         <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-secondary/50 transition-colors">
           <ArrowLeft className="w-4 h-4 text-muted-foreground" />
@@ -67,6 +68,7 @@ export default function AgentChat({ agent, onClose }) {
           <span className="text-[9px] font-bold text-green-500">ACTIVE</span>
         </div>
       </div>
+      )}
 
       {/* Messages */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-3">

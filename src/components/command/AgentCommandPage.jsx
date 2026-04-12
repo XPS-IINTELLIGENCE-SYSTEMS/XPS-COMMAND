@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { Bot, Globe, Wand2, Radar, Terminal, Wrench, Image, Video, Code } from "lucide-react";
+import { Bot, Globe, Wand2, Radar, Terminal } from "lucide-react";
 import AgentFleet from "./AgentFleet";
-import AgentChat from "./AgentChat";
+import AgentWorkspace from "./AgentWorkspace";
 import BrowserPanel from "./BrowserPanel";
 import ToolsPanel from "./ToolsPanel";
 
@@ -51,7 +51,7 @@ export default function AgentCommandPage() {
       {/* Content */}
       <div className="flex-1 overflow-hidden flex">
         {activeAgent ? (
-          <AgentChat agent={activeAgent} onClose={handleCloseAgent} />
+          <AgentWorkspace agent={activeAgent} onClose={handleCloseAgent} />
         ) : (
           <div className="flex-1 overflow-hidden">
             {tab === "agents" && <AgentFleet onLaunch={handleLaunchAgent} />}

@@ -3,6 +3,7 @@ import FindWorkView from "./phases/FindWorkView";
 import GetWorkView from "./phases/GetWorkView";
 import WinWorkView from "./phases/WinWorkView";
 import GetPaidView from "./phases/GetPaidView";
+import TipsView from "./phases/TipsView";
 import SettingsView from "./dashboard/SettingsView";
 
 const views = {
@@ -11,6 +12,7 @@ const views = {
   get_work: GetWorkView,
   win_work: WinWorkView,
   get_paid: GetPaidView,
+  tips: TipsView,
   settings: SettingsView,
 };
 

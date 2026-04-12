@@ -1,5 +1,5 @@
 import { 
-  Zap, Search, MessageSquare, Trophy, DollarSign, Settings
+  Zap, Search, MessageSquare, Trophy, DollarSign, Lightbulb, Settings
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -11,6 +11,7 @@ const phases = [
   { id: "get_work", label: "Get Work", icon: MessageSquare, num: "2" },
   { id: "win_work", label: "Win Work", icon: Trophy, num: "3" },
   { id: "get_paid", label: "Get Paid", icon: DollarSign, num: "4" },
+  { id: "tips", label: "Tips & Tricks", icon: Lightbulb, num: null },
 ];
 
 const utilityNav = [

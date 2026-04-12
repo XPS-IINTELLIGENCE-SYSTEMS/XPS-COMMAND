@@ -1,4 +1,4 @@
-import { Zap, Search, MessageSquare, Trophy, DollarSign } from "lucide-react";
+import { Zap, Search, MessageSquare, Trophy, DollarSign, Lightbulb } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const tabs = [
@@ -7,6 +7,7 @@ const tabs = [
   { id: "get_work", label: "Get", icon: MessageSquare },
   { id: "win_work", label: "Win", icon: Trophy },
   { id: "get_paid", label: "Paid", icon: DollarSign },
+  { id: "tips", label: "Tips", icon: Lightbulb },
 ];
 
 export default function MobileTabBar({ activeView, onViewChange }) {

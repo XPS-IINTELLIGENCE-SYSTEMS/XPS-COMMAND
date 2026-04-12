@@ -1,5 +1,5 @@
 import { 
-  Zap, Search, MessageSquare, Trophy, DollarSign, Settings
+  Zap, Search, MessageSquare, Trophy, DollarSign, Lightbulb, Settings
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -9,6 +9,7 @@ const navItems = [
   { id: "get_work", label: "2. Get Work", icon: MessageSquare, desc: "Outreach & communication" },
   { id: "win_work", label: "3. Win Work", icon: Trophy, desc: "Bids, proposals & closing" },
   { id: "get_paid", label: "4. Get Paid", icon: DollarSign, desc: "Invoicing & collections" },
+  { id: "tips", label: "Tips & Tricks", icon: Lightbulb, desc: "Pro knowledge & videos" },
   { id: "settings", label: "Settings", icon: Settings, desc: "Account & integrations" },
 ];
 

@@ -34,14 +34,14 @@ export default function WorkflowCanvas({ nodes, setNodes, agents }) {
       {/* Toolbar */}
       <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-card/50">
         <div className="flex items-center gap-2">
-          <span className="text-xs font-medium text-white">{nodes.length} nodes</span>
+          <span className="text-xs font-medium text-foreground">{nodes.length} nodes</span>
           <span className="text-[10px] text-muted-foreground">· Drag to reorder</span>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" className="h-7 text-[10px] gap-1.5">
+          <Button variant="outline" size="sm" className="h-7 text-[10px] gap-1.5 metallic-silver-bg text-background border-0 hover:brightness-110">
             <Save className="w-3 h-3" /> Save
           </Button>
-          <Button size="sm" className="h-7 text-[10px] gap-1.5 metallic-gold-bg text-background hover:brightness-110">
+          <Button size="sm" className="h-7 text-[10px] gap-1.5 metallic-silver-bg text-background border-0 hover:brightness-110">
             <Play className="w-3 h-3" /> Run Workflow
           </Button>
         </div>
@@ -55,7 +55,7 @@ export default function WorkflowCanvas({ nodes, setNodes, agents }) {
               <div className="w-16 h-16 rounded-2xl bg-secondary/50 flex items-center justify-center mb-3">
                 <Plus className="w-6 h-6 text-muted-foreground" />
               </div>
-              <p className="text-sm text-white font-medium mb-1">Build Your Workflow</p>
+              <p className="text-sm text-foreground font-medium mb-1">Build Your Workflow</p>
               <p className="text-[10px] text-muted-foreground max-w-xs">
                 Drag nodes from the sidebar to create an AI-orchestrated pipeline. 
                 Assign specialty agents to each step.
@@ -68,7 +68,7 @@ export default function WorkflowCanvas({ nodes, setNodes, agents }) {
                   <div ref={provided.innerRef} {...provided.droppableProps} className="space-y-3 max-w-lg mx-auto">
                     {/* Start marker */}
                     <div className="flex items-center justify-center">
-                      <div className="px-3 py-1 rounded-full bg-xps-green/20 border border-xps-green/30 text-[10px] text-xps-green font-medium">
+                      <div className="px-3 py-1 rounded-full bg-secondary border border-[#8a8a8a]/30 text-[10px] text-foreground/70 font-medium">
                         ● START
                       </div>
                     </div>
@@ -94,7 +94,7 @@ export default function WorkflowCanvas({ nodes, setNodes, agents }) {
 
                     {/* End marker */}
                     <div className="flex items-center justify-center pt-2">
-                      <div className="px-3 py-1 rounded-full bg-xps-red/20 border border-xps-red/30 text-[10px] text-xps-red font-medium">
+                      <div className="px-3 py-1 rounded-full bg-secondary border border-[#8a8a8a]/30 text-[10px] text-foreground/70 font-medium">
                         ■ END
                       </div>
                     </div>

@@ -22,10 +22,10 @@ export default function WorkflowSidebar({ onAddNode, agents, setAgents }) {
   };
 
   return (
-    <div className="w-56 min-w-[224px] border-r border-border bg-card/50 flex flex-col h-full overflow-hidden">
+    <div className="w-full md:w-56 md:min-w-[224px] border-b md:border-b-0 md:border-r border-border bg-card/50 flex flex-col max-h-[40vh] md:max-h-none md:h-full overflow-hidden">
       {/* Header */}
       <div className="px-3 py-2.5 border-b border-border">
-        <div className="text-xs font-semibold text-white mb-0.5">Node Palette</div>
+        <div className="text-xs font-semibold text-foreground mb-0.5">Node Palette</div>
         <div className="text-[9px] text-muted-foreground">Click to add to workflow</div>
       </div>
 
@@ -35,9 +35,9 @@ export default function WorkflowSidebar({ onAddNode, agents, setAgents }) {
           <div key={cat.label}>
             <button
               onClick={() => setExpandedCat(expandedCat === cat.label ? null : cat.label)}
-              className="w-full flex items-center gap-2 px-2 py-1.5 rounded-md text-[10px] font-semibold text-white/80 hover:bg-secondary/50 transition-colors"
+              className="w-full flex items-center gap-2 px-2 py-1.5 rounded-md text-[10px] font-semibold text-foreground/80 hover:bg-secondary/50 transition-colors"
             >
-              <div className="w-2 h-2 rounded-full" style={{ backgroundColor: cat.color }} />
+              <div className="w-2 h-2 rounded-full metallic-silver-bg" />
               {cat.label}
               <ChevronRight className={cn("w-3 h-3 ml-auto transition-transform", expandedCat === cat.label && "rotate-90")} />
             </button>
@@ -51,9 +51,9 @@ export default function WorkflowSidebar({ onAddNode, agents, setAgents }) {
                       onClick={() => onAddNode(node.type)}
                       className="w-full flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-secondary/70 transition-colors group"
                     >
-                      <Icon className="w-3 h-3 flex-shrink-0" style={{ color: cat.color }} />
+                      <Icon className="w-3 h-3 flex-shrink-0 metallic-silver-icon" />
                       <div className="text-left min-w-0">
-                        <div className="text-[10px] text-white/90 truncate">{node.label}</div>
+                        <div className="text-[10px] text-foreground/90 truncate">{node.label}</div>
                         <div className="text-[8px] text-muted-foreground truncate">{node.desc}</div>
                       </div>
                       <Plus className="w-3 h-3 text-muted-foreground opacity-0 group-hover:opacity-100 ml-auto flex-shrink-0" />
@@ -69,7 +69,7 @@ export default function WorkflowSidebar({ onAddNode, agents, setAgents }) {
       {/* Agent Creator */}
       <div className="border-t border-border px-3 py-2.5">
         <div className="flex items-center justify-between mb-2">
-          <div className="text-[10px] font-semibold text-white flex items-center gap-1">
+          <div className="text-[10px] font-semibold text-foreground flex items-center gap-1">
             <Bot className="w-3 h-3 metallic-silver-icon" /> Agents ({agents.length})
           </div>
           <button onClick={() => setShowAgentForm(!showAgentForm)} className="p-0.5 rounded hover:bg-secondary">
@@ -101,7 +101,7 @@ export default function WorkflowSidebar({ onAddNode, agents, setAgents }) {
               <option value="smart">Smart (GPT-4o)</option>
               <option value="deep">Deep Analysis (Claude)</option>
             </select>
-            <Button size="sm" className="w-full h-6 text-[9px] metallic-gold-bg text-background" onClick={addAgent}>
+            <Button size="sm" className="w-full h-6 text-[9px] metallic-silver-bg text-background border-0 hover:brightness-110" onClick={addAgent}>
               Create Agent
             </Button>
           </div>
@@ -112,7 +112,7 @@ export default function WorkflowSidebar({ onAddNode, agents, setAgents }) {
             <div key={agent.id} className="flex items-center gap-2 px-2 py-1 rounded-md bg-secondary/30 border border-border">
               <Bot className="w-3 h-3 metallic-silver-icon flex-shrink-0" />
               <div className="flex-1 min-w-0">
-                <div className="text-[10px] text-white truncate">{agent.name}</div>
+                <div className="text-[10px] text-foreground truncate">{agent.name}</div>
                 <div className="text-[8px] text-muted-foreground truncate">{agent.specialty || agent.model}</div>
               </div>
               <button onClick={() => removeAgent(agent.id)} className="p-0.5 rounded hover:bg-destructive/20">

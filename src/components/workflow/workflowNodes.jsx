@@ -8,7 +8,7 @@ import {
 const nodeCategories = [
   {
     label: "Data Acquisition",
-    color: "#3b82f6",
+    color: "#b0b0b0",
     nodes: [
       { type: "web_scrape", label: "Web Scraper", icon: Globe, desc: "Crawl by keyword or URL" },
       { type: "mass_ingest", label: "Mass Data Ingestion", icon: ArrowDownToLine, desc: "Async multi-site scraping" },
@@ -19,7 +19,7 @@ const nodeCategories = [
   },
   {
     label: "Data Processing",
-    color: "#8b5cf6",
+    color: "#c0c0c0",
     nodes: [
       { type: "validation", label: "Data Validation", icon: CheckCircle, desc: "Clean & validate records" },
       { type: "scoring", label: "Scoring & Prioritizing", icon: Star, desc: "AI-powered lead scoring" },
@@ -41,7 +41,7 @@ const nodeCategories = [
   },
   {
     label: "Sales Outreach",
-    color: "#22c55e",
+    color: "#a8a8a8",
     nodes: [
       { type: "sales_log", label: "Sales Call Log", icon: PhoneCall, desc: "AI call integration" },
       { type: "sales_pitch", label: "Sales Pitch", icon: MessageSquare, desc: "AI pitch generation" },
@@ -52,7 +52,7 @@ const nodeCategories = [
   },
   {
     label: "Analysis & Results",
-    color: "#f97316",
+    color: "#d0d0d0",
     nodes: [
       { type: "data_analysis", label: "Data Analysis", icon: BarChart3, desc: "Statistical analysis" },
       { type: "contact_success", label: "Contact Success", icon: Target, desc: "Track outreach results" },
@@ -62,7 +62,7 @@ const nodeCategories = [
   },
   {
     label: "Control Flow",
-    color: "#06b6d4",
+    color: "#9a9a9a",
     nodes: [
       { type: "condition", label: "Condition", icon: GitBranch, desc: "If/else branching" },
       { type: "loop", label: "Loop", icon: Search, desc: "Iterate over data" },

@@ -21,21 +21,18 @@ export default function WorkflowNodeCard({ node, index, isSelected, onSelect, on
       )}
     >
       {/* Drag handle */}
-      <div {...(dragHandleProps || {})} className="cursor-grab active:cursor-grabbing text-muted-foreground hover:text-white">
+      <div {...(dragHandleProps || {})} className="cursor-grab active:cursor-grabbing text-muted-foreground hover:text-foreground">
         <GripVertical className="w-4 h-4" />
       </div>
 
       {/* Icon */}
-      <div
-        className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
-        style={{ backgroundColor: color + "20", border: `1px solid ${color}40` }}
-      >
-        <Icon className="w-4 h-4" style={{ color }} />
+      <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 bg-secondary border border-[#8a8a8a]/30">
+        <Icon className="w-4 h-4 metallic-silver-icon" />
       </div>
 
       {/* Info */}
       <div className="flex-1 min-w-0">
-        <div className="text-xs font-medium text-white truncate">{nodeDef.label || node.type}</div>
+        <div className="text-xs font-medium text-foreground truncate">{nodeDef.label || node.type}</div>
         <div className="text-[10px] text-muted-foreground truncate">
           {node.agent ? `Agent: ${node.agent}` : nodeDef.desc || ""}
         </div>

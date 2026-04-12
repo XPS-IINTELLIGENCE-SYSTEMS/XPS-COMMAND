@@ -11,7 +11,7 @@ export default function NodeConfigPanel({ node, agents, onUpdate, onClose }) {
   return (
     <div className="w-64 border-l border-border bg-card/80 backdrop-blur-sm p-4 overflow-y-auto">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-xs font-semibold text-white">Configure Node</h3>
+        <h3 className="text-xs font-semibold text-foreground">Configure Node</h3>
         <button onClick={onClose} className="p-1 rounded hover:bg-secondary">
           <X className="w-3.5 h-3.5 text-muted-foreground" />
         </button>
@@ -21,7 +21,7 @@ export default function NodeConfigPanel({ node, agents, onUpdate, onClose }) {
         {/* Node type info */}
         <div className="p-3 rounded-lg bg-secondary/50 border border-border">
           <div className="text-[10px] text-muted-foreground mb-1">Type</div>
-          <div className="text-xs text-white font-medium">{nodeDef.label || node.type}</div>
+          <div className="text-xs text-foreground font-medium">{nodeDef.label || node.type}</div>
           <div className="text-[10px] text-muted-foreground mt-0.5">{nodeDef.desc}</div>
         </div>
 
@@ -93,7 +93,7 @@ export default function NodeConfigPanel({ node, agents, onUpdate, onClose }) {
           </select>
         </div>
 
-        <Button variant="outline" size="sm" className="w-full text-[10px] h-7" onClick={onClose}>
+        <Button variant="outline" size="sm" className="w-full text-[10px] h-7 metallic-silver-bg text-background border-0 hover:brightness-110" onClick={onClose}>
           Done
         </Button>
       </div>

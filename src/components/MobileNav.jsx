@@ -4,7 +4,7 @@ import {
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { id: "start_here", label: "Start Here", icon: Rocket, desc: "Get set up in minutes" },
+  { id: "start_here", label: "Training", icon: Rocket, desc: "Get set up in minutes" },
   { id: "command", label: "Dashboard", icon: Zap, desc: "AI daily briefing" },
   { id: "find_work", label: "1. Find Work", icon: Search, desc: "Lead gen & prospecting" },
   { id: "get_work", label: "2. Get Work", icon: MessageSquare, desc: "Outreach & communication" },

@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import HexGlow from "../components/HexGlow";
 import { base44 } from "@/api/base44Client";
@@ -12,11 +11,6 @@ const stats = [
 
 export default function SignIn() {
   const navigate = useNavigate();
-
-  useEffect(() => {
-    // Redirect to Base44 auth immediately
-    base44.auth.redirectToLogin("/dashboard");
-  }, []);
 
   return (
     <div className="hex-bg min-h-screen bg-background flex items-center justify-center relative overflow-hidden">
@@ -52,12 +46,6 @@ export default function SignIn() {
               </div>
             ))}
           </div>
-
-          {/* Spinner */}
-          <div className="mb-5">
-            <div className="w-8 h-8 border-4 border-white/10 border-t-primary rounded-full animate-spin" />
-          </div>
-          <p className="text-xs text-white/50 mb-5">Redirecting to secure sign-in...</p>
 
           {/* Sign In Button */}
           <button

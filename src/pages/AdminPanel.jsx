@@ -1,14 +1,16 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { Globe, Image, MessageSquare, BarChart3, Zap, Layout, Terminal, X, Sun, Moon } from "lucide-react";
+import { Globe, Image, MessageSquare, BarChart3, Zap, Layout, Terminal, X, Sun, Moon, Radar } from "lucide-react";
 import { cn } from "@/lib/utils";
 import AdminWebBrowser from "../components/admin/AdminWebBrowser";
 import AdminImageCreator from "../components/admin/AdminImageCreator";
 import MultiAgentChat from "../components/admin/MultiAgentChat";
 import GanttChart from "../components/admin/GanttChart";
+import ShadowScraper from "../components/admin/ShadowScraper";
 
 const TOOLS = [
   { id: "browser", label: "Browser", icon: Globe },
+  { id: "scraper", label: "Shadow Scraper", icon: Radar },
   { id: "image", label: "Image AI", icon: Image },
   { id: "chat", label: "Agent Chat", icon: MessageSquare },
   { id: "gantt", label: "Gantt", icon: BarChart3 },
@@ -73,6 +75,7 @@ export default function AdminPanel() {
   const renderTool = () => {
     switch (activeTool) {
       case "browser": return <AdminWebBrowser />;
+      case "scraper": return <ShadowScraper />;
       case "image": return <AdminImageCreator />;
       case "chat": return <MultiAgentChat />;
       case "gantt": return <GanttChart />;

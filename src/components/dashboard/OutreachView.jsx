@@ -31,7 +31,7 @@ export default function OutreachView() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-lg md:text-xl font-bold text-foreground">Outreach</h1>
-          <p className="text-[11px] text-muted-foreground">AI-powered email & SMS campaigns</p>
+          <p className="text-sm text-muted-foreground">AI-powered email & SMS campaigns</p>
         </div>
         <Button size="sm" className="h-9 text-xs gap-1.5 rounded-xl bg-primary text-primary-foreground">
           <Plus className="w-3.5 h-3.5" /> New Template
@@ -42,9 +42,9 @@ export default function OutreachView() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3">
         {stats.map((stat) => (
           <div key={stat.label} className="bg-card rounded-2xl border border-border p-3 md:p-4">
-            <div className="text-[11px] text-muted-foreground">{stat.label}</div>
+            <div className="text-sm text-muted-foreground">{stat.label}</div>
             <div className="text-xl font-bold text-foreground mt-1">{stat.value}</div>
-            <div className="text-[11px] text-primary/80 mt-0.5">{stat.sub}</div>
+            <div className="text-sm text-primary/80 mt-0.5">{stat.sub}</div>
           </div>
         ))}
       </div>
@@ -57,7 +57,7 @@ export default function OutreachView() {
           </div>
           <div className="text-left">
             <div className="text-sm font-semibold text-foreground">AI SMS</div>
-            <div className="text-[11px] text-muted-foreground">Send smart text</div>
+            <div className="text-sm text-muted-foreground">Send smart text</div>
           </div>
         </button>
         <button onClick={() => setCallOpen(true)} className="flex items-center gap-3 p-4 bg-card rounded-2xl border border-border active:scale-[0.98] transition-transform">
@@ -66,7 +66,7 @@ export default function OutreachView() {
           </div>
           <div className="text-left">
             <div className="text-sm font-semibold text-foreground">AI Call</div>
-            <div className="text-[11px] text-muted-foreground">AI voice outreach</div>
+            <div className="text-sm text-muted-foreground">AI voice outreach</div>
           </div>
         </button>
         <button className="flex items-center gap-3 p-4 bg-card rounded-2xl border border-border active:scale-[0.98] transition-transform">
@@ -75,7 +75,7 @@ export default function OutreachView() {
           </div>
           <div className="text-left">
             <div className="text-sm font-semibold text-foreground">AI Mass Email</div>
-            <div className="text-[11px] text-muted-foreground">Send to leads</div>
+            <div className="text-sm text-muted-foreground">Send to leads</div>
           </div>
         </button>
         <button className="flex items-center gap-3 p-4 bg-card rounded-2xl border border-border active:scale-[0.98] transition-transform">
@@ -84,7 +84,7 @@ export default function OutreachView() {
           </div>
           <div className="text-left">
             <div className="text-sm font-semibold text-foreground">AI Sequence</div>
-            <div className="text-[11px] text-muted-foreground">Multi-step drip</div>
+            <div className="text-sm text-muted-foreground">Multi-step drip</div>
           </div>
         </button>
       </div>
@@ -103,7 +103,7 @@ export default function OutreachView() {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="text-sm font-medium text-foreground truncate">{t.name}</div>
-                <div className="text-[11px] text-muted-foreground">{t.type} · {t.uses} uses · {t.lastUsed}</div>
+                <div className="text-sm text-muted-foreground">{t.type} · {t.uses} uses · {t.lastUsed}</div>
               </div>
               <ArrowUpRight className="w-4 h-4 text-muted-foreground flex-shrink-0" />
             </div>

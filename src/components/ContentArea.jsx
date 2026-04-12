@@ -7,6 +7,9 @@ import DoWorkView from "./phases/DoWorkView";
 import GetPaidView from "./phases/GetPaidView";
 import TipsView from "./phases/TipsView";
 import SettingsView from "./dashboard/SettingsView";
+import LeadsView from "./dashboard/LeadsView";
+import ResearchView from "./dashboard/ResearchView";
+import OutreachView from "./dashboard/OutreachView";
 
 const views = {
   start_here: StartHereView,
@@ -18,6 +21,9 @@ const views = {
   get_paid: GetPaidView,
   tips: TipsView,
   settings: SettingsView,
+  leads: LeadsView,
+  research: ResearchView,
+  outreach: OutreachView,
 };
 
 export default function ContentArea({ activeView }) {

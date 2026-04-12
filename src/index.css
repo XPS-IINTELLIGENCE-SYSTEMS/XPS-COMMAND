@@ -259,6 +259,10 @@
   .overflow-y-auto, .overflow-auto {
     -webkit-overflow-scrolling: touch;
   }
+  /* Minimum body text size for mobile readability */
+  p, span, div, li, td, th, label {
+    font-size: max(var(--tw-font-size, inherit), 14px);
+  }
 }
 
 /* Custom scrollbar */

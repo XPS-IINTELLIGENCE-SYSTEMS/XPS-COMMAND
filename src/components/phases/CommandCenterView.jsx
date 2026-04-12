@@ -46,7 +46,7 @@ export default function CommandCenterView() {
           <h1 className="text-3xl md:text-5xl font-extrabold leading-none xps-gold-slow-shimmer" style={{ fontFamily: "'Montserrat', sans-serif" }}>
             COMMAND
           </h1>
-          <p className="mt-3 text-sm md:text-base text-muted-foreground max-w-xl mx-auto">
+          <p className="mt-3 text-sm md:text-base text-muted-foreground max-w-xl mx-auto leading-relaxed">
             Your agent analyzed everything overnight — here's what needs your attention
           </p>
         </div>
@@ -61,7 +61,7 @@ export default function CommandCenterView() {
                   <StatIcon className="w-5 h-5 metallic-silver-icon" />
                 </div>
                 <div className="text-3xl md:text-4xl font-extrabold metallic-gold shimmer-icon">{stat.value}</div>
-                <div className="text-[10px] md:text-xs text-muted-foreground tracking-wider mt-1 font-medium">{stat.label}</div>
+                <div className="text-xs text-muted-foreground tracking-wider mt-1 font-medium">{stat.label}</div>
                 <div className="flex items-center justify-center gap-1.5 mt-3">
                   <TrendingUp className="w-5 h-5 metallic-gold-icon" />
                   <span className="text-base md:text-lg xps-gold-slow-shimmer font-bold">{stat.trend}</span>
@@ -78,7 +78,7 @@ export default function CommandCenterView() {
               <NavIcon id="command" size="md" />
               <div>
                 <h2 className="text-sm md:text-base font-bold text-foreground">Needs Your Attention</h2>
-                <p className="text-[10px] text-muted-foreground">AI flagged {todayActions.length} priority items</p>
+                <p className="text-xs text-muted-foreground">AI flagged {todayActions.length} priority items</p>
               </div>
             </div>
             <div className="space-y-2">
@@ -90,8 +90,8 @@ export default function CommandCenterView() {
                       <Icon className="w-4 h-4 shimmer-icon metallic-silver-icon" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs md:text-sm text-foreground font-medium">{action.label}</p>
-                      <span className="text-[10px] text-muted-foreground tracking-wider">{action.phase}</span>
+                      <p className="text-sm text-foreground font-medium">{action.label}</p>
+                      <span className="text-xs text-muted-foreground tracking-wider">{action.phase}</span>
                     </div>
                     <button className="shimmer-card inline-flex items-center gap-1 text-[10px] md:text-xs text-primary font-semibold px-3 py-1.5 rounded-lg border border-primary/20 hover:bg-primary/10 transition-colors">
                       Fix <ArrowRight className="w-3 h-3" />
@@ -110,7 +110,7 @@ export default function CommandCenterView() {
               <NavIcon id="tips" size="md" />
               <div>
                 <h2 className="text-sm md:text-base font-bold text-foreground">Recent Wins</h2>
-                <p className="text-[10px] text-muted-foreground">Closed deals & milestones</p>
+                <p className="text-xs text-muted-foreground">Closed deals & milestones</p>
               </div>
             </div>
             <div className="space-y-1">
@@ -118,8 +118,8 @@ export default function CommandCenterView() {
                 <div key={i} className="flex items-center gap-3 py-3 border-b border-border/30 last:border-0">
                   <CheckCircle2 className="w-4 h-4 metallic-gold-icon flex-shrink-0" />
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs md:text-sm text-foreground font-medium">{win.label}</p>
-                    <span className="text-[10px] text-muted-foreground">{win.time}</span>
+                    <p className="text-sm text-foreground font-medium">{win.label}</p>
+                    <span className="text-xs text-muted-foreground">{win.time}</span>
                   </div>
                 </div>
               ))}

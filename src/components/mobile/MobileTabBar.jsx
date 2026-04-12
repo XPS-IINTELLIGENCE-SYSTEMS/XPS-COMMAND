@@ -1,11 +1,12 @@
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, Search, Trophy, HardHat, DollarSign, Lightbulb } from "lucide-react";
+import { LayoutDashboard, Search, Users, Mail, DollarSign, Lightbulb } from "lucide-react";
+import NavIcon from "../shared/NavIcon";
 
 const tabs = [
-  { id: "command", label: "Home", Icon: LayoutDashboard },
-  { id: "find_work", label: "Find", Icon: Search },
-  { id: "win_work", label: "Win", Icon: Trophy },
-  { id: "do_work", label: "Do", Icon: HardHat },
+  { id: "command", label: "Dashboard", Icon: LayoutDashboard },
+  { id: "find_work", label: "Leads", Icon: Users },
+  { id: "research", label: "Research", Icon: Search },
+  { id: "outreach", label: "Outreach", Icon: Mail },
   { id: "get_paid", label: "Paid", Icon: DollarSign },
   { id: "tips", label: "Tips", Icon: Lightbulb },
 ];

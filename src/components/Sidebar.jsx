@@ -73,7 +73,7 @@ export default function Sidebar({ activeView, onViewChange }) {
                       "w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-xs font-medium transition-all duration-200",
                       isActive
                         ? "metallic-gold-bg text-background"
-                        : "text-white hover-metallic"
+                        : "text-white/80 hover-metallic"
                     )}
                   >
                     <Icon className={cn("w-3.5 h-3.5 flex-shrink-0", isActive ? "text-background" : "metallic-silver-icon")} />

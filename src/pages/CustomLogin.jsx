@@ -1,62 +1,13 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
 import PageHexGlow from "../components/PageHexGlow";
-import { base44 } from "@/api/base44Client";
-import { ArrowRight, Lock } from "lucide-react";
+import { ArrowRight, Shield, Wrench } from "lucide-react";
 
 export default function CustomLogin() {
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { toast } = useToast();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    if (!password.trim()) return;
-    setLoading(true);
-    try {
-      const response = await base44.functions.invoke("validatePassword", { password });
-      const { success, role } = response.data;
-
-      if (success) {
-        sessionStorage.setItem("xps-role", role);
-        toast({ title: "Access Granted", description: `Welcome, ${role}.` });
-
-        if (role === "owner") {
-          navigate("/admin-panel", { replace: true });
-        } else {
-          navigate("/dashboard", { replace: true });
-        }
-      } else {
-        toast({
-          title: "Access Denied",
-          description: "Invalid password. Try again.",
-          variant: "destructive",
-        });
-      }
-    } catch (error) {
-      // The function returns 401 for wrong passwords which throws an error
-      const msg = error?.response?.data?.message || error?.message || "";
-      if (msg.includes("Invalid password") || error?.response?.status === 401) {
-        toast({
-          title: "Access Denied",
-          description: "Invalid password. Try again.",
-          variant: "destructive",
-        });
-      } else {
-        console.error("Login error:", error);
-        toast({
-          title: "Connection Error",
-          description: "Could not reach server: " + msg,
-          variant: "destructive",
-        });
-      }
-    } finally {
-      setLoading(false);
-    }
+  const enter = (role, path) => {
+    sessionStorage.setItem("xps-role", role);
+    navigate(path, { replace: true });
   };
 
   return (
@@ -75,34 +26,34 @@ export default function CustomLogin() {
           >
             XPS Intelligence
           </h1>
-          <p className="text-sm text-muted-foreground mt-2">Enter your access code</p>
+          <p className="text-sm text-muted-foreground mt-2">Select your access level</p>
         </div>
 
-        <form onSubmit={handleLogin} className="space-y-6">
-          <Input
-            type="password"
-            placeholder="Enter Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="h-12 text-base bg-secondary/50 border-input/50 focus:border-ring chat-input-metallic"
-          />
-          <Button
-            type="submit"
-            className="w-full h-12 rounded-lg text-lg font-bold metallic-gold-bg text-background hover:brightness-110 transition-all duration-300"
-            disabled={loading}
+        <div className="space-y-3">
+          <button
+            onClick={() => enter("owner", "/admin-panel")}
+            className="w-full flex items-center gap-4 px-5 py-4 rounded-xl metallic-gold-bg text-background font-bold text-lg hover:brightness-110 transition-all duration-300"
           >
-            {loading ? (
-              "Verifying..."
-            ) : (
-              <>
-                <Lock className="w-5 h-5 mr-2" />
-                Access System
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </>
-            )}
-          </Button>
-        </form>
+            <Shield className="w-6 h-6" />
+            <div className="flex-1 text-left">
+              <div>Owner / Admin</div>
+              <div className="text-xs font-normal opacity-70">Full system access</div>
+            </div>
+            <ArrowRight className="w-5 h-5" />
+          </button>
+
+          <button
+            onClick={() => enter("operator", "/dashboard")}
+            className="w-full flex items-center gap-4 px-5 py-4 rounded-xl border border-white/15 bg-card/60 text-white font-bold text-lg hover:border-primary/40 hover:bg-card/80 transition-all duration-300"
+          >
+            <Wrench className="w-6 h-6 metallic-silver-icon" />
+            <div className="flex-1 text-left">
+              <div>Operator</div>
+              <div className="text-xs font-normal text-white/50">Dashboard & tools</div>
+            </div>
+            <ArrowRight className="w-5 h-5 text-white/40" />
+          </button>
+        </div>
       </div>
     </div>
   );

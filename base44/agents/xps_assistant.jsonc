@@ -122,43 +122,43 @@
       ]
     },
     {
-      "backend_function_name": "territoryAnalyzer"
+      "function_name": "territoryAnalyzer"
     },
     {
-      "backend_function_name": "leadScraper"
+      "function_name": "leadScraper"
     },
     {
-      "backend_function_name": "contactEnricher"
+      "function_name": "contactEnricher"
     },
     {
-      "backend_function_name": "deepResearch"
+      "function_name": "deepResearch"
     },
     {
-      "backend_function_name": "leadScorer"
+      "function_name": "leadScorer"
     },
     {
-      "backend_function_name": "bulkLeadPipeline"
+      "function_name": "bulkLeadPipeline"
     },
     {
-      "backend_function_name": "webResearch"
+      "function_name": "webResearch"
     },
     {
-      "backend_function_name": "sendOutreachEmail"
+      "function_name": "sendOutreachEmail"
     },
     {
-      "backend_function_name": "sendSms"
+      "function_name": "sendSms"
     },
     {
-      "backend_function_name": "makeAiCall"
+      "function_name": "makeAiCall"
     },
     {
-      "backend_function_name": "seoAnalyze"
+      "function_name": "seoAnalyze"
     },
     {
-      "backend_function_name": "generateProposal"
+      "function_name": "generateProposal"
     },
     {
-      "backend_function_name": "generateInvoice"
+      "function_name": "generateInvoice"
     }
   ],
   "whatsapp_greeting": "Hey! This is XPS Contractor Assist \u2014 your AI operations engine. I can find leads, analyze territories, enrich contacts, score your pipeline, write proposals, send emails & SMS, make AI calls, and run full lead generation campaigns. Tell me what you need \u2014 I execute immediately."

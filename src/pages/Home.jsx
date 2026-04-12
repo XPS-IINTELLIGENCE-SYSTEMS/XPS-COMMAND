@@ -6,6 +6,7 @@ import TopBar from "../components/TopBar";
 import ContentArea from "../components/ContentArea";
 import ChatPanel from "../components/ChatPanel";
 import MobileNav from "../components/MobileNav";
+import MobileTabBar from "../components/mobile/MobileTabBar";
 
 export default function Home() {
   const [activeView, setActiveView] = useState("dashboard");
@@ -68,9 +69,13 @@ export default function Home() {
         </div>
         {/* Chat panel - slides up from bottom */}
         {mobileChatOpen && (
-          <div className="flex-1 border-t border-border overflow-hidden pb-[env(safe-area-inset-bottom)]">
+          <div className="flex-1 border-t border-border overflow-hidden">
             <ChatPanel mobile />
           </div>
+        )}
+        {/* Persistent bottom tab bar */}
+        {!mobileChatOpen && (
+          <MobileTabBar activeView={activeView} onViewChange={handleMobileViewChange} />
         )}
       </div>
 

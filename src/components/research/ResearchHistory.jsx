@@ -1,6 +1,8 @@
 import { Globe, Sparkles, Clock, RefreshCw, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import moment from "moment";
+import PullToRefresh from "../shared/PullToRefresh";
+import { useCallback } from "react";
 
 const statusColors = {
   Complete: "text-green-400",
@@ -10,9 +12,17 @@ const statusColors = {
   Failed: "text-destructive",
 };
 
-export default function ResearchHistory({ results, loading, onSelect, onRefresh }) {
+export default function ResearchHistory({ results, loading, onSelect, onRefresh, pullRefresh }) {
+  const handlePullRefresh = useCallback(async () => {
+    await onRefresh();
+  }, [onRefresh]);
+
+  const Wrapper = pullRefresh ? PullToRefresh : ({ children }) => <div className="flex-1 overflow-y-auto">{children}</div>;
+  const wrapperProps = pullRefresh ? { onRefresh: handlePullRefresh } : {};
+
   return (
-    <div className="flex-1 overflow-y-auto p-3 md:p-6">
+    <Wrapper {...wrapperProps}>
+    <div className="p-3 md:p-6">
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-sm font-semibold text-foreground">Research History</h3>
         <button onClick={onRefresh} className="p-1.5 rounded-lg hover:bg-secondary transition-colors">
@@ -28,7 +38,7 @@ export default function ResearchHistory({ results, loading, onSelect, onRefresh 
         <div className="text-center py-12">
           <Globe className="w-10 h-10 text-muted-foreground/30 mx-auto mb-3" />
           <div className="text-sm text-muted-foreground">No research yet</div>
-          <div className="text-[11px] text-muted-foreground/60">Use the browser above to start researching</div>
+          <div className="text-sm text-muted-foreground/60">Use the browser above to start researching</div>
         </div>
       ) : (
         <div className="space-y-2">
@@ -49,11 +59,11 @@ export default function ResearchHistory({ results, loading, onSelect, onRefresh 
               </div>
               <div className="flex-1 min-w-0">
                 <div className="text-sm font-medium text-foreground truncate">{r.title || r.query}</div>
-                <div className="text-[11px] text-muted-foreground truncate">
+                <div className="text-sm text-muted-foreground truncate">
                   {r.category || "Research"} · {moment(r.created_date).fromNow()}
                 </div>
               </div>
-              <span className={cn("text-[10px] font-medium", statusColors[r.status] || "text-muted-foreground")}>
+              <span className={cn("text-xs font-medium", statusColors[r.status] || "text-muted-foreground")}>
                 {r.status}
               </span>
             </button>
@@ -61,5 +71,6 @@ export default function ResearchHistory({ results, loading, onSelect, onRefresh 
         </div>
       )}
     </div>
+    </Wrapper>
   );
 }

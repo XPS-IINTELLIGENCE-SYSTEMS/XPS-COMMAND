@@ -30,7 +30,7 @@ export default function ResearchView() {
   return (
     <div className="h-full flex flex-col overflow-hidden">
       <ResearchBrowser onComplete={handleResearchComplete} />
-      <ResearchHistory results={results} loading={loading} onSelect={setSelectedResult} onRefresh={loadResults} />
+      <ResearchHistory results={results} loading={loading} onSelect={setSelectedResult} onRefresh={loadResults} pullRefresh />
     </div>
   );
 }

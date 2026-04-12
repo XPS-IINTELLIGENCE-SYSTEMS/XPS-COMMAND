@@ -95,7 +95,7 @@ export default function ResearchBrowser({ onComplete }) {
         {/* Preset dropdown */}
         {showPresets && !searching && (
           <div className="mt-2 bg-card border border-border rounded-2xl overflow-hidden">
-            <div className="px-3 py-2 text-[10px] font-semibold text-muted-foreground/60 uppercase tracking-wider">Suggested Searches</div>
+            <div className="px-3 py-2 text-xs font-semibold text-muted-foreground/60 uppercase tracking-wider">Suggested Searches</div>
             {presets.map((preset) => {
               const Icon = preset.icon;
               return (
@@ -107,7 +107,7 @@ export default function ResearchBrowser({ onComplete }) {
                   <Icon className="w-4 h-4 text-muted-foreground flex-shrink-0" />
                   <div className="flex-1 min-w-0">
                     <div className="text-sm text-foreground">{preset.label}</div>
-                    <div className="text-[10px] text-muted-foreground">{preset.category}</div>
+                    <div className="text-xs text-muted-foreground">{preset.category}</div>
                   </div>
                   <ArrowRight className="w-3 h-3 text-muted-foreground" />
                 </button>
@@ -122,7 +122,7 @@ export default function ResearchBrowser({ onComplete }) {
             <Loader2 className="w-5 h-5 text-primary animate-spin flex-shrink-0" />
             <div>
               <div className="text-sm font-medium text-foreground">AI is researching...</div>
-              <div className="text-[11px] text-muted-foreground">Scraping web data → Extracting facts → Generating deep insights</div>
+              <div className="text-sm text-muted-foreground">Scraping web data → Extracting facts → Generating deep insights</div>
             </div>
           </div>
         )}
@@ -131,7 +131,7 @@ export default function ResearchBrowser({ onComplete }) {
         {error && (
           <div className="mt-3 bg-destructive/10 border border-destructive/20 rounded-2xl p-4">
             <div className="text-sm text-destructive font-medium">Research failed</div>
-            <div className="text-[11px] text-destructive/80 mt-0.5">{error}</div>
+            <div className="text-sm text-destructive/80 mt-0.5">{error}</div>
           </div>
         )}
 
@@ -145,10 +145,10 @@ export default function ResearchBrowser({ onComplete }) {
             <p className="text-xs text-foreground/80 leading-relaxed">{result.summary}</p>
             {result.key_data?.opportunities?.length > 0 && (
               <div>
-                <div className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">Opportunities</div>
+                <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Opportunities</div>
                 <div className="space-y-1">
                   {result.key_data.opportunities.slice(0, 3).map((opp, i) => (
-                    <div key={i} className="text-[11px] text-foreground/70 flex items-start gap-1.5">
+                    <div key={i} className="text-sm text-foreground/70 flex items-start gap-1.5">
                       <span className="text-primary mt-0.5">•</span> {opp}
                     </div>
                   ))}
@@ -157,7 +157,7 @@ export default function ResearchBrowser({ onComplete }) {
             )}
             <div className="flex items-center gap-2 flex-wrap">
               {result.tags?.split(", ").filter(Boolean).slice(0, 5).map((tag) => (
-                <span key={tag} className="text-[10px] bg-secondary px-2 py-0.5 rounded-lg text-muted-foreground">{tag}</span>
+                <span key={tag} className="text-xs bg-secondary px-2 py-0.5 rounded-lg text-muted-foreground">{tag}</span>
               ))}
             </div>
           </div>

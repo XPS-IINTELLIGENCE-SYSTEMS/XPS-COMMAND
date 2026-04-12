@@ -1,0 +1,35 @@
+{
+  "name": "UserProfile",
+  "type": "object",
+  "properties": {
+    "full_name": {
+      "type": "string",
+      "description": "User's full name"
+    },
+    "title": {
+      "type": "string",
+      "description": "User's role/title"
+    },
+    "preferred_tools": {
+      "type": "string",
+      "description": "Comma-separated list of preferred AI tools"
+    },
+    "ai_mode": {
+      "type": "string",
+      "enum": [
+        "Fully Autonomous",
+        "Semi-Autonomous",
+        "Basic Chat"
+      ],
+      "description": "Preferred AI interaction mode"
+    },
+    "industry": {
+      "type": "string",
+      "description": "User's industry or specialty"
+    }
+  },
+  "required": [
+    "full_name",
+    "title"
+  ]
+}

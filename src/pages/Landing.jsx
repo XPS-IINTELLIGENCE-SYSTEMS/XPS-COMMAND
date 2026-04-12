@@ -1,4 +1,4 @@
-import { ArrowRight, Shield } from "lucide-react";
+import { ArrowRight, ShieldCheck } from "lucide-react";
 import { Link } from "react-router-dom";
 import LandingNav from "../components/landing/LandingNav";
 
@@ -16,8 +16,8 @@ export default function Landing() {
 
       {/* Hero */}
       <div className="flex flex-col items-center text-center px-6 pt-14 md:pt-24 pb-16">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 mb-8 transition-all duration-500 hover:scale-105">
-          <Shield className="w-3.5 h-3.5 text-primary animate-pulse metallic-gold-icon" />
+        <div className="shimmer-card inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 mb-8">
+          <ShieldCheck className="w-3.5 h-3.5 metallic-gold-icon animate-pulse shimmer-icon" />
           <span className="text-xs font-medium xps-silver-subtle-gold">AI-Powered Xtreme Intelligence System</span>
         </div>
 
@@ -44,8 +44,8 @@ export default function Landing() {
         {/* Stats */}
         <div className="flex flex-wrap justify-center gap-8 md:gap-16 mt-20">
           {stats.map((s) => (
-            <div key={s.label} className="text-center transition-all duration-500 hover:scale-110 cursor-default">
-              <div className="text-2xl md:text-3xl font-bold metallic-gold">{s.value}</div>
+            <div key={s.label} className="shimmer-card text-center cursor-default p-3 rounded-xl">
+              <div className="text-2xl md:text-3xl font-bold metallic-gold shimmer-icon">{s.value}</div>
               <div className="text-[10px] md:text-xs text-muted-foreground tracking-widest mt-1">{s.label}</div>
             </div>
           ))}

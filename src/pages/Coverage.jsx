@@ -1,22 +1,22 @@
-import { MapPin, ArrowRight } from "lucide-react";
+import { MapPin, ArrowRight, Building } from "lucide-react";
 import { Link } from "react-router-dom";
 import LandingNav from "../components/landing/LandingNav";
 
 const regions = [
-  { name: "Southeast", locations: 14, cities: "Miami, Atlanta, Charlotte, Tampa, Orlando, Nashville" },
-  { name: "Northeast", locations: 10, cities: "New York, Boston, Philadelphia, Hartford, Newark" },
-  { name: "Midwest", locations: 9, cities: "Chicago, Detroit, Columbus, Indianapolis, Milwaukee" },
-  { name: "Southwest", locations: 8, cities: "Dallas, Houston, Phoenix, San Antonio, Austin" },
-  { name: "West Coast", locations: 11, cities: "Los Angeles, San Francisco, Seattle, Portland, San Diego" },
-  { name: "Mountain", locations: 5, cities: "Denver, Salt Lake City, Las Vegas, Albuquerque" },
-  { name: "Pacific Northwest", locations: 3, cities: "Seattle, Portland, Boise" },
+  { name: "Florida (HQ)", locations: 8, cities: "Pompano Beach (HQ), Miami, Tampa, Orlando, Jacksonville, Fort Lauderdale, Boca Raton, Fort Myers" },
+  { name: "Southeast", locations: 12, cities: "Atlanta, Charlotte, Raleigh, Nashville, Birmingham, Charleston, Savannah" },
+  { name: "Northeast", locations: 10, cities: "New York, Boston, Philadelphia, Hartford, Newark, Washington D.C." },
+  { name: "Midwest", locations: 9, cities: "Chicago, Detroit, Columbus, Indianapolis, Milwaukee, Minneapolis" },
+  { name: "Texas & Southwest", locations: 10, cities: "Dallas, Houston, Austin, San Antonio, Phoenix, Tucson, El Paso" },
+  { name: "West Coast", locations: 8, cities: "Los Angeles, San Francisco, San Diego, Sacramento, Portland" },
+  { name: "Mountain & Pacific NW", locations: 5, cities: "Denver, Salt Lake City, Las Vegas, Seattle, Boise" },
 ];
 
 const highlights = [
   { value: "60+", label: "ACTIVE LOCATIONS" },
-  { value: "32", label: "STATES COVERED" },
+  { value: "35+", label: "STATES COVERED" },
   { value: "200+", label: "XTREME TEAM" },
-  { value: "24/7", label: "AI COVERAGE" },
+  { value: "2010", label: "EST. FLORIDA" },
 ];
 
 export default function Coverage() {
@@ -31,27 +31,45 @@ export default function Coverage() {
           <span className="text-foreground">COVERAGE</span>
         </h1>
         <p className="mt-6 text-sm md:text-base text-foreground max-w-2xl leading-relaxed transition-all duration-500 hover:scale-[1.02]">
-          60+ locations across the United States — each backed by AI-powered intelligence, local market expertise, and the XPS quality standard.
+          From our flagship HQ in Pompano Beach, Florida to 60+ locations coast-to-coast — each territory backed by AI intelligence, XPS-certified training, and the Epoxy Network contractor marketplace.
         </p>
       </div>
 
       {/* Stats */}
       <div className="flex flex-wrap justify-center gap-8 md:gap-16 px-6 pb-12">
         {highlights.map((s) => (
-          <div key={s.label} className="text-center transition-all duration-500 hover:scale-110 cursor-default">
-            <div className="text-2xl md:text-3xl font-bold metallic-gold">{s.value}</div>
+          <div key={s.label} className="shimmer-card text-center cursor-default p-3 rounded-xl">
+            <div className="text-2xl md:text-3xl font-bold metallic-gold shimmer-icon">{s.value}</div>
             <div className="text-[10px] md:text-xs text-muted-foreground tracking-widest mt-1">{s.label}</div>
           </div>
         ))}
       </div>
 
+      {/* HQ Callout */}
+      <div className="max-w-5xl mx-auto px-6 pb-8">
+        <div className="shimmer-card bg-card border border-primary/30 rounded-2xl p-6 md:p-8 cursor-default">
+          <div className="flex items-center gap-4 mb-3">
+            <div className="shimmer-icon-container w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center transition-all duration-300">
+              <Building className="w-6 h-6 metallic-gold-icon shimmer-icon" />
+            </div>
+            <div>
+              <h3 className="text-base font-bold text-foreground">XPS Headquarters & Training Center</h3>
+              <span className="text-xs metallic-gold font-semibold">2200 NW 32nd Street, Suite 700 · Pompano Beach, FL 33069</span>
+            </div>
+          </div>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            Our flagship campus houses the XPS Xpress training center, product showroom, R&D lab, and corporate operations — the nerve center for nationwide contractor enablement and AI-powered sales intelligence.
+          </p>
+        </div>
+      </div>
+
       {/* Regions grid */}
       <div className="max-w-5xl mx-auto px-6 pb-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {regions.map((r) => (
-          <div key={r.name} className="bg-card border border-border rounded-2xl p-6 transition-all duration-500 hover:scale-105 cursor-default">
+          <div key={r.name} className="shimmer-card bg-card border border-border rounded-2xl p-6 cursor-default">
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center">
-                <MapPin className="w-4 h-4 metallic-gold-icon" />
+              <div className="shimmer-icon-container w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center transition-all duration-300">
+                <MapPin className="w-4 h-4 metallic-gold-icon shimmer-icon" />
               </div>
               <div>
                 <h3 className="text-sm font-bold text-foreground">{r.name}</h3>

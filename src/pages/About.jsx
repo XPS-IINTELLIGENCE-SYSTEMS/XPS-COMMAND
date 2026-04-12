@@ -1,21 +1,27 @@
-import { Shield, Target, Users, Gem, ArrowRight } from "lucide-react";
+import { Crown, Rocket, Users, GraduationCap, ArrowRight, Globe, Gem, ShieldCheck } from "lucide-react";
 import { Link } from "react-router-dom";
 import LandingNav from "../components/landing/LandingNav";
 
 const values = [
-  { icon: Shield, title: "Xtreme Quality", desc: "We don't cut corners. Every floor, every location, every interaction reflects our commitment to the highest standards in the industry." },
-  { icon: Target, title: "AI-First Innovation", desc: "We invest heavily in artificial intelligence to give our contractors and sales teams an unfair advantage over the competition." },
-  { icon: Users, title: "Team Empowerment", desc: "200+ xtreme professionals equipped with cutting-edge tools, training, and support to deliver exceptional results." },
-  { icon: Gem, title: "Industry Leadership", desc: "Pioneering the integration of AI into the polished concrete and epoxy flooring industry since day one." },
+  { icon: Crown, title: "Industry Pioneer", desc: "Founded in 2010 in Pompano Beach, Florida — XPS has grown from a single crew to the nation's leading vertically integrated epoxy and polished concrete platform." },
+  { icon: Rocket, title: "AI-First Innovation", desc: "We invest heavily in artificial intelligence to give our contractors and sales teams an unfair competitive advantage — from autonomous lead scoring to AI-generated proposals." },
+  { icon: Users, title: "200+ Xtreme Professionals", desc: "Our team of certified installers, sales pros, and support staff are equipped with cutting-edge tools, XPS training programs, and the Contractor Assist AI platform." },
+  { icon: GraduationCap, title: "Training & Certification", desc: "Comprehensive hands-on training programs at our Pompano Beach campus covering epoxy application, diamond grinding, polyaspartic coatings, and business operations." },
+  { icon: Globe, title: "Epoxy Network Marketplace", desc: "Our contractor discovery platform connects homeowners and businesses directly with XPS-certified installers — generating qualified leads across all 60+ territories." },
+  { icon: Gem, title: "Premium Product Ecosystem", desc: "A full Shopify-based catalog of professional-grade equipment, coatings, tooling, metallic pigments, flakes, quartz, and consumables — everything contractors need." },
+  { icon: ShieldCheck, title: "Contractor Enablement", desc: "Beyond products — XPS provides marketing services, financing guidance, branded materials, and ongoing support to help every franchise location thrive." },
+  { icon: Rocket, title: "The XPS Vision", desc: "Building the world's first AI-native operating system for the flooring industry — where every contractor has access to enterprise-grade intelligence tools." },
 ];
 
 const milestones = [
-  { year: "2015", event: "XPS Xpress founded with a vision to revolutionize the flooring industry" },
-  { year: "2018", event: "Expanded to 20+ locations across the Southeast" },
-  { year: "2020", event: "Launched AI-powered lead scoring and proposal automation" },
-  { year: "2022", event: "Reached 50+ locations with nationwide coverage" },
-  { year: "2024", event: "Introduced XPS Intelligence — Contractor Assist platform" },
-  { year: "2025", event: "60+ locations, 200+ team members, $120M+ revenue tracked" },
+  { year: "2010", event: "XPS Xtreme Polishing Systems incorporated in Pompano Beach, Florida" },
+  { year: "2014", event: "Launched Shopify-based equipment & coatings catalog for contractors" },
+  { year: "2017", event: "Expanded to 20+ XPS Xpress franchise locations across the Southeast" },
+  { year: "2019", event: "Launched the Epoxy Network — contractor discovery marketplace for homeowners" },
+  { year: "2021", event: "Reached 40+ locations with integrated training & certification programs" },
+  { year: "2023", event: "Began AI integration — lead scoring, automated proposals, competitive research" },
+  { year: "2024", event: "Launched XPS Intelligence — Contractor Assist autonomous AI platform" },
+  { year: "2025", event: "60+ locations, 200+ team members, $120M+ revenue tracked through AI CRM" },
 ];
 
 export default function About() {
@@ -30,7 +36,7 @@ export default function About() {
           <span className="text-foreground">STORY</span>
         </h1>
         <p className="mt-6 text-sm md:text-base text-foreground max-w-2xl leading-relaxed transition-all duration-500 hover:scale-[1.02]">
-          From a single crew to 60+ locations nationwide — XPS Xpress is redefining what's possible in the polished concrete and epoxy flooring industry through technology and relentless execution.
+          From a single crew in Pompano Beach to 60+ locations nationwide — XPS Xpress is redefining what's possible in the polished concrete and epoxy flooring industry through technology, training, and relentless execution.
         </p>
       </div>
 
@@ -39,10 +45,10 @@ export default function About() {
         {values.map((v) => {
           const Icon = v.icon;
           return (
-            <div key={v.title} className="bg-card border border-border rounded-2xl p-6 transition-all duration-500 hover:scale-105 cursor-default">
+            <div key={v.title} className="shimmer-card bg-card border border-border rounded-2xl p-6 cursor-default">
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                  <Icon className="w-5 h-5 metallic-gold-icon" />
+                <div className="shimmer-icon-container w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center transition-all duration-300">
+                  <Icon className="w-5 h-5 metallic-gold-icon shimmer-icon" />
                 </div>
                 <h3 className="text-sm font-bold text-foreground">{v.title}</h3>
               </div>
@@ -59,9 +65,9 @@ export default function About() {
         </h2>
         <div className="space-y-4">
           {milestones.map((m) => (
-            <div key={m.year} className="flex items-start gap-4 transition-all duration-500 hover:scale-[1.02] cursor-default">
+            <div key={m.year} className="shimmer-card flex items-start gap-4 cursor-default p-2 rounded-xl">
               <div className="w-16 flex-shrink-0 text-right">
-                <span className="text-sm font-bold metallic-gold">{m.year}</span>
+                <span className="text-sm font-bold metallic-gold shimmer-icon">{m.year}</span>
               </div>
               <div className="w-px bg-primary/30 flex-shrink-0 self-stretch" />
               <p className="text-sm text-muted-foreground leading-relaxed pb-2">{m.event}</p>

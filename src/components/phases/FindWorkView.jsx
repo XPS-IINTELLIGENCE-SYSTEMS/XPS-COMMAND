@@ -34,6 +34,7 @@ const tools = [
     old: "Gut feeling, word of mouth, driving around looking for opportunities",
     ai: "Scrapes census data, building permits, commercial development data by zip code to identify high-value territories",
     badge: "Intel",
+    fn: "territoryAnalyzer", params: { city: "Phoenix", state: "AZ", radius_miles: 25 },
     chart: (
       <>
         <div className="text-[10px] font-semibold text-foreground mb-2">Permits by Territory</div>
@@ -47,6 +48,7 @@ const tools = [
     old: "Yellow pages, Blue Book, cold door knocking, trade shows",
     ai: "Scrapes Google Maps, Yelp, permit databases, LinkedIn, industry directories by region + keywords",
     badge: "Active",
+    fn: "leadScraper", params: { location: "Phoenix, AZ", count: 25 },
     chart: (
       <>
         <div className="text-[10px] font-semibold text-foreground mb-2">Lead Sources Breakdown</div>
@@ -60,6 +62,7 @@ const tools = [
     old: "Manually search websites, call front desks, ask around for decision-maker info",
     ai: "Auto-pulls decision maker names, emails, phones, LinkedIn profiles from multiple data sources",
     badge: "Enrichment",
+    fn: "contactEnricher", params: { batch_ids: [] },
     chart: (
       <>
         <StatRow items={[{ value: "94%", label: "Email Hit Rate" }, { value: "78%", label: "Phone Found" }, { value: "86%", label: "LinkedIn Match" }, { value: "2.1s", label: "Avg Enrich" }]} />
@@ -71,6 +74,7 @@ const tools = [
     old: "Google them, drive by the location, ask around for intel",
     ai: "Scrapes their website, reviews, social media, recent news, building permits, existing floor photos",
     badge: "Research",
+    fn: "deepResearch", params: { company_name: "" },
     chart: (
       <>
         <div className="text-[10px] font-semibold text-foreground mb-2">Research Depth Score</div>
@@ -83,6 +87,7 @@ const tools = [
     old: "Gut feeling, whoever called back, stack of business cards on your desk",
     ai: "Ranks leads by budget indicators, timeline urgency, decision-maker access, square footage, industry fit",
     badge: "Scoring",
+    fn: "leadScorer", params: { batch_all: true, top_n: 20 },
     chart: (
       <>
         <div className="text-[10px] font-semibold text-foreground mb-2">Daily Scoring Activity</div>
@@ -231,6 +236,8 @@ export default function FindWorkView() {
             oldWay={tool.old}
             aiTool={tool.ai}
             statusBadge={tool.badge}
+            functionName={tool.fn}
+            functionParams={tool.params}
           >
             {tool.chart}
           </GlassToolCard>

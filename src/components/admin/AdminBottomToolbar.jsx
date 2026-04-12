@@ -1,4 +1,4 @@
-import { Home, Settings, Database, Users, FileText, Mail, DollarSign, BarChart3, Shield, Layers } from "lucide-react";
+import { Home, Settings, Database, Users, FileText, Mail, DollarSign, BarChart3, Layers, Globe, Search, Radar, Bot, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
@@ -14,23 +14,23 @@ const navItems = [
 
 export default function AdminBottomToolbar() {
   return (
-    <div className="h-9 min-h-[36px] border-t border-white/10 bg-black/40 flex items-center px-2 gap-0.5">
+    <div className="h-11 min-h-[44px] border-t border-white/10 bg-black/50 flex items-center justify-center gap-1 mb-3 mx-auto" style={{ width: 'calc(100% - 356px)', marginLeft: '300px' }}>
       {navItems.map((item) => {
         const Icon = item.icon;
         return (
           <a
             key={item.id}
             href={item.path}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-white/40 hover:text-white/80 hover:bg-white/5 transition-all"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-white/35 hover:text-white/80 hover:bg-white/5 transition-all group"
           >
-            <Icon className="w-3 h-3" />
-            <span className="text-[9px] font-medium hidden md:inline">{item.label}</span>
+            <Icon className="w-4 h-4" />
+            <span className="text-[10px] font-medium">{item.label}</span>
           </a>
         );
       })}
-      <div className="ml-auto flex items-center gap-2 text-[9px] text-white/30">
+      <div className="ml-4 flex items-center gap-2 text-[9px] text-white/20">
         <Layers className="w-3 h-3" />
-        <span>XPS Intelligence v2.0</span>
+        <span>XPS v2.0</span>
       </div>
     </div>
   );

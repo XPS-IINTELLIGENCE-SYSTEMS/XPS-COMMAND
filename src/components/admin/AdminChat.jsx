@@ -194,7 +194,12 @@ const AdminChat = forwardRef(function AdminChat(_, ref) {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSend()}
             placeholder="Admin command..."
-            className="flex-1 bg-white/5 border border-white/15 chat-input-metallic rounded-lg px-3 py-2.5 text-xs text-white placeholder:text-white/30 focus:outline-none focus:border-primary/50"
+            className="flex-1 bg-white/5 rounded-lg px-3 py-2.5 text-xs text-white placeholder:text-white/30 focus:outline-none focus:ring-1 focus:ring-primary/50"
+            style={{
+              border: '1px solid transparent',
+              borderImage: 'linear-gradient(90deg, #6a6a6a, #c0c0c0, #e8e8e8, #c0c0c0, #6a6a6a) 1',
+              animation: 'silver-border-anim 3s ease infinite',
+            }}
             disabled={loading || initializing}
           />
           <button

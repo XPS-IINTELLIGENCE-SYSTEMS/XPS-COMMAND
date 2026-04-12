@@ -39,11 +39,18 @@ export default function AdminPanel() {
         {/* Main area */}
         <div className="flex-1 flex overflow-hidden">
           {/* Left: Chat Panel */}
-          <div className="w-[300px] min-w-[300px] border-r border-white/10 bg-black/60">
+          <div className="w-[300px] min-w-[300px] bg-black/60 flex-shrink-0">
             <AdminChat ref={chatRef} />
           </div>
 
-          {/* Center: Editor Canvas */}
+          {/* Vertical silver metallic border line */}
+          <div className="w-px min-w-[1px] flex-shrink-0" style={{
+            background: 'linear-gradient(180deg, #6a6a6a 0%, #c0c0c0 25%, #e8e8e8 50%, #c0c0c0 75%, #6a6a6a 100%)',
+            boxShadow: '0 0 6px rgba(192,192,192,0.3), 0 0 12px rgba(192,192,192,0.15)',
+            animation: 'silver-border-anim 4s ease infinite',
+          }} />
+
+          {/* Center: Editor Canvas with hex glow */}
           <div className="flex-1 relative overflow-hidden hex-bg">
             <div className="absolute inset-0 pointer-events-none z-0">
               <HexGlow />
@@ -53,11 +60,11 @@ export default function AdminPanel() {
             </div>
           </div>
 
-          {/* Right: Tool Toolbar */}
+          {/* Right: Designer Corner Toolbar - offset from edge */}
           <AdminRightToolbar activeTool={activeTool} onToolChange={setActiveTool} />
         </div>
 
-        {/* Bottom Toolbar */}
+        {/* Bottom Toolbar - centered under editor, lifted off bottom */}
         <AdminBottomToolbar />
       </div>
     </div>

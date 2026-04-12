@@ -1,4 +1,7 @@
-import MetalIcon from "../shared/MetalIcon";
+import { Play, BookOpen, Star, Lightbulb } from "lucide-react";
+import NavIcon from "../shared/NavIcon";
+
+const TAG_ICONS = { Video: Play, Guide: BookOpen, "Pro Tip": Star, Sales: Lightbulb };
 
 const tips = [
   { title: "Surface Prep Secrets", desc: "The #1 mistake contractors make with moisture testing", tag: "Video" },
@@ -14,7 +17,7 @@ export default function TipsView() {
     <div className="h-full overflow-y-auto p-6">
       <div className="max-w-3xl mx-auto">
         <div className="flex items-center gap-3 mb-6">
-          <MetalIcon id="tips" size="lg" />
+          <NavIcon id="tips" size="lg" active />
           <div>
             <h1 className="text-lg font-bold xps-gold-slow-shimmer" style={{ fontFamily: "'Montserrat', sans-serif" }}>Tips & Tricks</h1>
             <p className="text-xs text-muted-foreground">Pro knowledge to grow your flooring business</p>
@@ -23,14 +26,15 @@ export default function TipsView() {
 
         <div className="grid gap-3 sm:grid-cols-2">
           {tips.map((tip) => {
+            const TagIcon = TAG_ICONS[tip.tag] || Lightbulb;
             return (
               <button
                 key={tip.title}
                 className="shimmer-card text-left p-4 rounded-xl bg-card border border-border hover:border-primary/30 transition-all"
               >
                 <div className="flex items-start gap-3">
-                  <div className="flex items-center justify-center flex-shrink-0">
-                    <MetalIcon id="tips" size="md" />
+                  <div className="shimmer-icon-container w-8 h-8 rounded-lg bg-secondary flex items-center justify-center flex-shrink-0">
+                    <TagIcon className="w-4 h-4 shimmer-icon metallic-silver-icon" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">

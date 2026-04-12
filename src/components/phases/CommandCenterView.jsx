@@ -1,6 +1,13 @@
-import { Mail, FileText, DollarSign, AlertCircle, CheckCircle2, Clock, ArrowRight, TrendingUp } from "lucide-react";
+import { Mail, DollarSign, AlertCircle, CheckCircle2, Clock, ArrowRight, TrendingUp, Search, Megaphone, HardHat } from "lucide-react";
 import HexGlow from "../HexGlow";
-import MetalIcon from "../shared/MetalIcon";
+import NavIcon from "../shared/NavIcon";
+
+const STAT_ICONS = {
+  find_work: Search,
+  get_work: Megaphone,
+  do_work: HardHat,
+  get_paid: DollarSign,
+};
 
 export default function CommandCenterView() {
   const todayActions = [
@@ -32,8 +39,8 @@ export default function CommandCenterView() {
       <div className="relative z-[1] p-4 md:p-8 space-y-8">
         {/* Hero Header */}
         <div className="text-center pt-4 md:pt-8 pb-4">
-          <div className="shimmer-card inline-flex items-center gap-3 px-5 py-2 rounded-full border border-primary/30 bg-primary/5 mb-6">
-            <MetalIcon id="command" size="sm" />
+          <div className="shimmer-card inline-flex items-center gap-2.5 px-5 py-2 rounded-full border border-primary/30 bg-primary/5 mb-6">
+            <NavIcon id="command" size="sm" />
             <span className="text-sm font-semibold xps-silver-subtle-gold">AI Daily Intelligence Briefing</span>
           </div>
           <h1 className="text-3xl md:text-5xl font-extrabold leading-none xps-gold-slow-shimmer" style={{ fontFamily: "'Montserrat', sans-serif" }}>
@@ -46,26 +53,29 @@ export default function CommandCenterView() {
 
         {/* Pipeline Stats */}
         <div className="flex flex-wrap justify-center gap-4 md:gap-8">
-          {stats.map((stat) => (
-            <div key={stat.label} className="shimmer-card text-center p-5 rounded-xl min-w-[120px] cursor-default">
-              <div className="flex items-center justify-center mx-auto mb-3">
-                <MetalIcon id={stat.iconId} size="lg" />
+          {stats.map((stat) => {
+            const StatIcon = STAT_ICONS[stat.iconId];
+            return (
+              <div key={stat.label} className="shimmer-card text-center p-5 rounded-xl min-w-[120px] cursor-default">
+                <div className="w-10 h-10 rounded-xl bg-secondary/60 flex items-center justify-center mx-auto mb-3">
+                  <StatIcon className="w-5 h-5 metallic-silver-icon" />
+                </div>
+                <div className="text-3xl md:text-4xl font-extrabold metallic-gold shimmer-icon">{stat.value}</div>
+                <div className="text-[10px] md:text-xs text-muted-foreground tracking-wider mt-1 font-medium">{stat.label}</div>
+                <div className="flex items-center justify-center gap-1.5 mt-3">
+                  <TrendingUp className="w-5 h-5 metallic-gold-icon" />
+                  <span className="text-base md:text-lg xps-gold-slow-shimmer font-bold">{stat.trend}</span>
+                </div>
               </div>
-              <div className="text-3xl md:text-4xl font-extrabold metallic-gold shimmer-icon">{stat.value}</div>
-              <div className="text-[10px] md:text-xs text-muted-foreground tracking-wider mt-1 font-medium">{stat.label}</div>
-              <div className="flex items-center justify-center gap-1.5 mt-3">
-                <TrendingUp className="w-5 h-5 metallic-gold-icon" />
-                <span className="text-base md:text-lg xps-gold-slow-shimmer font-bold">{stat.trend}</span>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Needs Attention */}
         <div className="max-w-3xl mx-auto">
           <div className="shimmer-card rounded-2xl border border-border bg-card/50 backdrop-blur-sm p-5 md:p-6 space-y-4">
             <div className="flex items-center gap-3">
-              <MetalIcon id="command" size="md" />
+              <NavIcon id="command" size="md" />
               <div>
                 <h2 className="text-sm md:text-base font-bold text-foreground">Needs Your Attention</h2>
                 <p className="text-[10px] text-muted-foreground">AI flagged {todayActions.length} priority items</p>
@@ -97,7 +107,7 @@ export default function CommandCenterView() {
         <div className="max-w-3xl mx-auto pb-8">
           <div className="shimmer-card rounded-2xl border border-border bg-card/50 backdrop-blur-sm p-5 md:p-6 space-y-4">
             <div className="flex items-center gap-3">
-              <MetalIcon id="tips" size="md" />
+              <NavIcon id="tips" size="md" />
               <div>
                 <h2 className="text-sm md:text-base font-bold text-foreground">Recent Wins</h2>
                 <p className="text-[10px] text-muted-foreground">Closed deals & milestones</p>

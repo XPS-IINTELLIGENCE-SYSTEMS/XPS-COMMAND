@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import MetalIcon from "./shared/MetalIcon";
+import NavIcon from "./shared/NavIcon";
 
 const navItems = [
   { id: "start_here", label: "Start Here", desc: "Get set up in minutes" },
@@ -38,12 +38,7 @@ export default function MobileNav({ activeView, onViewChange }) {
                   : "bg-card border-border active:bg-secondary"
               )}
             >
-              <div className={cn(
-                "w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 overflow-hidden",
-                isActive ? "bg-primary/15" : "bg-secondary"
-              )}>
-                <MetalIcon id={item.id} size="md" />
-              </div>
+              <NavIcon id={item.id} size="lg" active={isActive} />
               <div className="text-left">
                 <div className={cn(
                   "text-sm font-semibold",

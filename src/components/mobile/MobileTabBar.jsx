@@ -1,13 +1,13 @@
 import { cn } from "@/lib/utils";
-import MetalIcon from "../shared/MetalIcon";
+import { LayoutDashboard, Search, Megaphone, HardHat, DollarSign, Lightbulb } from "lucide-react";
 
 const tabs = [
-  { id: "command", label: "Home" },
-  { id: "find_work", label: "Find" },
-  { id: "get_work", label: "Get" },
-  { id: "do_work", label: "Do" },
-  { id: "get_paid", label: "Paid" },
-  { id: "tips", label: "Tips" },
+  { id: "command", label: "Home", Icon: LayoutDashboard },
+  { id: "find_work", label: "Find", Icon: Search },
+  { id: "get_work", label: "Get", Icon: Megaphone },
+  { id: "do_work", label: "Do", Icon: HardHat },
+  { id: "get_paid", label: "Paid", Icon: DollarSign },
+  { id: "tips", label: "Tips", Icon: Lightbulb },
 ];
 
 export default function MobileTabBar({ activeView, onViewChange }) {
@@ -20,12 +20,12 @@ export default function MobileTabBar({ activeView, onViewChange }) {
             key={tab.id}
             onClick={() => onViewChange(tab.id)}
             className={cn(
-              "flex-1 flex flex-col items-center justify-center gap-0.5 py-2 min-h-[52px] transition-colors",
+              "flex-1 flex flex-col items-center justify-center gap-0.5 py-2.5 min-h-[52px] transition-colors",
               isActive ? "text-primary" : "text-muted-foreground"
             )}
           >
-            <MetalIcon id={tab.id} size="xs" />
-            <span className={cn("text-[11px] font-medium", isActive && "xps-gold-slow-shimmer")}>{tab.label}</span>
+            <tab.Icon className={cn("w-5 h-5", isActive && "metallic-gold-icon")} />
+            <span className={cn("text-[10px] font-medium", isActive && "xps-gold-slow-shimmer")}>{tab.label}</span>
           </button>
         );
       })}

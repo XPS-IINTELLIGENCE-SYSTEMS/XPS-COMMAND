@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import MetalIcon from "./shared/MetalIcon";
+import NavIcon from "./shared/NavIcon";
 
 const phases = [
   { id: "start_here", label: "Start Here", num: null },
@@ -49,16 +49,16 @@ export default function Sidebar({ activeView, onViewChange }) {
                     key={item.id}
                     onClick={() => onViewChange(item.id)}
                     className={cn(
-                      "shimmer-card w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-150",
+                      "shimmer-card w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-[13px] font-medium transition-all duration-150",
                       isActive
                         ? "bg-primary/10 text-primary"
                         : "text-foreground/60 hover:text-foreground hover:bg-secondary/50"
                     )}
                   >
+                    <NavIcon id={item.id} size="sm" active={isActive} />
                     {item.num && (
                       <span className={cn("text-[10px] font-bold font-mono w-4", isActive ? "text-primary" : "text-muted-foreground")}>{item.num}</span>
                     )}
-                    <MetalIcon id={item.id} size="sm" />
                     {item.label}
                   </button>
                 );
@@ -78,13 +78,13 @@ export default function Sidebar({ activeView, onViewChange }) {
                     key={item.id}
                     onClick={() => onViewChange(item.id)}
                     className={cn(
-                      "shimmer-card w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-150",
+                      "shimmer-card w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-[13px] font-medium transition-all duration-150",
                       isActive
                         ? "bg-primary/10 text-primary"
                         : "text-foreground/60 hover:text-foreground hover:bg-secondary/50"
                     )}
                   >
-                    <MetalIcon id={item.id} size="sm" />
+                    <NavIcon id={item.id} size="sm" active={isActive} />
                     {item.label}
                   </button>
                 );

@@ -176,9 +176,10 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false }, ref) {
     setMessages([]);
     setConversation(null);
     conversationRef.current = null;
+    const agentCfg = AGENTS.find(a => a.id === currentAgentName) || AGENTS[0];
     const conv = await base44.agents.createConversation({
       agent_name: currentAgentName,
-      metadata: { name: currentAgentName === "xps_assistant" ? "XPS Command Session" : "SEO Marketing Session" },
+      metadata: { name: `${agentCfg.fullName || currentAgentName} Session` },
     });
     setConversation(conv);
     conversationRef.current = conv;
@@ -196,9 +197,10 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false }, ref) {
 
   const handleNewChat = async () => {
     setInitializing(true);
+    const agentCfg = AGENTS.find(a => a.id === currentAgentName) || AGENTS[0];
     const conv = await base44.agents.createConversation({
       agent_name: currentAgentName,
-      metadata: { name: currentAgentName === "xps_assistant" ? "XPS Command Session" : "SEO Marketing Session" },
+      metadata: { name: `${agentCfg.fullName || currentAgentName} Session` },
     });
     setConversation(conv);
     conversationRef.current = conv;
@@ -213,27 +215,51 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false }, ref) {
 
   const activeAgentConfig = AGENTS.find(a => a.id === currentAgentName) || AGENTS[0];
 
-  const quickActions = currentAgentName === "xps_assistant" ? [
-    { label: "Find me 25 leads in Tampa, FL", icon: Search },
-    { label: "Generate a proposal for my top lead", icon: Pencil },
+  const defaultActions = [
+    { label: "What can you do?", icon: Search },
     { label: "Show my pipeline status", icon: Database },
     { label: "Research a company", icon: Globe },
-  ] : [
-    { label: "Write a blog post", icon: Pencil },
-    { label: "Analyze a competitor", icon: Search },
-    { label: "Generate social content", icon: Globe },
-    { label: "Build keyword strategy", icon: TrendingUp },
+    { label: "Help me with a task", icon: Pencil },
   ];
+
+  const agentQuickActions = {
+    xps_assistant: [
+      { label: "Find me 25 leads in Tampa, FL", icon: Search },
+      { label: "Generate a proposal for my top lead", icon: Pencil },
+      { label: "Show my pipeline status", icon: Database },
+      { label: "Research a company", icon: Globe },
+    ],
+    seo_marketing: [
+      { label: "Write a blog post", icon: Pencil },
+      { label: "Analyze a competitor", icon: Search },
+      { label: "Generate social content", icon: Globe },
+      { label: "Build keyword strategy", icon: TrendingUp },
+    ],
+    lead_gen: [
+      { label: "Find leads in Phoenix, AZ", icon: Search },
+      { label: "Analyze Tampa territory", icon: Globe },
+      { label: "Enrich my top leads", icon: Database },
+      { label: "Score all new leads", icon: TrendingUp },
+    ],
+    sales_director: [
+      { label: "Create a proposal", icon: Pencil },
+      { label: "Draft a follow-up email", icon: Search },
+      { label: "Show deals in negotiation", icon: Database },
+      { label: "Close strategy for top lead", icon: TrendingUp },
+    ],
+  };
+
+  const quickActions = agentQuickActions[currentAgentName] || defaultActions;
 
   return (
     <div className={`${mobile ? 'w-full' : 'w-[320px] min-w-[320px]'} h-full ${mobile ? '' : 'border-l border-[#8a8a8a]/30'} flex flex-col bg-background`}>
-      {/* Header */}
-      <div className={`${mobile ? 'h-10 min-h-[40px]' : 'h-12 min-h-[48px]'} border-b border-border flex items-center justify-between px-3`}>
-        <div className="flex items-center gap-2">
+      {/* Agent Switcher Bar */}
+      <div className={`${mobile ? 'min-h-[36px]' : 'min-h-[40px]'} border-b border-border flex items-center gap-1 px-2 py-1`}>
+        <div className="flex-1 overflow-hidden">
           <AgentSwitcher activeAgent={currentAgentName} onSwitch={handleAgentSwitch} mobile={mobile} />
         </div>
-        <Button variant="ghost" size="icon" className="shimmer-card h-7 w-7" onClick={handleNewChat}>
-          <Plus className="w-3.5 h-3.5 shimmer-icon metallic-silver-icon" />
+        <Button variant="ghost" size="icon" className="shimmer-card h-6 w-6 flex-shrink-0" onClick={handleNewChat}>
+          <Plus className="w-3 h-3 shimmer-icon metallic-silver-icon" />
         </Button>
       </div>
 
@@ -275,11 +301,11 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false }, ref) {
               {!mobile && (
                 <>
                   <div className="w-14 h-14 rounded-2xl bg-secondary flex items-center justify-center mb-3 shimmer-card">
-                    <Wrench className="w-7 h-7 metallic-silver-icon shimmer-icon" />
+                    {(() => { const AIcon = activeAgentConfig?.icon || Wrench; return <AIcon className={`w-7 h-7 shimmer-icon ${activeAgentConfig?.color || 'metallic-silver-icon'}`} />; })()}
                   </div>
-                  <h3 className="text-sm font-bold xps-gold-slow-shimmer mb-1" style={{ fontFamily: "'Montserrat', sans-serif" }}>{activeAgentConfig.name}</h3>
+                  <h3 className="text-sm font-bold xps-gold-slow-shimmer mb-1" style={{ fontFamily: "'Montserrat', sans-serif" }}>{activeAgentConfig?.fullName || activeAgentConfig?.name}</h3>
                   <p className="text-[10px] text-muted-foreground mb-4">
-                   {activeAgentConfig.desc}
+                   {activeAgentConfig?.desc}
                   </p>
                 </>
               )}
@@ -317,7 +343,7 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false }, ref) {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSend()}
-            placeholder={currentAgentName === "xps_assistant" ? "Command the agent..." : "Marketing command..."}
+            placeholder={`Command ${activeAgentConfig?.name || 'agent'}...`}
             className={`flex-1 bg-card border rounded-lg px-3 chat-input-metallic ${mobile ? 'py-2.5 text-sm' : 'py-2 text-xs'} text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/30`}
             disabled={loading || initializing}
           />

@@ -405,6 +405,51 @@
   background-clip: text;
 }
 
+@keyframes silver-diagonal-gold {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 300% 300%; }
+}
+
+.xps-silver-subtle-gold {
+  background: linear-gradient(
+    135deg,
+    #c0c0c0 0%,
+    #d0d0d0 20%,
+    #e0e0e0 35%,
+    #d4af37 44%,
+    #f5e6a3 48%,
+    #d4af37 52%,
+    #e0e0e0 60%,
+    #d0d0d0 75%,
+    #c0c0c0 100%
+  );
+  background-size: 400% 400%;
+  animation: silver-diagonal-gold 16s linear infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.light .xps-silver-subtle-gold {
+  background: linear-gradient(
+    135deg,
+    #64748b 0%,
+    #7a8599 20%,
+    #8b9aad 35%,
+    #b8860b 44%,
+    #d4af37 48%,
+    #b8860b 52%,
+    #8b9aad 60%,
+    #7a8599 75%,
+    #64748b 100%
+  );
+  background-size: 400% 400%;
+  animation: silver-diagonal-gold 16s linear infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 .metallic-gold-silver-text {
   background: linear-gradient(135deg, #d4af37, #f5e6a3, #c0c0c0, #e8e8e8, #d4af37, #b8860b, #c0c0c0);
   background-size: 300% 300%;

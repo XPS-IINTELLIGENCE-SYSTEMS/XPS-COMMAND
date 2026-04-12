@@ -47,7 +47,7 @@ export default function Landing() {
       <div className="flex flex-col items-center text-center px-6 pt-14 md:pt-24 pb-16">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 mb-8">
           <Sparkles className="w-3.5 h-3.5 text-primary" />
-          <span className="text-xs font-medium text-primary">AI-Powered Sales Intelligence Platform</span>
+          <span className="text-xs font-medium xps-silver-subtle-gold">AI-Powered Xtreme Intelligence System</span>
         </div>
 
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold leading-none max-w-4xl" style={{ fontFamily: "'Montserrat', sans-serif" }}>

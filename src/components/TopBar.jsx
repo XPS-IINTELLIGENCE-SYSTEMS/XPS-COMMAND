@@ -18,10 +18,12 @@ const viewTitles = {
   editor: "Editor Studio",
 };
 
-export default function TopBar({ activeView }) {
+export default function TopBar({ activeView, children }) {
+  const toggleButtons = children ? (Array.isArray(children) ? children : [children]) : [];
   return (
     <div className="h-12 min-h-[48px] border-b border-border flex items-center justify-between px-4 bg-card/50">
       <div className="flex items-center gap-3">
+        {toggleButtons[0]}
         <div className="text-sm font-medium text-white">
           {viewTitles[activeView] || "Dashboard"}
         </div>
@@ -52,6 +54,7 @@ export default function TopBar({ activeView }) {
         <div className="w-7 h-7 rounded-full metallic-gold-bg flex items-center justify-center text-[10px] font-bold text-background">
           MR
         </div>
+        {toggleButtons[1]}
       </div>
     </div>
   );

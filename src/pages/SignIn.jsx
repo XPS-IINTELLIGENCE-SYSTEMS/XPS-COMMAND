@@ -1,9 +1,6 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Eye, EyeOff } from "lucide-react";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import PageHexGlow from "../components/PageHexGlow";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { base44 } from "@/api/base44Client";
 
 const stats = [
@@ -14,93 +11,33 @@ const stats = [
 ];
 
 export default function SignIn() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPw, setShowPw] = useState(false);
   const navigate = useNavigate();
 
-  const handleSignIn = (e) => {
-    e.preventDefault();
-    // Trigger real Base44 authentication, then redirect to dashboard
+  useEffect(() => {
+    // Redirect to Base44 auth immediately
     base44.auth.redirectToLogin("/dashboard");
-  };
+  }, []);
 
   return (
-    <div className="hex-bg min-h-screen bg-background flex relative">
+    <div className="hex-bg min-h-screen bg-background flex items-center justify-center relative">
       <PageHexGlow />
-      <div className="relative z-[1] flex flex-1">
-      {/* Left panel */}
-      <div className="hidden md:flex flex-1 flex-col items-center justify-center px-12">
+      <div className="relative z-[1] flex flex-col items-center text-center px-6">
         <img
           src="https://media.base44.com/images/public/69db3269c791af3f48cfaee9/583965fcb_IMAGEWITHWHITEOUTLINE.jpg"
           alt="XPS"
-          className="w-20 h-20 object-contain mb-6"
+          className="w-16 h-16 object-contain mb-6"
         />
-        <h2 className="text-3xl font-bold metallic-gold tracking-wider text-center">XPS Xpress</h2>
-        <p className="text-sm text-muted-foreground mt-2 text-center max-w-xs">
-          Contractor Assist — AI-Powered Sales Command Center
-        </p>
-        <div className="grid grid-cols-2 gap-3 mt-10 w-full max-w-xs">
-          {stats.map((s) => (
-            <div key={s.label} className="border border-border rounded-xl p-4 text-center">
-              <div className="text-xl font-bold metallic-gold">{s.value}</div>
-              <div className="text-[10px] text-muted-foreground tracking-widest mt-1">{s.label}</div>
-            </div>
-          ))}
+        <h2 className="text-2xl font-bold metallic-gold tracking-wider">XPS Intelligence</h2>
+        <p className="text-sm text-muted-foreground mt-3">Redirecting to sign in...</p>
+        <div className="mt-6">
+          <div className="w-8 h-8 border-4 border-slate-200 border-t-primary rounded-full animate-spin" />
         </div>
-      </div>
-
-      {/* Right panel - Sign In */}
-      <div className="flex-1 flex items-center justify-center px-6 md:px-16">
-        <div className="w-full max-w-sm">
-          <h1 className="text-2xl font-bold text-foreground">Welcome back</h1>
-          <p className="text-sm text-muted-foreground mt-1">Sign in to your XPS Intelligence account</p>
-
-          <form onSubmit={handleSignIn} className="mt-8 space-y-5">
-            <div>
-              <label className="text-sm text-muted-foreground mb-1.5 block">Email</label>
-              <Input
-                type="email"
-                placeholder="you@xpsxpress.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="h-11"
-              />
-            </div>
-            <div>
-              <label className="text-sm text-muted-foreground mb-1.5 block">Password</label>
-              <div className="relative">
-                <Input
-                  type={showPw ? "text" : "password"}
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="h-11 pr-10"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPw(!showPw)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
-                >
-                  {showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
-              </div>
-              <div className="text-right mt-2">
-                <span className="text-xs text-primary cursor-pointer hover:underline">Forgot password?</span>
-              </div>
-            </div>
-
-            <Button type="submit" className="w-full h-11 metallic-gold-bg text-background font-semibold text-sm hover:brightness-110">
-              Sign In
-            </Button>
-          </form>
-
-          <p className="text-sm text-muted-foreground text-center mt-6">
-            Don't have an account?{" "}
-            <span onClick={() => navigate("/onboarding")} className="text-primary cursor-pointer hover:underline">Sign up</span>
-          </p>
-        </div>
-      </div>
+        <button
+          onClick={() => base44.auth.redirectToLogin("/dashboard")}
+          className="mt-8 px-6 py-3 rounded-xl metallic-gold-bg text-background text-sm font-bold hover:brightness-110 transition-all"
+        >
+          Sign In
+        </button>
       </div>
     </div>
   );

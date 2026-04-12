@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
+import { base44 } from "@/api/base44Client";
 
 export default function LandingNav() {
   const [open, setOpen] = useState(false);
   return (
     <nav className="relative flex items-center justify-between px-4 md:px-12 py-3 md:py-4 border-b border-border/50">
-      <Link to="/signin" className="flex items-center gap-2 md:gap-4 transition-all duration-300 hover:scale-105 min-w-0">
+      <Link to="/" className="flex items-center gap-2 md:gap-4 transition-all duration-300 hover:scale-105 min-w-0">
         <img
           src="https://media.base44.com/images/public/69db3269c791af3f48cfaee9/583965fcb_IMAGEWITHWHITEOUTLINE.jpg"
           alt="XPS"
@@ -25,15 +26,18 @@ export default function LandingNav() {
         <Link to="/about" className="hover:text-foreground cursor-pointer transition-all duration-300 hover:scale-110">About</Link>
       </div>
       <div className="flex items-center gap-2 md:gap-3">
-        <Link to="/signin" className="text-sm md:text-lg font-medium text-white/80 hover:text-white transition-all duration-300">
+        <button
+          onClick={() => base44.auth.redirectToLogin("/dashboard")}
+          className="text-sm md:text-lg font-medium text-white/80 hover:text-white transition-all duration-300"
+        >
           Sign In
-        </Link>
-        <Link
-          to="/signin"
+        </button>
+        <button
+          onClick={() => base44.auth.redirectToLogin("/dashboard")}
           className="hidden md:inline-flex px-5 py-2.5 rounded-full metallic-gold-bg text-background text-base font-semibold hover:brightness-110 transition-all duration-300"
         >
           Learn More
-        </Link>
+        </button>
         <button onClick={() => setOpen(!open)} className="md:hidden ml-1 p-1 text-white/80 hover:text-white">
           {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>

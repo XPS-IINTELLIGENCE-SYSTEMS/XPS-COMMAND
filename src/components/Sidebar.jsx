@@ -23,7 +23,7 @@ export default function Sidebar({ activeView, onViewChange }) {
     <div className="w-full h-full bg-sidebar border-r border-sidebar-border flex flex-col">
       {/* Logo */}
       <div className="px-4 py-5 border-b border-sidebar-border">
-        <a href="/" className="flex items-center gap-2.5 transition-all duration-300 hover:scale-105">
+        <a href="/dashboard" className="flex items-center gap-2.5 transition-all duration-300 hover:scale-105">
           <img
             src="https://media.base44.com/images/public/69db3269c791af3f48cfaee9/583965fcb_IMAGEWITHWHITEOUTLINE.jpg"
             alt="XPS Logo"

@@ -25,8 +25,11 @@ Deno.serve(async (req) => {
       recommendation: { name: "Strategy Advisor", functions: ["leadScorer"], triggers: ["recommend", "suggest", "optimize", "prioritize", "best", "strategy"] },
       code_agent: { name: "Systems Engineer", functions: [], triggers: ["system", "automation", "workflow", "debug", "performance"] },
       security: { name: "Security Director", functions: [], triggers: ["security", "access", "compliance", "protect", "threat"] },
+      security_ops: { name: "Security Ops Analyst", functions: [], triggers: ["vulnerability", "incident", "threat hunt", "penetration", "exploit"] },
       maintenance: { name: "Maintenance Ops", functions: [], triggers: ["clean", "archive", "maintenance", "stale", "cleanup"] },
       reputation: { name: "Reputation Manager", functions: ["webResearch", "sendOutreachEmail"], triggers: ["review", "reputation", "testimonial", "rating", "brand"] },
+      scraper: { name: "Intelligence Scraper", functions: ["scheduledScraper", "webResearch"], triggers: ["scrape", "crawl", "extract", "harvest", "mine", "intelligence"] },
+      logging: { name: "Logging Agent", functions: [], triggers: ["log", "audit", "trail", "activity", "history", "record"] },
     };
 
     const commandLower = command.toLowerCase();

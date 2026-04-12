@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { Globe, Image, MessageSquare, BarChart3, Zap, Layout, Terminal, X, Sun, Moon, Radar, ScanSearch } from "lucide-react";
+import { Globe, Image, MessageSquare, BarChart3, Zap, Layout, Terminal, X, Sun, Moon, Radar, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import AdminWebBrowser from "../components/admin/AdminWebBrowser";
 import AdminImageCreator from "../components/admin/AdminImageCreator";
@@ -11,7 +11,7 @@ import CommandScraper from "../components/admin/CommandScraper";
 
 const TOOLS = [
   { id: "browser", label: "Browser", icon: Globe },
-  { id: "command_scraper", label: "Command Scraper", icon: ScanSearch },
+  { id: "command_scraper", label: "Command Scraper", icon: Search },
   { id: "scraper", label: "Shadow Scraper", icon: Radar },
   { id: "image", label: "Image AI", icon: Image },
   { id: "chat", label: "Agent Chat", icon: MessageSquare },

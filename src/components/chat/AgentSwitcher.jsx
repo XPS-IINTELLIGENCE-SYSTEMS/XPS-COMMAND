@@ -23,7 +23,7 @@ export { AGENTS };
 
 export default function AgentSwitcher({ activeAgent, onSwitch, mobile = false }) {
   return (
-    <div className={`flex ${mobile ? 'gap-1' : 'gap-1.5'} px-2 py-1.5 border-b border-border`}>
+    <div className={`flex ${mobile ? 'gap-1' : 'gap-1.5'}`}>
       {AGENTS.map((agent) => {
         const Icon = agent.icon;
         const isActive = activeAgent === agent.id;

@@ -124,6 +124,17 @@ export default function ChatPanel({ mobile = false }) {
     initConversation();
   }, [currentAgentName]);
 
+  // Subscribe to real-time conversation updates
+  useEffect(() => {
+    if (!conversation?.id) return;
+    const unsubscribe = base44.agents.subscribeToConversation(conversation.id, (data) => {
+      if (data?.messages) {
+        setMessages(data.messages);
+      }
+    });
+    return () => { if (unsubscribe) unsubscribe(); };
+  }, [conversation?.id]);
+
   // Auto-scroll: jump on new messages
   useEffect(() => {
     if (scrollRef.current) {

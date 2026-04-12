@@ -48,9 +48,7 @@ function MessageBubble({ message, isLatestAssistant }) {
   return (
     <div className={`flex gap-2.5 ${isUser ? "justify-end" : "justify-start"}`}>
       {!isUser && (
-        <div className="w-6 h-6 rounded-md metallic-silver-bg flex items-center justify-center flex-shrink-0 mt-0.5">
-          <Shield className="w-3.5 h-3.5 text-background" />
-        </div>
+        <img src="https://media.base44.com/images/public/69db3269c791af3f48cfaee9/583965fcb_IMAGEWITHWHITEOUTLINE.jpg" alt="XPS" className="w-6 h-6 object-contain flex-shrink-0 mt-0.5" />
       )}
       <div className={`max-w-[85%] ${isUser ? "order-first" : ""}`}>
         {message.tool_calls?.length > 0 && (
@@ -205,9 +203,7 @@ export default function ChatPanel() {
       {/* Header */}
       <div className="h-12 min-h-[48px] border-b border-border flex items-center justify-between px-3">
         <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-md metallic-silver-bg flex items-center justify-center">
-            <Shield className="w-3.5 h-3.5 text-background" />
-          </div>
+          <img src="https://media.base44.com/images/public/69db3269c791af3f48cfaee9/583965fcb_IMAGEWITHWHITEOUTLINE.jpg" alt="XPS" className="w-7 h-7 object-contain" />
           <div>
             <div className="text-xs font-semibold text-white">Open Claw Agent</div>
             <div className="text-[9px] text-xps-green flex items-center gap-1">
@@ -262,9 +258,7 @@ export default function ChatPanel() {
           </div>
         ) : messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center px-4">
-            <div className="w-12 h-12 rounded-xl metallic-silver-bg flex items-center justify-center mb-3">
-              <Shield className="w-6 h-6 text-background" />
-            </div>
+            <img src="https://media.base44.com/images/public/69db3269c791af3f48cfaee9/583965fcb_IMAGEWITHWHITEOUTLINE.jpg" alt="XPS" className="w-14 h-14 object-contain mb-3" />
             <h3 className="text-sm font-semibold text-white mb-1">Open Claw Agent</h3>
             <p className="text-[10px] text-muted-foreground mb-4">
               Autonomous AI with web browsing, UI editing, image generation, code execution, and full CRM access.

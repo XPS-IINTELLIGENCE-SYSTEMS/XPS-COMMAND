@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import NavIcon from "./shared/NavIcon";
-import { ChevronRight } from "lucide-react";
 
 const phases = [
   { id: "start_here", label: "Start Here", num: null, desc: "Get set up in minutes" },
@@ -47,31 +46,24 @@ export default function Sidebar({ activeView, onViewChange }) {
               Workflow
             </div>
             <div className="relative">
-              {/* Zig-zag connecting line */}
               <div className="absolute left-[19px] top-6 bottom-6 w-px bg-gradient-to-b from-primary/30 via-white/10 to-primary/30 pointer-events-none" />
 
               <div className="space-y-1 relative">
-                {phases.map((item, idx) => {
+                {phases.map((item) => {
                   const isActive = activeView === item.id;
                   const isNumbered = !!item.num;
-                  const isOdd = isNumbered && parseInt(item.num) % 2 === 1;
-                  const isEven = isNumbered && parseInt(item.num) % 2 === 0;
 
                   return (
                     <button
                       key={item.id}
                       onClick={() => onViewChange(item.id)}
                       className={cn(
-                        "shimmer-card w-full flex items-center gap-2.5 rounded-xl text-[13px] font-medium transition-all duration-200",
+                        "shimmer-card w-full flex items-center gap-2.5 rounded-xl text-[13px] font-medium transition-all duration-200 px-2.5 py-2",
                         isActive
                           ? "bg-primary/10 border border-primary/25 text-primary"
-                          : "text-foreground/60 hover:text-foreground hover:bg-secondary/50 border border-transparent",
-                        isOdd ? "ml-0 mr-3 pr-2 pl-2 py-2" : "",
-                        isEven ? "ml-3 mr-0 pl-2 pr-2 py-2" : "",
-                        !isNumbered ? "px-2.5 py-2" : ""
+                          : "text-foreground/60 hover:text-foreground hover:bg-secondary/50 border border-transparent"
                       )}
                     >
-                      {/* Step dot on the line */}
                       <div className="relative flex-shrink-0">
                         <NavIcon id={item.id} size="sm" active={isActive} />
                         {isNumbered && (

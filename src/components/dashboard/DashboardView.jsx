@@ -47,7 +47,7 @@ export default function DashboardView() {
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (
-            <div key={stat.label} className="bg-card rounded-lg border border-border p-4 hover:border-primary/20 transition-colors">
+            <div key={stat.label} className="bg-card rounded-lg border border-[#8a8a8a]/30 p-4 hover:border-primary/20 transition-colors">
               <div className="flex items-center justify-between mb-3">
                 <Icon className={`w-5 h-5 ${stat.color} opacity-70`} />
                 <div className={`flex items-center gap-1 text-[10px] font-medium ${stat.up ? "text-xps-green" : "text-xps-red"}`}>
@@ -64,7 +64,7 @@ export default function DashboardView() {
 
       {/* Charts */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-3">
-        <div className="md:col-span-2 bg-card rounded-lg border border-border p-3 md:p-4">
+        <div className="md:col-span-2 bg-card rounded-lg border border-[#8a8a8a]/30 p-3 md:p-4">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h3 className="text-sm font-semibold text-foreground">Revenue Pipeline</h3>
@@ -88,7 +88,7 @@ export default function DashboardView() {
           </ResponsiveContainer>
         </div>
 
-        <div className="bg-card rounded-lg border border-border p-4">
+        <div className="bg-card rounded-lg border border-[#8a8a8a]/30 p-4">
           <h3 className="text-sm font-semibold text-foreground">Pipeline Stages</h3>
           <p className="text-[10px] text-muted-foreground mb-2">Lead distribution by stage</p>
           <ResponsiveContainer width="100%" height={130}>
@@ -116,7 +116,7 @@ export default function DashboardView() {
 
       {/* Bottom section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3">
-        <div className="bg-card rounded-lg border border-border p-4">
+        <div className="bg-card rounded-lg border border-[#8a8a8a]/30 p-4">
           <h3 className="text-sm font-semibold text-foreground mb-3">Top Leads</h3>
           <div className="space-y-2.5">
             {topLeads.map((lead) => (
@@ -131,7 +131,7 @@ export default function DashboardView() {
           </div>
         </div>
 
-        <div className="bg-card rounded-lg border border-border p-4">
+        <div className="bg-card rounded-lg border border-[#8a8a8a]/30 p-4">
           <h3 className="text-sm font-semibold text-foreground mb-3">Recent Activity</h3>
           <div className="space-y-2.5">
             {recentActivity.map((item, i) => (

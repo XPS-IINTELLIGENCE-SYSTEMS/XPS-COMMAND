@@ -291,7 +291,7 @@ export default function ChatPanel({ mobile = false }) {
       )}
 
       {/* Input */}
-      <div className={`${mobile ? 'p-2 pb-3 safe-bottom' : 'p-3'} border-t border-border ${activeAgentId !== "main" && !mobile ? "hidden" : ""}`}>
+      <div className={`${mobile ? 'p-2 pb-6 safe-bottom' : 'p-3'} border-t border-border ${activeAgentId !== "main" && !mobile ? "hidden" : ""}`}>
         <div className="flex gap-2">
           <input
             value={input}

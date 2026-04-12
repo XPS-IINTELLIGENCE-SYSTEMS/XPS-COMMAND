@@ -1,6 +1,7 @@
 import { MapPin, ArrowRight, Building } from "lucide-react";
 import { Link } from "react-router-dom";
 import LandingNav from "../components/landing/LandingNav";
+import PageHexGlow from "../components/PageHexGlow";
 
 const regions = [
   { name: "Florida (HQ)", locations: 8, cities: "Pompano Beach (HQ), Miami, Tampa, Orlando, Jacksonville, Fort Lauderdale, Boca Raton, Fort Myers" },
@@ -21,7 +22,9 @@ const highlights = [
 
 export default function Coverage() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="hex-bg min-h-screen bg-background text-foreground relative">
+      <PageHexGlow />
+      <div className="relative z-[1]">
       <LandingNav />
 
       <div className="flex flex-col items-center text-center px-6 pt-14 md:pt-24 pb-8">
@@ -85,6 +88,7 @@ export default function Coverage() {
         <Link to="/signin" className="inline-flex items-center gap-2 px-6 py-3 rounded-lg metallic-gold-bg text-background font-semibold hover:brightness-110 transition-all duration-300 hover:scale-110">
           Find Your Territory <ArrowRight className="w-4 h-4" />
         </Link>
+      </div>
       </div>
     </div>
   );

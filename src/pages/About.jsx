@@ -1,6 +1,7 @@
 import { Crown, Rocket, Users, GraduationCap, ArrowRight, Globe, Gem, ShieldCheck } from "lucide-react";
 import { Link } from "react-router-dom";
 import LandingNav from "../components/landing/LandingNav";
+import PageHexGlow from "../components/PageHexGlow";
 
 const values = [
   { icon: Crown, title: "Industry Pioneer", desc: "Founded in 2010 in Pompano Beach, Florida — XPS has grown from a single crew to the nation's leading vertically integrated epoxy and polished concrete platform." },
@@ -26,7 +27,9 @@ const milestones = [
 
 export default function About() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="hex-bg min-h-screen bg-background text-foreground relative">
+      <PageHexGlow />
+      <div className="relative z-[1]">
       <LandingNav />
 
       <div className="flex flex-col items-center text-center px-6 pt-14 md:pt-24 pb-8">
@@ -80,6 +83,7 @@ export default function About() {
         <Link to="/signin" className="inline-flex items-center gap-2 px-6 py-3 rounded-lg metallic-gold-bg text-background font-semibold hover:brightness-110 transition-all duration-300 hover:scale-110">
           Join The Team <ArrowRight className="w-4 h-4" />
         </Link>
+      </div>
       </div>
     </div>
   );

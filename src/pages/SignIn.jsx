@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
+import PageHexGlow from "../components/PageHexGlow";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -24,7 +25,9 @@ export default function SignIn() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="hex-bg min-h-screen bg-background flex relative">
+      <PageHexGlow />
+      <div className="relative z-[1] flex flex-1">
       {/* Left panel */}
       <div className="hidden md:flex flex-1 flex-col items-center justify-center px-12">
         <img
@@ -96,6 +99,7 @@ export default function SignIn() {
             <span onClick={() => navigate("/onboarding")} className="text-primary cursor-pointer hover:underline">Sign up</span>
           </p>
         </div>
+      </div>
       </div>
     </div>
   );

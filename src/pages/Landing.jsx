@@ -1,6 +1,7 @@
 import { ArrowRight, ShieldCheck } from "lucide-react";
 import { Link } from "react-router-dom";
 import LandingNav from "../components/landing/LandingNav";
+import PageHexGlow from "../components/PageHexGlow";
 
 const stats = [
   { value: "60+", label: "LOCATIONS" },
@@ -11,7 +12,9 @@ const stats = [
 
 export default function Landing() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="hex-bg min-h-screen bg-background text-foreground relative">
+      <PageHexGlow />
+      <div className="relative z-[1]">
       <LandingNav />
 
       {/* Hero */}
@@ -50,6 +53,7 @@ export default function Landing() {
             </div>
           ))}
         </div>
+      </div>
       </div>
     </div>
   );

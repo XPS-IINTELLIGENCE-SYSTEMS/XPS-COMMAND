@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, ArrowLeft, Check, User, Briefcase, Cpu, Bot, Building2, Zap, ShieldCheck, MessageCircle } from "lucide-react";
+import PageHexGlow from "../components/PageHexGlow";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { base44 } from "@/api/base44Client";
@@ -279,8 +280,9 @@ export default function Onboarding() {
   ];
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <div className="w-full max-w-lg">
+    <div className="hex-bg min-h-screen bg-background flex items-center justify-center p-4 relative">
+      <PageHexGlow />
+      <div className="relative z-[1] w-full max-w-lg">
         {/* Logo */}
         <div className="flex items-center justify-center gap-3 mb-8">
           <img
@@ -344,6 +346,7 @@ export default function Onboarding() {
             </Button>
           )}
         </div>
+      </div>
       </div>
     </div>
   );

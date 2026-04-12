@@ -1,6 +1,7 @@
 import { ShieldCheck, Cpu, BarChart3, Sparkles, Lock, Radar, Database, Building2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import LandingNav from "../components/landing/LandingNav";
+import PageHexGlow from "../components/PageHexGlow";
 
 const features = [
   { icon: Cpu, title: "Autonomous AI Agents", desc: "Purpose-built agents handle lead scoring, proposal generation, follow-up sequencing, and competitive research around the clock — trained on flooring industry data." },
@@ -15,7 +16,9 @@ const features = [
 
 export default function Platform() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="hex-bg min-h-screen bg-background text-foreground relative">
+      <PageHexGlow />
+      <div className="relative z-[1]">
       <LandingNav />
 
       <div className="flex flex-col items-center text-center px-6 pt-14 md:pt-24 pb-8">
@@ -54,6 +57,7 @@ export default function Platform() {
         <Link to="/signin" className="inline-flex items-center gap-2 px-6 py-3 rounded-lg metallic-gold-bg text-background font-semibold hover:brightness-110 transition-all duration-300 hover:scale-110">
           See It In Action
         </Link>
+      </div>
       </div>
     </div>
   );

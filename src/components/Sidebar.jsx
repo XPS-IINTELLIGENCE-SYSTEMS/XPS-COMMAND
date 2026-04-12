@@ -11,7 +11,7 @@ const navSections = [
       { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
       { id: "crm", label: "CRM", icon: Users },
       { id: "leads", label: "Leads", icon: UserSearch },
-      { id: "ai-assistant", label: "AI Assistant", icon: Bot },
+      { id: "workflows", label: "Workflows", icon: Bot },
       { id: "research", label: "Research Lab", icon: FlaskConical },
       { id: "outreach", label: "Outreach", icon: Send },
       { id: "proposals", label: "Proposals", icon: FileText },

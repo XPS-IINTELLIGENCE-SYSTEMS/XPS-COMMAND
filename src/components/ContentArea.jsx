@@ -10,14 +10,14 @@ import CompetitionView from "./dashboard/CompetitionView";
 import ConnectorsView from "./dashboard/ConnectorsView";
 import AdminView from "./dashboard/AdminView";
 import SettingsView from "./dashboard/SettingsView";
-import AIAssistantView from "./dashboard/AIAssistantView";
 import EditorView from "./editor/EditorView";
+import WorkflowView from "./workflow/WorkflowView";
 
 const views = {
   dashboard: DashboardView,
   crm: CRMView,
   leads: LeadsView,
-  "ai-assistant": AIAssistantView,
+  workflows: WorkflowView,
   research: ResearchView,
   outreach: OutreachView,
   proposals: ProposalsView,

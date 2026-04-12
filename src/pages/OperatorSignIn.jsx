@@ -8,7 +8,7 @@ export default function OperatorSignIn() {
   const navigate = useNavigate();
 
   const handleSignIn = () => {
-    base44.auth.redirectToLogin("/admin-panel");
+    navigate("/admin-panel");
   };
 
   return (

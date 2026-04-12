@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
-import { base44 } from "@/api/base44Client";
 
 export default function LandingNav() {
   const [open, setOpen] = useState(false);
@@ -26,18 +25,18 @@ export default function LandingNav() {
         <Link to="/about" className="hover:text-foreground cursor-pointer transition-all duration-300 hover:scale-110">About</Link>
       </div>
       <div className="flex items-center gap-2 md:gap-3">
-        <button
-          onClick={() => base44.auth.redirectToLogin("/dashboard")}
+        <Link
+          to="/op-access"
           className="text-sm md:text-lg font-medium text-white/80 hover:text-white transition-all duration-300"
         >
           Sign In
-        </button>
-        <button
-          onClick={() => base44.auth.redirectToLogin("/dashboard")}
+        </Link>
+        <Link
+          to="/dashboard"
           className="hidden md:inline-flex px-5 py-2.5 rounded-full metallic-gold-bg text-background text-base font-semibold hover:brightness-110 transition-all duration-300"
         >
           Learn More
-        </button>
+        </Link>
         <button onClick={() => setOpen(!open)} className="md:hidden ml-1 p-1 text-white/80 hover:text-white">
           {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>

@@ -2,7 +2,6 @@ import { ArrowRight, ShieldCheck } from "lucide-react";
 import { Link } from "react-router-dom";
 import LandingNav from "../components/landing/LandingNav";
 import PageHexGlow from "../components/PageHexGlow";
-import { base44 } from "@/api/base44Client";
 
 const stats = [
   { value: "60+", label: "LOCATIONS" },
@@ -37,12 +36,12 @@ export default function Landing() {
         </p>
 
         <div className="flex flex-col sm:flex-row items-center gap-4 mt-14">
-          <button
-            onClick={() => base44.auth.redirectToLogin("/dashboard")}
+          <Link
+            to="/dashboard"
             className="inline-flex items-center gap-2 px-6 py-3 md:px-10 md:py-5 rounded-lg md:rounded-xl metallic-gold-bg text-background text-base md:text-xl font-bold hover:brightness-110 transition-all duration-300 hover:scale-110"
           >
             See It In Action <ArrowRight className="w-4 h-4" />
-          </button>
+          </Link>
         </div>
 
         {/* Stats */}

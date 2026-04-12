@@ -66,8 +66,8 @@ function MessageBubble({ message, isLatestAssistant }) {
         )}
         {message.content && (
           isUser ? (
-            <div className="rounded-xl px-3 py-2 bg-primary text-primary-foreground">
-              <p className="text-xs leading-relaxed">{message.content}</p>
+            <div className="rounded-xl px-3 py-2 bg-secondary/80 border border-[#8a8a8a]/30">
+              <p className="text-xs leading-relaxed metallic-gold-silver-text font-medium">{message.content}</p>
             </div>
           ) : (
             <div className="py-1">
@@ -298,7 +298,7 @@ export default function ChatPanel({ mobile = false }) {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSend()}
             placeholder="Command the agent..."
-            className={`flex-1 bg-card border border-[#8a8a8a]/40 rounded-lg px-3 ${mobile ? 'py-2.5 text-sm' : 'py-2 text-xs'} text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/30`}
+            className={`flex-1 bg-card border rounded-lg px-3 chat-input-metallic ${mobile ? 'py-2.5 text-sm' : 'py-2 text-xs'} text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/30`}
             disabled={loading || initializing}
           />
           <Button

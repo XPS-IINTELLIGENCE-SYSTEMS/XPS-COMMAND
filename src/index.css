@@ -293,3 +293,40 @@
   background-image: linear-gradient(135deg, #8b6914, #b8860b, #d4af37, #8b6914) !important;
   filter: none;
 }
+
+/* Animated metallic gold-silver text for user chat bubbles */
+@keyframes metallic-text-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.metallic-gold-silver-text {
+  background: linear-gradient(135deg, #d4af37, #f5e6a3, #c0c0c0, #e8e8e8, #d4af37, #b8860b, #c0c0c0);
+  background-size: 300% 300%;
+  animation: metallic-text-shift 4s ease infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Animated silver border for chat input */
+@keyframes silver-border-shift {
+  0% { border-color: #8a8a8a; box-shadow: 0 0 4px rgba(192,192,192,0.2); }
+  33% { border-color: #c0c0c0; box-shadow: 0 0 8px rgba(212,175,55,0.15); }
+  66% { border-color: #d4af37; box-shadow: 0 0 8px rgba(192,192,192,0.25); }
+  100% { border-color: #8a8a8a; box-shadow: 0 0 4px rgba(192,192,192,0.2); }
+}
+
+.chat-input-metallic {
+  animation: silver-border-shift 3s ease infinite;
+}
+
+.light .metallic-gold-silver-text {
+  background: linear-gradient(135deg, #8b6914, #b8860b, #d4af37, #8b6914, #64748b, #b8860b);
+  background-size: 300% 300%;
+  animation: metallic-text-shift 4s ease infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

@@ -26,7 +26,7 @@ export default function LandingNav() {
       </div>
       <div className="flex items-center gap-2 md:gap-3">
         <Link
-          to="/op-access"
+          to="/dashboard"
           className="text-sm md:text-lg font-medium text-white/80 hover:text-white transition-all duration-300"
         >
           Sign In

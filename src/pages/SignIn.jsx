@@ -4,6 +4,7 @@ import { Eye, EyeOff } from "lucide-react";
 import PageHexGlow from "../components/PageHexGlow";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { base44 } from "@/api/base44Client";
 
 const stats = [
   { value: "60+", label: "LOCATIONS" },
@@ -20,8 +21,8 @@ export default function SignIn() {
 
   const handleSignIn = (e) => {
     e.preventDefault();
-    // No auth required — just go to onboarding
-    navigate("/onboarding");
+    // Trigger real Base44 authentication, then redirect to dashboard
+    base44.auth.redirectToLogin("/dashboard");
   };
 
   return (

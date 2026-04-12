@@ -81,7 +81,7 @@ export default function Onboarding() {
       ai_mode: aiMode,
       industry: finalIndustry,
     });
-    navigate("/");
+    navigate("/dashboard");
   };
 
   const questions = [

@@ -15,13 +15,13 @@ export default function CustomLogin() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    if (!password.trim()) return;
     setLoading(true);
     try {
       const response = await base44.functions.invoke("validatePassword", { password });
       const { success, role } = response.data;
 
       if (success) {
-        // Store role in sessionStorage so protected pages can check it
         sessionStorage.setItem("xps-role", role);
         toast({ title: "Access Granted", description: `Welcome, ${role}.` });
 
@@ -30,13 +30,30 @@ export default function CustomLogin() {
         } else {
           navigate("/dashboard", { replace: true });
         }
+      } else {
+        toast({
+          title: "Access Denied",
+          description: "Invalid password. Try again.",
+          variant: "destructive",
+        });
       }
     } catch (error) {
-      toast({
-        title: "Access Denied",
-        description: "Invalid password. Try again.",
-        variant: "destructive",
-      });
+      // The function returns 401 for wrong passwords which throws an error
+      const msg = error?.response?.data?.message || error?.message || "";
+      if (msg.includes("Invalid password") || error?.response?.status === 401) {
+        toast({
+          title: "Access Denied",
+          description: "Invalid password. Try again.",
+          variant: "destructive",
+        });
+      } else {
+        console.error("Login error:", error);
+        toast({
+          title: "Connection Error",
+          description: "Could not reach server: " + msg,
+          variant: "destructive",
+        });
+      }
     } finally {
       setLoading(false);
     }

@@ -24,7 +24,7 @@ export default function Landing() {
             <div className="text-[9px] text-muted-foreground tracking-widest uppercase">Xtreme Polishing Systems</div>
           </div>
         </div>
-        <div className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
+        <div className="hidden md:flex items-center gap-8 text-sm text-white/70">
           <span className="hover:text-foreground cursor-pointer transition-colors">Platform</span>
           <span className="hover:text-foreground cursor-pointer transition-colors">Solutions</span>
           <span className="hover:text-foreground cursor-pointer transition-colors">Coverage</span>

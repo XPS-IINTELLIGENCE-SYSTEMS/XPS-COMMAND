@@ -2,7 +2,7 @@ import {
   LayoutDashboard, UserSearch, Send, FileText, BarChart3, Bot, 
   Settings, BookOpen, Shield, Globe
 } from "lucide-react";
-import { Link } from "react-router-dom";
+
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -27,7 +27,7 @@ export default function Sidebar({ activeView, onViewChange }) {
     <div className="w-full h-full bg-sidebar border-r border-sidebar-border flex flex-col">
       {/* Logo */}
       <div className="px-4 py-5 border-b border-sidebar-border">
-        <Link to="/" className="flex items-center gap-2.5 transition-all duration-300 hover:scale-105">
+        <a href="/" className="flex items-center gap-2.5 transition-all duration-300 hover:scale-105">
           <img
             src="https://media.base44.com/images/public/69db3269c791af3f48cfaee9/583965fcb_IMAGEWITHWHITEOUTLINE.jpg"
             alt="XPS Logo"
@@ -37,7 +37,7 @@ export default function Sidebar({ activeView, onViewChange }) {
             <div className="text-sm font-extrabold xps-gold-slow-shimmer tracking-wider" style={{ fontFamily: "'Montserrat', sans-serif" }}>XPS INTELLIGENCE</div>
             <div className="text-[9px] font-semibold metallic-silver tracking-widest">XTREME POLISHING SYSTEMS</div>
           </div>
-        </Link>
+        </a>
       </div>
 
       {/* Navigation */}

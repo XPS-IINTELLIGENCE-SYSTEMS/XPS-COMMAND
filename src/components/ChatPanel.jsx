@@ -95,7 +95,7 @@ export default function ChatPanel({ mobile = false }) {
   const scrollRef = useRef(null);
 
   const [agents, setAgents] = useState([
-    { id: "main", name: "Open Claw", type: "main", status: "active" },
+    { id: "main", name: "Contractor Assist", type: "main", status: "active" },
   ]);
   const [activeAgentId, setActiveAgentId] = useState("main");
   const [nextSubId, setNextSubId] = useState(1);
@@ -215,10 +215,10 @@ export default function ChatPanel({ mobile = false }) {
         <div className="flex items-center gap-2">
           <img src="https://media.base44.com/images/public/69db3269c791af3f48cfaee9/583965fcb_IMAGEWITHWHITEOUTLINE.jpg" alt="XPS" className={`${mobile ? 'w-5 h-5' : 'w-7 h-7'} object-contain`} />
           <div>
-            <div className={`${mobile ? 'text-[10px]' : 'text-xs'} font-semibold text-foreground`}>Open Claw Agent</div>
+            <div className={`${mobile ? 'text-[10px]' : 'text-xs'} font-semibold text-foreground`}>XPS Contractor Assist</div>
             <div className="text-[9px] text-xps-green flex items-center gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-xps-green inline-block" />
-              {mobile ? 'Active' : 'Autonomous · Web · UI · Code'}
+              {mobile ? 'Active' : 'Autonomous · Web · CRM · Code'}
             </div>
           </div>
         </div>
@@ -273,7 +273,7 @@ export default function ChatPanel({ mobile = false }) {
               {!mobile && (
                 <>
                   <img src="https://media.base44.com/images/public/69db3269c791af3f48cfaee9/583965fcb_IMAGEWITHWHITEOUTLINE.jpg" alt="XPS" className="w-14 h-14 object-contain mb-3" />
-                  <h3 className="text-sm font-semibold text-foreground mb-1">Open Claw Agent</h3>
+                  <h3 className="text-sm font-semibold text-foreground mb-1">XPS Contractor Assist</h3>
                   <p className="text-[10px] text-muted-foreground mb-4">
                     Autonomous AI with web browsing, data analysis, and full CRM access.
                   </p>

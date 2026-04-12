@@ -30,11 +30,11 @@ export default function Sidebar({ activeView, onViewChange }) {
           <img
             src="https://media.base44.com/images/public/69db3269c791af3f48cfaee9/583965fcb_IMAGEWITHWHITEOUTLINE.jpg"
             alt="XPS Logo"
-            className="w-8 h-8 object-contain"
+            className="w-9 h-9 object-contain"
           />
           <div>
-            <div className="text-xs font-bold metallic-gold tracking-wider">XPS INTELLIGENCE</div>
-            <div className="text-[9px] text-muted-foreground tracking-widest">COMMAND CENTER</div>
+            <div className="text-sm font-bold metallic-gold tracking-wider">XPS</div>
+            <div className="text-[10px] text-muted-foreground tracking-widest">CONTRACTOR ASSIST</div>
           </div>
         </div>
       </div>

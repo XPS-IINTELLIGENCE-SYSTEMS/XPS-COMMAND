@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ChevronRight, CheckCircle2, Compass, UserCircle, Link2, UserPlus, Send, FileText, Loader2 } from "lucide-react";
+import { ChevronRight, CheckCircle2, Compass, UserCircle, Link2, UserPlus, Send, FileText, Loader2, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { base44 } from "@/api/base44Client";
 
@@ -15,9 +15,7 @@ export default function StartHereView({ onNavigate }) {
   const [done, setDone] = useState({});
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    checkProgress();
-  }, []);
+  useEffect(() => { checkProgress(); }, []);
 
   const checkProgress = async () => {
     setLoading(true);
@@ -30,7 +28,7 @@ export default function StartHereView({ onNavigate }) {
 
     setDone({
       profile: !!user?.full_name,
-      integrations: false, // no way to check programmatically right now
+      integrations: false,
       first_lead: leads.length > 0,
       first_outreach: emails.length > 0,
       first_proposal: proposals.length > 0,
@@ -45,35 +43,47 @@ export default function StartHereView({ onNavigate }) {
   };
 
   return (
-    <div className="h-full overflow-y-auto p-6 md:p-10">
-      <div className="max-w-2xl mx-auto">
-        {/* Hero */}
-        <div className="text-center mb-12 pt-6">
+    <div className="h-full overflow-y-auto">
+      {/* Hero */}
+      <div className="relative px-6 pt-8 pb-10 md:pt-14 md:pb-16">
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent pointer-events-none" />
+        <div className="relative max-w-2xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 mb-6">
+            <ShieldCheck className="w-4 h-4 metallic-gold-icon" />
+            <span className="text-xs font-semibold xps-silver-subtle-gold">GETTING STARTED</span>
+          </div>
+
           <div className="relative inline-flex items-center justify-center mb-6">
-            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/10 to-white/5 blur-xl scale-150" />
-            <div className="relative w-20 h-20 rounded-2xl metallic-silver-bg flex items-center justify-center rotate-3 hover:rotate-0 transition-transform duration-500">
-              <Compass className="w-10 h-10 text-background" />
+            <div className="absolute inset-0 rounded-full bg-primary/10 blur-2xl scale-150" />
+            <div className="relative w-16 h-16 md:w-20 md:h-20 rounded-2xl metallic-silver-bg flex items-center justify-center rotate-3 hover:rotate-0 transition-transform duration-500">
+              <Compass className="w-8 h-8 md:w-10 md:h-10 text-background" />
             </div>
           </div>
-          <h1 className="text-3xl md:text-4xl font-extrabold metallic-silver mb-3" style={{ fontFamily: "'Montserrat', sans-serif" }}>
-            START HERE
+
+          <h1 className="text-3xl md:text-4xl font-extrabold leading-tight" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+            <span className="xps-gold-slow-shimmer">START HERE</span>
           </h1>
-          <p className="text-sm md:text-base text-white/50 max-w-md mx-auto leading-relaxed">
+          <p className="mt-3 text-sm md:text-base text-muted-foreground max-w-md mx-auto leading-relaxed">
             Five steps to go from zero to fully operational.
           </p>
+
           {!loading && (
-            <div className="mt-4 flex items-center justify-center gap-3">
-              <div className="h-2 w-48 rounded-full bg-secondary overflow-hidden">
-                <div className="h-full metallic-gold-bg rounded-full transition-all duration-500" style={{ width: `${(completedCount / 5) * 100}%` }} />
+            <div className="mt-6 flex items-center justify-center gap-3">
+              <div className="h-2.5 w-56 rounded-full bg-secondary overflow-hidden">
+                <div className="h-full metallic-gold-bg rounded-full transition-all duration-700 ease-out" style={{ width: `${(completedCount / 5) * 100}%` }} />
               </div>
-              <span className="text-xs font-bold text-primary">{completedCount}/5</span>
+              <span className="text-sm font-bold text-primary">{completedCount}/5</span>
             </div>
           )}
         </div>
+      </div>
 
+      {/* Steps */}
+      <div className="px-6 pb-10 max-w-2xl mx-auto">
         {loading ? (
-          <div className="flex justify-center py-12">
+          <div className="flex flex-col items-center justify-center py-16 gap-3">
             <Loader2 className="w-6 h-6 animate-spin text-primary" />
+            <span className="text-xs text-muted-foreground">Checking your progress...</span>
           </div>
         ) : (
           <div className="space-y-3">
@@ -85,27 +95,31 @@ export default function StartHereView({ onNavigate }) {
                   key={step.id}
                   onClick={() => handleClick(step)}
                   className={cn(
-                    "shimmer-card w-full flex items-center gap-4 p-5 rounded-xl border transition-all text-left",
+                    "shimmer-card w-full flex items-center gap-4 p-5 rounded-xl border transition-all text-left group",
                     isDone
-                      ? "border-green-500/30 bg-green-500/5"
-                      : "border-white/10 bg-card/60 hover:border-primary/30"
+                      ? "border-emerald-500/30 bg-emerald-500/5"
+                      : "border-border bg-card hover:border-primary/30"
                   )}
                 >
                   <div className={cn(
-                    "w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0",
-                    isDone ? "bg-green-500/20" : "bg-gradient-to-br from-white/10 to-white/5 border border-white/10"
+                    "shimmer-icon-container w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300",
+                    isDone ? "bg-emerald-500/15" : "bg-secondary"
                   )}>
-                    {isDone ? <CheckCircle2 className="w-5 h-5 text-green-400" /> : <StepIcon className="w-5 h-5 metallic-silver-icon" />}
+                    {isDone ? (
+                      <CheckCircle2 className="w-6 h-6 text-emerald-400" />
+                    ) : (
+                      <StepIcon className="w-6 h-6 shimmer-icon metallic-silver-icon" />
+                    )}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-0.5">
                       <span className="text-[10px] font-mono font-bold text-primary/70">0{i + 1}</span>
-                      <span className={cn("text-sm font-semibold", isDone ? "text-green-400" : "text-white")}>{step.title}</span>
-                      {isDone && <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-green-500/20 text-green-400">DONE</span>}
+                      <span className={cn("text-sm font-semibold", isDone ? "text-emerald-400" : "text-foreground")}>{step.title}</span>
+                      {isDone && <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400">DONE</span>}
                     </div>
-                    <p className="text-[11px] text-white/50 leading-relaxed">{step.desc}</p>
+                    <p className="text-xs text-muted-foreground leading-relaxed">{step.desc}</p>
                   </div>
-                  <ChevronRight className="w-4 h-4 text-white/30 flex-shrink-0" />
+                  <ChevronRight className="w-5 h-5 text-muted-foreground/30 group-hover:text-primary transition-colors flex-shrink-0" />
                 </button>
               );
             })}

@@ -1,3 +1,4 @@
+import StartHereView from "./phases/StartHereView";
 import CommandCenterView from "./phases/CommandCenterView";
 import FindWorkView from "./phases/FindWorkView";
 import GetWorkView from "./phases/GetWorkView";
@@ -7,6 +8,7 @@ import TipsView from "./phases/TipsView";
 import SettingsView from "./dashboard/SettingsView";
 
 const views = {
+  start_here: StartHereView,
   command: CommandCenterView,
   find_work: FindWorkView,
   get_work: GetWorkView,

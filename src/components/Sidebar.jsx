@@ -1,11 +1,12 @@
 import { 
-  Zap, Search, MessageSquare, Trophy, DollarSign, Lightbulb, Settings
+  Zap, Search, MessageSquare, Trophy, DollarSign, Lightbulb, Settings, Rocket
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 const phases = [
+  { id: "start_here", label: "Start Here", icon: Rocket, num: null },
   { id: "command", label: "Dashboard", icon: Zap, num: null },
   { id: "find_work", label: "Find Work", icon: Search, num: "1" },
   { id: "get_work", label: "Get Work", icon: MessageSquare, num: "2" },

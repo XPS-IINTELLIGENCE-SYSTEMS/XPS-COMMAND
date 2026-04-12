@@ -36,7 +36,7 @@ export default function CommandCenterView() {
             <span className="text-sm font-semibold xps-silver-subtle-gold">AI Daily Intelligence Briefing</span>
           </div>
           <h1 className="text-3xl md:text-5xl font-extrabold leading-none xps-gold-slow-shimmer" style={{ fontFamily: "'Montserrat', sans-serif" }}>
-            COMMAND CENTER
+            COMMAND
           </h1>
           <p className="mt-3 text-sm md:text-base text-muted-foreground max-w-xl mx-auto">
             Your agent analyzed everything overnight — here's what needs your attention

@@ -32,7 +32,7 @@ export default function SignIn() {
           alt="XPS"
           className="w-20 h-20 object-contain mb-6"
         />
-        <h2 className="text-3xl font-bold metallic-gold tracking-wider text-center">XPS INTELLIGENCE</h2>
+        <h2 className="text-3xl font-bold metallic-gold tracking-wider text-center">XPS Xpress</h2>
         <p className="text-sm text-muted-foreground mt-2 text-center max-w-xs">
           Contractor Assist — AI-Powered Sales Command Center
         </p>

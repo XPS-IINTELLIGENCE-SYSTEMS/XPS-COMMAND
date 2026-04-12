@@ -33,8 +33,8 @@ export default function Sidebar({ activeView, onViewChange }) {
             className="w-9 h-9 object-contain"
           />
           <div>
-            <div className="text-sm font-bold metallic-gold tracking-wider">XPS INTELLIGENCE</div>
-            <div className="text-[10px] font-semibold metallic-silver tracking-widest">CONTRACTOR ASSIST</div>
+            <div className="text-sm font-bold metallic-gold tracking-wider">XPS Xpress</div>
+            <div className="text-[10px] font-semibold metallic-silver tracking-widest">Xtreme Polishing Systems</div>
           </div>
         </div>
       </div>

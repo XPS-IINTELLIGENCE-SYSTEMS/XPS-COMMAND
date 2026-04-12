@@ -20,7 +20,7 @@ export default function Landing() {
             className="w-8 h-8 object-contain"
           />
           <div>
-            <div className="text-sm font-bold metallic-gold tracking-wider">XPS INTELLIGENCE</div>
+            <div className="text-sm font-bold metallic-gold tracking-wider">XPS Xpress</div>
             <div className="text-[9px] text-muted-foreground tracking-widest uppercase">Xtreme Polishing Systems</div>
           </div>
         </div>

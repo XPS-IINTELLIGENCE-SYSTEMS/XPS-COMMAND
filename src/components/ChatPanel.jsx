@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, forwardRef, useImperativeHandle } from "react";
 import { Send, Plus, Loader2, Sparkles, Globe, Pencil, Database, Code, Search, GitBranch, Layers, Bot, Wrench, TrendingUp } from "lucide-react";
 import AgentSwitcher, { AGENTS } from "./chat/AgentSwitcher";
 import AgentTab from "./chat/AgentTab";
@@ -87,7 +87,7 @@ function MessageBubble({ message, isLatestAssistant }) {
   );
 }
 
-export default function ChatPanel({ mobile = false }) {
+const ChatPanel = forwardRef(function ChatPanel({ mobile = false }, ref) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [conversation, setConversation] = useState(null);
@@ -95,6 +95,7 @@ export default function ChatPanel({ mobile = false }) {
   const [initializing, setInitializing] = useState(true);
   const scrollRef = useRef(null);
   const [currentAgentName, setCurrentAgentName] = useState("xps_assistant");
+  const conversationRef = useRef(null);
 
   const [agents, setAgents] = useState([
     { id: "main", name: "XPS Agent", type: "main", status: "active" },
@@ -120,11 +121,28 @@ export default function ChatPanel({ mobile = false }) {
     setAgents(prev => prev.map(a => a.id === id ? { ...a, status } : a));
   }, []);
 
+  // Expose sendCommand to parent via ref
+  useImperativeHandle(ref, () => ({
+    sendCommand: async (command) => {
+      if (!command) return;
+      setActiveAgentId("main");
+      // Wait for conversation to be ready
+      const conv = conversationRef.current;
+      if (!conv) {
+        // Queue the command for after init
+        setInput(command);
+        return;
+      }
+      setLoading(true);
+      await base44.agents.addMessage(conv, { role: "user", content: command });
+      setLoading(false);
+    }
+  }));
+
   useEffect(() => {
     initConversation();
   }, [currentAgentName]);
 
-  // Subscribe to real-time conversation updates
   useEffect(() => {
     if (!conversation?.id) return;
     const unsubscribe = base44.agents.subscribeToConversation(conversation.id, (data) => {
@@ -135,14 +153,12 @@ export default function ChatPanel({ mobile = false }) {
     return () => { if (unsubscribe) unsubscribe(); };
   }, [conversation?.id]);
 
-  // Auto-scroll: jump on new messages
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages.length]);
 
-  // Auto-scroll: poll while assistant is streaming
   useEffect(() => {
     if (!scrollRef.current || messages.length === 0) return;
     const lastMsg = messages[messages.length - 1];
@@ -159,17 +175,14 @@ export default function ChatPanel({ mobile = false }) {
     setInitializing(true);
     setMessages([]);
     setConversation(null);
-    try {
-      const conv = await base44.agents.createConversation({
-        agent_name: currentAgentName,
-        metadata: { name: currentAgentName === "xps_assistant" ? "XPS Command Session" : "SEO Marketing Session" },
-      });
-      setConversation(conv);
-    } catch (err) {
-      console.error("Failed to init conversation:", err);
-    } finally {
-      setInitializing(false);
-    }
+    conversationRef.current = null;
+    const conv = await base44.agents.createConversation({
+      agent_name: currentAgentName,
+      metadata: { name: currentAgentName === "xps_assistant" ? "XPS Command Session" : "SEO Marketing Session" },
+    });
+    setConversation(conv);
+    conversationRef.current = conv;
+    setInitializing(false);
   };
 
   const handleSend = async () => {
@@ -177,29 +190,20 @@ export default function ChatPanel({ mobile = false }) {
     const msg = input.trim();
     setInput("");
     setLoading(true);
-    try {
-      await base44.agents.addMessage(conversation, { role: "user", content: msg });
-    } catch (err) {
-      console.error("Send failed:", err);
-    } finally {
-      setLoading(false);
-    }
+    await base44.agents.addMessage(conversation, { role: "user", content: msg });
+    setLoading(false);
   };
 
   const handleNewChat = async () => {
     setInitializing(true);
-    try {
-      const conv = await base44.agents.createConversation({
-        agent_name: currentAgentName,
-        metadata: { name: currentAgentName === "xps_assistant" ? "XPS Command Session" : "SEO Marketing Session" },
-      });
-      setConversation(conv);
-      setMessages([]);
-    } catch (err) {
-      console.error("New chat failed:", err);
-    } finally {
-      setInitializing(false);
-    }
+    const conv = await base44.agents.createConversation({
+      agent_name: currentAgentName,
+      metadata: { name: currentAgentName === "xps_assistant" ? "XPS Command Session" : "SEO Marketing Session" },
+    });
+    setConversation(conv);
+    conversationRef.current = conv;
+    setMessages([]);
+    setInitializing(false);
   };
 
   const handleAgentSwitch = (agentName) => {
@@ -210,10 +214,10 @@ export default function ChatPanel({ mobile = false }) {
   const activeAgentConfig = AGENTS.find(a => a.id === currentAgentName) || AGENTS[0];
 
   const quickActions = currentAgentName === "xps_assistant" ? [
+    { label: "Find me 25 leads in Tampa, FL", icon: Search },
+    { label: "Generate a proposal for my top lead", icon: Pencil },
+    { label: "Show my pipeline status", icon: Database },
     { label: "Research a company", icon: Globe },
-    { label: "Draft a proposal", icon: Pencil },
-    { label: "Analyze pipeline", icon: Database },
-    { label: "Search the web", icon: Search },
   ] : [
     { label: "Write a blog post", icon: Pencil },
     { label: "Analyze a competitor", icon: Search },
@@ -232,8 +236,6 @@ export default function ChatPanel({ mobile = false }) {
           <Plus className="w-3.5 h-3.5 shimmer-icon metallic-silver-icon" />
         </Button>
       </div>
-
-
 
       {/* Agent tabs bar */}
       {!mobile && (
@@ -287,7 +289,9 @@ export default function ChatPanel({ mobile = false }) {
                   return (
                     <button
                       key={action.label}
-                      onClick={() => setInput(action.label)}
+                      onClick={() => {
+                        setInput(action.label);
+                      }}
                       className="shimmer-card w-full flex items-center gap-2 px-3 py-2 rounded-lg bg-card border border-border hover:border-primary/30 transition-colors text-left"
                     >
                       <Icon className="w-3 h-3 metallic-silver-icon shimmer-icon flex-shrink-0" />
@@ -350,4 +354,6 @@ export default function ChatPanel({ mobile = false }) {
       </div>
     </div>
   );
-}
+});
+
+export default ChatPanel;

@@ -26,12 +26,12 @@ export default function LandingNav() {
         <Link to="/about" className="hover:text-foreground cursor-pointer transition-all duration-300 hover:scale-110">About</Link>
       </div>
       <div className="flex items-center gap-2 md:gap-3">
-        <Link
-          to="/signin"
+        <button
+          onClick={() => base44.auth.redirectToLogin("/dashboard")}
           className="text-sm md:text-lg font-medium text-white/80 hover:text-white transition-all duration-300"
         >
           Sign In
-        </Link>
+        </button>
         <button
           onClick={() => base44.auth.redirectToLogin("/dashboard")}
           className="hidden md:inline-flex px-5 py-2.5 rounded-full metallic-gold-bg text-background text-base font-semibold hover:brightness-110 transition-all duration-300"

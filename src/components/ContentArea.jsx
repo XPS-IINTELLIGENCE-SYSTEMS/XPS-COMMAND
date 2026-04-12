@@ -11,14 +11,19 @@ import LeadsView from "./dashboard/LeadsView";
 import ResearchView from "./dashboard/ResearchView";
 import OutreachView from "./dashboard/OutreachView";
 
-const views = {
-  start_here: StartHereView,
-  command: CommandCenterView,
+// Views that accept onChatCommand
+const chatViews = {
   find_work: FindWorkView,
-  get_work: GetWorkView,
   win_work: WinWorkView,
   do_work: DoWorkView,
   get_paid: GetPaidView,
+};
+
+// Views that don't need chat commands
+const plainViews = {
+  start_here: StartHereView,
+  command: CommandCenterView,
+  get_work: GetWorkView,
   tips: TipsView,
   settings: SettingsView,
   leads: LeadsView,
@@ -26,8 +31,19 @@ const views = {
   outreach: OutreachView,
 };
 
-export default function ContentArea({ activeView }) {
-  const ViewComponent = views[activeView] || CommandCenterView;
+export default function ContentArea({ activeView, onChatCommand }) {
+  const ChatView = chatViews[activeView];
+  const PlainView = plainViews[activeView];
+
+  if (ChatView) {
+    return (
+      <div className="flex-1 h-full overflow-hidden border-l border-[#8a8a8a]/15">
+        <ChatView onChatCommand={onChatCommand} />
+      </div>
+    );
+  }
+
+  const ViewComponent = PlainView || CommandCenterView;
   return (
     <div className="flex-1 h-full overflow-hidden border-l border-[#8a8a8a]/15">
       <ViewComponent />

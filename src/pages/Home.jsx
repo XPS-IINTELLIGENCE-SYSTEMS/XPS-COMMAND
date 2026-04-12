@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { PanelLeftClose, PanelLeftOpen, PanelRightClose, PanelRightOpen, Menu, X, MessageSquare, Sun, Moon } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import HexGlow from "../components/HexGlow";
@@ -15,6 +15,7 @@ export default function Home() {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [mobileChatOpen, setMobileChatOpen] = useState(false);
   const [theme, setTheme] = useState(() => localStorage.getItem("xps-theme") || "dark");
+  const chatRef = useRef(null);
 
   useEffect(() => {
     document.documentElement.classList.remove("light", "dark");
@@ -27,11 +28,21 @@ export default function Home() {
     setMobileSidebarOpen(false);
   };
 
+  // When a tool card is clicked, send the command to the chat
+  const handleChatCommand = (command) => {
+    // Open chat if closed
+    setChatOpen(true);
+    setMobileChatOpen(true);
+    // Send command to chat via ref
+    if (chatRef.current?.sendCommand) {
+      chatRef.current.sendCommand(command);
+    }
+  };
+
   return (
     <div className="h-[100dvh] w-screen overflow-hidden" style={{ border: '1.5px solid #a0a0a0', animation: 'silver-border-anim 4s ease infinite' }}>
       <div className="h-full w-full flex flex-col md:flex-row overflow-hidden bg-background">
       {/* ========== MOBILE LAYOUT ========== */}
-      {/* Mobile Header - iPhone safe area aware */}
       <div className="flex md:hidden items-center justify-between h-12 min-h-[48px] border-b border-border bg-card/80 backdrop-blur-md px-4 safe-top">
         <button onClick={() => setMobileSidebarOpen(!mobileSidebarOpen)} className="p-2 -ml-1 rounded-lg active:bg-secondary/50 transition-colors">
           {mobileSidebarOpen ? <X className="w-5 h-5 text-foreground" /> : <Menu className="w-5 h-5 metallic-silver-icon" />}
@@ -51,7 +62,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Mobile Nav Overlay */}
       {mobileSidebarOpen && (
         <div className="md:hidden fixed inset-0 z-50 top-12">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setMobileSidebarOpen(false)} />
@@ -61,31 +71,25 @@ export default function Home() {
         </div>
       )}
 
-      {/* Mobile Content + Chat Split */}
       <div className="flex-1 flex flex-col md:hidden overflow-hidden">
-        {/* Content area - takes full height or top portion when chat is open */}
         <div className={`${mobileChatOpen ? 'h-[45%] min-h-[200px]' : 'flex-1'} overflow-hidden transition-all duration-300`}>
-          <ContentArea activeView={activeView} />
+          <ContentArea activeView={activeView} onChatCommand={handleChatCommand} />
         </div>
-        {/* Chat panel - slides up from bottom */}
         {mobileChatOpen && (
           <div className="flex-1 border-t border-border overflow-hidden">
-            <ChatPanel mobile />
+            <ChatPanel mobile ref={chatRef} />
           </div>
         )}
-        {/* Persistent bottom tab bar */}
         {!mobileChatOpen && (
           <MobileTabBar activeView={activeView} onViewChange={handleMobileViewChange} />
         )}
       </div>
 
       {/* ========== DESKTOP LAYOUT ========== */}
-      {/* Desktop Sidebar */}
       <div className={`hidden md:block transition-all duration-300 ease-in-out ${sidebarOpen ? 'w-[200px] min-w-[200px]' : 'w-0 min-w-0'} overflow-hidden`}>
         <Sidebar activeView={activeView} onViewChange={setActiveView} />
       </div>
 
-      {/* Desktop Center */}
       <div className="hex-bg hidden md:flex flex-1 flex-col overflow-hidden relative">
         <HexGlow />
         <div className="relative z-[2] flex flex-col flex-1 overflow-hidden">
@@ -97,13 +101,12 @@ export default function Home() {
               {chatOpen ? <PanelRightClose className="w-4 h-4" /> : <PanelRightOpen className="w-4 h-4" />}
             </button>
           </TopBar>
-          <ContentArea activeView={activeView} />
+          <ContentArea activeView={activeView} onChatCommand={handleChatCommand} />
         </div>
       </div>
 
-      {/* Desktop Chat Panel */}
       <div className={`hidden md:block transition-all duration-300 ease-in-out ${chatOpen ? 'w-[320px] min-w-[320px]' : 'w-0 min-w-0'} overflow-hidden`}>
-        <ChatPanel />
+        <ChatPanel ref={chatRef} />
       </div>
       </div>
     </div>

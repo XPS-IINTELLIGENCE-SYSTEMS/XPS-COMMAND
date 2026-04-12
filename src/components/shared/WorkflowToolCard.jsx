@@ -1,15 +1,25 @@
 import { cn } from "@/lib/utils";
+import { ArrowRight } from "lucide-react";
 
-export default function WorkflowToolCard({ num, label, Icon, description, statusBadge, zigzag = "none" }) {
+export default function WorkflowToolCard({ num, label, Icon, description, statusBadge, zigzag = "none", chatCommand, onAction }) {
   const isLeft = zigzag === "left";
   const isRight = zigzag === "right";
 
+  const handleClick = () => {
+    if (onAction) {
+      onAction(chatCommand || label);
+    }
+  };
+
   return (
-    <div className={cn(
-      "shimmer-card group relative rounded-2xl border border-white/10 bg-card/40 backdrop-blur-xl overflow-hidden transition-all duration-300 hover:border-primary/30 hover:shadow-[0_0_30px_rgba(212,175,55,0.08)]",
-      isLeft && "md:mr-16",
-      isRight && "md:ml-16"
-    )}>
+    <div
+      onClick={handleClick}
+      className={cn(
+        "shimmer-card group relative rounded-2xl border border-white/10 bg-card/40 backdrop-blur-xl overflow-hidden transition-all duration-300 hover:border-primary/30 hover:shadow-[0_0_30px_rgba(212,175,55,0.08)] cursor-pointer",
+        isLeft && "md:mr-16",
+        isRight && "md:ml-16"
+      )}
+    >
       <div className="absolute inset-0 bg-gradient-to-br from-white/[0.04] via-transparent to-white/[0.02] pointer-events-none" />
       <div className={cn(
         "relative p-5 md:p-6 flex items-start gap-4",
@@ -27,6 +37,11 @@ export default function WorkflowToolCard({ num, label, Icon, description, status
             )}
           </div>
           <p className="text-xs md:text-sm text-white/70 leading-relaxed">{description}</p>
+          {onAction && (
+            <div className="mt-3 flex items-center gap-1 text-xs text-primary font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+              Run this tool <ArrowRight className="w-3 h-3" />
+            </div>
+          )}
         </div>
       </div>
     </div>

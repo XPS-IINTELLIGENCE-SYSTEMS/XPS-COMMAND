@@ -35,7 +35,7 @@ function TypingText({ text }) {
   }, [text]);
 
   return (
-    <ReactMarkdown className="text-xs leading-relaxed text-foreground/90 max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 [&_p]:my-1 [&_ul]:my-1 [&_ol]:my-1 [&_li]:my-0.5 [&_code]:text-primary [&_code]:bg-secondary [&_code]:px-1 [&_code]:rounded [&_a]:text-primary [&_strong]:text-foreground [&_h1]:text-sm [&_h2]:text-xs [&_h3]:text-xs">
+    <ReactMarkdown className="text-[11px] leading-relaxed text-foreground/90 max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 [&_p]:my-0.5 [&_ul]:my-0.5 [&_ol]:my-0.5 [&_li]:my-0.5 [&_code]:text-primary [&_code]:bg-secondary [&_code]:px-1 [&_code]:rounded [&_a]:text-primary [&_strong]:text-foreground [&_h1]:text-xs [&_h2]:text-[11px] [&_h3]:text-[11px]">
       {done ? text : displayed + "▍"}
     </ReactMarkdown>
   );
@@ -74,7 +74,7 @@ function MessageBubble({ message, isLatestAssistant }) {
               {isLatestAssistant ? (
                 <TypingText text={message.content} />
               ) : (
-                <ReactMarkdown className="text-xs leading-relaxed text-foreground/90 max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 [&_p]:my-1 [&_ul]:my-1 [&_ol]:my-1 [&_li]:my-0.5 [&_code]:text-primary [&_code]:bg-secondary [&_code]:px-1 [&_code]:rounded [&_a]:text-primary [&_strong]:text-foreground">
+                <ReactMarkdown className="text-[11px] leading-relaxed text-foreground/90 max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 [&_p]:my-0.5 [&_ul]:my-0.5 [&_ol]:my-0.5 [&_li]:my-0.5 [&_code]:text-primary [&_code]:bg-secondary [&_code]:px-1 [&_code]:rounded [&_a]:text-primary [&_strong]:text-foreground">
                   {message.content}
                 </ReactMarkdown>
               )}
@@ -195,7 +195,7 @@ export default function ChatPanel({ mobile = false }) {
   ];
 
   return (
-    <div className={`${mobile ? 'w-full' : 'w-[320px] min-w-[320px]'} h-full ${mobile ? '' : 'border-l border-border'} flex flex-col bg-background`}>
+    <div className={`${mobile ? 'w-full' : 'w-[320px] min-w-[320px]'} h-full ${mobile ? '' : 'border-l border-[#8a8a8a]/30'} flex flex-col bg-background`}>
       {/* Header */}
       <div className={`${mobile ? 'h-10 min-h-[40px]' : 'h-12 min-h-[48px]'} border-b border-border flex items-center justify-between px-3`}>
         <div className="flex items-center gap-2">
@@ -291,14 +291,14 @@ export default function ChatPanel({ mobile = false }) {
       )}
 
       {/* Input */}
-      <div className={`${mobile ? 'p-2 safe-bottom' : 'p-3'} border-t border-border ${activeAgentId !== "main" && !mobile ? "hidden" : ""}`}>
+      <div className={`${mobile ? 'p-2 pb-3 safe-bottom' : 'p-3'} border-t border-border ${activeAgentId !== "main" && !mobile ? "hidden" : ""}`}>
         <div className="flex gap-2">
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSend()}
             placeholder="Command the agent..."
-            className={`flex-1 bg-card border border-border rounded-lg px-3 ${mobile ? 'py-2.5 text-sm' : 'py-2 text-xs'} text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50`}
+            className={`flex-1 bg-card border border-[#8a8a8a]/40 rounded-lg px-3 ${mobile ? 'py-2.5 text-sm' : 'py-2 text-xs'} text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/30`}
             disabled={loading || initializing}
           />
           <Button

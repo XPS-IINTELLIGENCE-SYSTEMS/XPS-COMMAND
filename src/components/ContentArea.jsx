@@ -37,7 +37,7 @@ const views = {
 export default function ContentArea({ activeView }) {
   const ViewComponent = views[activeView] || DashboardView;
   return (
-    <div className="flex-1 h-full overflow-hidden">
+    <div className="flex-1 h-full overflow-hidden border-l border-[#8a8a8a]/15">
       <ViewComponent />
     </div>
   );

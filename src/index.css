@@ -342,17 +342,16 @@
   animation: silver-border-anim 4s ease infinite;
 }
 
-/* Thin silver border on dark cards globally */
-.dark .bg-card {
-  border: 1px solid rgba(160, 160, 160, 0.12);
-}
-
-.dark .bg-card\/50 {
-  border: 1px solid rgba(160, 160, 160, 0.08);
-}
-
+/* Thin silver border on dark cards globally - outside @layer for max specificity */
+.dark .bg-card,
+.dark .bg-card\/50,
 .dark .bg-card\/80 {
-  border: 1px solid rgba(160, 160, 160, 0.1);
+  outline: 0.5px solid rgba(160, 160, 160, 0.18);
+}
+
+.dark .rounded-2xl,
+.dark .rounded-xl {
+  outline: 0.5px solid rgba(160, 160, 160, 0.12);
 }
 
 .light .metallic-gold-silver-text {

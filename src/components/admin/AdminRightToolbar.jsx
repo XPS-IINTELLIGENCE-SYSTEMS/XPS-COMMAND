@@ -56,7 +56,7 @@ export default function AdminRightToolbar({ activeTool, onToolChange }) {
   return (
     <div className="flex flex-col">
       {/* Right side vertical tools */}
-      <div className="w-[56px] min-w-[56px] flex flex-col items-center py-3 gap-1 mr-3">
+      <div className="w-[56px] min-w-[56px] flex flex-col items-center py-3 gap-1 mr-0.5">
         <div className="text-[7px] font-bold text-white/20 uppercase tracking-[0.2em] mb-2">TOOLS</div>
         
         {/* Main tools */}
@@ -84,7 +84,7 @@ export default function AdminRightToolbar({ activeTool, onToolChange }) {
       </div>
 
       {/* Corner wrap - bottom right tools */}
-      <div className="flex items-center justify-center gap-1 px-1.5 pb-3 mr-3">
+      <div className="flex items-center justify-center gap-1 px-1.5 pb-3 mr-0.5">
         <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
           <Eye className="w-[18px] h-[18px] text-white/20" />
         </div>

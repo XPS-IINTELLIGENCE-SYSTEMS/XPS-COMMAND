@@ -19,9 +19,13 @@ export default function AdminPanel() {
 
   return (
     <div className="h-[100dvh] w-screen overflow-hidden" style={{ border: '1.5px solid #a0a0a0', animation: 'silver-border-anim 4s ease infinite' }}>
-      <div className="h-full w-full flex flex-col bg-black overflow-hidden">
+      <div className="h-full w-full flex flex-col bg-black overflow-hidden hex-bg relative">
+        {/* Full-screen electric hex glow */}
+        <div className="absolute inset-0 pointer-events-none z-0">
+          <HexGlow />
+        </div>
         {/* Top bar */}
-        <div className="h-10 min-h-[40px] border-b border-white/10 bg-black/80 flex items-center justify-between px-3 flex-shrink-0">
+        <div className="relative z-[1] h-10 min-h-[40px] border-b border-white/10 bg-black/80 backdrop-blur-sm flex items-center justify-between px-3 flex-shrink-0">
           <div className="flex items-center gap-2">
             <a href="/dashboard" className="flex items-center gap-2 hover:opacity-80">
               <img src="https://media.base44.com/images/public/69db3269c791af3f48cfaee9/583965fcb_IMAGEWITHWHITEOUTLINE.jpg" alt="XPS" className="w-5 h-5 object-contain" />
@@ -37,7 +41,7 @@ export default function AdminPanel() {
         </div>
 
         {/* Main area */}
-        <div className="flex-1 flex overflow-hidden">
+        <div className="relative z-[1] flex-1 flex overflow-hidden">
           {/* Left: Chat Panel */}
           <div className="w-[300px] min-w-[300px] bg-black/60 flex-shrink-0">
             <AdminChat ref={chatRef} />
@@ -50,11 +54,8 @@ export default function AdminPanel() {
             animation: 'silver-border-anim 4s ease infinite',
           }} />
 
-          {/* Center: Editor Canvas with hex glow */}
-          <div className="flex-1 relative overflow-hidden hex-bg">
-            <div className="absolute inset-0 pointer-events-none z-0">
-              <HexGlow />
-            </div>
+          {/* Center: Editor Canvas */}
+          <div className="flex-1 relative overflow-hidden">
             <div className="relative z-[1] h-full">
               <AdminEditorCanvas activeTool={activeTool} />
             </div>
@@ -65,7 +66,9 @@ export default function AdminPanel() {
         </div>
 
         {/* Bottom Toolbar - centered under editor, lifted off bottom */}
-        <AdminBottomToolbar />
+        <div className="relative z-[1]">
+          <AdminBottomToolbar />
+        </div>
       </div>
     </div>
   );

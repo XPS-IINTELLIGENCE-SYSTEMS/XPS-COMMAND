@@ -1,5 +1,6 @@
-import { Zap, Search, Mail, FileText, DollarSign, AlertCircle, CheckCircle2, Clock, ArrowRight, TrendingUp, Target } from "lucide-react";
+import { Mail, FileText, DollarSign, AlertCircle, CheckCircle2, Clock, ArrowRight, TrendingUp } from "lucide-react";
 import HexGlow from "../HexGlow";
+import MetalIcon from "../shared/MetalIcon";
 
 export default function CommandCenterView() {
   const todayActions = [
@@ -16,10 +17,10 @@ export default function CommandCenterView() {
   ];
 
   const stats = [
-    { label: "Active Leads", value: "47", icon: Search, trend: "+12%" },
-    { label: "In Outreach", value: "23", icon: Mail, trend: "+8%" },
-    { label: "Open Proposals", value: "8", icon: FileText, trend: "+3" },
-    { label: "Unpaid Invoices", value: "4", icon: DollarSign, trend: "-2" },
+    { label: "Active Leads", value: "47", iconId: "find_work", trend: "+12%" },
+    { label: "In Outreach", value: "23", iconId: "get_work", trend: "+8%" },
+    { label: "Open Proposals", value: "8", iconId: "do_work", trend: "+3" },
+    { label: "Unpaid Invoices", value: "4", iconId: "get_paid", trend: "-2" },
   ];
 
   return (
@@ -32,7 +33,7 @@ export default function CommandCenterView() {
         {/* Hero Header */}
         <div className="text-center pt-4 md:pt-8 pb-4">
           <div className="shimmer-card inline-flex items-center gap-3 px-5 py-2 rounded-full border border-primary/30 bg-primary/5 mb-6">
-            <Zap className="w-5 h-5 metallic-gold-icon animate-pulse shimmer-icon" />
+            <MetalIcon id="command" size="sm" />
             <span className="text-sm font-semibold xps-silver-subtle-gold">AI Daily Intelligence Briefing</span>
           </div>
           <h1 className="text-3xl md:text-5xl font-extrabold leading-none xps-gold-slow-shimmer" style={{ fontFamily: "'Montserrat', sans-serif" }}>
@@ -45,31 +46,26 @@ export default function CommandCenterView() {
 
         {/* Pipeline Stats */}
         <div className="flex flex-wrap justify-center gap-4 md:gap-8">
-          {stats.map((stat) => {
-            const Icon = stat.icon;
-            return (
-              <div key={stat.label} className="shimmer-card text-center p-5 rounded-xl min-w-[120px] cursor-default">
-                <div className="shimmer-icon-container w-10 h-10 rounded-xl bg-secondary/50 border border-border flex items-center justify-center mx-auto mb-3">
-                  <Icon className="w-5 h-5 metallic-silver-icon shimmer-icon" />
-                </div>
-                <div className="text-3xl md:text-4xl font-extrabold metallic-gold shimmer-icon">{stat.value}</div>
-                <div className="text-[10px] md:text-xs text-muted-foreground tracking-wider mt-1 font-medium">{stat.label}</div>
-                <div className="flex items-center justify-center gap-1 mt-2">
-                  <TrendingUp className="w-3 h-3 metallic-gold-icon" />
-                  <span className="text-[10px] xps-gold-slow-shimmer font-semibold">{stat.trend}</span>
-                </div>
+          {stats.map((stat) => (
+            <div key={stat.label} className="shimmer-card text-center p-5 rounded-xl min-w-[120px] cursor-default">
+              <div className="flex items-center justify-center mx-auto mb-3">
+                <MetalIcon id={stat.iconId} size="lg" />
               </div>
-            );
-          })}
+              <div className="text-3xl md:text-4xl font-extrabold metallic-gold shimmer-icon">{stat.value}</div>
+              <div className="text-[10px] md:text-xs text-muted-foreground tracking-wider mt-1 font-medium">{stat.label}</div>
+              <div className="flex items-center justify-center gap-1 mt-2">
+                <TrendingUp className="w-3 h-3 metallic-gold-icon" />
+                <span className="text-[10px] xps-gold-slow-shimmer font-semibold">{stat.trend}</span>
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* Needs Attention */}
         <div className="max-w-3xl mx-auto">
           <div className="shimmer-card rounded-2xl border border-border bg-card/50 backdrop-blur-sm p-5 md:p-6 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl metallic-gold-bg flex items-center justify-center">
-                <Target className="w-4 h-4 text-background" />
-              </div>
+              <MetalIcon id="command" size="md" />
               <div>
                 <h2 className="text-sm md:text-base font-bold text-foreground">Needs Your Attention</h2>
                 <p className="text-[10px] text-muted-foreground">AI flagged {todayActions.length} priority items</p>
@@ -101,9 +97,7 @@ export default function CommandCenterView() {
         <div className="max-w-3xl mx-auto pb-8">
           <div className="shimmer-card rounded-2xl border border-border bg-card/50 backdrop-blur-sm p-5 md:p-6 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="shimmer-icon-container w-9 h-9 rounded-xl bg-secondary/50 border border-border flex items-center justify-center">
-                <CheckCircle2 className="w-4 h-4 shimmer-icon metallic-silver-icon" />
-              </div>
+              <MetalIcon id="tips" size="md" />
               <div>
                 <h2 className="text-sm md:text-base font-bold text-foreground">Recent Wins</h2>
                 <p className="text-[10px] text-muted-foreground">Closed deals & milestones</p>

@@ -1,19 +1,20 @@
-import { Search, MapPin, Target, Users, TrendingUp, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import MetalIcon from "../shared/MetalIcon";
 
 const steps = [
-  { num: "1.1", label: "Identify Target Territory", desc: "AI scans permits, census & development data by region", icon: MapPin },
-  { num: "1.2", label: "Scrape & Find Leads", desc: "Auto-discover prospects from Google, LinkedIn, directories", icon: Search },
-  { num: "1.3", label: "Enrich Contact Info", desc: "Pull decision-maker names, emails, phones automatically", icon: Users },
-  { num: "1.4", label: "Deep Research Leads", desc: "Scrape websites, reviews, news, floor photos & permits", icon: Target },
-  { num: "1.5", label: "Score & Prioritize", desc: "AI ranks leads by budget, timeline, fit & urgency", icon: TrendingUp },
+  { num: "1.1", label: "Identify Target Territory", desc: "AI scans permits, census & development data by region" },
+  { num: "1.2", label: "Scrape & Find Leads", desc: "Auto-discover prospects from Google, LinkedIn, directories" },
+  { num: "1.3", label: "Enrich Contact Info", desc: "Pull decision-maker names, emails, phones automatically" },
+  { num: "1.4", label: "Deep Research Leads", desc: "Scrape websites, reviews, news, floor photos & permits" },
+  { num: "1.5", label: "Score & Prioritize", desc: "AI ranks leads by budget, timeline, fit & urgency" },
 ];
 
 export default function FindWorkView() {
   return (
     <div className="h-full overflow-y-auto p-4 md:p-6 space-y-6">
       <div className="flex items-center gap-3 mb-2">
-        <div className="w-10 h-10 rounded-xl metallic-gold-bg flex items-center justify-center text-background font-bold text-lg">1</div>
+        <MetalIcon id="find_work" size="lg" />
         <div>
           <h1 className="text-lg md:text-xl font-bold xps-gold-slow-shimmer" style={{ fontFamily: "'Montserrat', sans-serif" }}>FIND WORK</h1>
           <p className="text-xs text-muted-foreground">Lead generation, territory research & prospecting</p>
@@ -38,11 +39,10 @@ export default function FindWorkView() {
       <div className="space-y-3">
         <h2 className="text-sm font-semibold text-foreground">Workflow Steps</h2>
         {steps.map((step) => {
-          const Icon = step.icon;
           return (
             <div key={step.num} className="shimmer-card flex items-start gap-3 p-3 rounded-xl bg-card border border-border">
-              <div className="shimmer-icon-container w-9 h-9 rounded-lg bg-secondary flex items-center justify-center flex-shrink-0">
-                <Icon className="w-4 h-4 shimmer-icon metallic-silver-icon" />
+              <div className="flex items-center justify-center flex-shrink-0">
+                <MetalIcon id="find_work" size="md" />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">

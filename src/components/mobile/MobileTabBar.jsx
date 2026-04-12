@@ -1,20 +1,19 @@
-import { Zap, Search, MessageSquare, Trophy, DollarSign, Lightbulb } from "lucide-react";
 import { cn } from "@/lib/utils";
+import MetalIcon from "../shared/MetalIcon";
 
 const tabs = [
-  { id: "command", label: "Home", icon: Zap },
-  { id: "find_work", label: "Find", icon: Search },
-  { id: "get_work", label: "Get", icon: MessageSquare },
-  { id: "do_work", label: "Do", icon: Trophy },
-  { id: "get_paid", label: "Paid", icon: DollarSign },
-  { id: "tips", label: "Tips", icon: Lightbulb },
+  { id: "command", label: "Home" },
+  { id: "find_work", label: "Find" },
+  { id: "get_work", label: "Get" },
+  { id: "do_work", label: "Do" },
+  { id: "get_paid", label: "Paid" },
+  { id: "tips", label: "Tips" },
 ];
 
 export default function MobileTabBar({ activeView, onViewChange }) {
   return (
     <div className="flex items-stretch justify-around border-t border-border bg-card/95 backdrop-blur-md safe-bottom select-none" style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
       {tabs.map((tab) => {
-        const Icon = tab.icon;
         const isActive = activeView === tab.id;
         return (
           <button
@@ -25,7 +24,7 @@ export default function MobileTabBar({ activeView, onViewChange }) {
               isActive ? "text-primary" : "text-muted-foreground"
             )}
           >
-            <Icon className={cn("w-5 h-5", isActive ? "metallic-gold-icon" : "")} />
+            <MetalIcon id={tab.id} size="xs" />
             <span className={cn("text-[11px] font-medium", isActive && "xps-gold-slow-shimmer")}>{tab.label}</span>
           </button>
         );

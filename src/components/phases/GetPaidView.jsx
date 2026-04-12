@@ -1,22 +1,23 @@
-import { ClipboardCheck, Receipt, Bell, CreditCard, Heart, Star, Archive, BarChart3, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import MetalIcon from "../shared/MetalIcon";
 
 const steps = [
-  { num: "4.1", label: "Client Walkthrough & Sign-Off", desc: "Guided inspection with photos, digital approval on-site", icon: ClipboardCheck },
-  { num: "4.2", label: "Send Final Invoice", desc: "Auto-generated from job data, deposit subtracted, terms applied", icon: Receipt },
-  { num: "4.3", label: "Follow Up on Payment", desc: "Escalating reminders: email → text → call → formal letter", icon: Bell },
-  { num: "4.4", label: "Collect Payment", desc: "Online payment link, auto-records and confirms", icon: CreditCard },
-  { num: "4.5", label: "Send Thank You", desc: "Personalized thank you auto-sent on payment receipt", icon: Heart },
-  { num: "4.6", label: "Request Google Review", desc: "Friendly text/email with direct review link, timed perfectly", icon: Star },
-  { num: "4.7", label: "Archive & Analyze", desc: "All docs archived, job profitability calculated, referral request sent", icon: Archive },
-  { num: "4.8", label: "Job P&L Report", desc: "Auto-calculates actual profit: revenue - materials - labor - overhead", icon: BarChart3 },
+  { num: "4.1", label: "Client Walkthrough & Sign-Off", desc: "Guided inspection with photos, digital approval on-site" },
+  { num: "4.2", label: "Send Final Invoice", desc: "Auto-generated from job data, deposit subtracted, terms applied" },
+  { num: "4.3", label: "Follow Up on Payment", desc: "Escalating reminders: email → text → call → formal letter" },
+  { num: "4.4", label: "Collect Payment", desc: "Online payment link, auto-records and confirms" },
+  { num: "4.5", label: "Send Thank You", desc: "Personalized thank you auto-sent on payment receipt" },
+  { num: "4.6", label: "Request Google Review", desc: "Friendly text/email with direct review link, timed perfectly" },
+  { num: "4.7", label: "Archive & Analyze", desc: "All docs archived, job profitability calculated, referral request sent" },
+  { num: "4.8", label: "Job P&L Report", desc: "Auto-calculates actual profit: revenue - materials - labor - overhead" },
 ];
 
 export default function GetPaidView() {
   return (
     <div className="h-full overflow-y-auto p-4 md:p-6 space-y-6">
       <div className="flex items-center gap-3 mb-2">
-        <div className="w-10 h-10 rounded-xl metallic-gold-bg flex items-center justify-center text-background font-bold text-lg">4</div>
+        <MetalIcon id="get_paid" size="lg" />
         <div>
           <h1 className="text-lg md:text-xl font-bold xps-gold-slow-shimmer" style={{ fontFamily: "'Montserrat', sans-serif" }}>GET PAID</h1>
           <p className="text-xs text-muted-foreground">Invoicing, collections & reputation building</p>
@@ -41,11 +42,10 @@ export default function GetPaidView() {
       <div className="space-y-3">
         <h2 className="text-sm font-semibold text-foreground">Workflow Steps</h2>
         {steps.map((step) => {
-          const Icon = step.icon;
           return (
             <div key={step.num} className="shimmer-card flex items-start gap-3 p-3 rounded-xl bg-card border border-border">
-              <div className="shimmer-icon-container w-9 h-9 rounded-lg bg-secondary flex items-center justify-center flex-shrink-0">
-                <Icon className="w-4 h-4 shimmer-icon metallic-silver-icon" />
+              <div className="flex items-center justify-center flex-shrink-0">
+                <MetalIcon id="get_paid" size="md" />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">

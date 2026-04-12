@@ -1,17 +1,15 @@
-import { 
-  Zap, Search, MessageSquare, Trophy, DollarSign, Lightbulb, Settings, Rocket
-} from "lucide-react";
 import { cn } from "@/lib/utils";
+import MetalIcon from "./shared/MetalIcon";
 
 const navItems = [
-  { id: "start_here", label: "Start Here", icon: Rocket, desc: "Get set up in minutes" },
-  { id: "command", label: "Dashboard", icon: Zap, desc: "AI daily briefing" },
-  { id: "find_work", label: "1. Find Work", icon: Search, desc: "Lead gen & prospecting" },
-  { id: "get_work", label: "2. Get Work", icon: MessageSquare, desc: "Outreach & communication" },
-  { id: "do_work", label: "3. Do Work", icon: Trophy, desc: "Manage jobs & execution" },
-  { id: "get_paid", label: "4. Get Paid", icon: DollarSign, desc: "Invoicing & collections" },
-  { id: "tips", label: "Tips & Tricks", icon: Lightbulb, desc: "Pro knowledge & videos" },
-  { id: "settings", label: "Settings", icon: Settings, desc: "Account & integrations" },
+  { id: "start_here", label: "Start Here", desc: "Get set up in minutes" },
+  { id: "command", label: "Dashboard", desc: "AI daily briefing" },
+  { id: "find_work", label: "1. Find Work", desc: "Lead gen & prospecting" },
+  { id: "get_work", label: "2. Get Work", desc: "Outreach & communication" },
+  { id: "do_work", label: "3. Do Work", desc: "Manage jobs & execution" },
+  { id: "get_paid", label: "4. Get Paid", desc: "Invoicing & collections" },
+  { id: "tips", label: "Tips & Tricks", desc: "Pro knowledge & videos" },
+  { id: "settings", label: "Settings", desc: "Account & integrations" },
 ];
 
 export default function MobileNav({ activeView, onViewChange }) {
@@ -28,7 +26,6 @@ export default function MobileNav({ activeView, onViewChange }) {
       </div>
       <div className="space-y-2">
         {navItems.map((item) => {
-          const Icon = item.icon;
           const isActive = activeView === item.id;
           return (
             <button
@@ -42,10 +39,10 @@ export default function MobileNav({ activeView, onViewChange }) {
               )}
             >
               <div className={cn(
-                "shimmer-icon-container w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300",
+                "w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 overflow-hidden",
                 isActive ? "bg-primary/15" : "bg-secondary"
               )}>
-                <Icon className={cn("w-5 h-5 shimmer-icon", isActive ? "metallic-gold-icon" : "metallic-silver-icon")} />
+                <MetalIcon id={item.id} size="md" />
               </div>
               <div className="text-left">
                 <div className={cn(

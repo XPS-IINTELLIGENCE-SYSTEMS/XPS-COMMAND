@@ -1,22 +1,19 @@
-import { 
-  Zap, Search, MessageSquare, Trophy, DollarSign, Lightbulb, Settings, Rocket
-} from "lucide-react";
-
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import MetalIcon from "./shared/MetalIcon";
 
 const phases = [
-  { id: "start_here", label: "Start Here", icon: Rocket, num: null },
-  { id: "command", label: "Dashboard", icon: Zap, num: null },
-  { id: "find_work", label: "Find Work", icon: Search, num: "1" },
-  { id: "get_work", label: "Get Work", icon: MessageSquare, num: "2" },
-  { id: "do_work", label: "Do Work", icon: Trophy, num: "3" },
-  { id: "get_paid", label: "Get Paid", icon: DollarSign, num: "4" },
-  { id: "tips", label: "Tips & Tricks", icon: Lightbulb, num: null },
+  { id: "start_here", label: "Start Here", num: null },
+  { id: "command", label: "Dashboard", num: null },
+  { id: "find_work", label: "Find Work", num: "1" },
+  { id: "get_work", label: "Get Work", num: "2" },
+  { id: "do_work", label: "Do Work", num: "3" },
+  { id: "get_paid", label: "Get Paid", num: "4" },
+  { id: "tips", label: "Tips & Tricks", num: null },
 ];
 
 const utilityNav = [
-  { id: "settings", label: "Settings", icon: Settings },
+  { id: "settings", label: "Settings" },
 ];
 
 export default function Sidebar({ activeView, onViewChange }) {
@@ -46,7 +43,6 @@ export default function Sidebar({ activeView, onViewChange }) {
             </div>
             <div className="space-y-0.5">
               {phases.map((item) => {
-                const Icon = item.icon;
                 const isActive = activeView === item.id;
                 return (
                   <button
@@ -62,7 +58,7 @@ export default function Sidebar({ activeView, onViewChange }) {
                     {item.num && (
                       <span className={cn("text-[10px] font-bold font-mono w-4", isActive ? "text-primary" : "text-muted-foreground")}>{item.num}</span>
                     )}
-                    <Icon className={cn("w-[18px] h-[18px] shimmer-icon", isActive ? "metallic-gold-icon" : "metallic-silver-icon")} />
+                    <MetalIcon id={item.id} size="sm" />
                     {item.label}
                   </button>
                 );
@@ -76,7 +72,6 @@ export default function Sidebar({ activeView, onViewChange }) {
             </div>
             <div className="space-y-0.5">
               {utilityNav.map((item) => {
-                const Icon = item.icon;
                 const isActive = activeView === item.id;
                 return (
                   <button
@@ -89,7 +84,7 @@ export default function Sidebar({ activeView, onViewChange }) {
                         : "text-foreground/60 hover:text-foreground hover:bg-secondary/50"
                     )}
                   >
-                    <Icon className={cn("w-[18px] h-[18px] shimmer-icon", isActive ? "metallic-gold-icon" : "metallic-silver-icon")} />
+                    <MetalIcon id={item.id} size="sm" />
                     {item.label}
                   </button>
                 );

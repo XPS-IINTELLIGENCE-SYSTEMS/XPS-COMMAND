@@ -5,10 +5,12 @@ import NavIcon from "./shared/NavIcon";
 const phases = [
   { id: "start_here", label: "Start Here", num: null },
   { id: "command", label: "Dashboard", num: null },
+  { id: "agent_hub", label: "Agent Hub", num: null },
   { id: "find_work", label: "Find Work", num: "1" },
   { id: "get_work", label: "Get Work", num: "2" },
-  { id: "do_work", label: "Do Work", num: "3" },
-  { id: "get_paid", label: "Get Paid", num: "4" },
+  { id: "win_work", label: "Win Work", num: "3" },
+  { id: "do_work", label: "Do Work", num: "4" },
+  { id: "get_paid", label: "Get Paid", num: "5" },
   { id: "tips", label: "Tips & Tricks", num: null },
 ];
 

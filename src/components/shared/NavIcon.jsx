@@ -1,11 +1,13 @@
 import { cn } from "@/lib/utils";
-import { Rocket, LayoutDashboard, Search, Megaphone, HardHat, DollarSign, Lightbulb, Settings } from "lucide-react";
+import { Rocket, LayoutDashboard, Search, Megaphone, HardHat, DollarSign, Lightbulb, Settings, Zap, Trophy } from "lucide-react";
 
 const ICON_MAP = {
   start_here: Rocket,
   command: LayoutDashboard,
+  agent_hub: Zap,
   find_work: Search,
   get_work: Megaphone,
+  win_work: Trophy,
   do_work: HardHat,
   get_paid: DollarSign,
   tips: Lightbulb,

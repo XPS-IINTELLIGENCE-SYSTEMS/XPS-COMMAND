@@ -6,8 +6,9 @@ const navItems = [
   { id: "command", label: "Dashboard", desc: "AI daily briefing" },
   { id: "find_work", label: "1. Find Work", desc: "Lead gen & prospecting" },
   { id: "get_work", label: "2. Get Work", desc: "Outreach & communication" },
-  { id: "do_work", label: "3. Do Work", desc: "Manage jobs & execution" },
-  { id: "get_paid", label: "4. Get Paid", desc: "Invoicing & collections" },
+  { id: "win_work", label: "3. Win Work", desc: "Proposals & closing" },
+  { id: "do_work", label: "4. Do Work", desc: "Manage jobs & execution" },
+  { id: "get_paid", label: "5. Get Paid", desc: "Invoicing & collections" },
   { id: "tips", label: "Tips & Tricks", desc: "Pro knowledge & videos" },
   { id: "settings", label: "Settings", desc: "Account & integrations" },
 ];

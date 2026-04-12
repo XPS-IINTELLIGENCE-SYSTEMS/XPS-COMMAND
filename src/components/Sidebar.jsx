@@ -5,7 +5,6 @@ import NavIcon from "./shared/NavIcon";
 const phases = [
   { id: "start_here", label: "Start Here", num: null },
   { id: "command", label: "Dashboard", num: null },
-  { id: "agent_hub", label: "Agent Hub", num: null },
   { id: "find_work", label: "Find Work", num: "1" },
   { id: "get_work", label: "Get Work", num: "2" },
   { id: "win_work", label: "Win Work", num: "3" },

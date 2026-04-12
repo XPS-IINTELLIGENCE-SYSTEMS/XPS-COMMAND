@@ -1,6 +1,5 @@
 import StartHereView from "./phases/StartHereView";
 import CommandCenterView from "./phases/CommandCenterView";
-import AgentHubView from "./dashboard/AgentHubView";
 import FindWorkView from "./phases/FindWorkView";
 import GetWorkView from "./phases/GetWorkView";
 import WinWorkView from "./phases/WinWorkView";
@@ -12,7 +11,6 @@ import SettingsView from "./dashboard/SettingsView";
 const views = {
   start_here: StartHereView,
   command: CommandCenterView,
-  agent_hub: AgentHubView,
   find_work: FindWorkView,
   get_work: GetWorkView,
   win_work: WinWorkView,

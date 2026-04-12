@@ -1,10 +1,10 @@
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, Search, Megaphone, HardHat, DollarSign, Lightbulb } from "lucide-react";
+import { LayoutDashboard, Search, Trophy, HardHat, DollarSign, Lightbulb } from "lucide-react";
 
 const tabs = [
   { id: "command", label: "Home", Icon: LayoutDashboard },
   { id: "find_work", label: "Find", Icon: Search },
-  { id: "get_work", label: "Get", Icon: Megaphone },
+  { id: "win_work", label: "Win", Icon: Trophy },
   { id: "do_work", label: "Do", Icon: HardHat },
   { id: "get_paid", label: "Paid", Icon: DollarSign },
   { id: "tips", label: "Tips", Icon: Lightbulb },

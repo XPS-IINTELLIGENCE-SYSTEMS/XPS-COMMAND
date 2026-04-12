@@ -4,44 +4,44 @@ import { base44 } from "@/api/base44Client";
 import { cn } from "@/lib/utils";
 
 const AGENTS = [
-  { id: "ceo_orchestrator", name: "CEO Orchestrator", role: "Swarm Commander", icon: Crown, color: "text-yellow-500", desc: "Delegates to all agents, strategic decisions" },
-  { id: "lead_gen", name: "Lead Gen Manager", role: "Business Dev", icon: Users, color: "text-blue-400", desc: "Territory analysis, scraping, enrichment, scoring" },
-  { id: "sales_director", name: "Sales Director", role: "Revenue", icon: TrendingUp, color: "text-green-400", desc: "Proposals, follow-ups, closing deals" },
-  { id: "seo_marketing", name: "Marketing Director", role: "Marketing", icon: Megaphone, color: "text-purple-400", desc: "SEO, content, competitor intel, campaigns" },
-  { id: "social_media", name: "Social Media Manager", role: "Social", icon: Share2, color: "text-pink-400", desc: "Instagram, Facebook, LinkedIn, TikTok, YouTube" },
-  { id: "billing_controller", name: "Finance Controller", role: "Finance", icon: DollarSign, color: "text-emerald-400", desc: "Invoicing, payments, collections, reporting" },
-  { id: "prediction", name: "Prediction Analyst", role: "Strategy", icon: Brain, color: "text-cyan-400", desc: "Revenue forecasting, trend analysis, market prediction" },
-  { id: "simulation", name: "Simulation Analyst", role: "Strategy", icon: BarChart3, color: "text-indigo-400", desc: "What-if scenarios, risk modeling, pipeline simulation" },
-  { id: "validation", name: "QA Director", role: "Quality", icon: CheckSquare, color: "text-amber-400", desc: "Data audits, duplicate detection, compliance" },
-  { id: "recommendation", name: "Strategy Advisor", role: "Strategy", icon: Lightbulb, color: "text-orange-400", desc: "Next-best-action, optimization, prioritization" },
-  { id: "code_agent", name: "Systems Engineer", role: "Engineering", icon: Code2, color: "text-slate-400", desc: "Automation, workflows, system maintenance" },
-  { id: "security", name: "Security Director", role: "Security", icon: Shield, color: "text-red-400", desc: "Access control, data protection, threat monitoring" },
-  { id: "security_ops", name: "Security Ops Analyst", role: "Security", icon: Shield, color: "text-red-300", desc: "Threat hunting, incident response, vulnerability assessment" },
-  { id: "logging", name: "Logging Agent", role: "Audit", icon: ScrollText, color: "text-teal-400", desc: "Full audit trail, event tracking, activity history" },
-  { id: "maintenance", name: "Maintenance Ops", role: "Infrastructure", icon: Wrench, color: "text-gray-400", desc: "Data cleanup, archival, performance optimization" },
-  { id: "reputation", name: "Reputation Manager", role: "PR", icon: Star, color: "text-yellow-400", desc: "Reviews, testimonials, brand sentiment" },
-  { id: "xps_assistant", name: "Operations Director", role: "Operations", icon: Bot, color: "text-primary", desc: "CRM, emails, SMS, calls, proposals, invoices" },
+  { id: "ceo_orchestrator", name: "CEO Orchestrator", role: "Swarm Commander", icon: Crown, desc: "Delegates to all agents, strategic decisions" },
+  { id: "lead_gen", name: "Lead Gen Manager", role: "Business Dev", icon: Users, desc: "Territory analysis, scraping, enrichment, scoring" },
+  { id: "sales_director", name: "Sales Director", role: "Revenue", icon: TrendingUp, desc: "Proposals, follow-ups, closing deals" },
+  { id: "seo_marketing", name: "Marketing Director", role: "Marketing", icon: Megaphone, desc: "SEO, content, competitor intel, campaigns" },
+  { id: "social_media", name: "Social Media Manager", role: "Social", icon: Share2, desc: "Instagram, Facebook, LinkedIn, TikTok, YouTube" },
+  { id: "billing_controller", name: "Finance Controller", role: "Finance", icon: DollarSign, desc: "Invoicing, payments, collections, reporting" },
+  { id: "prediction", name: "Prediction Analyst", role: "Strategy", icon: Brain, desc: "Revenue forecasting, trend analysis, market prediction" },
+  { id: "simulation", name: "Simulation Analyst", role: "Strategy", icon: BarChart3, desc: "What-if scenarios, risk modeling, pipeline simulation" },
+  { id: "validation", name: "QA Director", role: "Quality", icon: CheckSquare, desc: "Data audits, duplicate detection, compliance" },
+  { id: "recommendation", name: "Strategy Advisor", role: "Strategy", icon: Lightbulb, desc: "Next-best-action, optimization, prioritization" },
+  { id: "code_agent", name: "Systems Engineer", role: "Engineering", icon: Code2, desc: "Automation, workflows, system maintenance" },
+  { id: "security", name: "Security Director", role: "Security", icon: Shield, desc: "Access control, data protection, threat monitoring" },
+  { id: "security_ops", name: "Security Ops Analyst", role: "Security", icon: Shield, desc: "Threat hunting, incident response, vulnerability assessment" },
+  { id: "logging", name: "Logging Agent", role: "Audit", icon: ScrollText, desc: "Full audit trail, event tracking, activity history" },
+  { id: "maintenance", name: "Maintenance Ops", role: "Infrastructure", icon: Wrench, desc: "Data cleanup, archival, performance optimization" },
+  { id: "reputation", name: "Reputation Manager", role: "PR", icon: Star, desc: "Reviews, testimonials, brand sentiment" },
+  { id: "xps_assistant", name: "Operations Director", role: "Operations", icon: Bot, desc: "CRM, emails, SMS, calls, proposals, invoices" },
 ];
 
 function AgentCard({ agent }) {
   const Icon = agent.icon;
   return (
     <div className="shimmer-card group flex items-center gap-3 p-3.5 rounded-xl bg-card/60 border border-border hover:border-primary/30 transition-all cursor-pointer">
-      <div className={cn("w-10 h-10 rounded-xl bg-secondary/60 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform", agent.color)}>
-        <Icon className="w-5 h-5" />
+      <div className="w-10 h-10 rounded-xl bg-secondary/60 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+        <Icon className="w-5 h-5 metallic-silver-icon" />
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <span className="text-sm font-semibold text-foreground truncate">{agent.name}</span>
+          <span className="text-sm font-semibold text-white truncate">{agent.name}</span>
           <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-primary/10 text-primary">{agent.role}</span>
         </div>
-        <p className="text-[11px] text-muted-foreground truncate">{agent.desc}</p>
+        <p className="text-[11px] text-white/50 truncate">{agent.desc}</p>
       </div>
-      <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-green-500/10 border border-green-500/20">
-        <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-        <span className="text-[9px] font-bold text-green-500">ONLINE</span>
+      <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/5 border border-white/10">
+        <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+        <span className="text-[9px] font-bold text-white/60">ONLINE</span>
       </div>
-      <ChevronRight className="w-4 h-4 text-muted-foreground" />
+      <ChevronRight className="w-4 h-4 text-white/30" />
     </div>
   );
 }

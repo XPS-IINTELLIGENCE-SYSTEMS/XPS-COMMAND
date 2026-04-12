@@ -38,7 +38,7 @@ export default function Landing() {
         <div className="flex items-center gap-4 mt-14">
           <Link
             to="/signin"
-            className="inline-flex items-center gap-3 px-8 py-4 rounded-xl metallic-gold-bg text-background text-lg font-bold hover:brightness-110 transition-all duration-300 hover:scale-110"
+            className="inline-flex items-center gap-2 px-5 py-2.5 md:px-8 md:py-4 rounded-lg md:rounded-xl metallic-gold-bg text-background text-sm md:text-lg font-semibold md:font-bold hover:brightness-110 transition-all duration-300 hover:scale-110"
           >
             See It In Action <ArrowRight className="w-4 h-4" />
           </Link>

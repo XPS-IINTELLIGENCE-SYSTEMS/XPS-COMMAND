@@ -21,13 +21,13 @@ export default function LandingNav() {
         <Link to="/coverage" className="hover:text-foreground cursor-pointer transition-all duration-300 hover:scale-110">Coverage</Link>
         <Link to="/about" className="hover:text-foreground cursor-pointer transition-all duration-300 hover:scale-110">About</Link>
       </div>
-      <div className="flex items-center gap-3">
-        <Link to="/signin" className="text-base font-medium text-white hover:text-white transition-all duration-300 hover:scale-110">
+      <div className="flex items-center gap-2 md:gap-3">
+        <Link to="/signin" className="text-xs md:text-base font-medium text-white hover:text-white transition-all duration-300 hover:scale-110">
           Sign In
         </Link>
         <Link
           to="/signin"
-          className="px-3 py-1.5 md:px-4 md:py-2 rounded-md md:rounded-lg metallic-gold-bg text-background text-xs md:text-sm font-semibold md:font-bold hover:brightness-110 transition-all duration-300 hover:scale-105"
+          className="px-2.5 py-1 md:px-4 md:py-2 rounded md:rounded-lg metallic-gold-bg text-background text-[11px] md:text-sm font-semibold md:font-bold hover:brightness-110 transition-all duration-300 hover:scale-105"
         >
           Learn More
         </Link>

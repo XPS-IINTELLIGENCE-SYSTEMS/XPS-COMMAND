@@ -16,6 +16,7 @@ const AGENTS = [
   { id: "recommendation", name: "Strategy Advisor", role: "Strategy", icon: Lightbulb, color: "text-orange-400", desc: "Next-best-action, optimization, prioritization" },
   { id: "code_agent", name: "Systems Engineer", role: "Engineering", icon: Code2, color: "text-slate-400", desc: "Automation, workflows, system maintenance" },
   { id: "security", name: "Security Director", role: "Security", icon: Shield, color: "text-red-400", desc: "Access control, data protection, threat monitoring" },
+  { id: "security_ops", name: "Security Ops Analyst", role: "Security", icon: Shield, color: "text-red-300", desc: "Threat hunting, incident response, vulnerability assessment" },
   { id: "maintenance", name: "Maintenance Ops", role: "Infrastructure", icon: Wrench, color: "text-gray-400", desc: "Data cleanup, archival, performance optimization" },
   { id: "reputation", name: "Reputation Manager", role: "PR", icon: Star, color: "text-yellow-400", desc: "Reviews, testimonials, brand sentiment" },
   { id: "xps_assistant", name: "Operations Director", role: "Operations", icon: Bot, color: "text-primary", desc: "CRM, emails, SMS, calls, proposals, invoices" },

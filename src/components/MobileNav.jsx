@@ -34,10 +34,10 @@ export default function MobileNav({ activeView, onViewChange }) {
               key={item.id}
               onClick={() => onViewChange(item.id)}
               className={cn(
-                "shimmer-card w-full flex items-center gap-4 p-4 rounded-2xl border transition-all active:scale-[0.98]",
+                "shimmer-card w-full flex items-center gap-4 p-4 rounded-2xl transition-all active:scale-[0.98]",
                 isActive
-                  ? "bg-primary/10 border-primary/25"
-                  : "bg-card border-border active:bg-secondary"
+                  ? "glass-card-active"
+                  : "glass-card"
               )}
             >
               <NavIcon id={item.id} size="lg" active={isActive} />

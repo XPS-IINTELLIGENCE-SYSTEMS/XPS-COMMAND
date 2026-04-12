@@ -111,7 +111,7 @@ export default function PipelineCharts() {
         {kpis.map(kpi => {
           const Icon = kpi.icon;
           return (
-            <div key={kpi.label} className="shimmer-card relative overflow-hidden rounded-xl border border-border bg-card p-4 group cursor-default">
+            <div key={kpi.label} className="shimmer-card glass-card relative overflow-hidden rounded-xl p-4 group cursor-default">
               <div className="absolute top-0 right-0 w-20 h-20 rounded-bl-full bg-primary/5 transition-all group-hover:bg-primary/10" />
               <div className="relative">
                 <div className="flex items-center gap-2 mb-2">
@@ -132,7 +132,7 @@ export default function PipelineCharts() {
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Pipeline by Stage */}
-        <div className="rounded-xl border border-border bg-card p-5">
+        <div className="glass-panel rounded-xl p-5">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-sm font-bold text-foreground">Pipeline by Stage</h3>
             <span className="text-[10px] text-muted-foreground px-2 py-0.5 rounded-full bg-secondary">{data.leadCount} leads</span>
@@ -151,7 +151,7 @@ export default function PipelineCharts() {
         </div>
 
         {/* Revenue by Vertical */}
-        <div className="rounded-xl border border-border bg-card p-5">
+        <div className="glass-panel rounded-xl p-5">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-sm font-bold text-foreground">Revenue by Vertical</h3>
             <span className="text-[10px] text-muted-foreground px-2 py-0.5 rounded-full bg-secondary">{data.verticalData.length} verticals</span>
@@ -179,7 +179,7 @@ export default function PipelineCharts() {
       </div>
 
       {/* Activity Timeline — full width area chart */}
-      <div className="rounded-xl border border-border bg-card p-5">
+      <div className="glass-panel rounded-xl p-5">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-sm font-bold text-foreground">30-Day Activity</h3>
           <div className="flex items-center gap-3">

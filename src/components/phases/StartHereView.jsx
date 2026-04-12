@@ -95,10 +95,10 @@ export default function StartHereView({ onNavigate }) {
                   key={step.id}
                   onClick={() => handleClick(step)}
                   className={cn(
-                    "shimmer-card w-full flex items-center gap-4 p-5 rounded-xl border transition-all text-left group",
+                    "shimmer-card w-full flex items-center gap-4 p-5 rounded-xl transition-all text-left group",
                     isDone
-                      ? "border-emerald-500/30 bg-emerald-500/5"
-                      : "border-border bg-card hover:border-primary/30"
+                      ? "glass-card border-emerald-500/30 !bg-emerald-500/[0.06]"
+                      : "glass-card"
                   )}
                 >
                   <div className={cn(

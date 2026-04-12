@@ -301,7 +301,7 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false }, ref) {
                       onClick={() => {
                         setInput(action.label);
                       }}
-                      className="shimmer-card w-full flex items-center gap-2 px-3 py-2 rounded-lg bg-card border border-border hover:border-primary/30 transition-colors text-left"
+                      className="shimmer-card glass-card w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left"
                     >
                       <Icon className="w-3 h-3 metallic-silver-icon shimmer-icon flex-shrink-0" />
                       <span className="text-[10px] text-foreground">{action.label}</span>
@@ -327,7 +327,7 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false }, ref) {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSend()}
             placeholder={`Command ${activeAgentConfig?.name || 'agent'}...`}
-            className={`flex-1 bg-card border rounded-lg px-3 chat-input-metallic ${mobile ? 'py-2.5 text-sm' : 'py-2 text-xs'} text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/30`}
+            className={`flex-1 glass-input rounded-lg px-3 chat-input-metallic ${mobile ? 'py-2.5 text-sm' : 'py-2 text-xs'} text-foreground placeholder:text-muted-foreground focus:outline-none`}
             disabled={loading || initializing}
           />
           <Button

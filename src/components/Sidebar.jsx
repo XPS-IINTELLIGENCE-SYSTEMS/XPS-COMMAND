@@ -27,8 +27,8 @@ function SidebarButton({ item, isActive, onClick }) {
       className={cn(
         "shimmer-card w-full flex items-center gap-2.5 rounded-xl text-[13px] font-medium transition-all duration-200 px-2.5 py-2",
         isActive
-          ? "bg-primary/10 border border-primary/25 text-primary"
-          : "text-foreground/60 hover:text-foreground hover:bg-secondary/50 border border-transparent"
+          ? "glass-card-active text-primary"
+          : "glass-card text-foreground/60 hover:text-foreground"
       )}
     >
       <div className="relative flex-shrink-0 w-7 h-7 flex items-center justify-center">
@@ -54,7 +54,7 @@ function SidebarButton({ item, isActive, onClick }) {
 
 export default function Sidebar({ activeView, onViewChange }) {
   return (
-    <div className="w-full h-full bg-sidebar border-r border-sidebar-border flex flex-col">
+    <div className="w-full h-full bg-sidebar/80 backdrop-blur-xl border-r border-white/[0.06] flex flex-col">
       {/* Logo */}
       <div className="px-4 py-5 border-b border-sidebar-border">
         <a href="/dashboard" className="flex items-center gap-2.5 transition-all duration-300 hover:scale-105">

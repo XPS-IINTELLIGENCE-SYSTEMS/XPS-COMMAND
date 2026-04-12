@@ -78,7 +78,7 @@ export default function CRMView() {
   return (
     <div className="h-full flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="flex-shrink-0 p-3 md:p-4 border-b border-border bg-card/30 space-y-2">
+      <div className="flex-shrink-0 p-3 md:p-4 glass-panel space-y-2">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-base font-bold text-foreground">{filtered.length} Leads · ${totalValue.toLocaleString()} pipeline</h1>
@@ -96,7 +96,7 @@ export default function CRMView() {
         <div className="flex h-full min-w-max">
           {STAGES.map(stage => (
             <div key={stage} className={`w-52 flex-shrink-0 flex flex-col border-r border-border/50 ${STAGE_COLORS[stage]} border-t-2`}>
-              <div className="px-3 py-2 flex items-center justify-between bg-card/20">
+              <div className="px-3 py-2 flex items-center justify-between bg-white/[0.03]">
                 <span className="text-xs font-bold text-foreground">{stage}</span>
                 <span className="text-[10px] bg-secondary px-1.5 py-0.5 rounded text-muted-foreground">{grouped[stage].length}</span>
               </div>
@@ -105,7 +105,7 @@ export default function CRMView() {
                   <button
                     key={lead.id}
                     onClick={() => setSelected(lead)}
-                    className="w-full text-left bg-card rounded-lg border border-border p-2.5 hover:border-primary/30 transition-colors"
+                    className="w-full text-left glass-card rounded-lg p-2.5 transition-all"
                   >
                     <div className="text-xs font-semibold text-foreground truncate">{lead.company}</div>
                     <div className="text-[10px] text-muted-foreground truncate">{lead.contact_name}</div>
@@ -135,7 +135,7 @@ export default function CRMView() {
       {selected && (
         <div className="fixed inset-0 z-50 flex justify-end" onClick={() => setSelected(null)}>
           <div className="absolute inset-0 bg-black/40" />
-          <div className="relative w-80 bg-card border-l border-border h-full overflow-y-auto shadow-2xl" onClick={e => e.stopPropagation()}>
+          <div className="relative w-80 glass-panel h-full overflow-y-auto shadow-2xl" onClick={e => e.stopPropagation()}>
             <div className="p-4 space-y-4">
               <div className="flex items-start justify-between">
                 <div>
@@ -153,7 +153,7 @@ export default function CRMView() {
               </div>
 
               {selected.ai_insight && (
-                <div className="bg-primary/5 rounded-lg p-3 text-xs text-foreground/80">
+                <div className="glass-card rounded-lg p-3 text-xs text-foreground/80">
                   <div className="flex items-center gap-1 text-primary font-semibold mb-1"><Sparkles className="w-3 h-3" />AI Insight</div>
                   {selected.ai_insight}
                 </div>
@@ -181,7 +181,7 @@ export default function CRMView() {
       {adding && (
         <div className="fixed inset-0 z-50 flex items-center justify-center" onClick={() => setAdding(false)}>
           <div className="absolute inset-0 bg-black/40" />
-          <div className="relative bg-card border border-border rounded-xl p-5 w-96 space-y-3 shadow-2xl" onClick={e => e.stopPropagation()}>
+          <div className="relative glass-panel rounded-xl p-5 w-96 space-y-3 shadow-2xl" onClick={e => e.stopPropagation()}>
             <h3 className="text-sm font-bold text-foreground">Add New Lead</h3>
             <Input placeholder="Company name *" value={newLead.company} onChange={e => setNewLead({ ...newLead, company: e.target.value })} className="h-9 text-sm" />
             <Input placeholder="Contact name" value={newLead.contact_name} onChange={e => setNewLead({ ...newLead, contact_name: e.target.value })} className="h-9 text-sm" />

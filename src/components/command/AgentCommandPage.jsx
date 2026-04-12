@@ -37,7 +37,7 @@ function EmptyState() {
   return (
     <div className="flex-1 flex items-center justify-center p-8">
       <div className="text-center max-w-md space-y-3">
-        <div className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto mb-4">
+        <div className="w-16 h-16 rounded-2xl glass-card-active flex items-center justify-center mx-auto mb-4">
           <Globe className="w-8 h-8 metallic-gold-icon" />
         </div>
         <h2 className="text-lg font-bold xps-gold-slow-shimmer" style={{ fontFamily: "'Montserrat', sans-serif" }}>

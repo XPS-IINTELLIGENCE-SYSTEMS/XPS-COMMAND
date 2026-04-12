@@ -6,7 +6,7 @@ import PipelineCharts from "../dashboard/PipelineCharts";
 
 function HeroMetric({ icon: Icon, label, value, accent }) {
   return (
-    <div className="shimmer-card flex flex-col items-center text-center p-5 rounded-xl cursor-default">
+    <div className="shimmer-card glass-card flex flex-col items-center text-center p-5 rounded-xl cursor-default">
       <div className="shimmer-icon-container w-12 h-12 rounded-2xl bg-secondary flex items-center justify-center mb-3">
         <Icon className="w-6 h-6 shimmer-icon metallic-gold-icon" />
       </div>
@@ -20,7 +20,7 @@ function AttentionCard({ icon: Icon, label, phase, nav, onNavigate }) {
   return (
     <button
       onClick={() => nav && onNavigate?.(nav)}
-      className="shimmer-card w-full flex items-center gap-4 p-4 rounded-xl border border-border bg-card hover:border-primary/30 transition-all text-left group"
+      className="shimmer-card glass-card w-full flex items-center gap-4 p-4 rounded-xl transition-all text-left group"
     >
       <div className="shimmer-icon-container w-10 h-10 rounded-xl bg-destructive/10 flex items-center justify-center flex-shrink-0">
         <Icon className="w-5 h-5 shimmer-icon text-destructive" />
@@ -36,7 +36,7 @@ function AttentionCard({ icon: Icon, label, phase, nav, onNavigate }) {
 
 function QuickAction({ icon: Icon, label, desc, onClick }) {
   return (
-    <button onClick={onClick} className="shimmer-card flex items-center gap-3 p-4 rounded-xl border border-border bg-card hover:border-primary/30 transition-all text-left group">
+    <button onClick={onClick} className="shimmer-card glass-card flex items-center gap-3 p-4 rounded-xl transition-all text-left group">
       <div className="shimmer-icon-container w-10 h-10 rounded-xl bg-secondary flex items-center justify-center flex-shrink-0">
         <Icon className="w-5 h-5 shimmer-icon metallic-silver-icon" />
       </div>
@@ -149,7 +149,7 @@ export default function CommandCenterView({ onNavigate }) {
         )}
 
         {actions.length === 0 && (
-          <div className="shimmer-card flex items-center gap-4 p-5 rounded-xl border border-border bg-card">
+          <div className="shimmer-card glass-card flex items-center gap-4 p-5 rounded-xl">
             <div className="shimmer-icon-container w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center">
               <CheckCircle2 className="w-6 h-6 shimmer-icon text-emerald-400" />
             </div>

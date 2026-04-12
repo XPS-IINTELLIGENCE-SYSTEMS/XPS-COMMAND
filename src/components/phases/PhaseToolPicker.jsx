@@ -62,10 +62,10 @@ export default function PhaseToolPicker({ phaseId, onLaunch }) {
                       key={tool.id}
                       onClick={() => toggle(tool.id)}
                       className={cn(
-                        "shimmer-card group relative rounded-xl border p-3.5 text-left transition-all duration-200 cursor-pointer",
+                        "shimmer-card group relative rounded-xl p-3.5 text-left transition-all duration-200 cursor-pointer",
                         isSelected
-                          ? "border-primary/50 bg-primary/10 shadow-[0_0_20px_rgba(212,175,55,0.12)]"
-                          : "border-white/10 bg-card/40 hover:border-white/25 hover:bg-card/60"
+                          ? "glass-card-active shadow-[0_0_20px_rgba(212,175,55,0.12)]"
+                          : "glass-card"
                       )}
                     >
                       {/* Selection indicator */}
@@ -127,7 +127,7 @@ export default function PhaseToolPicker({ phaseId, onLaunch }) {
         >
           <button
             onClick={handleLaunch}
-            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 transition-all"
+            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl metallic-gold-bg text-background font-semibold text-sm hover:brightness-110 transition-all shadow-lg shadow-primary/20"
           >
             <span>Launch {totalSelected} Tool{totalSelected !== 1 ? "s" : ""}</span>
             <ArrowRight className="w-4 h-4" />

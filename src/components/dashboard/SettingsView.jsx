@@ -68,7 +68,7 @@ export default function SettingsView() {
 
       <div className="space-y-3 max-w-2xl">
         {/* Profile */}
-        <div className="bg-card rounded-2xl border border-border p-4">
+        <div className="glass-card rounded-2xl p-4">
           <div className="flex items-center gap-2.5 mb-3">
             <div className="w-8 h-8 rounded-xl bg-secondary flex items-center justify-center">
               <User className="w-4 h-4 text-muted-foreground" />
@@ -92,7 +92,7 @@ export default function SettingsView() {
         </div>
 
         {/* Notifications */}
-        <div className="bg-card rounded-2xl border border-border p-4">
+        <div className="glass-card rounded-2xl p-4">
           <div className="flex items-center gap-2.5 mb-3">
             <div className="w-8 h-8 rounded-xl bg-secondary flex items-center justify-center">
               <Bell className="w-4 h-4 text-muted-foreground" />
@@ -114,7 +114,7 @@ export default function SettingsView() {
         </div>
 
         {/* Appearance */}
-        <div className="bg-card rounded-2xl border border-border p-4">
+        <div className="glass-card rounded-2xl p-4">
           <div className="flex items-center gap-2.5 mb-3">
             <div className="w-8 h-8 rounded-xl bg-secondary flex items-center justify-center">
               <Palette className="w-4 h-4 text-muted-foreground" />
@@ -135,7 +135,7 @@ export default function SettingsView() {
       </div>
 
       {/* Danger Zone */}
-      <div className="max-w-2xl bg-card rounded-2xl border border-destructive/30 p-4">
+      <div className="max-w-2xl glass-card rounded-2xl !border-destructive/30 p-4">
         <div className="flex items-center gap-2.5 mb-3">
           <div className="w-8 h-8 rounded-xl bg-destructive/10 flex items-center justify-center">
             <Trash2 className="w-4 h-4 text-destructive" />

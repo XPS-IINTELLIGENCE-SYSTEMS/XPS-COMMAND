@@ -16,7 +16,7 @@ export default function StartHereView() {
           <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4 shimmer-card">
             <Rocket className="w-8 h-8 metallic-gold-icon shimmer-icon" />
           </div>
-          <h1 className="text-2xl font-extrabold xps-gold-slow-shimmer mb-2" style={{ fontFamily: "'Montserrat', sans-serif" }}>Training</h1>
+          <h1 className="text-2xl font-extrabold xps-gold-slow-shimmer mb-2" style={{ fontFamily: "'Montserrat', sans-serif" }}>Start Here</h1>
           <p className="text-sm text-muted-foreground max-w-md mx-auto">Follow these steps to get your AI-powered business engine up and running in minutes.</p>
         </div>
 

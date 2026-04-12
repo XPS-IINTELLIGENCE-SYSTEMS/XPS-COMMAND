@@ -1,11 +1,12 @@
 import { 
-  LayoutDashboard, UserSearch, Send, FileText, BarChart3, Bot, Settings, MessageSquare
+  LayoutDashboard, UserSearch, Send, FileText, BarChart3, Bot, Settings, Globe
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, desc: "Overview" },
   { id: "leads", label: "Leads", icon: UserSearch, desc: "Hot prospects" },
+  { id: "research", label: "Research", icon: Globe, desc: "Web scraping & intel" },
   { id: "outreach", label: "Outreach", icon: Send, desc: "AI emails & calls" },
   { id: "proposals", label: "Proposals", icon: FileText, desc: "Send quotes" },
   { id: "analytics", label: "Analytics", icon: BarChart3, desc: "Performance" },

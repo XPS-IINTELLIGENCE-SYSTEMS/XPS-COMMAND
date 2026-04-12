@@ -1,6 +1,6 @@
 import { 
   LayoutDashboard, UserSearch, Send, FileText, BarChart3, Bot, 
-  Settings, BookOpen, Shield
+  Settings, BookOpen, Shield, Globe
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -8,6 +8,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 const mainNav = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
   { id: "leads", label: "Leads", icon: UserSearch },
+  { id: "research", label: "Research", icon: Globe },
   { id: "outreach", label: "Outreach", icon: Send },
   { id: "proposals", label: "Proposals", icon: FileText },
   { id: "workflows", label: "AI Workflows", icon: Bot },

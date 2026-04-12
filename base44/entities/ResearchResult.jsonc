@@ -1,0 +1,75 @@
+{
+  "name": "ResearchResult",
+  "type": "object",
+  "properties": {
+    "query": {
+      "type": "string",
+      "description": "The search query or URL that was researched"
+    },
+    "source_url": {
+      "type": "string",
+      "description": "Primary URL source"
+    },
+    "title": {
+      "type": "string",
+      "description": "Title of the research result"
+    },
+    "raw_content": {
+      "type": "string",
+      "description": "Raw scraped/fetched content"
+    },
+    "ai_summary": {
+      "type": "string",
+      "description": "AI-generated summary of findings"
+    },
+    "ai_insights": {
+      "type": "string",
+      "description": "AI-generated deep insights and analysis"
+    },
+    "key_data_points": {
+      "type": "string",
+      "description": "JSON string of extracted key data points"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Company Research",
+        "Competitor Intel",
+        "Market Analysis",
+        "Lead Research",
+        "Industry News",
+        "Pricing Intel",
+        "Technology",
+        "Custom"
+      ],
+      "description": "Category of research"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Pending",
+        "Scraping",
+        "Analyzing",
+        "Complete",
+        "Failed"
+      ],
+      "default": "Pending"
+    },
+    "tags": {
+      "type": "string",
+      "description": "Comma-separated tags"
+    },
+    "lead_id": {
+      "type": "string",
+      "description": "Associated lead ID if applicable"
+    },
+    "stored_to": {
+      "type": "string",
+      "description": "Where data was stored (Drive, Supabase, Local)"
+    }
+  },
+  "required": [
+    "query",
+    "status"
+  ]
+}

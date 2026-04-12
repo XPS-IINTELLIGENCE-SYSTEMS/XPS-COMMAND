@@ -5,6 +5,7 @@ const viewTitles = {
   dashboard: "Dashboard",
   leads: "Leads",
   workflows: "AI Workflows",
+  research: "Web Research",
   outreach: "Outreach",
   proposals: "Proposals",
   analytics: "Analytics",

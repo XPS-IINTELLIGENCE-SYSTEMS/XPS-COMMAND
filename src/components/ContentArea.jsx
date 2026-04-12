@@ -7,11 +7,13 @@ import KnowledgeView from "./dashboard/KnowledgeView";
 import AdminView from "./dashboard/AdminView";
 import SettingsView from "./dashboard/SettingsView";
 import WorkflowView from "./workflow/WorkflowView";
+import ResearchView from "./dashboard/ResearchView";
 
 const views = {
   dashboard: DashboardView,
   leads: LeadsView,
   workflows: WorkflowView,
+  research: ResearchView,
   outreach: OutreachView,
   proposals: ProposalsView,
   analytics: AnalyticsView,

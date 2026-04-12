@@ -33,6 +33,7 @@ const apiIntegrations = [
   { key: "vercel", name: "Vercel", desc: "Deployment and hosting platform", icon: Cloud, category: "DEVOPS", configured: true },
   { key: "groq", name: "Groq", desc: "Ultra-fast LLM inference engine", icon: Cpu, category: "AI", configured: true },
   { key: "openai", name: "ChatGPT / OpenAI", desc: "GPT-4o advanced reasoning and generation", icon: MessageSquare, category: "AI", configured: true },
+  { key: "redis", name: "Redis", desc: "In-memory data store for caching and real-time data", icon: Database, category: "DATABASE", configured: true },
 ];
 
 function IntegrationCard({ integration, isOAuth }) {

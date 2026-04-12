@@ -168,6 +168,36 @@ Return JSON array of components with type (heading/text/button/image/card/grid),
         return Response.json(data);
       }
 
+      case "redis_command": {
+        const REDIS_URL = Deno.env.get("REDIS_URL");
+        if (!REDIS_URL) return Response.json({ error: "REDIS_URL not set" }, { status: 500 });
+
+        const { connect } = await import("https://deno.land/x/redis@v0.32.4/mod.ts");
+        const url = new URL(REDIS_URL);
+        const redis = await connect({
+          hostname: url.hostname,
+          port: parseInt(url.port) || 6379,
+          password: url.password || undefined,
+          tls: url.protocol === "rediss:",
+        });
+
+        let result;
+        const cmd = params.command?.toUpperCase();
+        switch (cmd) {
+          case "GET": result = await redis.get(params.key); break;
+          case "SET": result = await redis.set(params.key, params.value); break;
+          case "DEL": result = await redis.del(params.key); break;
+          case "KEYS": result = await redis.keys(params.pattern || "*"); break;
+          case "HGETALL": result = await redis.hgetall(params.key); break;
+          case "HSET": result = await redis.hset(params.key, params.field, params.value); break;
+          case "INFO": result = await redis.info(); break;
+          case "PING": result = await redis.ping(); break;
+          default: result = "Unsupported command: " + cmd;
+        }
+        redis.close();
+        return Response.json({ result });
+      }
+
       default:
         return Response.json({ error: `Unknown action: ${action}` }, { status: 400 });
     }

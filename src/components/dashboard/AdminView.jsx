@@ -1,82 +1,60 @@
-import { useState } from "react";
-import { Users, MapPin, Database, Shield, Bot, Box, GitBranch, Activity } from "lucide-react";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import AdminIntegrations from "../admin/AdminIntegrations";
+import { Users, MapPin, Database, Shield, Bot, Activity } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 
 const cards = [
-  { name: "Users & Roles", desc: "Manage 247 users across 4 role types", icon: Users, stat: "247 active" },
-  { name: "Locations", desc: "60+ XPS franchise locations configured", icon: MapPin, stat: "63 locations" },
-  { name: "Database", desc: "PostgreSQL cluster health and metrics", icon: Database, stat: "99.9% uptime" },
-  { name: "Security", desc: "RBAC policies, audit trails, and compliance", icon: Shield, stat: "All clear" },
-  { name: "AI Factory", desc: "xps-ai-factory model status and endpoints", icon: Bot, stat: "3 models" },
-  { name: "Deployments", desc: "Railway + GitHub deployment pipeline", icon: Box, stat: "v2.4.1" },
-  { name: "Repositories", desc: "GitHub sync for xps-scraper, open-agent-builder", icon: GitBranch, stat: "4 repos" },
-  { name: "Activity Log", desc: "System-wide audit and event logging", icon: Activity, stat: "12.4K events" },
+  { name: "Users & Roles", desc: "247 active users", icon: Users },
+  { name: "Locations", desc: "63 franchise locations", icon: MapPin },
+  { name: "Database", desc: "99.9% uptime", icon: Database },
+  { name: "Security", desc: "All clear", icon: Shield },
+  { name: "AI Models", desc: "3 active models", icon: Bot },
+  { name: "Activity Log", desc: "12.4K events", icon: Activity },
 ];
 
 const auditLog = [
-  { type: "Admin", action: "Updated RBAC policy for Manager role", time: "2 min ago" },
-  { type: "System", action: "Auto-deployed v2.4.1 from main branch", time: "1 hour ago" },
-  { type: "Admin", action: "Added new location: Nashville, TN", time: "3 hours ago" },
-  { type: "System", action: "AI model fine tuning completed", time: "Yesterday" },
-  { type: "Admin", action: "Updated email templates for Southeast region", time: "Yesterday" },
+  { action: "Updated RBAC policy for Manager role", time: "2 min ago" },
+  { action: "Auto-deployed v2.4.1 from main branch", time: "1 hour ago" },
+  { action: "Added new location: Nashville, TN", time: "3 hours ago" },
+  { action: "AI model fine tuning completed", time: "Yesterday" },
+  { action: "Updated email templates for Southeast region", time: "Yesterday" },
 ];
 
 export default function AdminView() {
   return (
-    <div className="p-3 md:p-6 space-y-4 md:space-y-6 overflow-y-auto h-full">
+    <div className="p-3 md:p-6 space-y-4 md:space-y-5 overflow-y-auto h-full">
       <div>
-        <h1 className="text-xl font-bold text-foreground">Admin Control Plane</h1>
-        <p className="text-xs text-muted-foreground mt-0.5">System administration, security, and infrastructure management</p>
+        <h1 className="text-lg md:text-xl font-bold text-foreground">Admin</h1>
+        <p className="text-[11px] text-muted-foreground">System administration and infrastructure</p>
       </div>
 
-      <Tabs defaultValue="overview" className="w-full">
-        <TabsList className="bg-secondary/50 border border-border">
-          <TabsTrigger value="overview" className="text-xs">Overview</TabsTrigger>
-          <TabsTrigger value="integrations" className="text-xs">Integrations</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="overview" className="space-y-6 mt-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3">
-            {cards.map((card) => {
-              const Icon = card.icon;
-              return (
-                <div key={card.name} className="bg-card rounded-lg border border-border p-4 hover:border-primary/20 transition-colors cursor-pointer">
-                  <div className="flex items-center justify-between mb-2">
-                    <Icon className="w-5 h-5 text-primary/70" />
-                    <span className="text-[10px] text-muted-foreground">{card.stat}</span>
-                  </div>
-                  <div className="text-xs font-semibold text-foreground">{card.name}</div>
-                  <p className="text-[10px] text-muted-foreground mt-1">{card.desc}</p>
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3">
+        {cards.map((card) => {
+          const Icon = card.icon;
+          return (
+            <div key={card.name} className="bg-card rounded-2xl border border-border p-4 hover:border-primary/20 transition-colors cursor-pointer">
+              <div className="flex items-center justify-between mb-3">
+                <div className="w-9 h-9 rounded-xl bg-secondary flex items-center justify-center">
+                  <Icon className="w-4 h-4 text-muted-foreground" />
                 </div>
-              );
-            })}
-          </div>
-
-          <div className="bg-card rounded-lg border border-border p-4">
-            <h3 className="text-sm font-semibold text-foreground mb-3">Recent Audit Log</h3>
-            <div className="space-y-2">
-              {auditLog.map((entry, i) => (
-                <div key={i} className="flex items-center justify-between py-2 border-b border-border/50 last:border-0">
-                  <div className="flex items-center gap-3">
-                    <span className={`text-[9px] font-semibold px-1.5 py-0.5 rounded ${
-                      entry.type === "Admin" ? "bg-primary/15 text-primary" : "bg-xps-blue/15 text-xps-blue"
-                    }`}>
-                      {entry.type}
-                    </span>
-                    <span className="text-xs text-foreground">{entry.action}</span>
-                  </div>
-                  <span className="text-[10px] text-muted-foreground">{entry.time}</span>
-                </div>
-              ))}
+                <ArrowUpRight className="w-3.5 h-3.5 text-muted-foreground" />
+              </div>
+              <div className="text-sm font-semibold text-foreground">{card.name}</div>
+              <div className="text-[11px] text-muted-foreground mt-0.5">{card.desc}</div>
             </div>
-          </div>
-        </TabsContent>
+          );
+        })}
+      </div>
 
-        <TabsContent value="integrations" className="mt-4">
-          <AdminIntegrations />
-        </TabsContent>
-      </Tabs>
+      <div className="bg-card rounded-2xl border border-border p-4">
+        <h3 className="text-sm font-semibold text-foreground mb-3">Recent Activity</h3>
+        <div className="space-y-3">
+          {auditLog.map((entry, i) => (
+            <div key={i} className="flex items-center justify-between py-2 border-b border-border/50 last:border-0">
+              <span className="text-sm text-foreground">{entry.action}</span>
+              <span className="text-[11px] text-muted-foreground flex-shrink-0 ml-3">{entry.time}</span>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

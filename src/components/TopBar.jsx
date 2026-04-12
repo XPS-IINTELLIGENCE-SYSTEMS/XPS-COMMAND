@@ -1,23 +1,16 @@
-import { Search, Settings, Bell, Sun, Moon } from "lucide-react";
+import { Search, Bell, Sun, Moon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
 const viewTitles = {
   dashboard: "Dashboard",
-  crm: "CRM",
   leads: "Leads",
   workflows: "AI Workflows",
-  research: "Research Lab",
   outreach: "Outreach",
   proposals: "Proposals",
   analytics: "Analytics",
-  reports: "AI Reports",
   knowledge: "Knowledge Base",
-  competition: "Competition Watch",
-  connectors: "Connectors",
   admin: "Admin",
   settings: "Settings",
-  editor: "Editor Studio",
-  operator: "Operator",
 };
 
 export default function TopBar({ activeView, children, theme, onThemeToggle }) {
@@ -41,23 +34,18 @@ export default function TopBar({ activeView, children, theme, onThemeToggle }) {
         </div>
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2">
         <button
           onClick={onThemeToggle}
-          className="p-1.5 rounded-md hover:bg-secondary/50 text-foreground transition-colors"
-          title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          className="p-2 rounded-xl hover:bg-secondary/50 text-muted-foreground transition-colors"
         >
-          {theme === 'dark' ? <Sun className="w-4 h-4 metallic-silver-icon" /> : <Moon className="w-4 h-4" />}
+          {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
         </button>
-        <button className="p-1.5 rounded-md hover:bg-secondary/50 text-foreground transition-colors">
-          <Settings className="w-4 h-4 metallic-silver-icon" />
+        <button className="p-2 rounded-xl hover:bg-secondary/50 text-muted-foreground transition-colors relative">
+          <Bell className="w-4 h-4" />
+          <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-primary rounded-full" />
         </button>
-        <button className="p-1.5 rounded-md hover:bg-secondary/50 text-foreground transition-colors relative">
-          <Bell className="w-4 h-4 metallic-silver-icon" />
-          <span className="absolute -top-0.5 -right-0.5 w-2 h-2 metallic-gold-bg rounded-full" />
-        </button>
-
-        <div className="w-7 h-7 rounded-full metallic-gold-bg flex items-center justify-center text-[10px] font-bold text-background">
+        <div className="w-8 h-8 rounded-xl bg-primary/15 flex items-center justify-center text-[11px] font-bold text-primary">
           MR
         </div>
         {toggleButtons[1]}

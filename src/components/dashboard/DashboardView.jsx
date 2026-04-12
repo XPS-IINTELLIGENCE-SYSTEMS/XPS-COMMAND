@@ -1,150 +1,135 @@
-import { Users, DollarSign, FileText, Target, TrendingUp, TrendingDown } from "lucide-react";
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
+import { Phone, Mail, Sparkles, ArrowUpRight, ChevronRight, Clock, TrendingUp } from "lucide-react";
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
-const stats = [
-  { label: "Active Leads", value: "2,847", change: "+12.4%", up: true, icon: Users, color: "text-primary" },
-  { label: "Pipeline Value", value: "$4.2M", change: "+8.7%", up: true, icon: DollarSign, color: "text-xps-gold" },
-  { label: "Proposals Sent", value: "342", change: "+23.1%", up: true, icon: FileText, color: "text-xps-blue" },
-  { label: "Close Rate", value: "34.2%", change: "-1.3%", up: false, icon: Target, color: "text-xps-purple" },
+const hotLeads = [
+  { company: "Ace Hardware Distribution", contact: "Robert Chen", score: 92, value: "$45,000", reason: "Viewed pricing page 3x this week", sqft: "12,000 sq ft warehouse" },
+  { company: "Tampa Bay Brewing Co.", contact: "Sarah Mills", score: 87, value: "$28,000", reason: "Requested quote via website form", sqft: "4,500 sq ft taproom" },
+  { company: "Gulf Coast Logistics", contact: "Diana Patel", score: 84, value: "$120,000", reason: "AI detected expansion permit filed", sqft: "45,000 sq ft facility" },
+  { company: "Sunshine Auto Group", contact: "Mike Torres", score: 79, value: "$62,000", reason: "Competitor contract expiring Q2", sqft: "8,000 sq ft showroom" },
 ];
 
 const revenueData = [
-  { month: "Jul", value: 280000 }, { month: "Aug", value: 310000 }, { month: "Sep", value: 295000 },
   { month: "Oct", value: 380000 }, { month: "Nov", value: 420000 }, { month: "Dec", value: 450000 },
-  { month: "Jan", value: 470000 }, { month: "Feb", value: 520000 }, { month: "Mar", value: 540000 },
+  { month: "Jan", value: 470000 }, { month: "Feb", value: 520000 }, { month: "Mar", value: 580000 },
 ];
 
-const pipelineData = [
-  { name: "Prospecting", value: 420, color: "#D4A853" },
-  { name: "Qualified", value: 310, color: "#D4A853CC" },
-  { name: "Proposal", value: 180, color: "#D4A85399" },
-  { name: "Negotiation", value: 90, color: "#D4A85366" },
-  { name: "Closed Won", value: 140, color: "#4CAF50" },
-];
-
-const topLeads = [
-  { name: "Ace Hardware Distribution", score: 92, value: "$45,000" },
-  { name: "Tampa Bay Brewing Co.", score: 87, value: "$28,000" },
-  { name: "Sunshine Auto Group", score: 84, value: "$62,000" },
-];
-
-const recentActivity = [
-  { action: "New lead scored 92", detail: "Ace Hardware Distribution", time: "2 min ago" },
-  { action: "Proposal viewed", detail: "Gulf Coast Logistics", time: "15 min ago" },
-  { action: "Meeting scheduled", detail: "Palm Medical Center", time: "1 hour ago" },
+const stats = [
+  { label: "Pipeline", value: "$4.2M", sub: "+8.7% this month" },
+  { label: "Hot Leads", value: "47", sub: "Ready to contact" },
+  { label: "Close Rate", value: "34%", sub: "+2% vs last quarter" },
+  { label: "Avg Deal", value: "$58K", sub: "Up from $42K" },
 ];
 
 export default function DashboardView() {
   return (
-    <div className="p-4 md:p-6 space-y-4 md:space-y-6 overflow-y-auto h-full">
+    <div className="p-3 md:p-6 space-y-4 md:space-y-5 overflow-y-auto h-full">
+      {/* Greeting */}
       <div>
-        <h1 className="text-xl font-bold text-foreground">Good morning, Marcus</h1>
-        <p className="text-xs text-muted-foreground mt-0.5">Here's your sales intelligence briefing for today.</p>
+        <h1 className="text-xl md:text-2xl font-bold text-foreground">Good morning, Marcus</h1>
+        <p className="text-sm text-muted-foreground mt-0.5">You have <span className="text-primary font-semibold">4 hot leads</span> ready for action today.</p>
       </div>
 
-      {/* Stats */}
+      {/* Stats row */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3">
-        {stats.map((stat) => {
-          const Icon = stat.icon;
-          return (
-            <div key={stat.label} className="bg-card rounded-lg border border-[#8a8a8a]/30 p-4 hover:border-primary/20 transition-colors">
-              <div className="flex items-center justify-between mb-3">
-                <Icon className={`w-5 h-5 ${stat.color} opacity-70`} />
-                <div className={`flex items-center gap-1 text-[10px] font-medium ${stat.up ? "text-xps-green" : "text-xps-red"}`}>
-                  {stat.up ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
-                  {stat.change}
-                </div>
-              </div>
-              <div className="text-2xl font-bold text-foreground">{stat.value}</div>
-              <div className="text-[10px] text-muted-foreground mt-0.5">{stat.label}</div>
-            </div>
-          );
-        })}
+        {stats.map((stat) => (
+          <div key={stat.label} className="bg-card rounded-2xl border border-border p-3 md:p-4">
+            <div className="text-[11px] text-muted-foreground mb-1">{stat.label}</div>
+            <div className="text-xl md:text-2xl font-bold text-foreground">{stat.value}</div>
+            <div className="text-[11px] text-primary/80 mt-0.5">{stat.sub}</div>
+          </div>
+        ))}
       </div>
 
-      {/* Charts */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-3">
-        <div className="md:col-span-2 bg-card rounded-lg border border-[#8a8a8a]/30 p-3 md:p-4">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h3 className="text-sm font-semibold text-foreground">Revenue Pipeline</h3>
-              <p className="text-[10px] text-muted-foreground">Monthly pipeline value trend</p>
-            </div>
+      {/* Hot leads — THE most important section */}
+      <div>
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-primary" />
+            <h2 className="text-sm font-bold text-foreground">AI-Prioritized Leads</h2>
           </div>
-          <ResponsiveContainer width="100%" height={200}>
-            <AreaChart data={revenueData}>
-              <defs>
-                <linearGradient id="goldGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#D4A853" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="#D4A853" stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1E1E2E" />
-              <XAxis dataKey="month" tick={{ fontSize: 10, fill: '#666' }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fontSize: 10, fill: '#666' }} axisLine={false} tickLine={false} tickFormatter={(v) => `$${v / 1000}K`} />
-              <Tooltip contentStyle={{ background: '#14141B', border: '1px solid #2A2A35', borderRadius: 8, fontSize: 11 }} />
-              <Area type="monotone" dataKey="value" stroke="#D4A853" fill="url(#goldGradient)" strokeWidth={2} />
-            </AreaChart>
-          </ResponsiveContainer>
+          <button className="flex items-center gap-1 text-xs text-primary font-medium">
+            View All <ChevronRight className="w-3 h-3" />
+          </button>
         </div>
-
-        <div className="bg-card rounded-lg border border-[#8a8a8a]/30 p-4">
-          <h3 className="text-sm font-semibold text-foreground">Pipeline Stages</h3>
-          <p className="text-[10px] text-muted-foreground mb-2">Lead distribution by stage</p>
-          <ResponsiveContainer width="100%" height={130}>
-            <PieChart>
-              <Pie data={pipelineData} cx="50%" cy="50%" innerRadius={35} outerRadius={55} dataKey="value" paddingAngle={2}>
-                {pipelineData.map((entry, i) => (
-                  <Cell key={i} fill={entry.color} />
-                ))}
-              </Pie>
-            </PieChart>
-          </ResponsiveContainer>
-          <div className="space-y-1.5 mt-2">
-            {pipelineData.map((item) => (
-              <div key={item.name} className="flex items-center justify-between text-[10px]">
-                <div className="flex items-center gap-1.5">
-                  <div className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }} />
-                  <span className="text-muted-foreground">{item.name}</span>
+        <div className="space-y-2">
+          {hotLeads.map((lead) => (
+            <div key={lead.company} className="bg-card rounded-2xl border border-border p-3 md:p-4">
+              <div className="flex items-start justify-between mb-2">
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-semibold text-foreground">{lead.company}</span>
+                    <span className="text-[10px] font-bold text-primary bg-primary/10 px-1.5 py-0.5 rounded-md">{lead.score}</span>
+                  </div>
+                  <div className="text-xs text-muted-foreground mt-0.5">{lead.contact} · {lead.sqft}</div>
                 </div>
-                <span className="font-medium text-foreground">{item.value}</span>
+                <span className="text-base font-bold text-foreground flex-shrink-0 ml-3">{lead.value}</span>
               </div>
-            ))}
-          </div>
+              
+              {/* AI Insight */}
+              <div className="flex items-start gap-2 mb-3 bg-primary/5 rounded-xl px-3 py-2">
+                <Sparkles className="w-3 h-3 text-primary mt-0.5 flex-shrink-0" />
+                <span className="text-[11px] text-foreground/80">{lead.reason}</span>
+              </div>
+
+              {/* Action buttons — one-tap to act */}
+              <div className="flex items-center gap-2">
+                <button className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-semibold active:scale-[0.97] transition-transform">
+                  <Phone className="w-3.5 h-3.5" /> AI Call
+                </button>
+                <button className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-secondary text-foreground text-xs font-medium border border-border active:scale-[0.97] transition-transform">
+                  <Mail className="w-3.5 h-3.5" /> AI Email
+                </button>
+                <button className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-secondary text-foreground text-xs font-medium border border-border active:scale-[0.97] transition-transform">
+                  <Sparkles className="w-3.5 h-3.5" /> AI Pitch
+                </button>
+                <div className="ml-auto">
+                  <button className="p-2 rounded-xl hover:bg-secondary transition-colors">
+                    <ArrowUpRight className="w-4 h-4 text-muted-foreground" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* Bottom section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3">
-        <div className="bg-card rounded-lg border border-[#8a8a8a]/30 p-4">
-          <h3 className="text-sm font-semibold text-foreground mb-3">Top Leads</h3>
-          <div className="space-y-2.5">
-            {topLeads.map((lead) => (
-              <div key={lead.name} className="flex items-center justify-between">
-                <div>
-                  <div className="text-xs font-medium text-foreground">{lead.name}</div>
-                  <div className="text-[10px] text-muted-foreground">Score: {lead.score}</div>
-                </div>
-                <div className="text-xs font-semibold text-primary">{lead.value}</div>
-              </div>
-            ))}
+      {/* Revenue chart */}
+      <div className="bg-card rounded-2xl border border-border p-3 md:p-4">
+        <div className="flex items-center justify-between mb-3">
+          <div>
+            <h3 className="text-sm font-semibold text-foreground">Revenue Pipeline</h3>
+            <p className="text-[11px] text-muted-foreground">6-month trend</p>
+          </div>
+          <div className="flex items-center gap-1 text-xs text-primary font-medium">
+            <TrendingUp className="w-3.5 h-3.5" /> +18%
           </div>
         </div>
+        <ResponsiveContainer width="100%" height={160}>
+          <AreaChart data={revenueData}>
+            <defs>
+              <linearGradient id="goldGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="hsl(40, 60%, 58%)" stopOpacity={0.25} />
+                <stop offset="95%" stopColor="hsl(40, 60%, 58%)" stopOpacity={0} />
+              </linearGradient>
+            </defs>
+            <XAxis dataKey="month" tick={{ fontSize: 10, fill: 'hsl(240, 5%, 55%)' }} axisLine={false} tickLine={false} />
+            <YAxis tick={{ fontSize: 10, fill: 'hsl(240, 5%, 55%)' }} axisLine={false} tickLine={false} tickFormatter={(v) => `$${v / 1000}K`} />
+            <Tooltip contentStyle={{ background: 'hsl(240, 8%, 7%)', border: '1px solid hsl(240, 6%, 14%)', borderRadius: 12, fontSize: 11 }} />
+            <Area type="monotone" dataKey="value" stroke="hsl(40, 60%, 58%)" fill="url(#goldGradient)" strokeWidth={2} />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
 
-        <div className="bg-card rounded-lg border border-[#8a8a8a]/30 p-4">
-          <h3 className="text-sm font-semibold text-foreground mb-3">Recent Activity</h3>
-          <div className="space-y-2.5">
-            {recentActivity.map((item, i) => (
-              <div key={i} className="flex items-center justify-between">
-                <div>
-                  <div className="text-xs font-medium text-foreground">{item.action}</div>
-                  <div className="text-[10px] text-muted-foreground">{item.detail}</div>
-                </div>
-                <div className="text-[10px] text-muted-foreground">{item.time}</div>
-              </div>
-            ))}
-          </div>
+      {/* Today's schedule hint */}
+      <div className="bg-card rounded-2xl border border-border p-4 flex items-center gap-3">
+        <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center flex-shrink-0">
+          <Clock className="w-5 h-5 text-muted-foreground" />
         </div>
+        <div className="flex-1 min-w-0">
+          <div className="text-sm font-medium text-foreground">3 follow-ups scheduled today</div>
+          <div className="text-[11px] text-muted-foreground">Next: Ace Hardware at 2:00 PM</div>
+        </div>
+        <ChevronRight className="w-4 h-4 text-muted-foreground flex-shrink-0" />
       </div>
     </div>
   );

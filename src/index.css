@@ -8,37 +8,37 @@
   :root {
     --font-inter: 'Inter', sans-serif;
     --background: 240 10% 4%;
-    --foreground: 0 0% 100%;
+    --foreground: 0 0% 95%;
     --card: 240 8% 7%;
-    --card-foreground: 0 0% 100%;
+    --card-foreground: 0 0% 95%;
     --popover: 240 8% 7%;
-    --popover-foreground: 0 0% 100%;
+    --popover-foreground: 0 0% 95%;
     --primary: 40 60% 58%;
     --primary-foreground: 240 10% 4%;
     --secondary: 240 6% 12%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary-foreground: 0 0% 95%;
     --muted: 240 6% 12%;
-    --muted-foreground: 0 0% 70%;
+    --muted-foreground: 240 5% 55%;
     --accent: 40 60% 58%;
     --accent-foreground: 240 10% 4%;
-    --destructive: 0 70% 50%;
+    --destructive: 0 60% 48%;
     --destructive-foreground: 0 0% 100%;
-    --border: 240 6% 16%;
-    --input: 240 6% 16%;
+    --border: 240 6% 14%;
+    --input: 240 6% 14%;
     --ring: 40 60% 58%;
     --chart-1: 40 60% 58%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
+    --chart-2: 40 40% 45%;
+    --chart-3: 240 5% 35%;
+    --chart-4: 40 70% 68%;
+    --chart-5: 240 5% 55%;
+    --radius: 0.75rem;
     --sidebar-background: 240 8% 5%;
-    --sidebar-foreground: 0 0% 100%;
+    --sidebar-foreground: 0 0% 95%;
     --sidebar-primary: 40 60% 58%;
     --sidebar-primary-foreground: 240 10% 4%;
     --sidebar-accent: 240 6% 12%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 240 6% 14%;
+    --sidebar-accent-foreground: 0 0% 95%;
+    --sidebar-border: 240 6% 12%;
     --sidebar-ring: 40 60% 58%;
 
     --xps-gold: 40 60% 58%;
@@ -46,12 +46,9 @@
     --xps-dark: 240 10% 4%;
     --xps-card: 240 8% 7%;
     --xps-card-hover: 240 8% 10%;
-    --xps-border: 240 6% 16%;
-    --xps-green: 142 70% 45%;
-    --xps-red: 0 70% 50%;
-    --xps-blue: 210 70% 55%;
-    --xps-purple: 270 60% 55%;
-    --xps-orange: 25 90% 55%;
+    --xps-border: 240 6% 14%;
+    --xps-success: 145 50% 42%;
+    --xps-danger: 0 60% 48%;
   }
 
   .light {

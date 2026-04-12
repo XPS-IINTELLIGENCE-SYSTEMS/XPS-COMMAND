@@ -1,4 +1,4 @@
-import { Settings, User, Bell, Palette, Globe, Key, Database } from "lucide-react";
+import { User, Bell, Palette } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 
 const settingSections = [
@@ -29,29 +29,31 @@ const settingSections = [
 
 export default function SettingsView() {
   return (
-    <div className="p-3 md:p-6 space-y-4 md:space-y-6 overflow-y-auto h-full">
+    <div className="p-3 md:p-6 space-y-4 md:space-y-5 overflow-y-auto h-full">
       <div>
-        <h1 className="text-xl font-bold text-foreground">Settings</h1>
-        <p className="text-xs text-muted-foreground mt-0.5">Manage your account and application preferences</p>
+        <h1 className="text-lg md:text-xl font-bold text-foreground">Settings</h1>
+        <p className="text-[11px] text-muted-foreground">Account and application preferences</p>
       </div>
 
-      <div className="space-y-4 max-w-2xl">
+      <div className="space-y-3 max-w-2xl">
         {settingSections.map((section) => {
           const Icon = section.icon;
           return (
-            <div key={section.name} className="bg-card rounded-lg border border-border p-4">
-              <div className="flex items-center gap-2 mb-3">
-                <Icon className="w-4 h-4 text-primary" />
+            <div key={section.name} className="bg-card rounded-2xl border border-border p-4">
+              <div className="flex items-center gap-2.5 mb-3">
+                <div className="w-8 h-8 rounded-xl bg-secondary flex items-center justify-center">
+                  <Icon className="w-4 h-4 text-muted-foreground" />
+                </div>
                 <h3 className="text-sm font-semibold text-foreground">{section.name}</h3>
               </div>
               <div className="space-y-3">
                 {section.items.map((item) => (
-                  <div key={item.label} className="flex items-center justify-between py-1.5 border-b border-border/50 last:border-0">
-                    <span className="text-xs text-muted-foreground">{item.label}</span>
+                  <div key={item.label} className="flex items-center justify-between py-2 border-b border-border/50 last:border-0">
+                    <span className="text-sm text-muted-foreground">{item.label}</span>
                     {item.toggle ? (
                       <Switch defaultChecked={item.enabled} />
                     ) : (
-                      <span className="text-xs text-foreground font-medium">{item.value}</span>
+                      <span className="text-sm text-foreground font-medium">{item.value}</span>
                     )}
                   </div>
                 ))}

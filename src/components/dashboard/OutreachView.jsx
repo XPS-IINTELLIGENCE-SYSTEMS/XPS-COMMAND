@@ -1,12 +1,17 @@
-import { Mail, MessageSquare, Plus, Pencil } from "lucide-react";
+import { Mail, MessageSquare, Plus, Pencil, Send, Users, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+const stats = [
+  { label: "Emails Sent", value: "4,218", sub: "This month" },
+  { label: "Open Rate", value: "34%", sub: "+2.1% vs last" },
+  { label: "Response Rate", value: "13%", sub: "+3.4% vs last" },
+  { label: "Meetings Booked", value: "89", sub: "From outreach" },
+];
+
 const templates = [
-  { name: "Initial Outreach — Polishing", type: "Email", status: "Active", uses: 342, lastUsed: "Today" },
+  { name: "Initial Outreach — Epoxy Flooring", type: "Email", status: "Active", uses: 342, lastUsed: "Today" },
   { name: "Follow-Up — No Response (7 day)", type: "Email", status: "Active", uses: 218, lastUsed: "Yesterday" },
   { name: "Proposal Follow-Up", type: "Email", status: "Active", uses: 156, lastUsed: "2 days ago" },
-  { name: "Promo Code — Seasonal Offer", type: "Email", status: "Draft", uses: 0, lastUsed: "N/A" },
-  { name: "Post-Sale Thank You", type: "Email", status: "Active", uses: 89, lastUsed: "3 days ago" },
   { name: "Appointment Confirmation", type: "SMS", status: "Active", uses: 412, lastUsed: "Today" },
   { name: "Quick Check-In", type: "SMS", status: "Active", uses: 267, lastUsed: "Today" },
   { name: "Reactivation — Dormant Lead", type: "Email", status: "Active", uses: 74, lastUsed: "1 week ago" },
@@ -14,74 +19,67 @@ const templates = [
 
 export default function OutreachView() {
   return (
-    <div className="p-3 md:p-6 space-y-4 md:space-y-6 overflow-y-auto h-full">
+    <div className="p-3 md:p-6 space-y-4 md:space-y-5 overflow-y-auto h-full">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-lg md:text-xl font-bold text-foreground">Outreach Center</h1>
-          <p className="text-[10px] md:text-xs text-muted-foreground mt-0.5">Email and SMS templates</p>
+          <h1 className="text-lg md:text-xl font-bold text-foreground">Outreach</h1>
+          <p className="text-[11px] text-muted-foreground">AI-powered email & SMS campaigns</p>
         </div>
-        <Button size="sm" className="text-xs gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90">
-          <Plus className="w-3 h-3" /> <span className="hidden md:inline">New Template</span><span className="md:hidden">New</span>
+        <Button size="sm" className="h-9 text-xs gap-1.5 rounded-xl bg-primary text-primary-foreground">
+          <Plus className="w-3.5 h-3.5" /> New Template
         </Button>
       </div>
 
-      {/* Mobile: Card layout */}
-      <div className="md:hidden space-y-2">
-        {templates.map((t) => (
-          <div key={t.name} className="bg-card rounded-lg border border-border p-3 active:bg-secondary/30 cursor-pointer">
-            <div className="flex items-start justify-between mb-1.5">
-              <div className="flex items-center gap-2 min-w-0">
-                {t.type === "Email" ? <Mail className="w-4 h-4 text-muted-foreground flex-shrink-0" /> : <MessageSquare className="w-4 h-4 text-muted-foreground flex-shrink-0" />}
-                <span className="text-sm font-medium text-primary truncate">{t.name}</span>
-              </div>
-              <Pencil className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0 ml-2" />
-            </div>
-            <div className="flex items-center justify-between text-xs text-muted-foreground">
-              <div className="flex items-center gap-2">
-                <span className="bg-secondary px-1.5 py-0.5 rounded text-[10px]">{t.type}</span>
-                <span className={t.status === "Active" ? "text-xps-green" : ""}>{t.status}</span>
-              </div>
-              <span>{t.uses} uses · {t.lastUsed}</span>
-            </div>
+      {/* Stats */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3">
+        {stats.map((stat) => (
+          <div key={stat.label} className="bg-card rounded-2xl border border-border p-3 md:p-4">
+            <div className="text-[11px] text-muted-foreground">{stat.label}</div>
+            <div className="text-xl font-bold text-foreground mt-1">{stat.value}</div>
+            <div className="text-[11px] text-primary/80 mt-0.5">{stat.sub}</div>
           </div>
         ))}
       </div>
 
-      {/* Desktop: Table layout */}
-      <div className="hidden md:block bg-card rounded-lg border border-border overflow-hidden">
-        <table className="w-full">
-          <thead>
-            <tr className="border-b border-border">
-              <th className="text-left text-[10px] font-semibold text-muted-foreground uppercase tracking-wider px-4 py-2.5">Template</th>
-              <th className="text-center text-[10px] font-semibold text-muted-foreground uppercase tracking-wider px-4 py-2.5">Type</th>
-              <th className="text-center text-[10px] font-semibold text-muted-foreground uppercase tracking-wider px-4 py-2.5">Status</th>
-              <th className="text-center text-[10px] font-semibold text-muted-foreground uppercase tracking-wider px-4 py-2.5">Uses</th>
-              <th className="text-center text-[10px] font-semibold text-muted-foreground uppercase tracking-wider px-4 py-2.5">Last Used</th>
-              <th className="w-10"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {templates.map((t) => (
-              <tr key={t.name} className="border-b border-border/50 hover:bg-secondary/30 transition-colors cursor-pointer">
-                <td className="px-4 py-3">
-                  <div className="flex items-center gap-2.5">
-                    {t.type === "Email" ? <Mail className="w-4 h-4 text-muted-foreground" /> : <MessageSquare className="w-4 h-4 text-muted-foreground" />}
-                    <span className="text-xs font-medium text-primary">{t.name}</span>
-                  </div>
-                </td>
-                <td className="px-4 py-3 text-center text-xs text-muted-foreground">{t.type}</td>
-                <td className="px-4 py-3 text-center">
-                  <span className={`text-[10px] font-medium ${t.status === "Active" ? "text-xps-green" : "text-muted-foreground"}`}>{t.status}</span>
-                </td>
-                <td className="px-4 py-3 text-center text-xs text-foreground">{t.uses}</td>
-                <td className="px-4 py-3 text-center text-xs text-muted-foreground">{t.lastUsed}</td>
-                <td className="px-4 py-3">
-                  <Pencil className="w-3.5 h-3.5 text-muted-foreground hover:text-foreground cursor-pointer" />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      {/* Quick Actions */}
+      <div className="grid grid-cols-2 gap-2">
+        <button className="flex items-center gap-3 p-4 bg-primary/10 rounded-2xl border border-primary/20 active:scale-[0.98] transition-transform">
+          <div className="w-10 h-10 rounded-xl bg-primary/15 flex items-center justify-center">
+            <Send className="w-5 h-5 text-primary" />
+          </div>
+          <div className="text-left">
+            <div className="text-sm font-semibold text-foreground">AI Mass Email</div>
+            <div className="text-[11px] text-muted-foreground">Send to filtered leads</div>
+          </div>
+        </button>
+        <button className="flex items-center gap-3 p-4 bg-card rounded-2xl border border-border active:scale-[0.98] transition-transform">
+          <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center">
+            <Users className="w-5 h-5 text-muted-foreground" />
+          </div>
+          <div className="text-left">
+            <div className="text-sm font-semibold text-foreground">AI Sequence</div>
+            <div className="text-[11px] text-muted-foreground">Multi-step drip campaign</div>
+          </div>
+        </button>
+      </div>
+
+      {/* Templates */}
+      <div>
+        <h3 className="text-sm font-semibold text-foreground mb-3">Templates</h3>
+        <div className="space-y-2">
+          {templates.map((t) => (
+            <div key={t.name} className="bg-card rounded-2xl border border-border p-3 md:p-4 flex items-center gap-3 cursor-pointer hover:border-primary/20 transition-colors">
+              <div className="w-9 h-9 rounded-xl bg-secondary flex items-center justify-center flex-shrink-0">
+                {t.type === "Email" ? <Mail className="w-4 h-4 text-muted-foreground" /> : <MessageSquare className="w-4 h-4 text-muted-foreground" />}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="text-sm font-medium text-foreground truncate">{t.name}</div>
+                <div className="text-[11px] text-muted-foreground">{t.type} · {t.uses} uses · {t.lastUsed}</div>
+              </div>
+              <ArrowUpRight className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

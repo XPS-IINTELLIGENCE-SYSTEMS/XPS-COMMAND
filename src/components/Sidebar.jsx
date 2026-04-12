@@ -1,93 +1,99 @@
 import { 
-  LayoutDashboard, Users, UserSearch, Bot, FlaskConical, Send, FileText, 
-  BarChart3, BookOpen, Eye, Link2, Shield, Settings, Search, Pencil, Terminal
+  LayoutDashboard, UserSearch, Send, FileText, BarChart3, Bot, 
+  Settings, BookOpen, Shield
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-const navSections = [
-  {
-    label: "MAIN",
-    items: [
-      { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-      { id: "crm", label: "CRM", icon: Users },
-      { id: "leads", label: "Leads", icon: UserSearch },
-      { id: "workflows", label: "Workflows", icon: Bot },
-      { id: "research", label: "Research Lab", icon: FlaskConical },
-      { id: "outreach", label: "Outreach", icon: Send },
-      { id: "proposals", label: "Proposals", icon: FileText },
-      { id: "analytics", label: "Analytics", icon: BarChart3 },
-      { id: "reports", label: "AI Reports", icon: BarChart3 },
-      { id: "editor", label: "Editor", icon: Pencil },
-      { id: "operator", label: "Operator", icon: Terminal },
-    ],
-  },
-  {
-    label: "INTELLIGENCE",
-    items: [
-      { id: "knowledge", label: "Knowledge Base", icon: BookOpen },
-      { id: "competition", label: "Competition", icon: Eye },
-      { id: "connectors", label: "Connectors", icon: Link2 },
-    ],
-  },
-  {
-    label: "SYSTEM",
-    items: [
-      { id: "admin", label: "Admin", icon: Shield },
-      { id: "settings", label: "Settings", icon: Settings },
-    ],
-  },
+const mainNav = [
+  { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { id: "leads", label: "Leads", icon: UserSearch },
+  { id: "outreach", label: "Outreach", icon: Send },
+  { id: "proposals", label: "Proposals", icon: FileText },
+  { id: "workflows", label: "AI Workflows", icon: Bot },
+  { id: "analytics", label: "Analytics", icon: BarChart3 },
+];
+
+const secondaryNav = [
+  { id: "knowledge", label: "Knowledge", icon: BookOpen },
+  { id: "admin", label: "Admin", icon: Shield },
+  { id: "settings", label: "Settings", icon: Settings },
 ];
 
 export default function Sidebar({ activeView, onViewChange }) {
   return (
     <div className="w-full h-full bg-sidebar border-r border-sidebar-border flex flex-col">
       {/* Logo */}
-      <div className="px-4 py-4 border-b border-sidebar-border">
-        <div className="flex items-center gap-2">
+      <div className="px-4 py-5 border-b border-sidebar-border">
+        <div className="flex items-center gap-2.5">
           <img
             src="https://media.base44.com/images/public/69db3269c791af3f48cfaee9/583965fcb_IMAGEWITHWHITEOUTLINE.jpg"
             alt="XPS Logo"
-            className="w-9 h-9 object-contain"
+            className="w-8 h-8 object-contain"
           />
           <div>
             <div className="text-xs font-bold metallic-gold tracking-wider">XPS INTELLIGENCE</div>
-            <div className="text-[9px] metallic-gold tracking-widest">COMMAND CENTER</div>
+            <div className="text-[9px] text-muted-foreground tracking-widest">COMMAND CENTER</div>
           </div>
         </div>
       </div>
 
       {/* Navigation */}
       <ScrollArea className="flex-1">
-        <nav className="py-3 px-2 space-y-4">
-          {navSections.map((section) => (
-            <div key={section.label}>
-              <div className="px-2 mb-1.5 text-[10px] font-semibold text-foreground/40 tracking-wider">
-                {section.label}
-              </div>
-              <div className="space-y-0.5">
-                {section.items.map((item) => {
-                  const Icon = item.icon;
-                  const isActive = activeView === item.id;
-                  return (
-                    <button
-                      key={item.id}
-                      onClick={() => onViewChange(item.id)}
-                      className={cn(
-                        "w-full flex items-center gap-2.5 px-2.5 py-2 rounded-md text-xs font-medium transition-all duration-200",
-                        isActive
-                          ? "bg-primary/10 backdrop-blur-md border border-primary/20 shadow-[0_0_12px_rgba(212,175,55,0.15)] metallic-gold"
-                          : "text-foreground/70 hover-metallic active:bg-secondary/50"
-                      )}
-                    >
-                      <Icon className={cn("w-4 h-4 flex-shrink-0", isActive ? "metallic-gold-icon" : "metallic-silver-icon")} />
-                      {item.label}
-                    </button>
-                  );
-                })}
-              </div>
+        <nav className="py-4 px-3 space-y-6">
+          <div>
+            <div className="px-2 mb-2 text-[10px] font-semibold text-muted-foreground/60 tracking-wider uppercase">
+              Sales
             </div>
-          ))}
+            <div className="space-y-0.5">
+              {mainNav.map((item) => {
+                const Icon = item.icon;
+                const isActive = activeView === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => onViewChange(item.id)}
+                    className={cn(
+                      "w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-150",
+                      isActive
+                        ? "bg-primary/10 text-primary"
+                        : "text-foreground/60 hover:text-foreground hover:bg-secondary/50"
+                    )}
+                  >
+                    <Icon className={cn("w-[18px] h-[18px]", isActive ? "text-primary" : "text-muted-foreground")} />
+                    {item.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div>
+            <div className="px-2 mb-2 text-[10px] font-semibold text-muted-foreground/60 tracking-wider uppercase">
+              System
+            </div>
+            <div className="space-y-0.5">
+              {secondaryNav.map((item) => {
+                const Icon = item.icon;
+                const isActive = activeView === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => onViewChange(item.id)}
+                    className={cn(
+                      "w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-150",
+                      isActive
+                        ? "bg-primary/10 text-primary"
+                        : "text-foreground/60 hover:text-foreground hover:bg-secondary/50"
+                    )}
+                  >
+                    <Icon className={cn("w-[18px] h-[18px]", isActive ? "text-primary" : "text-muted-foreground")} />
+                    {item.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
         </nav>
       </ScrollArea>
     </div>

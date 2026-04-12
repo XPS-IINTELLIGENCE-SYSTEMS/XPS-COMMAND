@@ -60,11 +60,8 @@ module.exports = {
           card: 'hsl(var(--xps-card))',
           'card-hover': 'hsl(var(--xps-card-hover))',
           border: 'hsl(var(--xps-border))',
-          green: 'hsl(var(--xps-green))',
-          red: 'hsl(var(--xps-red))',
-          blue: 'hsl(var(--xps-blue))',
-          purple: 'hsl(var(--xps-purple))',
-          orange: 'hsl(var(--xps-orange))',
+          success: 'hsl(var(--xps-success))',
+          danger: 'hsl(var(--xps-danger))',
         },
   			sidebar: {
   				DEFAULT: 'hsl(var(--sidebar-background))',

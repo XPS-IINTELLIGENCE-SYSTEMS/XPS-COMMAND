@@ -7,7 +7,7 @@
 export const PHASES = [
   {
     id: "find_work",
-    label: "Find Work",
+    label: "Discover",
     num: "1",
     desc: "Leads & prospecting",
     categories: [
@@ -33,7 +33,7 @@ export const PHASES = [
   },
   {
     id: "get_work",
-    label: "Get Work",
+    label: "Engage",
     num: "2",
     desc: "Outreach & comms",
     categories: [
@@ -62,7 +62,7 @@ export const PHASES = [
   },
   {
     id: "win_work",
-    label: "Win Work",
+    label: "Close",
     num: "3",
     desc: "Proposals & closing",
     categories: [
@@ -97,7 +97,7 @@ export const PHASES = [
   },
   {
     id: "do_work",
-    label: "Do Work",
+    label: "Execute",
     num: "4",
     desc: "Jobs & execution",
     categories: [
@@ -134,7 +134,7 @@ export const PHASES = [
   },
   {
     id: "get_paid",
-    label: "Get Paid",
+    label: "Collect",
     num: "5",
     desc: "Invoice & collect",
     categories: [

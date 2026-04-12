@@ -79,13 +79,13 @@ export default function CommandCenterView({ onNavigate }) {
     // Attention items
     const flagged = [];
     const unopened = proposals.filter(p => p.status === "Sent");
-    if (unopened.length > 0) flagged.push({ icon: AlertCircle, label: `${unopened.length} proposal${unopened.length > 1 ? "s" : ""} sent but not yet viewed`, phase: "WIN WORK", nav: "win_work" });
+    if (unopened.length > 0) flagged.push({ icon: AlertCircle, label: `${unopened.length} proposal${unopened.length > 1 ? "s" : ""} sent but not yet viewed`, phase: "CLOSE", nav: "win_work" });
     const newLeads = leads.filter(l => l.stage === "New");
-    if (newLeads.length > 0) flagged.push({ icon: Mail, label: `${newLeads.length} new lead${newLeads.length > 1 ? "s" : ""} need contact`, phase: "FIND WORK", nav: "get_work" });
+    if (newLeads.length > 0) flagged.push({ icon: Mail, label: `${newLeads.length} new lead${newLeads.length > 1 ? "s" : ""} need contact`, phase: "DISCOVER", nav: "get_work" });
     const overdue = invoices.filter(i => i.status === "Overdue");
-    if (overdue.length > 0) flagged.push({ icon: DollarSign, label: `${overdue.length} invoice${overdue.length > 1 ? "s" : ""} overdue`, phase: "GET PAID", nav: "get_paid" });
+    if (overdue.length > 0) flagged.push({ icon: DollarSign, label: `${overdue.length} invoice${overdue.length > 1 ? "s" : ""} overdue`, phase: "COLLECT", nav: "get_paid" });
     const draftProposals = proposals.filter(p => p.status === "Draft");
-    if (draftProposals.length > 0) flagged.push({ icon: Clock, label: `${draftProposals.length} draft proposal${draftProposals.length > 1 ? "s" : ""} need to be sent`, phase: "WIN WORK", nav: "win_work" });
+    if (draftProposals.length > 0) flagged.push({ icon: Clock, label: `${draftProposals.length} draft proposal${draftProposals.length > 1 ? "s" : ""} need to be sent`, phase: "CLOSE", nav: "win_work" });
     
     setActions(flagged);
     setLoading(false);

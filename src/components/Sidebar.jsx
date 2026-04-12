@@ -8,11 +8,11 @@ const phases = [
   { id: "command", label: "Dashboard", num: null, desc: "Pipeline & metrics" },
   { id: "crm", label: "CRM Pipeline", num: null, desc: "Manage all leads" },
   { id: "analytics", label: "Analytics", num: null, desc: "Charts & revenue" },
-  { id: "find_work", label: "Find Work", num: "1", desc: "Signal-based prospecting" },
-  { id: "get_work", label: "Get Work", num: "2", desc: "Outreach & comms" },
-  { id: "win_work", label: "Win Work", num: "3", desc: "Proposals & closing" },
-  { id: "do_work", label: "Do Work", num: "4", desc: "Jobs & execution" },
-  { id: "get_paid", label: "Get Paid", num: "5", desc: "Invoice & collect" },
+  { id: "find_work", label: "Discover", num: "1", desc: "Signal-based prospecting" },
+  { id: "get_work", label: "Engage", num: "2", desc: "Outreach & comms" },
+  { id: "win_work", label: "Close", num: "3", desc: "Proposals & closing" },
+  { id: "do_work", label: "Execute", num: "4", desc: "Jobs & execution" },
+  { id: "get_paid", label: "Collect", num: "5", desc: "Invoice & collect" },
   { id: "tips", label: "Tips & Tricks", num: null, desc: "Pro knowledge" },
 ];
 

@@ -10,7 +10,7 @@ const navItems = [
   { id: "win_work", label: "Win Work", sub: "Proposals & closing" },
   { id: "do_work", label: "Do Work", sub: "Jobs & execution" },
   { id: "get_paid", label: "Get Paid", sub: "Invoice & collect" },
-  { id: "admin", label: "Admin Tools", sub: "Scrapers & command interface" },
+  { id: "agents", label: "Agent Command", sub: "All agents, browser, tools" },
   { id: "settings", label: "Settings", sub: "Account & preferences" },
 ];
 

@@ -17,7 +17,7 @@ const phases = [
 ];
 
 const utilityNav = [
-  { id: "admin", label: "Admin Tools" },
+  { id: "agents", label: "Agent Command" },
   { id: "settings", label: "Settings" },
 ];
 

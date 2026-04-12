@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, Users, BarChart3, Search, Shield, Radar } from "lucide-react";
+import { LayoutDashboard, Users, BarChart3, Search, Bot } from "lucide-react";
 import NavIcon from "../shared/NavIcon";
 
 const tabs = [
@@ -7,7 +7,7 @@ const tabs = [
   { id: "crm", label: "CRM", icon: Users },
   { id: "analytics", label: "Charts", icon: BarChart3 },
   { id: "find_work", label: "Find", icon: Search },
-  { id: "admin", label: "Tools", icon: Radar },
+  { id: "agents", label: "Agents", icon: Bot },
 ];
 
 export default function MobileTabBar({ activeView, onViewChange }) {

@@ -8,7 +8,7 @@ import ResearchView from "./dashboard/ResearchView";
 import OutreachView from "./dashboard/OutreachView";
 import CRMView from "./dashboard/CRMView";
 import AnalyticsView from "./dashboard/AnalyticsView";
-import AdminView from "./dashboard/AdminView";
+import AgentCommandPage from "./command/AgentCommandPage";
 
 // Phase views use the new interactive PhaseView system
 const phaseViews = ["find_work", "get_work", "win_work", "do_work", "get_paid"];
@@ -22,7 +22,7 @@ const plainViews = {
   outreach: OutreachView,
   crm: CRMView,
   analytics: AnalyticsView,
-  admin: AdminView,
+  agents: AgentCommandPage,
 };
 
 export default function ContentArea({ activeView, onChatCommand, onNavigate }) {

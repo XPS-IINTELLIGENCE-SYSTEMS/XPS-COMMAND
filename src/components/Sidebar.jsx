@@ -15,6 +15,9 @@ const phases = [
 ];
 
 const utilityNav = [
+  { id: "crm", label: "CRM Pipeline" },
+  { id: "analytics", label: "Analytics" },
+  { id: "admin", label: "Admin" },
   { id: "settings", label: "Settings" },
 ];
 

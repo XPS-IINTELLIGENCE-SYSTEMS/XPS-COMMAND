@@ -180,44 +180,38 @@ export default function ToolModuleWorkspace({ tools, onBack, onExecute }) {
 
       {/* Execute / Reset Bar */}
       {visibleTools.length > 0 && (
-        <div className="flex-shrink-0 p-4 border-t border-white/10 bg-black/40 backdrop-blur-sm">
+        <div className="flex-shrink-0 p-3 border-t border-border bg-card/50">
           <div className="max-w-3xl mx-auto">
             {!showResults || executing ? (
               <button
                 onClick={handleExecute}
                 disabled={executing}
                 className={cn(
-                  "w-full flex items-center justify-center gap-3 py-3.5 rounded-2xl font-bold text-base transition-all duration-300",
+                  "w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold transition-all",
                   executing
-                    ? "bg-white/10 text-white/50 cursor-wait"
-                    : "metallic-gold-bg text-background hover:brightness-110 shadow-[0_0_30px_rgba(212,175,55,0.15)]"
+                    ? "bg-secondary text-muted-foreground cursor-wait"
+                    : "bg-primary text-primary-foreground hover:bg-primary/90"
                 )}
               >
                 {executing ? (
-                  <>
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                    <span>Executing {totalCount} tool{totalCount !== 1 ? "s" : ""}...</span>
-                  </>
+                  <><Loader2 className="w-4 h-4 animate-spin" /><span>Running...</span></>
                 ) : (
-                  <>
-                    <Play className="w-5 h-5" />
-                    <span>Execute {visibleTools.length} Tool{visibleTools.length !== 1 ? "s" : ""}</span>
-                  </>
+                  <><Play className="w-4 h-4" /><span>Run {visibleTools.length} Tool{visibleTools.length !== 1 ? "s" : ""}</span></>
                 )}
               </button>
             ) : (
-              <div className="flex gap-3">
+              <div className="flex gap-2">
                 <button
                   onClick={() => { setShowResults(false); setResults({}); }}
-                  className="flex-1 py-3.5 rounded-2xl border border-white/15 text-white/70 font-bold text-base hover:bg-white/5 transition-all"
+                  className="flex-1 py-2.5 rounded-xl border border-border text-foreground/70 text-sm font-medium hover:bg-secondary/50 transition-all"
                 >
                   Modify & Re-run
                 </button>
                 <button
                   onClick={onBack}
-                  className="flex-1 py-3.5 rounded-2xl metallic-gold-bg text-background font-bold text-base hover:brightness-110 transition-all"
+                  className="flex-1 py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-all"
                 >
-                  Done — Pick More Tools
+                  Done
                 </button>
               </div>
             )}

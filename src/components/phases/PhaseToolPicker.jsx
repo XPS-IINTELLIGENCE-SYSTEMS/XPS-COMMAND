@@ -32,21 +32,12 @@ export default function PhaseToolPicker({ phaseId, onLaunch }) {
     <div className="h-full overflow-y-auto">
       <div className="max-w-4xl mx-auto p-4 md:p-8">
         {/* Phase Header */}
-        <div className="text-center pt-2 md:pt-6 pb-6 md:pb-10">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 mb-4">
-            <span className="text-xs font-bold text-primary">PHASE {phase.num}</span>
-            <span className="text-xs text-white/60">·</span>
-            <span className="text-xs font-medium text-white/70">Select your tools</span>
+        <div className="pb-4 md:pb-6">
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-[10px] font-bold text-primary px-2 py-0.5 rounded bg-primary/10">PHASE {phase.num}</span>
           </div>
-          <h1
-            className="text-3xl md:text-5xl font-extrabold leading-none xps-gold-slow-shimmer"
-            style={{ fontFamily: "'Montserrat', sans-serif" }}
-          >
-            {phase.label.toUpperCase()}
-          </h1>
-          <p className="mt-3 text-sm text-white/50 max-w-lg mx-auto">
-            Pick the tools you need, then press launch. They'll expand into interactive modules.
-          </p>
+          <h1 className="text-xl font-bold text-foreground">{phase.label}</h1>
+          <p className="text-xs text-muted-foreground">Select tools and launch to configure & run them</p>
         </div>
 
         {/* Categories & Tool Grid */}
@@ -130,16 +121,16 @@ export default function PhaseToolPicker({ phaseId, onLaunch }) {
         {/* Launch Bar */}
         <div
           className={cn(
-            "sticky bottom-4 mt-8 transition-all duration-300",
+            "sticky bottom-4 mt-6 transition-all duration-300",
             totalSelected > 0 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"
           )}
         >
           <button
             onClick={handleLaunch}
-            className="w-full flex items-center justify-center gap-3 py-4 rounded-2xl metallic-gold-bg text-background font-bold text-base md:text-lg hover:brightness-110 transition-all duration-300 shadow-[0_0_40px_rgba(212,175,55,0.2)]"
+            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 transition-all"
           >
             <span>Launch {totalSelected} Tool{totalSelected !== 1 ? "s" : ""}</span>
-            <ArrowRight className="w-5 h-5" />
+            <ArrowRight className="w-4 h-4" />
           </button>
         </div>
       </div>

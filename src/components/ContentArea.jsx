@@ -6,18 +6,23 @@ import SettingsView from "./dashboard/SettingsView";
 import LeadsView from "./dashboard/LeadsView";
 import ResearchView from "./dashboard/ResearchView";
 import OutreachView from "./dashboard/OutreachView";
+import CRMView from "./dashboard/CRMView";
+import AnalyticsView from "./dashboard/AnalyticsView";
+import AdminView from "./dashboard/AdminView";
 
 // Phase views use the new interactive PhaseView system
 const phaseViews = ["find_work", "get_work", "win_work", "do_work", "get_paid"];
 
 // Views that don't need chat commands but may need navigation
 const plainViews = {
-  command: CommandCenterView,
   tips: TipsView,
   settings: SettingsView,
   leads: LeadsView,
   research: ResearchView,
   outreach: OutreachView,
+  crm: CRMView,
+  analytics: AnalyticsView,
+  admin: AdminView,
 };
 
 export default function ContentArea({ activeView, onChatCommand, onNavigate }) {

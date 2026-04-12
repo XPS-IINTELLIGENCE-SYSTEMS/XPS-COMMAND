@@ -2,15 +2,16 @@ import { cn } from "@/lib/utils";
 import NavIcon from "./shared/NavIcon";
 
 const navItems = [
-  { id: "start_here", label: "Start Here", desc: "Get set up in minutes" },
-  { id: "command", label: "Dashboard", desc: "AI daily briefing" },
-  { id: "find_work", label: "1. Find Work", desc: "Lead gen & prospecting" },
-  { id: "get_work", label: "2. Get Work", desc: "Outreach & communication" },
-  { id: "win_work", label: "3. Win Work", desc: "Proposals & closing" },
-  { id: "do_work", label: "4. Do Work", desc: "Manage jobs & execution" },
-  { id: "get_paid", label: "5. Get Paid", desc: "Invoicing & collections" },
-  { id: "tips", label: "Tips & Tricks", desc: "Pro knowledge & videos" },
-  { id: "settings", label: "Settings", desc: "Account & integrations" },
+  { id: "command", label: "Dashboard", sub: "Pipeline overview" },
+  { id: "crm", label: "CRM Pipeline", sub: "Manage leads" },
+  { id: "analytics", label: "Analytics", sub: "Charts & metrics" },
+  { id: "find_work", label: "Find Work", sub: "Leads & prospecting" },
+  { id: "get_work", label: "Get Work", sub: "Outreach & comms" },
+  { id: "win_work", label: "Win Work", sub: "Proposals & closing" },
+  { id: "do_work", label: "Do Work", sub: "Jobs & execution" },
+  { id: "get_paid", label: "Get Paid", sub: "Invoice & collect" },
+  { id: "admin", label: "Admin", sub: "AI command interface" },
+  { id: "settings", label: "Settings", sub: "Account & preferences" },
 ];
 
 export default function MobileNav({ activeView, onViewChange }) {

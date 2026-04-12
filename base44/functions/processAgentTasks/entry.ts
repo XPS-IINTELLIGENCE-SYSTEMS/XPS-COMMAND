@@ -1,4 +1,4 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.23';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 // This function processes queued agent tasks in the background
 // It is called by a scheduled automation every 5 minutes

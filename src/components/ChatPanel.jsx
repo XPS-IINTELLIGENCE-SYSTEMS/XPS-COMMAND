@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Send, Plus, Loader2, Sparkles, Globe, Pencil, Database, Code, Search, GitBranch, Layers, Bot, Wrench } from "lucide-react";
+import { Send, Plus, Loader2, Sparkles, Globe, Pencil, Database, Code, Search, GitBranch, Layers, Bot, Wrench, TrendingUp } from "lucide-react";
+import AgentSwitcher, { AGENTS } from "./chat/AgentSwitcher";
 import AgentTab from "./chat/AgentTab";
 import SubAgentChat from "./chat/SubAgentChat";
 import { Button } from "@/components/ui/button";
@@ -93,6 +94,7 @@ export default function ChatPanel({ mobile = false }) {
   const [loading, setLoading] = useState(false);
   const [initializing, setInitializing] = useState(true);
   const scrollRef = useRef(null);
+  const [currentAgentName, setCurrentAgentName] = useState("xps_assistant");
 
   const [agents, setAgents] = useState([
     { id: "main", name: "XPS Agent", type: "main", status: "active" },
@@ -120,7 +122,7 @@ export default function ChatPanel({ mobile = false }) {
 
   useEffect(() => {
     initConversation();
-  }, []);
+  }, [currentAgentName]);
 
   // Auto-scroll: jump on new messages
   useEffect(() => {
@@ -143,16 +145,19 @@ export default function ChatPanel({ mobile = false }) {
   }, [messages]);
 
   const initConversation = async () => {
+    setInitializing(true);
+    setMessages([]);
+    setConversation(null);
     try {
-      const convos = await base44.agents.listConversations({ agent_name: "xps_assistant" });
+      const convos = await base44.agents.listConversations({ agent_name: currentAgentName });
       let conv;
       if (convos && convos.length > 0) {
         conv = await base44.agents.getConversation(convos[0].id);
         setMessages(conv.messages || []);
       } else {
         conv = await base44.agents.createConversation({
-          agent_name: "xps_assistant",
-          metadata: { name: "XPS Command Session" },
+          agent_name: currentAgentName,
+          metadata: { name: currentAgentName === "xps_assistant" ? "XPS Command Session" : "SEO Marketing Session" },
         });
       }
       setConversation(conv);
@@ -189,8 +194,8 @@ export default function ChatPanel({ mobile = false }) {
     setInitializing(true);
     try {
       const conv = await base44.agents.createConversation({
-        agent_name: "xps_assistant",
-        metadata: { name: "XPS Command Session" },
+        agent_name: currentAgentName,
+        metadata: { name: currentAgentName === "xps_assistant" ? "XPS Command Session" : "SEO Marketing Session" },
       });
       setConversation(conv);
       setMessages([]);
@@ -201,11 +206,23 @@ export default function ChatPanel({ mobile = false }) {
     }
   };
 
-  const quickActions = [
+  const handleAgentSwitch = (agentName) => {
+    if (agentName === currentAgentName) return;
+    setCurrentAgentName(agentName);
+  };
+
+  const activeAgentConfig = AGENTS.find(a => a.id === currentAgentName) || AGENTS[0];
+
+  const quickActions = currentAgentName === "xps_assistant" ? [
     { label: "Research a company", icon: Globe },
     { label: "Draft a proposal", icon: Pencil },
     { label: "Analyze pipeline", icon: Database },
     { label: "Search the web", icon: Search },
+  ] : [
+    { label: "Write a blog post", icon: Pencil },
+    { label: "Analyze a competitor", icon: Search },
+    { label: "Generate social content", icon: Globe },
+    { label: "Build keyword strategy", icon: TrendingUp },
   ];
 
   return (
@@ -214,13 +231,16 @@ export default function ChatPanel({ mobile = false }) {
       <div className={`${mobile ? 'h-10 min-h-[40px]' : 'h-12 min-h-[48px]'} border-b border-border flex items-center justify-between px-3`}>
         <div className="flex items-center gap-2">
           <div className={`${mobile ? 'w-6 h-6' : 'w-8 h-8'} rounded-lg bg-secondary flex items-center justify-center`}>
-            <Wrench className={`${mobile ? 'w-3 h-3' : 'w-4 h-4'} metallic-silver-icon`} />
+            {currentAgentName === "seo_marketing" 
+              ? <TrendingUp className={`${mobile ? 'w-3 h-3' : 'w-4 h-4'} metallic-silver-icon`} />
+              : <Wrench className={`${mobile ? 'w-3 h-3' : 'w-4 h-4'} metallic-silver-icon`} />
+            }
           </div>
           <div>
-            <div className={`${mobile ? 'text-[10px]' : 'text-xs'} font-bold xps-gold-slow-shimmer`} style={{ fontFamily: "'Montserrat', sans-serif" }}>XPS AGENT</div>
+            <div className={`${mobile ? 'text-[10px]' : 'text-xs'} font-bold xps-gold-slow-shimmer`} style={{ fontFamily: "'Montserrat', sans-serif" }}>{activeAgentConfig.name}</div>
             <div className="text-[9px] text-muted-foreground flex items-center gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
-              {mobile ? 'Ready' : 'Your AI Sales & Ops Crew'}
+              {mobile ? 'Ready' : activeAgentConfig.fullName}
             </div>
           </div>
         </div>
@@ -228,6 +248,9 @@ export default function ChatPanel({ mobile = false }) {
           <Plus className="w-3.5 h-3.5 shimmer-icon metallic-silver-icon" />
         </Button>
       </div>
+
+      {/* Agent Switcher */}
+      <AgentSwitcher activeAgent={currentAgentName} onSwitch={handleAgentSwitch} mobile={mobile} />
 
       {/* Agent tabs bar */}
       {!mobile && (
@@ -269,9 +292,9 @@ export default function ChatPanel({ mobile = false }) {
                   <div className="w-14 h-14 rounded-2xl bg-secondary flex items-center justify-center mb-3 shimmer-card">
                     <Wrench className="w-7 h-7 metallic-silver-icon shimmer-icon" />
                   </div>
-                  <h3 className="text-sm font-bold xps-gold-slow-shimmer mb-1" style={{ fontFamily: "'Montserrat', sans-serif" }}>XPS AGENT</h3>
+                  <h3 className="text-sm font-bold xps-gold-slow-shimmer mb-1" style={{ fontFamily: "'Montserrat', sans-serif" }}>{activeAgentConfig.name}</h3>
                   <p className="text-[10px] text-muted-foreground mb-4">
-                    Your AI crew — handles research, emails, proposals, and follow-ups.
+                   {activeAgentConfig.desc}
                   </p>
                 </>
               )}
@@ -307,7 +330,7 @@ export default function ChatPanel({ mobile = false }) {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSend()}
-            placeholder="Command the agent..."
+            placeholder={currentAgentName === "xps_assistant" ? "Command the agent..." : "Marketing command..."}
             className={`flex-1 bg-card border rounded-lg px-3 chat-input-metallic ${mobile ? 'py-2.5 text-sm' : 'py-2 text-xs'} text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/30`}
             disabled={loading || initializing}
           />

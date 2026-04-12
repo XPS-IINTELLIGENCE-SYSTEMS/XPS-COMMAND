@@ -38,11 +38,11 @@ export default function Platform() {
         </p>
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 pb-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div className="max-w-6xl mx-auto px-6 pb-20 flex flex-wrap justify-center gap-5">
         {features.map((f) => {
           const Icon = f.icon;
           return (
-            <div key={f.title} className="shimmer-card bg-card border border-border rounded-2xl p-6 cursor-default">
+            <div key={f.title} className="shimmer-card bg-card border border-border rounded-2xl p-6 cursor-default flex flex-col items-center text-center w-full md:w-[calc(50%-10px)] lg:w-[calc(25%-15px)]">
               <div className="shimmer-icon-container w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center mb-4 transition-all duration-300">
                 <Icon className="w-5 h-5 metallic-gold-icon shimmer-icon" />
               </div>

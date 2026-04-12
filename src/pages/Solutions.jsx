@@ -60,15 +60,15 @@ export default function Solutions() {
         </p>
       </div>
 
-      <div className="max-w-5xl mx-auto px-6 pb-20 space-y-5">
+      <div className="max-w-5xl mx-auto px-6 pb-20 flex flex-wrap justify-center gap-5">
         {solutions.map((s) => {
           const Icon = s.icon;
           return (
-            <div key={s.title} className="shimmer-card flex flex-col md:flex-row items-start gap-6 bg-card border border-border rounded-2xl p-6 md:p-8 cursor-default">
-              <div className="shimmer-icon-container w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 transition-all duration-300">
+            <div key={s.title} className="shimmer-card flex flex-col items-center text-center bg-card border border-border rounded-2xl p-6 md:p-8 cursor-default">
+              <div className="shimmer-icon-container w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center transition-all duration-300 mb-4">
                 <Icon className="w-6 h-6 metallic-gold-icon shimmer-icon" />
               </div>
-              <div className="flex-1">
+              <div className="flex flex-col items-center">
                 <div className="flex items-center gap-3 mb-2">
                   <h3 className="text-base font-bold text-foreground">{s.title}</h3>
                   <span className="text-[10px] font-semibold metallic-gold px-2 py-0.5 rounded-full border border-primary/30 bg-primary/5">{s.stats}</span>

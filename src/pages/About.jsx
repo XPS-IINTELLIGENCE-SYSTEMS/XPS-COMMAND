@@ -44,17 +44,15 @@ export default function About() {
       </div>
 
       {/* Values */}
-      <div className="max-w-5xl mx-auto px-6 pb-12 grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div className="max-w-5xl mx-auto px-6 pb-12 flex flex-wrap justify-center gap-5">
         {values.map((v) => {
           const Icon = v.icon;
           return (
-            <div key={v.title} className="shimmer-card bg-card border border-border rounded-2xl p-6 cursor-default">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="shimmer-icon-container w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center transition-all duration-300">
-                  <Icon className="w-5 h-5 metallic-gold-icon shimmer-icon" />
-                </div>
-                <h3 className="text-sm font-bold text-foreground">{v.title}</h3>
+            <div key={v.title} className="shimmer-card bg-card border border-border rounded-2xl p-6 cursor-default flex flex-col items-center text-center w-full md:w-[calc(50%-10px)]">
+              <div className="shimmer-icon-container w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center transition-all duration-300 mb-3">
+                <Icon className="w-5 h-5 metallic-gold-icon shimmer-icon" />
               </div>
+              <h3 className="text-sm font-bold text-foreground mb-2">{v.title}</h3>
               <p className="text-xs text-muted-foreground leading-relaxed">{v.desc}</p>
             </div>
           );
@@ -68,12 +66,10 @@ export default function About() {
         </h2>
         <div className="space-y-4">
           {milestones.map((m) => (
-            <div key={m.year} className="shimmer-card flex items-start gap-4 cursor-default p-2 rounded-xl">
-              <div className="w-16 flex-shrink-0 text-right">
-                <span className="text-sm font-bold metallic-gold shimmer-icon">{m.year}</span>
-              </div>
-              <div className="w-px bg-primary/30 flex-shrink-0 self-stretch" />
-              <p className="text-sm text-muted-foreground leading-relaxed pb-2">{m.event}</p>
+            <div key={m.year} className="shimmer-card flex flex-col items-center text-center cursor-default p-4 rounded-xl">
+              <span className="text-sm font-bold metallic-gold shimmer-icon mb-1">{m.year}</span>
+              <div className="w-8 h-px bg-primary/30 mb-2" />
+              <p className="text-sm text-muted-foreground leading-relaxed">{m.event}</p>
             </div>
           ))}
         </div>

@@ -53,9 +53,9 @@ export default function Landing() {
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold leading-none max-w-4xl" style={{ fontFamily: "'Montserrat', sans-serif" }}>
           <span className="xps-gold-slow-shimmer">XPS INTELLIGENCE</span>
         </h1>
-        <div className="text-sm md:text-lg tracking-[0.35em] font-semibold metallic-silver mt-2">CONTRACTOR ASSIST</div>
+        <div className="text-sm md:text-lg tracking-[0.35em] font-semibold text-white/90 mt-2">CONTRACTOR ASSIST</div>
 
-        <p className="mt-6 text-sm md:text-base text-muted-foreground max-w-2xl leading-relaxed">
+        <p className="mt-6 text-sm md:text-base text-foreground/70 max-w-2xl leading-relaxed">
           XPS Intelligence — Contractor Assist empowers 60+ locations and 200+ sales
           professionals with AI-driven CRM, lead intelligence, proposal automation,
           and competitive insights — built for the polishing industry.

@@ -318,14 +318,19 @@
   background: linear-gradient(
     90deg,
     #d4af37 0%,
-    #d4af37 30%,
-    #f5e6a3 45%,
-    #fffbe6 50%,
-    #f5e6a3 55%,
-    #d4af37 70%,
+    #d4af37 10%,
+    #f5e6a3 18%,
+    #fffbe6 22%,
+    #f5e6a3 26%,
+    #d4af37 34%,
+    #d4af37 48%,
+    #f5e6a3 56%,
+    #fffbe6 60%,
+    #f5e6a3 64%,
+    #d4af37 72%,
     #d4af37 100%
   );
-  background-size: 300% 100%;
+  background-size: 400% 100%;
   animation: gold-slow-ltr 12s linear infinite;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -361,14 +366,19 @@
   background: linear-gradient(
     90deg,
     #9a7b2f 0%,
-    #9a7b2f 30%,
-    #d4af37 45%,
-    #f0d060 50%,
-    #d4af37 55%,
-    #9a7b2f 70%,
+    #9a7b2f 10%,
+    #d4af37 18%,
+    #f0d060 22%,
+    #d4af37 26%,
+    #9a7b2f 34%,
+    #9a7b2f 48%,
+    #d4af37 56%,
+    #f0d060 60%,
+    #d4af37 64%,
+    #9a7b2f 72%,
     #9a7b2f 100%
   );
-  background-size: 300% 100%;
+  background-size: 400% 100%;
   animation: gold-slow-ltr 12s linear infinite;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;

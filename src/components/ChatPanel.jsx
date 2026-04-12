@@ -215,7 +215,7 @@ export default function ChatPanel({ mobile = false }) {
         <div className="flex items-center gap-2">
           <img src="https://media.base44.com/images/public/69db3269c791af3f48cfaee9/583965fcb_IMAGEWITHWHITEOUTLINE.jpg" alt="XPS" className={`${mobile ? 'w-5 h-5' : 'w-7 h-7'} object-contain`} />
           <div>
-            <div className={`${mobile ? 'text-[10px]' : 'text-xs'} font-semibold text-foreground`}>XPS Contractor Assist</div>
+            <div className={`${mobile ? 'text-[10px]' : 'text-xs'} font-semibold text-foreground`}>XPS Intelligence</div>
             <div className="text-[9px] text-xps-green flex items-center gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-xps-green inline-block" />
               {mobile ? 'Active' : 'Autonomous · Web · CRM · Code'}

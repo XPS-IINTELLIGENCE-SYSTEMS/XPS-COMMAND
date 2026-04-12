@@ -51,15 +51,15 @@ export default function Landing() {
         </div>
 
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight max-w-4xl">
-          <span className="text-foreground">The Contractor Assist for</span>
+          <span className="text-foreground">The Command Center for</span>
           <br />
-          <span className="metallic-gold">Xtreme Sales</span>
+          <span className="metallic-gold">XPS Intelligence</span>
         </h1>
 
         <p className="mt-6 text-sm md:text-base text-muted-foreground max-w-2xl leading-relaxed">
-          Empowering 60+ locations and 200+ sales professionals with AI-driven
-          CRM, lead intelligence, proposal automation, and competitive insights —
-          built for the polishing industry.
+          XPS Intelligence — Contractor Assist empowers 60+ locations and 200+ sales
+          professionals with AI-driven CRM, lead intelligence, proposal automation,
+          and competitive insights — built for the polishing industry.
         </p>
 
         <div className="flex items-center gap-4 mt-10">

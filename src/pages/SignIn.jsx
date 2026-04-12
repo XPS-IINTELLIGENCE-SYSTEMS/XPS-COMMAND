@@ -32,9 +32,9 @@ export default function SignIn() {
           alt="XPS"
           className="w-20 h-20 object-contain mb-6"
         />
-        <h2 className="text-2xl font-bold metallic-gold tracking-wider text-center">XPS Intelligence</h2>
+        <h2 className="text-3xl font-bold metallic-gold tracking-wider text-center">XPS INTELLIGENCE</h2>
         <p className="text-sm text-muted-foreground mt-2 text-center max-w-xs">
-          AI-Powered Contractor Assist for Xtreme Polishing Systems
+          Contractor Assist — AI-Powered Sales Command Center
         </p>
         <div className="grid grid-cols-2 gap-3 mt-10 w-full max-w-xs">
           {stats.map((s) => (
@@ -50,7 +50,7 @@ export default function SignIn() {
       <div className="flex-1 flex items-center justify-center px-6 md:px-16">
         <div className="w-full max-w-sm">
           <h1 className="text-2xl font-bold text-foreground">Welcome back</h1>
-          <p className="text-sm text-muted-foreground mt-1">Sign in to your XPS Contractor Assist account</p>
+          <p className="text-sm text-muted-foreground mt-1">Sign in to your XPS Intelligence account</p>
 
           <form onSubmit={handleSignIn} className="mt-8 space-y-5">
             <div>

@@ -280,8 +280,8 @@ export default function Onboarding() {
             className="w-10 h-10 object-contain"
           />
           <div>
-            <div className="text-sm font-bold metallic-gold tracking-wider">XPS INTELLIGENCE</div>
-            <div className="text-[10px] font-semibold metallic-silver tracking-widest">CONTRACTOR ASSIST</div>
+            <div className="text-base font-bold metallic-gold tracking-wider">XPS INTELLIGENCE</div>
+            <div className="text-[9px] text-muted-foreground tracking-widest">CONTRACTOR ASSIST</div>
           </div>
         </div>
 

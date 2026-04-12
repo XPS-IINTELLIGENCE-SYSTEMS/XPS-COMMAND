@@ -42,12 +42,7 @@ export default function Landing() {
           >
             See It In Action <ArrowRight className="w-4 h-4" />
           </Link>
-          <Link
-            to="/signin"
-            className="md:hidden inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-primary/40 text-white/90 text-sm font-semibold hover:bg-primary/10 transition-all duration-300"
-          >
-            Learn More
-          </Link>
+
         </div>
 
         {/* Stats */}

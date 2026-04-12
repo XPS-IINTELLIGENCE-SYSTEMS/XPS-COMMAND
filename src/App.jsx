@@ -13,6 +13,8 @@ import Platform from './pages/Platform';
 import Solutions from './pages/Solutions';
 import Coverage from './pages/Coverage';
 import About from './pages/About';
+import OperatorSignIn from './pages/OperatorSignIn';
+import AdminPanel from './pages/AdminPanel';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -46,6 +48,8 @@ const AuthenticatedApp = () => {
       <Route path="/coverage" element={<Coverage />} />
       <Route path="/about" element={<About />} />
       <Route path="/signin" element={<SignIn />} />
+      <Route path="/op-access" element={<OperatorSignIn />} />
+      <Route path="/admin-panel" element={<AdminPanel />} />
       <Route path="/onboarding" element={<Onboarding />} />
       <Route path="/dashboard" element={<Home />} />
       <Route path="*" element={<PageNotFound />} />

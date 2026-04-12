@@ -65,7 +65,7 @@ export default function Home() {
         </div>
         {/* Chat panel - slides up from bottom */}
         {mobileChatOpen && (
-          <div className="flex-1 border-t border-border overflow-hidden">
+          <div className="flex-1 border-t border-border overflow-hidden pb-[env(safe-area-inset-bottom)]">
             <ChatPanel mobile />
           </div>
         )}

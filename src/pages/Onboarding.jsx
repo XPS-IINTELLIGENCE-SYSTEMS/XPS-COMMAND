@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, ArrowLeft, Check, User, Briefcase, Cpu, Bot, Building2 } from "lucide-react";
+import { ArrowRight, ArrowLeft, Check, User, Briefcase, Cpu, Bot, Building2, Zap, ShieldCheck, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { base44 } from "@/api/base44Client";
@@ -27,9 +27,9 @@ const aiTools = [
 ];
 
 const aiModes = [
-  { id: "Fully Autonomous", label: "Fully Autonomous", desc: "AI takes action on its own — sends emails, creates proposals, follows up automatically.", icon: "🤖" },
-  { id: "Semi-Autonomous", label: "Semi-Autonomous", desc: "AI drafts and suggests, you approve before anything is sent or created.", icon: "🤝" },
-  { id: "Basic Chat", label: "Basic Chat", desc: "AI only responds when you ask — no proactive actions.", icon: "💬" },
+  { id: "Fully Autonomous", label: "Fully Autonomous", desc: "AI takes action on its own — sends emails, creates proposals, follows up automatically.", Icon: Zap },
+  { id: "Semi-Autonomous", label: "Semi-Autonomous", desc: "AI drafts and suggests, you approve before anything is sent or created.", Icon: ShieldCheck },
+  { id: "Basic Chat", label: "Basic Chat", desc: "AI only responds when you ask — no proactive actions.", Icon: MessageCircle },
 ];
 
 const industryOptions = [
@@ -197,27 +197,36 @@ export default function Onboarding() {
         </div>
       </div>
       <div className="space-y-3">
-        {aiModes.map((mode) => (
-          <button
-            key={mode.id}
-            onClick={() => setAiMode(mode.id)}
-            className={`w-full p-4 rounded-xl border text-left transition-all ${
-              aiMode === mode.id
-                ? "border-primary bg-primary/10"
-                : "border-border bg-card hover:border-primary/30"
-            }`}
-          >
-            <div className="flex items-center gap-3">
-              <span className="text-2xl">{mode.icon}</span>
-              <div>
-                <div className={`text-sm font-semibold ${aiMode === mode.id ? "text-primary" : "text-foreground"}`}>
-                  {mode.label}
+        {aiModes.map((mode) => {
+          const ModeIcon = mode.Icon;
+          return (
+            <button
+              key={mode.id}
+              onClick={() => setAiMode(mode.id)}
+              className={`shimmer-card w-full p-4 rounded-xl border text-left transition-all ${
+                aiMode === mode.id
+                  ? "border-primary bg-primary/10"
+                  : "border-border bg-card hover:border-primary/30"
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <div className={`shimmer-icon-container w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${
+                  aiMode === mode.id ? "bg-primary/15" : "bg-secondary"
+                }`}>
+                  <ModeIcon className={`w-5 h-5 shimmer-icon ${
+                    aiMode === mode.id ? "metallic-gold-icon" : "metallic-silver-icon"
+                  }`} />
                 </div>
-                <p className="text-[11px] text-muted-foreground mt-0.5">{mode.desc}</p>
+                <div>
+                  <div className={`text-sm font-semibold ${aiMode === mode.id ? "text-primary" : "text-foreground"}`}>
+                    {mode.label}
+                  </div>
+                  <p className="text-[11px] text-muted-foreground mt-0.5">{mode.desc}</p>
+                </div>
               </div>
-            </div>
-          </button>
-        ))}
+            </button>
+          );
+        })}
       </div>
     </div>,
 

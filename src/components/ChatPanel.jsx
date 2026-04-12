@@ -122,24 +122,25 @@ export default function ChatPanel({ mobile = false }) {
     initConversation();
   }, []);
 
+  // Auto-scroll: jump on new messages
   useEffect(() => {
     if (scrollRef.current) {
-      requestAnimationFrame(() => {
-        scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-      });
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [messages]);
+  }, [messages.length]);
 
-  // Also scroll when messages content changes (streaming tokens)
+  // Auto-scroll: poll while assistant is streaming
   useEffect(() => {
     if (!scrollRef.current || messages.length === 0) return;
     const lastMsg = messages[messages.length - 1];
-    if (lastMsg?.role === 'assistant') {
-      requestAnimationFrame(() => {
-        scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-      });
-    }
-  }, [messages.length > 0 && messages[messages.length - 1]?.content]);
+    if (lastMsg?.role !== 'assistant') return;
+    const el = scrollRef.current;
+    el.scrollTop = el.scrollHeight;
+    const interval = setInterval(() => {
+      el.scrollTop = el.scrollHeight;
+    }, 120);
+    return () => clearInterval(interval);
+  }, [messages]);
 
   const initConversation = async () => {
     try {

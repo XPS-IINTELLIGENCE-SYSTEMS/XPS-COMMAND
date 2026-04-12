@@ -26,7 +26,7 @@ export default function Home() {
   };
 
   return (
-    <div className="h-[100dvh] w-screen overflow-hidden animated-silver-border">
+    <div className="h-[100dvh] w-screen overflow-hidden" style={{ border: '1.5px solid #a0a0a0', animation: 'silver-border-anim 4s ease infinite' }}>
       <div className="h-full w-full flex flex-col md:flex-row overflow-hidden bg-background">
       {/* ========== MOBILE LAYOUT ========== */}
       {/* Mobile Header - iPhone safe area aware */}

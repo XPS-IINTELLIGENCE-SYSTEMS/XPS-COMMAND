@@ -1,4 +1,4 @@
-import { Search, Bell, Sun, Moon } from "lucide-react";
+import { Search, Bell, Sun, Moon, Sparkles } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
 const viewTitles = {
@@ -17,20 +17,23 @@ const viewTitles = {
 export default function TopBar({ activeView, children, theme, onThemeToggle }) {
   const toggleButtons = children ? (Array.isArray(children) ? children : [children]) : [];
   return (
-    <div className="h-12 min-h-[48px] border-b border-border flex items-center justify-between px-4 bg-card/50">
+    <div className="h-14 min-h-[56px] border-b border-border flex items-center justify-between px-5 bg-card/50 backdrop-blur-sm">
       <div className="flex items-center gap-3">
         {toggleButtons[0]}
-        <div className="text-sm font-medium text-foreground">
-          {viewTitles[activeView] || "Dashboard"}
+        <div className="flex items-center gap-2">
+          <Sparkles className="w-3.5 h-3.5 metallic-gold-icon" />
+          <div className="text-sm font-bold xps-gold-slow-shimmer" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+            {viewTitles[activeView] || "Dashboard"}
+          </div>
         </div>
       </div>
 
       <div className="flex-1 max-w-md mx-6">
         <div className="relative">
-          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 metallic-silver-icon" />
           <Input
             placeholder="Search leads, companies, proposals..."
-            className="pl-8 h-8 text-xs bg-secondary/50 border-border focus:border-primary/50"
+            className="pl-9 h-9 text-xs bg-secondary/30 border-border/50 rounded-xl focus:border-primary/50 chat-input-metallic"
           />
         </div>
       </div>
@@ -46,7 +49,7 @@ export default function TopBar({ activeView, children, theme, onThemeToggle }) {
           <Bell className="w-4 h-4 shimmer-icon metallic-silver-icon" />
           <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-primary rounded-full" />
         </button>
-        <div className="w-8 h-8 rounded-xl bg-primary/15 flex items-center justify-center text-[11px] font-bold text-primary">
+        <div className="shimmer-card w-9 h-9 rounded-xl metallic-gold-bg flex items-center justify-center text-[11px] font-bold text-background cursor-pointer">
           JR
         </div>
         {toggleButtons[1]}

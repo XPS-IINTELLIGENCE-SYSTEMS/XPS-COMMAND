@@ -17,12 +17,12 @@ const navItems = [
 export default function MobileNav({ activeView, onViewChange }) {
   return (
     <div className="h-full bg-background overflow-y-auto p-5 safe-top">
-      <div className="mb-5">
+      <div className="mb-6">
         <div className="flex items-center gap-3 mb-1">
-          <img src="https://media.base44.com/images/public/69db3269c791af3f48cfaee9/583965fcb_IMAGEWITHWHITEOUTLINE.jpg" alt="XPS" className="w-9 h-9 object-contain" />
+          <img src="https://media.base44.com/images/public/69db3269c791af3f48cfaee9/583965fcb_IMAGEWITHWHITEOUTLINE.jpg" alt="XPS" className="w-10 h-10 object-contain" />
           <div>
-            <div className="text-base font-bold metallic-gold tracking-wider">XPS INTELLIGENCE</div>
-            <div className="text-[11px] text-muted-foreground">Command Center</div>
+            <div className="text-base font-extrabold xps-gold-slow-shimmer tracking-wider" style={{ fontFamily: "'Montserrat', sans-serif" }}>XPS INTELLIGENCE</div>
+            <div className="text-[10px] font-semibold metallic-silver tracking-widest">CONTRACTOR ASSIST</div>
           </div>
         </div>
       </div>
@@ -35,22 +35,22 @@ export default function MobileNav({ activeView, onViewChange }) {
               key={item.id}
               onClick={() => onViewChange(item.id)}
               className={cn(
-                "w-full flex items-center gap-4 p-4 rounded-2xl border transition-all active:scale-[0.98]",
+                "shimmer-card w-full flex items-center gap-4 p-4 rounded-2xl border transition-all active:scale-[0.98]",
                 isActive
                   ? "bg-primary/10 border-primary/25"
                   : "bg-card border-border active:bg-secondary"
               )}
             >
               <div className={cn(
-                "w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0",
+                "shimmer-icon-container w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300",
                 isActive ? "bg-primary/15" : "bg-secondary"
               )}>
-                <Icon className={cn("w-5 h-5", isActive ? "text-primary" : "text-muted-foreground")} />
+                <Icon className={cn("w-5 h-5 shimmer-icon", isActive ? "metallic-gold-icon" : "metallic-silver-icon")} />
               </div>
               <div className="text-left">
                 <div className={cn(
                   "text-sm font-semibold",
-                  isActive ? "text-primary" : "text-foreground"
+                  isActive ? "xps-gold-slow-shimmer" : "text-foreground"
                 )}>
                   {item.label}
                 </div>

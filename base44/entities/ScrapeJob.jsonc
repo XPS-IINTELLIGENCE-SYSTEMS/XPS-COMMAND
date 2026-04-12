@@ -1,0 +1,106 @@
+{
+  "name": "ScrapeJob",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Job name"
+    },
+    "keywords": {
+      "type": "string",
+      "description": "Comma-separated keywords to scrape"
+    },
+    "urls": {
+      "type": "string",
+      "description": "Comma-separated target URLs"
+    },
+    "industry": {
+      "type": "string",
+      "description": "Target industry"
+    },
+    "location": {
+      "type": "string",
+      "description": "Target location"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Company Research",
+        "Competitor Intel",
+        "Market Analysis",
+        "Lead Research",
+        "Industry News",
+        "Pricing Intel",
+        "Technology",
+        "Custom"
+      ],
+      "default": "Company Research"
+    },
+    "destination": {
+      "type": "string",
+      "enum": [
+        "Pre-Stage",
+        "Stage",
+        "HubSpot Ready",
+        "Google Drive",
+        "Supabase",
+        "Airtable",
+        "Knowledge Base",
+        "Local"
+      ],
+      "default": "Local"
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "Single",
+        "Bulk"
+      ],
+      "default": "Single"
+    },
+    "schedule": {
+      "type": "string",
+      "enum": [
+        "Manual",
+        "Every 15 min",
+        "Every 30 min",
+        "Hourly",
+        "Every 6 hours",
+        "Daily",
+        "Weekly"
+      ],
+      "default": "Manual"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "last_run": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "run_count": {
+      "type": "number",
+      "default": 0
+    },
+    "results_count": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Idle",
+        "Running",
+        "Completed",
+        "Failed",
+        "Scheduled"
+      ],
+      "default": "Idle"
+    }
+  },
+  "required": [
+    "name",
+    "status"
+  ]
+}

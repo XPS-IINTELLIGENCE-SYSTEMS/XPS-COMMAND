@@ -47,7 +47,7 @@ export default function TopBar({ activeView, children, theme, onThemeToggle }) {
           <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-primary rounded-full" />
         </button>
         <div className="w-8 h-8 rounded-xl bg-primary/15 flex items-center justify-center text-[11px] font-bold text-primary">
-          MR
+          JR
         </div>
         {toggleButtons[1]}
       </div>

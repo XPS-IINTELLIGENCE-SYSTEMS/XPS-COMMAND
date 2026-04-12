@@ -1,23 +1,18 @@
 import { Phone, Mail, Sparkles, ArrowUpRight, ChevronRight, Clock, TrendingUp } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
-const hotLeads = [
-  { company: "Ace Hardware Distribution", contact: "Robert Chen", score: 92, value: "$45,000", reason: "Viewed pricing page 3x this week", sqft: "12,000 sq ft warehouse" },
-  { company: "Tampa Bay Brewing Co.", contact: "Sarah Mills", score: 87, value: "$28,000", reason: "Requested quote via website form", sqft: "4,500 sq ft taproom" },
-  { company: "Gulf Coast Logistics", contact: "Diana Patel", score: 84, value: "$120,000", reason: "AI detected expansion permit filed", sqft: "45,000 sq ft facility" },
-  { company: "Sunshine Auto Group", contact: "Mike Torres", score: 79, value: "$62,000", reason: "Competitor contract expiring Q2", sqft: "8,000 sq ft showroom" },
-];
+const hotLeads = [];
 
 const revenueData = [
-  { month: "Oct", value: 380000 }, { month: "Nov", value: 420000 }, { month: "Dec", value: 450000 },
-  { month: "Jan", value: 470000 }, { month: "Feb", value: 520000 }, { month: "Mar", value: 580000 },
+  { month: "Oct", value: 0 }, { month: "Nov", value: 0 }, { month: "Dec", value: 0 },
+  { month: "Jan", value: 0 }, { month: "Feb", value: 0 }, { month: "Mar", value: 0 },
 ];
 
 const stats = [
-  { label: "Pipeline", value: "$4.2M", sub: "+8.7% this month" },
-  { label: "Hot Leads", value: "47", sub: "Ready to contact" },
-  { label: "Close Rate", value: "34%", sub: "+2% vs last quarter" },
-  { label: "Avg Deal", value: "$58K", sub: "Up from $42K" },
+  { label: "Pipeline", value: "$0", sub: "No data yet" },
+  { label: "Hot Leads", value: "0", sub: "Add leads to get started" },
+  { label: "Close Rate", value: "0%", sub: "No deals yet" },
+  { label: "Avg Deal", value: "$0", sub: "No deals yet" },
 ];
 
 export default function DashboardView() {
@@ -25,8 +20,8 @@ export default function DashboardView() {
     <div className="p-3 md:p-6 space-y-4 md:space-y-5 overflow-y-auto h-full">
       {/* Greeting */}
       <div>
-        <h1 className="text-xl md:text-2xl font-bold text-foreground">Good morning, Marcus</h1>
-        <p className="text-sm text-muted-foreground mt-0.5">You have <span className="text-primary font-semibold">4 hot leads</span> ready for action today.</p>
+        <h1 className="text-xl md:text-2xl font-bold text-foreground">Welcome, Jeremy</h1>
+        <p className="text-sm text-muted-foreground mt-0.5">Your dashboard is ready — let's add some real data.</p>
       </div>
 
       {/* Stats row */}
@@ -126,8 +121,8 @@ export default function DashboardView() {
           <Clock className="w-5 h-5 text-muted-foreground" />
         </div>
         <div className="flex-1 min-w-0">
-          <div className="text-sm font-medium text-foreground">3 follow-ups scheduled today</div>
-          <div className="text-[11px] text-muted-foreground">Next: Ace Hardware at 2:00 PM</div>
+          <div className="text-sm font-medium text-foreground">No follow-ups scheduled</div>
+          <div className="text-[11px] text-muted-foreground">Schedule calls to see them here</div>
         </div>
         <ChevronRight className="w-4 h-4 text-muted-foreground flex-shrink-0" />
       </div>

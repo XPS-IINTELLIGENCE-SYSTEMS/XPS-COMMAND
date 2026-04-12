@@ -24,13 +24,13 @@ export default function CRMView() {
         <p className="text-xs text-muted-foreground mt-0.5">Customer relationship management and pipeline overview</p>
       </div>
 
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (
             <div key={stat.label} className="bg-card rounded-lg border border-border p-4 hover:border-primary/20 transition-colors">
               <Icon className="w-5 h-5 text-primary/70 mb-3" />
-              <div className="text-2xl font-bold text-foreground">{stat.value}</div>
+              <div className="text-lg md:text-2xl font-bold text-foreground truncate">{stat.value}</div>
               <div className="text-[10px] text-muted-foreground mt-0.5">{stat.label}</div>
             </div>
           );
@@ -39,11 +39,11 @@ export default function CRMView() {
 
       <div className="bg-card rounded-lg border border-border p-4">
         <h3 className="text-sm font-semibold text-foreground mb-4">Pipeline Stages</h3>
-        <div className="grid grid-cols-6 gap-3">
+        <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
           {stages.map((stage) => (
             <div key={stage.name} className={`bg-secondary/50 rounded-lg p-3 text-center border-t-2 ${stage.color}`}>
               <div className="text-[10px] text-muted-foreground mb-1">{stage.name}</div>
-              <div className="text-xl font-bold text-foreground">{stage.count}</div>
+              <div className="text-base md:text-xl font-bold text-foreground">{stage.count}</div>
               <div className="text-[10px] text-primary mt-1">{stage.value}</div>
             </div>
           ))}

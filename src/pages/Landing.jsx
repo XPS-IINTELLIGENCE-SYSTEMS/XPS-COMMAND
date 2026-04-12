@@ -56,7 +56,7 @@ export default function Landing() {
         <div className="text-sm md:text-lg tracking-[0.35em] font-semibold text-white/90 mt-2">CONTRACTOR ASSIST</div>
 
         <p className="mt-6 text-sm md:text-base text-foreground max-w-2xl leading-relaxed">
-          XPS Intelligence — Contractor Assist empowers 60+ locations and 200+ sales
+          XPS Intelligence — Contractor Assist empowers 60+ locations and 200+ xtreme
           professionals with AI-driven CRM, lead intelligence, proposal automation,
           and competitive insights — built for the polishing industry.
         </p>

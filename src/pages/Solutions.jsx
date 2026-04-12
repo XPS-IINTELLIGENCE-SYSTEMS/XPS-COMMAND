@@ -49,31 +49,31 @@ export default function Solutions() {
       <div className="relative z-[1]">
       <LandingNav />
 
-      <div className="flex flex-col items-center text-center px-6 pt-14 md:pt-24 pb-8">
-        <h1 className="text-4xl md:text-6xl font-extrabold leading-none max-w-4xl transition-all duration-500 hover:scale-105" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+      <div className="flex flex-col items-center text-center px-6 pt-16 md:pt-28 pb-12">
+        <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold leading-none max-w-5xl transition-all duration-500 hover:scale-105" style={{ fontFamily: "'Montserrat', sans-serif" }}>
           <span className="xps-gold-slow-shimmer">AI SOLUTIONS</span>
           <br />
-          <span className="text-foreground">THAT CLOSE DEALS</span>
+          <span className="text-white">THAT CLOSE DEALS</span>
         </h1>
-        <p className="mt-6 text-sm md:text-base text-foreground max-w-2xl leading-relaxed transition-all duration-500 hover:scale-[1.02]">
+        <p className="mt-8 text-base md:text-lg text-white/90 max-w-3xl leading-relaxed transition-all duration-500 hover:scale-[1.02]">
           From first contact to signed contract — every tool your XPS sales team needs, powered by AI that understands epoxy coatings, polished concrete, and the contractor business.
         </p>
       </div>
 
-      <div className="max-w-5xl mx-auto px-6 pb-20 flex flex-wrap justify-center gap-5">
+      <div className="max-w-6xl mx-auto px-6 md:px-10 pb-24 flex flex-wrap justify-center gap-6 md:gap-8">
         {solutions.map((s) => {
           const Icon = s.icon;
           return (
-            <div key={s.title} className="shimmer-card flex flex-col items-center text-center bg-card border border-border rounded-2xl p-6 md:p-8 cursor-default">
-              <div className="shimmer-icon-container w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center transition-all duration-300 mb-4">
-                <Icon className="w-6 h-6 metallic-gold-icon shimmer-icon" />
+            <div key={s.title} className="shimmer-card flex flex-col items-center text-center bg-card border border-border rounded-2xl p-8 md:p-10 cursor-default w-full">
+              <div className="shimmer-icon-container w-14 h-14 md:w-16 md:h-16 rounded-xl bg-primary/10 flex items-center justify-center transition-all duration-300 mb-5">
+                <Icon className="w-7 h-7 md:w-8 md:h-8 metallic-gold-icon shimmer-icon" />
               </div>
               <div className="flex flex-col items-center">
-                <div className="flex items-center gap-3 mb-2">
-                  <h3 className="text-base font-bold text-foreground">{s.title}</h3>
-                  <span className="text-[10px] font-semibold metallic-gold px-2 py-0.5 rounded-full border border-primary/30 bg-primary/5">{s.stats}</span>
+                <div className="flex items-center gap-3 mb-3">
+                  <h3 className="text-lg md:text-xl font-bold text-white">{s.title}</h3>
+                  <span className="text-xs font-semibold metallic-gold px-3 py-1 rounded-full border border-primary/30 bg-primary/5">{s.stats}</span>
                 </div>
-                <p className="text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
+                <p className="text-sm md:text-base text-white/70 leading-relaxed max-w-2xl">{s.desc}</p>
               </div>
             </div>
           );
@@ -81,8 +81,8 @@ export default function Solutions() {
       </div>
 
       <div className="flex justify-center pb-20">
-        <Link to="/signin" className="inline-flex items-center gap-2 px-6 py-3 rounded-lg metallic-gold-bg text-background font-semibold hover:brightness-110 transition-all duration-300 hover:scale-110">
-          See It In Action <ArrowRight className="w-4 h-4" />
+        <Link to="/signin" className="inline-flex items-center gap-3 px-8 py-4 rounded-xl metallic-gold-bg text-background text-lg font-bold hover:brightness-110 transition-all duration-300 hover:scale-110">
+          See It In Action <ArrowRight className="w-5 h-5" />
         </Link>
       </div>
       </div>

@@ -32,52 +32,52 @@ export default function About() {
       <div className="relative z-[1]">
       <LandingNav />
 
-      <div className="flex flex-col items-center text-center px-6 pt-14 md:pt-24 pb-8">
-        <h1 className="text-4xl md:text-6xl font-extrabold leading-none max-w-4xl transition-all duration-500 hover:scale-105" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+      <div className="flex flex-col items-center text-center px-6 pt-16 md:pt-28 pb-12">
+        <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold leading-none max-w-5xl transition-all duration-500 hover:scale-105" style={{ fontFamily: "'Montserrat', sans-serif" }}>
           <span className="xps-gold-slow-shimmer">THE XTREME</span>
           <br />
-          <span className="text-foreground">STORY</span>
+          <span className="text-white">STORY</span>
         </h1>
-        <p className="mt-6 text-sm md:text-base text-foreground max-w-2xl leading-relaxed transition-all duration-500 hover:scale-[1.02]">
+        <p className="mt-8 text-base md:text-lg text-white/90 max-w-3xl leading-relaxed transition-all duration-500 hover:scale-[1.02]">
           From a single crew in Pompano Beach to 60+ locations nationwide — XPS Xpress is redefining what's possible in the polished concrete and epoxy flooring industry through technology, training, and relentless execution.
         </p>
       </div>
 
       {/* Values */}
-      <div className="max-w-5xl mx-auto px-6 pb-12 flex flex-wrap justify-center gap-5">
+      <div className="max-w-6xl mx-auto px-6 md:px-10 pb-16 flex flex-wrap justify-center gap-6 md:gap-8">
         {values.map((v) => {
           const Icon = v.icon;
           return (
-            <div key={v.title} className="shimmer-card bg-card border border-border rounded-2xl p-6 cursor-default flex flex-col items-center text-center w-full md:w-[calc(50%-10px)]">
-              <div className="shimmer-icon-container w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center transition-all duration-300 mb-3">
-                <Icon className="w-5 h-5 metallic-gold-icon shimmer-icon" />
+            <div key={v.title} className="shimmer-card bg-card border border-border rounded-2xl p-8 md:p-10 cursor-default flex flex-col items-center text-center w-full md:w-[calc(50%-16px)]">
+              <div className="shimmer-icon-container w-14 h-14 md:w-16 md:h-16 rounded-xl bg-primary/10 flex items-center justify-center transition-all duration-300 mb-5">
+                <Icon className="w-7 h-7 md:w-8 md:h-8 metallic-gold-icon shimmer-icon" />
               </div>
-              <h3 className="text-sm font-bold text-foreground mb-2">{v.title}</h3>
-              <p className="text-xs text-muted-foreground leading-relaxed">{v.desc}</p>
+              <h3 className="text-base md:text-lg font-bold text-white mb-3">{v.title}</h3>
+              <p className="text-sm text-white/70 leading-relaxed">{v.desc}</p>
             </div>
           );
         })}
       </div>
 
       {/* Timeline */}
-      <div className="max-w-3xl mx-auto px-6 pb-20">
-        <h2 className="text-center text-lg font-bold text-foreground mb-8 transition-all duration-500 hover:scale-105">
+      <div className="max-w-4xl mx-auto px-6 md:px-10 pb-24">
+        <h2 className="text-center text-2xl md:text-3xl font-bold text-white mb-10 transition-all duration-500 hover:scale-105">
           <span className="metallic-gold">Our Journey</span>
         </h2>
         <div className="space-y-4">
           {milestones.map((m) => (
-            <div key={m.year} className="shimmer-card flex flex-col items-center text-center cursor-default p-4 rounded-xl">
-              <span className="text-sm font-bold metallic-gold shimmer-icon mb-1">{m.year}</span>
-              <div className="w-8 h-px bg-primary/30 mb-2" />
-              <p className="text-sm text-muted-foreground leading-relaxed">{m.event}</p>
+            <div key={m.year} className="shimmer-card flex flex-col items-center text-center cursor-default p-5 md:p-6 rounded-xl">
+              <span className="text-base md:text-lg font-bold metallic-gold shimmer-icon mb-2">{m.year}</span>
+              <div className="w-12 h-px bg-primary/30 mb-3" />
+              <p className="text-sm md:text-base text-white/70 leading-relaxed">{m.event}</p>
             </div>
           ))}
         </div>
       </div>
 
       <div className="flex justify-center pb-20">
-        <Link to="/signin" className="inline-flex items-center gap-2 px-6 py-3 rounded-lg metallic-gold-bg text-background font-semibold hover:brightness-110 transition-all duration-300 hover:scale-110">
-          Join The Team <ArrowRight className="w-4 h-4" />
+        <Link to="/signin" className="inline-flex items-center gap-3 px-8 py-4 rounded-xl metallic-gold-bg text-background text-lg font-bold hover:brightness-110 transition-all duration-300 hover:scale-110">
+          Join The Team <ArrowRight className="w-5 h-5" />
         </Link>
       </div>
       </div>

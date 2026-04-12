@@ -27,7 +27,7 @@ export default function Home() {
 
   return (
     <div className="h-[100dvh] w-screen overflow-hidden" style={{ border: '1.5px solid #a0a0a0', animation: 'silver-border-anim 4s ease infinite' }}>
-      <div className="hex-bg h-full w-full flex flex-col md:flex-row overflow-hidden bg-background">
+      <div className="h-full w-full flex flex-col md:flex-row overflow-hidden bg-background">
       {/* ========== MOBILE LAYOUT ========== */}
       {/* Mobile Header - iPhone safe area aware */}
       <div className="flex md:hidden items-center justify-between h-12 min-h-[48px] border-b border-border bg-card/80 backdrop-blur-md px-4 safe-top">
@@ -80,7 +80,7 @@ export default function Home() {
       </div>
 
       {/* Desktop Center */}
-      <div className="hidden md:flex flex-1 flex-col overflow-hidden">
+      <div className="hex-bg hidden md:flex flex-1 flex-col overflow-hidden">
         <TopBar activeView={activeView} theme={theme} onThemeToggle={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
           <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-1.5 rounded-md hover:bg-secondary/50 text-muted-foreground hover:text-foreground transition-colors" title={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}>
             {sidebarOpen ? <PanelLeftClose className="w-4 h-4" /> : <PanelLeftOpen className="w-4 h-4" />}

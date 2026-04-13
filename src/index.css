@@ -724,6 +724,18 @@ svg, button svg, a svg {
   -webkit-user-select: none;
 }
 
+/* Download CTA flash animation */
+@keyframes download-flash {
+  0%, 70% { opacity: 1; text-shadow: 0 0 4px rgba(255,255,255,0.3); }
+  80% { opacity: 0.2; text-shadow: none; }
+  90% { opacity: 1; text-shadow: 0 0 12px rgba(212,175,55,0.6), 0 0 24px rgba(255,255,255,0.3); }
+  100% { opacity: 1; text-shadow: 0 0 4px rgba(255,255,255,0.3); }
+}
+
+.download-flash {
+  animation: download-flash 2s ease-in-out infinite;
+}
+
 .light .metallic-gold-silver-text {
   background: linear-gradient(135deg, #8b6914, #b8860b, #d4af37, #8b6914, #64748b, #b8860b);
   background-size: 300% 300%;

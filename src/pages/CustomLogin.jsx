@@ -31,7 +31,7 @@ export default function CustomLogin() {
 
         <div className="space-y-3">
           <button
-            onClick={() => enter("command", "/dashboard")}
+            onClick={() => enter("command", "/onboarding")}
             className="w-full flex items-center gap-4 px-5 py-4 rounded-xl metallic-gold-bg text-background font-bold text-lg hover:brightness-110 transition-all duration-300"
           >
             <Terminal className="w-6 h-6" />

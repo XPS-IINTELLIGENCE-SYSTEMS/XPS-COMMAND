@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Compass, LayoutDashboard, Search, Megaphone, HardHat, DollarSign, Lightbulb, Settings, Zap, Trophy, Users, BarChart3, Bot, Package, Hammer, Phone, Clock, CalendarClock } from "lucide-react";
+import { Compass, LayoutDashboard, Search, Megaphone, HardHat, DollarSign, Lightbulb, Settings, Zap, Trophy, Users, BarChart3, Bot, Package, Hammer, Phone, Clock, CalendarClock, Shield } from "lucide-react";
 
 const ICON_MAP = {
   start_here: Compass,
@@ -20,6 +20,7 @@ const ICON_MAP = {
   tips: Lightbulb,
   task_scheduler: CalendarClock,
   settings: Settings,
+  admin: Shield,
 };
 
 /**

@@ -22,6 +22,7 @@ const utilityNav = [
   { id: "task_scheduler", label: "Task Scheduler", desc: "Scraper control center" },
   { id: "agents", label: "Agent Command", desc: "All agents & tools" },
   { id: "settings", label: "Settings", desc: "Account & preferences" },
+  { id: "admin", label: "Admin", desc: "Admin operator panel" },
 ];
 
 function SidebarButton({ item, isActive, onClick }) {

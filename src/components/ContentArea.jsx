@@ -13,6 +13,7 @@ import CRMView from "./dashboard/CRMView";
 import LeadPipelineView from "./pipeline/LeadPipelineView";
 import AnalyticsView from "./dashboard/AnalyticsView";
 import AgentCommandPage from "./command/AgentCommandPage";
+import AdminInlineView from "./admin/AdminInlineView";
 
 export default function ContentArea({ activeView, onChatCommand, onNavigate }) {
   const wrapper = (children) => (
@@ -52,6 +53,8 @@ export default function ContentArea({ activeView, onChatCommand, onNavigate }) {
       return wrapper(<TaskSchedulerView />);
     case "settings":
       return wrapper(<SettingsView />);
+    case "admin":
+      return wrapper(<AdminInlineView />);
     default:
       return wrapper(<DashboardView onNavigate={onNavigate} />);
   }

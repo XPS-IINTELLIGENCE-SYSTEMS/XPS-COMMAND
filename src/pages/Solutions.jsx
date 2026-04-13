@@ -69,10 +69,8 @@ export default function Solutions() {
                 <Icon className="w-7 h-7 md:w-8 md:h-8 metallic-gold-icon shimmer-icon" />
               </div>
               <div className="flex flex-col items-center">
-                <div className="flex items-center gap-3 mb-3">
-                  <h3 className="text-lg md:text-xl font-bold text-white">{s.title}</h3>
-                  <span className="text-xs font-semibold metallic-gold px-3 py-1 rounded-full border border-primary/30 bg-primary/5">{s.stats}</span>
-                </div>
+                <h3 className="text-lg md:text-xl font-bold text-white mb-2">{s.title}</h3>
+                <span className="text-sm font-semibold metallic-gold px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 mb-3">{s.stats}</span>
                 <p className="text-sm md:text-base text-white/70 leading-relaxed max-w-2xl">{s.desc}</p>
               </div>
             </div>

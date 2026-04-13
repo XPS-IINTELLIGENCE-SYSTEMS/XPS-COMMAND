@@ -10,7 +10,7 @@ export default function LandingNav() {
         <img
           src="https://media.base44.com/images/public/69db3269c791af3f48cfaee9/583965fcb_IMAGEWITHWHITEOUTLINE.jpg"
           alt="XPS"
-          className="w-7 h-7 md:w-12 md:h-12 object-contain flex-shrink-0"
+          className="w-10 h-10 md:w-12 md:h-12 object-contain flex-shrink-0"
         />
         <div>
           <div className="text-sm md:text-lg font-bold metallic-gold tracking-wider leading-tight">XPS Intelligence</div>

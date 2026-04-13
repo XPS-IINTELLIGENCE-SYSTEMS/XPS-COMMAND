@@ -24,7 +24,7 @@ export default function Landing() {
           <span className="text-base md:text-lg font-semibold xps-silver-subtle-gold">AI-Powered Xtreme Intelligence System</span>
         </div>
 
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold leading-none max-w-5xl transition-all duration-500 hover:scale-105" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+        <h1 className="text-4xl md:text-7xl lg:text-8xl font-extrabold leading-none max-w-5xl px-2 transition-all duration-500 hover:scale-105" style={{ fontFamily: "'Montserrat', sans-serif" }}>
           <span className="xps-gold-slow-shimmer">XPS INTELLIGENCE</span>
         </h1>
         <div className="text-lg md:text-2xl lg:text-3xl tracking-[0.35em] font-bold text-white mt-3 transition-all duration-500 hover:scale-105">CONTRACTOR ASSIST</div>

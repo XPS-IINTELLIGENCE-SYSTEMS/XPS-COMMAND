@@ -2,12 +2,12 @@ import { useState, useEffect, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import { GripVertical, Plus, X, Check } from "lucide-react";
+import { GripVertical, Plus, X, Check, Pencil } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import NavIcon from "./shared/NavIcon";
 
 const DEFAULT_PHASES = [
-  { id: "command", label: "Dashboard", num: null, desc: "Pipeline & metrics" },
+  { id: "command", label: "Command", num: null, desc: "Pipeline & metrics" },
   { id: "crm", label: "CRM", num: null, desc: "Pipeline board" },
   { id: "start_here", label: "Start Here", num: null, desc: "Get set up in minutes" },
   { id: "find_work", label: "Discovery", num: "1", desc: "Signal-based prospecting" },
@@ -38,7 +38,24 @@ function loadNav(key, fallback) {
 }
 function saveNav(key, data) { localStorage.setItem(key, JSON.stringify(data)); }
 
-function SidebarButton({ item, isActive, onClick, dragHandleProps }) {
+function SidebarButton({ item, isActive, onClick, dragHandleProps, onEditLabel, onEditDesc }) {
+  const [editingLabel, setEditingLabel] = useState(false);
+  const [editingDesc, setEditingDesc] = useState(false);
+  const [labelVal, setLabelVal] = useState(item.label);
+  const [descVal, setDescVal] = useState(item.desc || "");
+
+  useEffect(() => { setLabelVal(item.label); }, [item.label]);
+  useEffect(() => { setDescVal(item.desc || ""); }, [item.desc]);
+
+  const saveLabel = () => {
+    if (labelVal.trim() && labelVal.trim() !== item.label) onEditLabel(labelVal.trim());
+    setEditingLabel(false);
+  };
+  const saveDesc = () => {
+    if (descVal.trim() !== (item.desc || "")) onEditDesc(descVal.trim());
+    setEditingDesc(false);
+  };
+
   return (
     <div className={cn(
       "shimmer-card w-full flex items-center gap-1.5 rounded-xl text-[13px] font-medium transition-all duration-200 px-1.5 py-2",
@@ -60,9 +77,39 @@ function SidebarButton({ item, isActive, onClick, dragHandleProps }) {
           )}
         </div>
         <div className="text-left min-w-0 flex-1">
-          <div className="text-[13px] font-semibold truncate">{item.label}</div>
-          {item.desc && (
-            <div className={cn("text-[9px] truncate", isActive ? "text-primary/60" : "text-muted-foreground/50")}>{item.desc}</div>
+          {editingLabel ? (
+            <input
+              autoFocus
+              value={labelVal}
+              onChange={(e) => setLabelVal(e.target.value)}
+              onBlur={saveLabel}
+              onKeyDown={(e) => { if (e.key === 'Enter') saveLabel(); if (e.key === 'Escape') setEditingLabel(false); }}
+              onClick={(e) => e.stopPropagation()}
+              className="text-[13px] font-semibold bg-transparent border-b border-primary/40 outline-none text-foreground w-full"
+            />
+          ) : (
+            <div
+              className="text-[13px] font-semibold truncate cursor-text"
+              onDoubleClick={(e) => { e.stopPropagation(); setEditingLabel(true); }}
+            >{item.label}</div>
+          )}
+          {editingDesc ? (
+            <input
+              autoFocus
+              value={descVal}
+              onChange={(e) => setDescVal(e.target.value)}
+              onBlur={saveDesc}
+              onKeyDown={(e) => { if (e.key === 'Enter') saveDesc(); if (e.key === 'Escape') setEditingDesc(false); }}
+              onClick={(e) => e.stopPropagation()}
+              className={cn("text-[9px] bg-transparent border-b border-primary/40 outline-none w-full", isActive ? "text-primary/60" : "text-muted-foreground/50")}
+            />
+          ) : (
+            item.desc && (
+              <div
+                className={cn("text-[9px] truncate cursor-text", isActive ? "text-primary/60" : "text-muted-foreground/50")}
+                onDoubleClick={(e) => { e.stopPropagation(); setEditingDesc(true); }}
+              >{item.desc}</div>
+            )
           )}
         </div>
       </button>
@@ -91,7 +138,7 @@ function AddItemForm({ onAdd, onCancel }) {
   );
 }
 
-export default function Sidebar({ activeView, onViewChange }) {
+export default function Sidebar({ activeView, onViewChange, onPhasesChange }) {
   const [phases, setPhases] = useState(() => loadNav("xps-sidebar-phases", DEFAULT_PHASES));
   const [utility, setUtility] = useState(() => loadNav("xps-sidebar-utility", DEFAULT_UTILITY));
   const [addingTo, setAddingTo] = useState(null); // "workflow" | "system" | null
@@ -110,6 +157,7 @@ export default function Sidebar({ activeView, onViewChange }) {
       reordered.splice(destination.index, 0, moved);
       setSrc(reordered);
       saveNav(source.droppableId === "workflow" ? "xps-sidebar-phases" : "xps-sidebar-utility", reordered);
+      if (source.droppableId === "workflow" && onPhasesChange) onPhasesChange(reordered);
     } else {
       const srcCopy = Array.from(srcList);
       const dstCopy = Array.from(dstList);
@@ -117,16 +165,36 @@ export default function Sidebar({ activeView, onViewChange }) {
       dstCopy.splice(destination.index, 0, moved);
       setSrc(srcCopy);
       setDst(dstCopy);
-      saveNav("xps-sidebar-phases", source.droppableId === "workflow" ? srcCopy : dstCopy);
+      const newPhases = source.droppableId === "workflow" ? srcCopy : dstCopy;
+      saveNav("xps-sidebar-phases", newPhases);
       saveNav("xps-sidebar-utility", source.droppableId === "system" ? srcCopy : dstCopy);
+      if (onPhasesChange) onPhasesChange(newPhases);
     }
   }, [phases, utility]);
+
+  const editItem = (section, idx, field, value) => {
+    if (section === "workflow") {
+      const updated = phases.map((p, i) => i === idx ? { ...p, [field]: value } : p);
+      setPhases(updated);
+      saveNav("xps-sidebar-phases", updated);
+      if (onPhasesChange) onPhasesChange(updated);
+    } else {
+      const updated = utility.map((u, i) => i === idx ? { ...u, [field]: value } : u);
+      setUtility(updated);
+      saveNav("xps-sidebar-utility", updated);
+    }
+  };
+
+  useEffect(() => {
+    if (onPhasesChange) onPhasesChange(phases);
+  }, []);
 
   const addItem = (section, item) => {
     if (section === "workflow") {
       const updated = [...phases, item];
       setPhases(updated);
       saveNav("xps-sidebar-phases", updated);
+      if (onPhasesChange) onPhasesChange(updated);
     } else {
       const updated = [...utility, item];
       setUtility(updated);
@@ -175,6 +243,8 @@ export default function Sidebar({ activeView, onViewChange }) {
                               isActive={activeView === item.id}
                               onClick={() => onViewChange(item.id)}
                               dragHandleProps={prov.dragHandleProps}
+                              onEditLabel={(v) => editItem("workflow", idx, "label", v)}
+                              onEditDesc={(v) => editItem("workflow", idx, "desc", v)}
                             />
                           </div>
                         )}
@@ -210,6 +280,8 @@ export default function Sidebar({ activeView, onViewChange }) {
                               isActive={activeView === item.id}
                               onClick={() => onViewChange(item.id)}
                               dragHandleProps={prov.dragHandleProps}
+                              onEditLabel={(v) => editItem("system", idx, "label", v)}
+                              onEditDesc={(v) => editItem("system", idx, "desc", v)}
                             />
                           </div>
                         )}

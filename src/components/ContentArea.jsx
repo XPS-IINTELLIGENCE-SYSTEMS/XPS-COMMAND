@@ -15,14 +15,14 @@ import AnalyticsView from "./dashboard/AnalyticsView";
 import AgentCommandPage from "./command/AgentCommandPage";
 import AdminInlineView from "./admin/AdminInlineView";
 
-export default function ContentArea({ activeView, onChatCommand, onNavigate }) {
+export default function ContentArea({ activeView, onChatCommand, onNavigate, sidebarPhases }) {
   const wrapper = (children) => (
     <div className="flex-1 h-full overflow-hidden border-l border-[#8a8a8a]/15">{children}</div>
   );
 
   switch (activeView) {
     case "command":
-      return wrapper(<DashboardView onNavigate={onNavigate} />);
+      return wrapper(<DashboardView onNavigate={onNavigate} sidebarPhases={sidebarPhases} />);
     case "start_here":
       return wrapper(<StartHereView onNavigate={onNavigate} />);
     case "find_work":
@@ -56,6 +56,6 @@ export default function ContentArea({ activeView, onChatCommand, onNavigate }) {
     case "admin":
       return wrapper(<AdminInlineView />);
     default:
-      return wrapper(<DashboardView onNavigate={onNavigate} />);
+      return wrapper(<DashboardView onNavigate={onNavigate} sidebarPhases={sidebarPhases} />);
   }
 }

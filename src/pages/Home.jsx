@@ -10,6 +10,7 @@ import MobileTabBar from "../components/mobile/MobileTabBar";
 
 export default function Home() {
   const [activeView, setActiveView] = useState("command");
+  const [sidebarPhases, setSidebarPhases] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [chatOpen, setChatOpen] = useState(true);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
@@ -169,7 +170,7 @@ export default function Home() {
       {/* ========== DESKTOP LAYOUT ========== */}
       <div className="hidden md:flex flex-row" style={{ width: sidebarOpen ? sidebarWidth : 0, minWidth: sidebarOpen ? sidebarWidth : 0, transition: isResizing.current ? 'none' : 'width 0.3s, min-width 0.3s' }}>
         <div className="flex-1 overflow-hidden">
-          <Sidebar activeView={activeView} onViewChange={setActiveView} />
+          <Sidebar activeView={activeView} onViewChange={setActiveView} onPhasesChange={setSidebarPhases} />
         </div>
         {sidebarOpen && (
           <div
@@ -203,7 +204,7 @@ export default function Home() {
               <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-border group-hover:bg-primary/50 transition-colors" />
             </div>
           </div>
-          <ContentArea activeView={activeView} onChatCommand={handleChatCommand} onNavigate={setActiveView} />
+          <ContentArea activeView={activeView} onChatCommand={handleChatCommand} onNavigate={setActiveView} sidebarPhases={sidebarPhases} />
         </div>
       </div>
 

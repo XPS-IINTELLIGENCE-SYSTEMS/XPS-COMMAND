@@ -4,6 +4,7 @@ import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { base44 } from "@/api/base44Client";
 import { cn } from "@/lib/utils";
 import EditCardModal from "./EditCardModal";
+import CRMTopCards from "./CRMTopCards";
 
 const ICON_MAP = { Users, Compass, Search, Package, Hammer, Phone, Clock, Trophy, HardHat, DollarSign, BarChart3, Lightbulb, Bot, CalendarClock, Settings };
 
@@ -50,6 +51,35 @@ const DEFAULT_GROUPS = [
   },
 ];
 
+function buildGroupsFromSidebar(phases) {
+  // Skip "command" itself, chunk the rest into rows of 3
+  const items = phases.filter(p => p.id !== "command");
+  const groups = [];
+  for (let i = 0; i < items.length; i += 3) {
+    const chunk = items.slice(i, i + 3);
+    const heading = i === 0 ? "Workflow" : `Row ${Math.floor(i / 3) + 1}`;
+    groups.push({
+      heading,
+      cards: chunk.map(p => ({
+        id: p.id,
+        label: p.label,
+        desc: p.desc || "",
+        icon: SIDEBAR_ICON_MAP[p.id] || "Settings",
+        nav: p.id,
+        iconColor: "#d4af37",
+      })),
+    });
+  }
+  return groups;
+}
+
+const SIDEBAR_ICON_MAP = {
+  crm: "Users", start_here: "Compass", find_work: "Search", xpress_leads: "Package",
+  job_leads: "Hammer", get_work: "Phone", follow_up: "Clock", win_work: "Trophy",
+  do_work: "HardHat", get_paid: "DollarSign", analytics: "BarChart3", tips: "Lightbulb",
+  agents: "Bot", task_scheduler: "CalendarClock", settings: "Settings", admin: "Users",
+};
+
 function loadGroups() {
   try {
     const saved = localStorage.getItem("xps-dash-groups-v2");
@@ -59,14 +89,27 @@ function loadGroups() {
 }
 function saveGroups(g) { localStorage.setItem("xps-dash-groups-v2", JSON.stringify(g)); }
 
-export default function DashboardView({ onNavigate }) {
-  const [groups, setGroups] = useState(loadGroups);
+export default function DashboardView({ onNavigate, sidebarPhases }) {
+  const [groups, setGroups] = useState(() => {
+    // If sidebarPhases provided, build groups from sidebar order
+    if (sidebarPhases && sidebarPhases.length > 0) {
+      return buildGroupsFromSidebar(sidebarPhases);
+    }
+    return loadGroups();
+  });
   const [d, setD] = useState(null);
   const [loading, setLoading] = useState(true);
   const [editCard, setEditCard] = useState(null);
   const [editGroupIdx, setEditGroupIdx] = useState(null);
   const [editCardIdx, setEditCardIdx] = useState(null);
   const [editingHeading, setEditingHeading] = useState(null);
+
+  // Rebuild groups whenever sidebarPhases change
+  useEffect(() => {
+    if (sidebarPhases && sidebarPhases.length > 0) {
+      setGroups(buildGroupsFromSidebar(sidebarPhases));
+    }
+  }, [sidebarPhases]);
 
   useEffect(() => { load(); }, []);
 
@@ -167,6 +210,9 @@ export default function DashboardView({ onNavigate }) {
           </h1>
           <p className="text-sm text-muted-foreground mt-2">Drag cards to reorder · Click pencil to edit</p>
         </div>
+
+        {/* CRM TOP CARDS */}
+        <CRMTopCards leads={d.leads} onNavigate={nav} />
 
         {/* GROUPED CARD ROWS */}
         <DragDropContext onDragEnd={onDragEnd}>

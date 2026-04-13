@@ -1,21 +1,34 @@
 import { useState, useEffect, useCallback } from "react";
-import { Loader2, Plus, RefreshCcw, Package, Hammer } from "lucide-react";
+import { Loader2, Plus, RefreshCcw, Package, Hammer, Search, MapPin, Users, Target, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { base44 } from "@/api/base44Client";
 import { useToast } from "@/components/ui/use-toast";
-import { cn } from "@/lib/utils";
-import PipelineRow from "./PipelineRow";
+import { getIconColor } from "@/lib/iconColors";
+import HScrollRow from "../shared/HScrollRow";
+import HCard from "../shared/HCard";
+import NavIcon from "../shared/NavIcon";
 import LeadDetailPanel from "./LeadDetailPanel";
 import AddLeadModal from "./AddLeadModal";
-import NavIcon from "../shared/NavIcon";
 
-const TABS = [
-  { id: "XPress", label: "XPRESS PIPELINE", desc: "Material · Equipment · Training Sales", icon: Package },
-  { id: "Jobs", label: "JOBS PIPELINE", desc: "Contract Work · Projects", icon: Hammer },
-];
+const PIPELINE_TOOLS = {
+  XPress: [
+    { id: "scraper", label: "AI Lead Scraper", Icon: Search },
+    { id: "enricher", label: "AI Contact Enricher", Icon: Users },
+    { id: "scorer", label: "AI Lead Scorer", Icon: TrendingUp },
+    { id: "territory", label: "AI Territory Analyzer", Icon: MapPin },
+    { id: "research", label: "AI Deep Research", Icon: Target },
+  ],
+  Jobs: [
+    { id: "scraper", label: "AI Job Scraper", Icon: Search },
+    { id: "enricher", label: "AI Contact Enricher", Icon: Users },
+    { id: "scorer", label: "AI Lead Scorer", Icon: TrendingUp },
+    { id: "territory", label: "AI Territory Analyzer", Icon: MapPin },
+    { id: "research", label: "AI Deep Research", Icon: Target },
+  ],
+};
 
-export default function LeadPipelineView({ onChatCommand, forcedTab }) {
+export default function LeadPipelineView({ onChatCommand, onOpenTool, forcedTab }) {
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -23,6 +36,10 @@ export default function LeadPipelineView({ onChatCommand, forcedTab }) {
   const [adding, setAdding] = useState(false);
   const [activeTab, setActiveTab] = useState(forcedTab || "XPress");
   const { toast } = useToast();
+
+  const workflowId = activeTab === "XPress" ? "xpress_leads" : "job_leads";
+  const color = getIconColor(workflowId);
+  const LeadIcon = activeTab === "XPress" ? Package : Hammer;
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -49,7 +66,6 @@ export default function LeadPipelineView({ onChatCommand, forcedTab }) {
   };
 
   const byType = leads.filter(l => (l.lead_type || "XPress") === activeTab);
-
   const filtered = byType.filter(l =>
     !search || (l.company || "").toLowerCase().includes(search.toLowerCase()) ||
     (l.contact_name || "").toLowerCase().includes(search.toLowerCase()) ||
@@ -61,90 +77,76 @@ export default function LeadPipelineView({ onChatCommand, forcedTab }) {
   const prioritized = filtered.filter(l => l.pipeline_status === "Prioritized" || l.stage === "Prioritized");
   const qualified = filtered.filter(l => l.pipeline_status === "Qualified" || l.stage === "Qualified");
 
+  const tools = PIPELINE_TOOLS[activeTab] || [];
+
   if (loading) {
     return <div className="flex items-center justify-center h-full"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>;
   }
 
   return (
     <div className="h-full flex overflow-hidden">
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <div className="flex-shrink-0 p-4 md:p-6 bg-white/[0.02] backdrop-blur-xl border-b border-white/[0.06] space-y-4">
-          {!forcedTab && (
-            <div className="flex gap-2 mb-2">
-              {TABS.map(tab => {
-                const Icon = tab.icon;
-                const isActive = activeTab === tab.id;
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => { setActiveTab(tab.id); setSelected(null); }}
-                    className={cn(
-                      "flex items-center gap-2.5 px-5 py-3 rounded-xl text-sm font-bold transition-all flex-1",
-                      isActive
-                        ? "bg-white/[0.08] backdrop-blur-2xl border border-white/[0.2] text-primary shadow-[0_0_20px_rgba(255,255,255,0.06)]"
-                        : "bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] text-muted-foreground hover:text-foreground hover:border-white/[0.18]"
-                    )}
-                  >
-                    <Icon className="w-4 h-4" />
-                    <div className="text-left">
-                      <div className="text-sm font-bold">{tab.label}</div>
-                      <div className="text-xs opacity-60">{tab.desc}</div>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          )}
-
-          <div className="text-center pt-1 pb-2">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 mb-3">
-              <NavIcon id={activeTab === "XPress" ? "xpress_leads" : "job_leads"} size="sm" active />
-              <span className="text-xs font-semibold text-foreground">{activeTab === "XPress" ? "XPRESS · PIPELINE" : "JOBS · PIPELINE"}</span>
+      <div className="flex-1 overflow-y-auto">
+        <div className="p-4 md:p-6 space-y-12">
+          {/* Header - Contact page style */}
+          <div className="text-center pt-2 pb-4">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 mb-4">
+              <NavIcon id={workflowId} size="sm" active />
+              <span className="text-xs font-semibold text-white">{activeTab === "XPress" ? "XPRESS · PIPELINE" : "JOBS · PIPELINE"}</span>
             </div>
             <h1 className="text-2xl md:text-3xl font-extrabold xps-gold-slow-shimmer" style={{ fontFamily: "'Montserrat', sans-serif" }}>
               {activeTab === "XPress" ? "XPRESS PIPELINE" : "JOBS PIPELINE"}
             </h1>
-            <p className="mt-1 text-xs text-muted-foreground">{filtered.length} leads in pipeline</p>
-          </div>
-          <div className="flex items-center justify-end">
-            <div></div>
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm" className="text-sm" onClick={load}><RefreshCcw className="w-4 h-4 mr-2" />Refresh</Button>
-              <Button size="sm" className="text-sm" onClick={() => setAdding(true)}><Plus className="w-4 h-4 mr-2" />Add Lead</Button>
+            <p className="mt-2 text-xs text-white/40">{filtered.length} leads in pipeline</p>
+
+            {/* Action bar */}
+            <div className="flex items-center justify-center gap-2 mt-4">
+              <Button variant="outline" size="sm" className="text-xs" onClick={load}><RefreshCcw className="w-3.5 h-3.5 mr-1.5" />Refresh</Button>
+              <Button size="sm" className="text-xs" onClick={() => setAdding(true)}><Plus className="w-3.5 h-3.5 mr-1.5" />Add Lead</Button>
+            </div>
+
+            {/* Search */}
+            <div className="max-w-md mx-auto mt-4">
+              <Input placeholder="Search leads..." value={search} onChange={e => setSearch(e.target.value)} className="h-9 text-sm bg-white/[0.04] border-white/[0.1] rounded-xl" />
             </div>
           </div>
-          <Input placeholder="Search leads..." value={search} onChange={e => setSearch(e.target.value)} className="h-10 text-sm bg-white/[0.04] border-white/[0.1] rounded-xl" />
-        </div>
 
-        <div className="flex-1 overflow-y-auto p-3 md:p-6 space-y-8">
-          <PipelineRow
-            title="INCOMING"
-            subtitle={activeTab === "XPress" ? "Raw contractor leads from ChatGPT, scraper, attachments, Drive, Supabase" : "Incoming job/project leads from all sources"}
-            leads={incoming}
-            colorKey="Incoming"
-            onLeadClick={setSelected}
-          />
-          <PipelineRow
-            title="VALIDATED"
-            subtitle={activeTab === "XPress" ? "Confirmed real businesses with verified contact info" : "Verified projects with confirmed scope and contact"}
-            leads={validated}
-            colorKey="Validated"
-            onLeadClick={setSelected}
-          />
-          <PipelineRow
-            title="PRIORITIZED & SCORED"
-            subtitle={activeTab === "XPress" ? "AI-scored & ranked by product/training fit" : "Scored & ranked by project value, timeline, and fit"}
-            leads={prioritized}
-            colorKey="Prioritized"
-            onLeadClick={setSelected}
-          />
-          <PipelineRow
-            title="QUALIFIED"
-            subtitle={activeTab === "XPress" ? "Qualified contractors ready for outreach — confirmed need for XPS products" : "Qualified projects ready for proposal and engagement"}
-            leads={qualified}
-            colorKey="Qualified"
-            onLeadClick={setSelected}
-          />
+          {/* Tools Row */}
+          <HScrollRow title="PIPELINE TOOLS" subtitle="Click to open tool" icon={LeadIcon} count={tools.length}>
+            {tools.map(t => (
+              <HCard key={t.id} title={t.label} icon={t.Icon} iconColor={color} onClick={() => onOpenTool?.(t.id, workflowId)}>
+                <div className="text-[9px] opacity-0 group-hover:opacity-100 transition-opacity mt-1" style={{ color }}>Open tool →</div>
+              </HCard>
+            ))}
+          </HScrollRow>
+
+          {/* Pipeline stages as HScrollRow */}
+          <HScrollRow title="INCOMING" subtitle={activeTab === "XPress" ? "Raw contractor leads from all sources" : "Incoming job/project leads"} icon={LeadIcon} count={incoming.length}>
+            {incoming.slice(0, 20).map(l => (
+              <HCard key={l.id} title={l.company} subtitle={l.contact_name || `${l.city || ""}, ${l.state || ""}`} meta={l.score ? `Score: ${l.score}` : l.source || ""} icon={LeadIcon} iconColor={color} onClick={() => setSelected(l)} />
+            ))}
+            {incoming.length === 0 && <EmptyCard text="No incoming leads" />}
+          </HScrollRow>
+
+          <HScrollRow title="VALIDATED" subtitle="Confirmed real businesses" icon={LeadIcon} count={validated.length}>
+            {validated.slice(0, 20).map(l => (
+              <HCard key={l.id} title={l.company} subtitle={l.contact_name} meta={l.score ? `Score: ${l.score}` : l.email || ""} icon={LeadIcon} iconColor={color} onClick={() => setSelected(l)} />
+            ))}
+            {validated.length === 0 && <EmptyCard text="No validated leads" />}
+          </HScrollRow>
+
+          <HScrollRow title="PRIORITIZED & SCORED" subtitle="AI-scored & ranked" icon={LeadIcon} count={prioritized.length}>
+            {prioritized.slice(0, 20).map(l => (
+              <HCard key={l.id} title={l.company} subtitle={l.contact_name} meta={l.score ? `Score: ${l.score}` : ""} icon={LeadIcon} iconColor={color} onClick={() => setSelected(l)} />
+            ))}
+            {prioritized.length === 0 && <EmptyCard text="No prioritized leads" />}
+          </HScrollRow>
+
+          <HScrollRow title="QUALIFIED" subtitle="Ready for outreach" icon={LeadIcon} count={qualified.length}>
+            {qualified.slice(0, 20).map(l => (
+              <HCard key={l.id} title={l.company} subtitle={l.contact_name} meta={l.estimated_value ? `$${l.estimated_value.toLocaleString()}` : l.email || ""} icon={LeadIcon} iconColor={color} onClick={() => setSelected(l)} />
+            ))}
+            {qualified.length === 0 && <EmptyCard text="No qualified leads" />}
+          </HScrollRow>
         </div>
       </div>
 
@@ -158,6 +160,14 @@ export default function LeadPipelineView({ onChatCommand, forcedTab }) {
       )}
 
       {adding && <AddLeadModal onClose={() => setAdding(false)} defaultType={activeTab} />}
+    </div>
+  );
+}
+
+function EmptyCard({ text }) {
+  return (
+    <div className="flex-shrink-0 w-[240px] rounded-xl p-4 bg-black/60 border border-white/[0.06] flex items-center justify-center">
+      <span className="text-[11px] text-muted-foreground/50">{text}</span>
     </div>
   );
 }

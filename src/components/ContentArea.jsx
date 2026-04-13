@@ -1,3 +1,4 @@
+import { useState } from "react";
 import StartHereView from "./phases/StartHereView";
 import DashboardView from "./dashboard/DashboardView";
 import DiscoverView from "./phases/DiscoverView";
@@ -16,10 +17,14 @@ import AgentCommandPage from "./command/AgentCommandPage";
 import AdminInlineView from "./admin/AdminInlineView";
 import TemplatesView from "./templates/TemplatesView";
 import NavButtons, { pushView } from "./shared/NavButtons";
+import ToolModuleOverlay from "./tools/ToolModuleOverlay";
+import { getToolById } from "./tools/toolRegistry";
+import { getIconColor } from "@/lib/iconColors";
 import { useEffect, useRef } from "react";
 
 export default function ContentArea({ activeView, onChatCommand, onNavigate, sidebarPhases }) {
   const lastPushed = useRef(null);
+  const [activeTool, setActiveTool] = useState(null);
 
   useEffect(() => {
     if (activeView && activeView !== lastPushed.current) {
@@ -28,6 +33,9 @@ export default function ContentArea({ activeView, onChatCommand, onNavigate, sid
     }
   }, [activeView]);
 
+  // Close tool when view changes
+  useEffect(() => { setActiveTool(null); }, [activeView]);
+
   const handleNavButton = (view, isHistoryNav) => {
     if (isHistoryNav) {
       lastPushed.current = view;
@@ -35,12 +43,39 @@ export default function ContentArea({ activeView, onChatCommand, onNavigate, sid
     if (onNavigate) onNavigate(view);
   };
 
+  // Open a tool module in the center UI
+  const openTool = (toolId, workflowId) => {
+    const tool = getToolById(toolId);
+    if (tool) {
+      setActiveTool({
+        ...tool,
+        workflowColor: getIconColor(workflowId || tool.workflowId),
+      });
+    }
+  };
+
+  // Also send to chat if needed
+  const handleToolAndChat = (toolId, workflowId, chatCmd) => {
+    openTool(toolId, workflowId);
+    // Optionally also tell the AI
+    if (chatCmd && onChatCommand) onChatCommand(chatCmd);
+  };
+
   const wrapper = (children) => (
     <div className="flex-1 h-full overflow-hidden border-l border-[#8a8a8a]/15 relative">
       <NavButtons onNavigate={handleNavButton} />
       {children}
+      {activeTool && (
+        <ToolModuleOverlay
+          tool={activeTool}
+          onClose={() => setActiveTool(null)}
+          onChatCommand={onChatCommand}
+        />
+      )}
     </div>
   );
+
+  const toolProps = { onChatCommand, onOpenTool: openTool, onToolAndChat: handleToolAndChat };
 
   switch (activeView) {
     case "command":
@@ -48,23 +83,23 @@ export default function ContentArea({ activeView, onChatCommand, onNavigate, sid
     case "start_here":
       return wrapper(<StartHereView onNavigate={onNavigate} />);
     case "find_work":
-      return wrapper(<DiscoverView onChatCommand={onChatCommand} />);
+      return wrapper(<DiscoverView {...toolProps} />);
     case "xpress_leads":
-      return wrapper(<LeadPipelineView onChatCommand={onChatCommand} forcedTab="XPress" />);
+      return wrapper(<LeadPipelineView {...toolProps} forcedTab="XPress" />);
     case "job_leads":
-      return wrapper(<LeadPipelineView onChatCommand={onChatCommand} forcedTab="Jobs" />);
+      return wrapper(<LeadPipelineView {...toolProps} forcedTab="Jobs" />);
     case "crm":
       return wrapper(<CRMView />);
     case "get_work":
-      return wrapper(<ContactView onChatCommand={onChatCommand} />);
+      return wrapper(<ContactView {...toolProps} />);
     case "follow_up":
-      return wrapper(<FollowUpView onChatCommand={onChatCommand} />);
+      return wrapper(<FollowUpView {...toolProps} />);
     case "win_work":
-      return wrapper(<CloseView onChatCommand={onChatCommand} />);
+      return wrapper(<CloseView {...toolProps} />);
     case "do_work":
-      return wrapper(<ExecuteView onChatCommand={onChatCommand} />);
+      return wrapper(<ExecuteView {...toolProps} />);
     case "get_paid":
-      return wrapper(<CollectView onChatCommand={onChatCommand} />);
+      return wrapper(<CollectView {...toolProps} />);
     case "analytics":
       return wrapper(<AnalyticsView />);
     case "tips":

@@ -1,23 +1,27 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { Phone, Mail, Send, MessageSquare, Clock, CalendarCheck, Loader2, Package, Hammer } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import { getIconColor } from "@/lib/iconColors";
 import HScrollRow from "../shared/HScrollRow";
 import HCard from "../shared/HCard";
 import NavIcon from "../shared/NavIcon";
 
+const WORKFLOW_ID = "get_work";
+
 const CONTACT_TOOLS = [
-  { id: "email", label: "AI Email Writer", Icon: Mail, cmd: "Write an outreach email for my top lead" },
-  { id: "send", label: "AI Auto-Send", Icon: Send, cmd: "Send outreach emails to my top 5 leads" },
-  { id: "call", label: "AI Call Prep", Icon: Phone, cmd: "Prepare a call script for my highest scored lead" },
-  { id: "sms", label: "AI SMS Outreach", Icon: MessageSquare, cmd: "Send a follow-up SMS to my most recent lead" },
-  { id: "followup", label: "AI Follow-Up Engine", Icon: Clock, cmd: "Set up follow-up sequences for all contacted leads" },
-  { id: "scheduler", label: "AI Meeting Scheduler", Icon: CalendarCheck, cmd: "Schedule a meeting with my highest scored lead" },
+  { id: "email", label: "AI Email Writer", Icon: Mail },
+  { id: "send", label: "AI Auto-Send", Icon: Send },
+  { id: "call", label: "AI Call Prep", Icon: Phone },
+  { id: "sms", label: "AI SMS Outreach", Icon: MessageSquare },
+  { id: "followup_contact", label: "AI Follow-Up Engine", Icon: Clock },
+  { id: "scheduler", label: "AI Meeting Scheduler", Icon: CalendarCheck },
 ];
 
-export default function ContactView({ onChatCommand }) {
+export default function ContactView({ onChatCommand, onOpenTool }) {
   const [leads, setLeads] = useState([]);
   const [emails, setEmails] = useState([]);
   const [loading, setLoading] = useState(true);
+  const color = getIconColor(WORKFLOW_ID);
 
   useEffect(() => {
     (async () => {
@@ -30,8 +34,6 @@ export default function ContactView({ onChatCommand }) {
       setLoading(false);
     })();
   }, []);
-
-  const fire = (cmd) => { if (onChatCommand) onChatCommand(cmd); };
 
   const qualified = leads.filter(l => (l.pipeline_status === "Qualified" || l.stage === "Qualified") && l.stage !== "Contacted");
   const needsFollowup = leads.filter(l => l.stage === "Contacted");
@@ -46,38 +48,38 @@ export default function ContactView({ onChatCommand }) {
       <div className="p-4 md:p-6 space-y-12">
         <div className="text-center pt-2 pb-4">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 mb-4">
-            <NavIcon id="get_work" size="sm" active />
+            <NavIcon id={WORKFLOW_ID} size="sm" active />
             <span className="text-xs font-semibold text-white">CONTACT · OUTREACH</span>
           </div>
           <h1 className="text-2xl md:text-3xl font-extrabold xps-gold-slow-shimmer" style={{ fontFamily: "'Montserrat', sans-serif" }}>CONTACT</h1>
           <p className="mt-2 text-xs text-white/40">Outreach tools, who needs contacting, and recent activity</p>
         </div>
 
-        <HScrollRow title="OUTREACH TOOLS" subtitle="Click to run" icon={Phone} count={CONTACT_TOOLS.length}>
+        <HScrollRow title="OUTREACH TOOLS" subtitle="Click to open tool" icon={Phone} count={CONTACT_TOOLS.length}>
           {CONTACT_TOOLS.map(t => (
-            <HCard key={t.id} title={t.label} icon={t.Icon} onClick={() => fire(t.cmd)}>
-              <div className="text-[9px] text-primary opacity-0 group-hover:opacity-100 transition-opacity mt-1">Run →</div>
+            <HCard key={t.id} title={t.label} icon={t.Icon} iconColor={color} onClick={() => onOpenTool?.(t.id, WORKFLOW_ID)}>
+              <div className="text-[9px] opacity-0 group-hover:opacity-100 transition-opacity mt-1" style={{ color }}>Open tool →</div>
             </HCard>
           ))}
         </HScrollRow>
 
         <HScrollRow title="NEEDS FIRST CONTACT" subtitle="Qualified but not yet contacted" icon={Mail} count={qualified.length}>
           {qualified.slice(0, 15).map(l => (
-            <HCard key={l.id} title={l.company} subtitle={l.contact_name} meta={l.email || l.phone || "No info"} icon={l.lead_type === "XPress" ? Package : Hammer} onClick={() => fire(`Write an outreach email for ${l.company}`)} />
+            <HCard key={l.id} title={l.company} subtitle={l.contact_name} meta={l.email || l.phone || "No info"} icon={l.lead_type === "XPress" ? Package : Hammer} iconColor={color} onClick={() => onOpenTool?.("email", WORKFLOW_ID)} />
           ))}
           {qualified.length === 0 && <EmptyCard text="All qualified leads contacted" />}
         </HScrollRow>
 
         <HScrollRow title="NEEDS FOLLOW-UP" subtitle="Contacted but no response" icon={Clock} count={needsFollowup.length}>
           {needsFollowup.slice(0, 15).map(l => (
-            <HCard key={l.id} title={l.company} subtitle={l.contact_name} meta={l.stage} icon={l.lead_type === "XPress" ? Package : Hammer} onClick={() => fire(`Follow up with ${l.company}`)} />
+            <HCard key={l.id} title={l.company} subtitle={l.contact_name} meta={l.stage} icon={l.lead_type === "XPress" ? Package : Hammer} iconColor={color} onClick={() => onOpenTool?.("followup_contact", WORKFLOW_ID)} />
           ))}
           {needsFollowup.length === 0 && <EmptyCard text="No leads need follow-up" />}
         </HScrollRow>
 
         <HScrollRow title="RECENT EMAILS" subtitle="Latest outreach" icon={Send} count={recentEmails.length}>
           {recentEmails.map(e => (
-            <HCard key={e.id} title={e.to_name || e.to_email} subtitle={e.subject} meta={e.status} icon={Mail} />
+            <HCard key={e.id} title={e.to_name || e.to_email} subtitle={e.subject} meta={e.status} icon={Mail} iconColor={color} />
           ))}
           {recentEmails.length === 0 && <EmptyCard text="No emails sent yet" />}
         </HScrollRow>

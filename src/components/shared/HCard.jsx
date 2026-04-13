@@ -5,8 +5,9 @@ import { cn } from "@/lib/utils";
  * Even index (0,2,4) = solid black card
  * Odd index (1,3,5) = clear glassmorphic card
  * ALL get animated silver border. NO BROWN. NO GOLD BACKGROUNDS.
+ * Icons are ALWAYS colored by their workflow color.
  */
-export default function HCard({ title, subtitle, meta, icon: Icon, onClick, children, index = 0 }) {
+export default function HCard({ title, subtitle, meta, icon: Icon, iconColor, onClick, children, index = 0 }) {
   const isGlass = index % 2 === 1;
 
   return (
@@ -28,7 +29,7 @@ export default function HCard({ title, subtitle, meta, icon: Icon, onClick, chil
             "bg-white/[0.06] border border-white/[0.08]",
             "group-hover:bg-white/[0.12] group-hover:border-white/[0.2] group-hover:shadow-[0_0_12px_rgba(255,255,255,0.1)]"
           )}>
-            <Icon className="w-5 h-5 text-white/60 group-hover:text-white transition-colors duration-300" />
+            <Icon className="w-5 h-5 transition-colors duration-300" style={{ color: iconColor || "#d4af37" }} />
           </div>
         )}
         <div className="flex-1 min-w-0">

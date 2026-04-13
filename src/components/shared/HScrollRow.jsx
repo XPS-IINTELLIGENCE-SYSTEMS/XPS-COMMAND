@@ -2,7 +2,7 @@ import { useRef, Children, cloneElement } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export default function HScrollRow({ title, subtitle, icon: Icon, count, children }) {
+export default function HScrollRow({ title, subtitle, icon: Icon, iconColor, count, children }) {
   const scrollRef = useRef(null);
 
   const scroll = (dir) => {
@@ -24,7 +24,7 @@ export default function HScrollRow({ title, subtitle, icon: Icon, count, childre
     <div className="space-y-3 mb-4">
       <div className="flex items-center justify-between px-1">
         <div className="flex items-center gap-3">
-          {Icon && <Icon className="w-5 h-5 text-primary" />}
+          {Icon && <Icon className="w-5 h-5" style={{ color: iconColor || "#d4af37" }} />}
           <h3 className="text-base font-bold xps-gold-slow-shimmer" style={{ fontFamily: "'Montserrat', sans-serif" }}>{title}</h3>
           {count !== undefined && (
             <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-white/[0.06] border border-white/[0.1] text-muted-foreground">{count}</span>

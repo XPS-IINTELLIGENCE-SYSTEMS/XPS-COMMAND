@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { PanelLeftClose, PanelLeftOpen, PanelRightClose, PanelRightOpen, Menu, X, MessageSquare, Sun, Moon } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import HexGlow from "../components/HexGlow";
@@ -16,6 +16,33 @@ export default function Home() {
   const [mobileChatOpen, setMobileChatOpen] = useState(false);
   const [theme, setTheme] = useState(() => localStorage.getItem("xps-theme") || "dark");
   const chatRef = useRef(null);
+  const [sidebarWidth, setSidebarWidth] = useState(() => {
+    const saved = localStorage.getItem("xps-sidebar-width");
+    return saved ? parseInt(saved) : 220;
+  });
+  const isResizing = useRef(false);
+
+  const startResize = useCallback((e) => {
+    e.preventDefault();
+    isResizing.current = true;
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+    const onMove = (ev) => {
+      if (!isResizing.current) return;
+      const newW = Math.max(160, Math.min(400, ev.clientX));
+      setSidebarWidth(newW);
+    };
+    const onUp = () => {
+      isResizing.current = false;
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+      setSidebarWidth(w => { localStorage.setItem('xps-sidebar-width', w); return w; });
+    };
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+  }, []);
 
   useEffect(() => {
     document.documentElement.classList.remove("light", "dark");
@@ -86,8 +113,19 @@ export default function Home() {
       </div>
 
       {/* ========== DESKTOP LAYOUT ========== */}
-      <div className={`hidden md:block transition-all duration-300 ease-in-out ${sidebarOpen ? 'w-[200px] min-w-[200px]' : 'w-0 min-w-0'} overflow-hidden`}>
-        <Sidebar activeView={activeView} onViewChange={setActiveView} />
+      <div className="hidden md:flex flex-row" style={{ width: sidebarOpen ? sidebarWidth : 0, minWidth: sidebarOpen ? sidebarWidth : 0, transition: isResizing.current ? 'none' : 'width 0.3s, min-width 0.3s' }}>
+        <div className="flex-1 overflow-hidden">
+          <Sidebar activeView={activeView} onViewChange={setActiveView} />
+        </div>
+        {sidebarOpen && (
+          <div
+            onMouseDown={startResize}
+            className="w-1.5 cursor-col-resize flex-shrink-0 group relative hover:bg-primary/20 transition-colors"
+            title="Drag to resize sidebar"
+          >
+            <div className="absolute inset-y-0 left-0 w-[3px] bg-border group-hover:bg-primary/50 transition-colors" />
+          </div>
+        )}
       </div>
 
       <div className="hex-bg hidden md:flex flex-1 flex-col overflow-hidden relative">

@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import NavIcon from "./shared/NavIcon";
+import { getIconColor } from "@/lib/iconColors";
 
 const navItems = [
   { id: "command", label: "Dashboard", sub: "Full workflow overview" },

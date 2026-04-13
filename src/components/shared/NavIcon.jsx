@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { getIconColor } from "@/lib/iconColors";
 import { Compass, LayoutDashboard, Search, Megaphone, HardHat, DollarSign, Lightbulb, Settings, Zap, Trophy, Users, BarChart3, Bot, Package, Hammer, Phone, Clock, CalendarClock, Shield } from "lucide-react";
 
 const ICON_MAP = {
@@ -48,7 +49,7 @@ export default function NavIcon({ id, size = "md", active = false, className }) 
       className={cn(
         "rounded-lg flex items-center justify-center flex-shrink-0 transition-all duration-200",
         s.container,
-        active ? "bg-primary/15" : "bg-secondary/60",
+        active ? "bg-white/[0.08]" : "bg-secondary/60",
         className
       )}
     >
@@ -56,8 +57,9 @@ export default function NavIcon({ id, size = "md", active = false, className }) 
         className={cn(
           s.icon,
           "transition-colors duration-200",
-          active ? "text-primary" : "metallic-silver-icon"
+          !active && "opacity-60"
         )}
+        style={{ color: getIconColor(id) }}
       />
     </div>
   );

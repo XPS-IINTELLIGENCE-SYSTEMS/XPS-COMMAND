@@ -1,9 +1,10 @@
 import { UserCheck, Clock, Users } from "lucide-react";
+import { CRM_COLORS } from "@/lib/iconColors";
 
 const CARDS = [
-  { id: "contact_first", label: "Contact First", desc: "Highest priority awaiting contact", icon: UserCheck, color: "#ef4444", nav: "crm" },
-  { id: "follow_up_crm", label: "Follow Up", desc: "Awaiting follow-up response", icon: Clock, color: "#f59e0b", nav: "follow_up" },
-  { id: "in_pipeline", label: "In Pipeline", desc: "Active leads in pipeline", icon: Users, color: "#22c55e", nav: "crm" },
+  { id: "contact_first", label: "Contact First", desc: "Highest priority awaiting contact", icon: UserCheck, color: CRM_COLORS.contact_first, nav: "crm" },
+  { id: "follow_up_crm", label: "Follow Up", desc: "Awaiting follow-up response", icon: Clock, color: CRM_COLORS.follow_up_crm, nav: "follow_up" },
+  { id: "in_pipeline", label: "In Pipeline", desc: "Active leads in pipeline", icon: Users, color: CRM_COLORS.in_pipeline, nav: "crm" },
 ];
 
 export default function CRMTopCards({ leads, onNavigate }) {

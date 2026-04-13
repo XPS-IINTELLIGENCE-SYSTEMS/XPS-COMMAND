@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Loader2, Search, Package, Hammer, Phone, Clock, Trophy, HardHat, DollarSign, BarChart3, Lightbulb, Bot, Settings, Compass, CalendarClock, Users, GripVertical, Pencil } from "lucide-react";
+import { getIconColor } from "@/lib/iconColors";
 import { Droppable, Draggable } from "@hello-pangea/dnd";
 import { base44 } from "@/api/base44Client";
 import { cn } from "@/lib/utils";
@@ -12,41 +13,41 @@ const DEFAULT_GROUPS = [
   {
     heading: "Pipeline Overview",
     cards: [
-      { id: "xpress_leads", label: "XPress Pipeline", desc: "Contractor & operator leads", icon: "Package", nav: "xpress_leads", iconColor: "#d4af37" },
-      { id: "job_leads", label: "Jobs Pipeline", desc: "End-buyer project leads", icon: "Hammer", nav: "job_leads", iconColor: "#d4af37" },
-      { id: "follow_up", label: "Follow-Up", desc: "Sequences & reminders", icon: "Clock", nav: "follow_up", iconColor: "#d4af37" },
+      { id: "xpress_leads", label: "XPress Pipeline", desc: "Contractor & operator leads", icon: "Package", nav: "xpress_leads" },
+      { id: "job_leads", label: "Jobs Pipeline", desc: "End-buyer project leads", icon: "Hammer", nav: "job_leads" },
+      { id: "follow_up", label: "Follow-Up", desc: "Sequences & reminders", icon: "Clock", nav: "follow_up" },
     ],
   },
   {
     heading: "Prospecting & Discovery",
     cards: [
-      { id: "start_here", label: "Start Here", desc: "Get set up in minutes", icon: "Compass", nav: "start_here", iconColor: "#d4af37" },
-      { id: "find_work", label: "Discovery", desc: "Signal-based prospecting", icon: "Search", nav: "find_work", iconColor: "#d4af37" },
-      { id: "crm", label: "CRM Board", desc: "Manage every deal", icon: "Users", nav: "crm", iconColor: "#d4af37" },
+      { id: "start_here", label: "Start Here", desc: "Get set up in minutes", icon: "Compass", nav: "start_here" },
+      { id: "find_work", label: "Discovery", desc: "Signal-based prospecting", icon: "Search", nav: "find_work" },
+      { id: "crm", label: "CRM Board", desc: "Manage every deal", icon: "Users", nav: "crm" },
     ],
   },
   {
     heading: "Outreach & Closing",
     cards: [
-      { id: "get_work", label: "Contact", desc: "Outreach & comms", icon: "Phone", nav: "get_work", iconColor: "#d4af37" },
-      { id: "win_work", label: "Close", desc: "Proposals & closing", icon: "Trophy", nav: "win_work", iconColor: "#d4af37" },
-      { id: "do_work", label: "Execute", desc: "Jobs & execution", icon: "HardHat", nav: "do_work", iconColor: "#d4af37" },
+      { id: "get_work", label: "Contact", desc: "Outreach & comms", icon: "Phone", nav: "get_work" },
+      { id: "win_work", label: "Close", desc: "Proposals & closing", icon: "Trophy", nav: "win_work" },
+      { id: "do_work", label: "Execute", desc: "Jobs & execution", icon: "HardHat", nav: "do_work" },
     ],
   },
   {
     heading: "Revenue & Insights",
     cards: [
-      { id: "get_paid", label: "Collect", desc: "Invoice & collect", icon: "DollarSign", nav: "get_paid", iconColor: "#d4af37" },
-      { id: "analytics", label: "Analytics", desc: "Charts & revenue", icon: "BarChart3", nav: "analytics", iconColor: "#d4af37" },
-      { id: "tips", label: "Tips & Tricks", desc: "Pro knowledge", icon: "Lightbulb", nav: "tips", iconColor: "#d4af37" },
+      { id: "get_paid", label: "Collect", desc: "Invoice & collect", icon: "DollarSign", nav: "get_paid" },
+      { id: "analytics", label: "Analytics", desc: "Charts & revenue", icon: "BarChart3", nav: "analytics" },
+      { id: "tips", label: "Tips & Tricks", desc: "Pro knowledge", icon: "Lightbulb", nav: "tips" },
     ],
   },
   {
     heading: "System & Tools",
     cards: [
-      { id: "agents", label: "Agents", desc: "AI agent command", icon: "Bot", nav: "agents", iconColor: "#d4af37" },
-      { id: "task_scheduler", label: "Task Scheduler", desc: "Scraper control center", icon: "CalendarClock", nav: "task_scheduler", iconColor: "#d4af37" },
-      { id: "settings", label: "Settings", desc: "Account & preferences", icon: "Settings", nav: "settings", iconColor: "#d4af37" },
+      { id: "agents", label: "Agents", desc: "AI agent command", icon: "Bot", nav: "agents" },
+      { id: "task_scheduler", label: "Task Scheduler", desc: "Scraper control center", icon: "CalendarClock", nav: "task_scheduler" },
+      { id: "settings", label: "Settings", desc: "Account & preferences", icon: "Settings", nav: "settings" },
     ],
   },
 ];
@@ -65,7 +66,6 @@ function buildGroupsFromSidebar(phases) {
         desc: p.desc || "",
         icon: SIDEBAR_ICON_MAP[p.id] || "Settings",
         nav: p.id,
-        iconColor: "#d4af37",
       })),
     });
   }
@@ -293,7 +293,7 @@ export default function DashboardView({ onNavigate, sidebarPhases }) {
                                 {/* Icon */}
                                 <button onClick={() => nav(card.nav)} className="w-full flex flex-col items-center">
                                   <div className="w-12 h-12 rounded-xl bg-white/[0.06] border border-white/[0.08] flex items-center justify-center mb-3">
-                                    <Icon className="w-6 h-6" style={{ color: card.iconColor || "#d4af37" }} />
+                                    <Icon className="w-6 h-6" style={{ color: getIconColor(card.id) }} />
                                   </div>
                                   <div className="text-sm font-bold text-foreground mb-0.5">{card.label}</div>
                                   <div className="text-[11px] text-muted-foreground leading-snug">{card.desc}</div>

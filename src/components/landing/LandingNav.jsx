@@ -27,7 +27,7 @@ export default function LandingNav() {
       <div className="flex items-center gap-2 md:gap-3">
         <Link
           to="/custom-login"
-          className="text-sm md:text-lg font-medium text-white/80 hover:text-white transition-all duration-300"
+          className="hidden md:inline-flex text-lg font-medium text-white/80 hover:text-white transition-all duration-300"
         >
           Sign In
         </Link>
@@ -44,10 +44,13 @@ export default function LandingNav() {
 
       {/* Mobile nav drawer */}
       {open && (
-        <div className="absolute top-full left-0 right-0 bg-card/95 backdrop-blur-lg border-b border-border z-50 md:hidden">
-          <div className="flex flex-col px-6 py-4 gap-3">
+        <div className="absolute top-full left-0 right-0 z-50 md:hidden" style={{ background: 'rgba(10,12,20,0.55)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+          <div className="flex flex-col px-6 py-4 gap-1">
+            <Link to="/custom-login" onClick={() => setOpen(false)} className="text-base font-semibold text-right py-3 border-b border-white/[0.08] metallic-gold">
+              Sign In
+            </Link>
             {[{to:"/",label:"Home"},{to:"/platform",label:"Platform"},{to:"/solutions",label:"Solutions"},{to:"/coverage",label:"Coverage"},{to:"/about",label:"About"}].map(link => (
-              <Link key={link.to} to={link.to} onClick={() => setOpen(false)} className="text-base font-medium text-white/80 hover:text-white py-3 border-b border-border/30 last:border-0">
+              <Link key={link.to} to={link.to} onClick={() => setOpen(false)} className="text-base font-medium text-white/80 hover:text-white py-3 border-b border-white/[0.06] last:border-0 text-right">
                 {link.label}
               </Link>
             ))}

@@ -45,25 +45,43 @@ export default function PageHexGlow() {
       ctx.globalAlpha = 1;
     };
 
-    const handleMove = (e) => {
-      mouseRef.current = { x: e.clientX, y: e.clientY };
+    const updatePosition = (x, y) => {
+      mouseRef.current = { x, y };
       if (ripples.current.length < 3) {
         ripples.current.push({
-          x: e.clientX, y: e.clientY,
+          x, y,
           radius: 0, maxRadius: 220, speed: 2.5, life: 1,
         });
       }
     };
 
-    const handleClick = (e) => {
+    const addRipple = (x, y) => {
       ripples.current.push({
-        x: e.clientX, y: e.clientY,
+        x, y,
         radius: 0, maxRadius: 350, speed: 3.5, life: 1,
       });
     };
 
+    const handleMove = (e) => updatePosition(e.clientX, e.clientY);
+    const handleClick = (e) => addRipple(e.clientX, e.clientY);
+
+    // Touch support for mobile
+    const handleTouchMove = (e) => {
+      const t = e.touches[0];
+      if (t) updatePosition(t.clientX, t.clientY);
+    };
+    const handleTouchStart = (e) => {
+      const t = e.touches[0];
+      if (t) {
+        updatePosition(t.clientX, t.clientY);
+        addRipple(t.clientX, t.clientY);
+      }
+    };
+
     container.addEventListener("mousemove", handleMove);
     container.addEventListener("click", handleClick);
+    container.addEventListener("touchmove", handleTouchMove, { passive: true });
+    container.addEventListener("touchstart", handleTouchStart, { passive: true });
 
     const animate = () => {
       if (!running) return;
@@ -122,6 +140,8 @@ export default function PageHexGlow() {
       cancelAnimationFrame(frameRef.current);
       container.removeEventListener("mousemove", handleMove);
       container.removeEventListener("click", handleClick);
+      container.removeEventListener("touchmove", handleTouchMove);
+      container.removeEventListener("touchstart", handleTouchStart);
       window.removeEventListener("resize", resize);
     };
   }, []);

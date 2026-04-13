@@ -44,13 +44,13 @@ export default function CRMTopCards({ leads, onNavigate }) {
       </h2>
       <p className="text-[11px] text-muted-foreground mt-0.5">Your most urgent leads — take action now</p>
     </div>
-    <div className="grid grid-cols-3 gap-4 mb-10">
+    <div className="flex md:grid md:grid-cols-3 gap-3 md:gap-4 mb-10 overflow-x-auto md:overflow-visible scrollbar-hide snap-x snap-mandatory pb-2 md:pb-0 -mx-2 px-2 md:mx-0 md:px-0">
       {CARDS.map((card) => {
         const Icon = card.icon;
         return (
           <div
             key={card.id}
-            className="rounded-2xl p-4 md:p-5 text-center transition-all duration-200 bg-white/[0.04] backdrop-blur-2xl border animated-silver-border hover:border-white/[0.25] hover:shadow-[0_0_30px_rgba(255,255,255,0.06)]"
+            className="snap-start flex-shrink-0 w-[70vw] sm:w-[45vw] md:w-auto rounded-2xl p-4 md:p-5 text-center transition-all duration-200 bg-white/[0.04] backdrop-blur-2xl border animated-silver-border hover:border-white/[0.25] hover:shadow-[0_0_30px_rgba(255,255,255,0.06)]"
           >
             <button
               onClick={(e) => openPicker(e, card.id, card.label)}

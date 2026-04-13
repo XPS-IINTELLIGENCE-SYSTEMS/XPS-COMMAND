@@ -8,6 +8,7 @@ import { base44 } from "@/api/base44Client";
 import { cn } from "@/lib/utils";
 import EditCardModal from "./EditCardModal";
 import CRMTopCards from "./CRMTopCards";
+import DashboardScrollRow from "./DashboardScrollRow";
 
 const ICON_MAP = { Users, Compass, Search, Package, Hammer, Phone, Clock, Trophy, HardHat, DollarSign, BarChart3, Lightbulb, Bot, CalendarClock, Settings };
 
@@ -244,19 +245,20 @@ export default function DashboardView({ onNavigate, sidebarPhases }) {
             {groups.map((group, gIdx) => (
               <div key={gIdx}>
                 {/* Editable group heading */}
+                <div className="text-center mb-4">
                 {editingHeading === gIdx ? (
                   <input
                     autoFocus
                     defaultValue={group.heading}
                     onBlur={(e) => handleHeadingSave(gIdx, e.target.value)}
                     onKeyDown={(e) => { if (e.key === "Enter") handleHeadingSave(gIdx, e.target.value); }}
-                    className="text-lg md:text-xl font-extrabold tracking-wide bg-transparent border-b-2 border-primary/40 outline-none text-foreground mb-4 w-full max-w-sm xps-gold-slow-shimmer"
+                    className="text-lg md:text-xl font-extrabold tracking-wide bg-transparent border-b-2 border-primary/40 outline-none text-foreground mb-2 w-full max-w-sm mx-auto xps-gold-slow-shimmer text-center"
                     style={{ fontFamily: "'Montserrat', sans-serif" }}
                   />
                 ) : (
                   <button
                     onClick={() => setEditingHeading(gIdx)}
-                    className="group flex items-center gap-2 mb-4"
+                    className="group inline-flex items-center gap-2"
                   >
                     <h2 className="text-lg md:text-xl font-extrabold tracking-wide xps-gold-slow-shimmer" style={{ fontFamily: "'Montserrat', sans-serif" }}>
                       {group.heading}
@@ -264,14 +266,15 @@ export default function DashboardView({ onNavigate, sidebarPhases }) {
                     <Pencil className="w-3.5 h-3.5 text-muted-foreground/40 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </button>
                 )}
+                </div>
 
-                {/* 3-column card row with drag & drop */}
+                {/* Card row - horizontal scroll on mobile, grid on desktop */}
                 <Droppable droppableId={`group-${gIdx}`} direction="horizontal">
                   {(provided) => (
                     <div
                       ref={provided.innerRef}
                       {...provided.droppableProps}
-                      className="grid grid-cols-3 gap-4"
+                      className="flex md:grid md:grid-cols-3 gap-3 md:gap-4 overflow-x-auto md:overflow-visible scrollbar-hide snap-x snap-mandatory pb-2 md:pb-0 -mx-2 px-2 md:mx-0 md:px-0"
                     >
                       {group.cards.map((card, cIdx) => {
                         const Icon = ICON_MAP[card.icon] || Settings;
@@ -282,7 +285,7 @@ export default function DashboardView({ onNavigate, sidebarPhases }) {
                                 ref={prov.innerRef}
                                 {...prov.draggableProps}
                                 className={cn(
-                                  "rounded-2xl p-4 md:p-5 text-center transition-all duration-200 bg-white/[0.04] backdrop-blur-2xl border animated-silver-border hover:border-white/[0.25] hover:shadow-[0_0_30px_rgba(255,255,255,0.06)]",
+                                  "snap-start flex-shrink-0 w-[70vw] sm:w-[45vw] md:w-auto rounded-2xl p-4 md:p-5 text-center transition-all duration-200 bg-white/[0.04] backdrop-blur-2xl border animated-silver-border hover:border-white/[0.25] hover:shadow-[0_0_30px_rgba(255,255,255,0.06)]",
                                   snapshot.isDragging && "ring-2 ring-primary/50 shadow-2xl scale-105 z-50"
                                 )}
                                 style={{
@@ -290,8 +293,8 @@ export default function DashboardView({ onNavigate, sidebarPhases }) {
                                   borderColor: card.borderColor || undefined,
                                 }}
                               >
-                                {/* Top bar: drag handle + edit */}
-                                <div className="flex items-center justify-between mb-3">
+                                {/* Top bar: drag handle + edit (hidden on mobile) */}
+                                <div className="hidden md:flex items-center justify-between mb-3">
                                   <div {...prov.dragHandleProps} className="p-1 rounded-md hover:bg-white/10 cursor-grab active:cursor-grabbing">
                                     <GripVertical className="w-4 h-4 text-muted-foreground/40" />
                                   </div>
@@ -300,7 +303,7 @@ export default function DashboardView({ onNavigate, sidebarPhases }) {
                                   </button>
                                 </div>
 
-                                {/* Icon — click to pick color, right-click for picker */}
+                                {/* Icon */}
                                 <div className="w-full flex flex-col items-center">
                                   <button
                                     onClick={(e) => openColorPicker(e, card.id, card.label)}

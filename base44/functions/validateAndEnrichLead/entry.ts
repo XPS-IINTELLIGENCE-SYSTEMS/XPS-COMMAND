@@ -64,6 +64,8 @@ LEAD DATA:
 - growth_signals: Specific growth indicators found
 - services_offered: Comma-separated list of services they offer
 - competitive_position: Brief assessment of where they stand vs competitors
+- estimated_annual_revenue: Estimated annual revenue in dollars (use web research, employee count, industry averages — 0 if truly unknown)
+- revenue_confidence: "high", "medium", or "low" — how confident are you in the revenue estimate
 - company_profile_summary: 3-5 sentence executive summary of this company, their strengths, what they do, and why XPS should engage
 - xps_opportunity: What specific XPS products/services would benefit this company
 - validation_notes: Any issues or red flags found
@@ -89,6 +91,8 @@ LEAD DATA:
           growth_signals: { type: "string" },
           services_offered: { type: "string" },
           competitive_position: { type: "string" },
+          estimated_annual_revenue: { type: "number" },
+          revenue_confidence: { type: "string" },
           company_profile_summary: { type: "string" },
           xps_opportunity: { type: "string" },
           validation_notes: { type: "string" },
@@ -163,6 +167,9 @@ LEAD DATA:
     if (enrichResult.material_type && enrichResult.material_type !== "unknown") {
       updateData.existing_material = enrichResult.material_type;
     }
+    if (enrichResult.estimated_annual_revenue && enrichResult.estimated_annual_revenue > 0) {
+      updateData.estimated_revenue = enrichResult.estimated_annual_revenue;
+    }
 
     await base44.asServiceRole.entities.Lead.update(leadId, updateData);
 
@@ -174,7 +181,7 @@ LEAD DATA:
         task_type: "Research",
         status: "Completed",
         priority: priority >= 8 ? "High" : priority >= 5 ? "Medium" : "Low",
-        result: `Validated: ${isValid} | Contact: ${hasContact} | Equipment: ${enrichResult.equipment_type || 'unknown'} | Materials: ${enrichResult.material_type || 'unknown'} | Employees: ${enrichResult.employee_estimate || '?'} | Growing: ${enrichResult.is_growing ? 'YES' : 'no'} | ${enrichResult.growth_signals || ''}`,
+        result: `Validated: ${isValid} | Contact: ${hasContact} | Equipment: ${enrichResult.equipment_type || 'unknown'} | Materials: ${enrichResult.material_type || 'unknown'} | Employees: ${enrichResult.employee_estimate || '?'} | Revenue: $${enrichResult.estimated_annual_revenue ? (enrichResult.estimated_annual_revenue/1000).toFixed(0) + 'k' : '?'} (${enrichResult.revenue_confidence || '?'}) | Growing: ${enrichResult.is_growing ? 'YES' : 'no'} | ${enrichResult.growth_signals || ''}`,
         completed_at: new Date().toISOString(),
         related_entity_type: "Lead",
         related_entity_id: leadId,
@@ -204,6 +211,8 @@ LEAD DATA:
       equipment: enrichResult.equipment_type,
       materials: enrichResult.material_type,
       employees: enrichResult.employee_estimate,
+      estimated_revenue: enrichResult.estimated_annual_revenue,
+      revenue_confidence: enrichResult.revenue_confidence,
       is_growing: enrichResult.is_growing,
     });
   } catch (error) {

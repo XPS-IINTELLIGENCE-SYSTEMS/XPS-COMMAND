@@ -59,6 +59,10 @@
       "type": "number",
       "description": "Number of employees"
     },
+    "estimated_revenue": {
+      "type": "number",
+      "description": "Estimated annual company revenue in dollars"
+    },
     "existing_material": {
       "type": "string",
       "description": "Current flooring material in use"

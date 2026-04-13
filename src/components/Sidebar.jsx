@@ -4,11 +4,11 @@ import NavIcon from "./shared/NavIcon";
 
 const phases = [
   { id: "command", label: "Dashboard", num: null, desc: "Pipeline & metrics" },
+  { id: "crm", label: "CRM", num: null, desc: "Pipeline board" },
   { id: "start_here", label: "Start Here", num: null, desc: "Get set up in minutes" },
   { id: "find_work", label: "Discovery", num: "1", desc: "Signal-based prospecting" },
   { id: "xpress_leads", label: "XPress Pipeline", num: null, desc: "Contractor & operator leads" },
   { id: "job_leads", label: "Jobs Pipeline", num: null, desc: "End-buyer project leads" },
-  { id: "crm", label: "CRM", num: null, desc: "Pipeline board" },
   { id: "get_work", label: "Contact", num: "2", desc: "Outreach & comms" },
   { id: "follow_up", label: "Follow-Up", num: null, desc: "Sequences & reminders" },
   { id: "win_work", label: "Close", num: "3", desc: "Proposals & closing" },

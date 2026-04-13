@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Loader2, Search, Package, Hammer, Users, Phone, Clock, Trophy, HardHat, DollarSign, BarChart3, Lightbulb, Bot } from "lucide-react";
+import CRMSection from "./CRMSection";
 import { base44 } from "@/api/base44Client";
 import { cn } from "@/lib/utils";
 
@@ -222,6 +223,16 @@ export default function DashboardView({ onNavigate }) {
             ))}
           </div>
         </div>
+
+        {/* ===== FULL CRM BELOW ===== */}
+        <div className="pt-4">
+          <div className="mb-5">
+            <h2 className="text-2xl md:text-3xl font-extrabold xps-gold-slow-shimmer tracking-tight" style={{ fontFamily: "'Montserrat', sans-serif" }}>FULL CRM BOARD</h2>
+            <p className="text-base text-muted-foreground mt-1">Manage every deal from contact to close</p>
+          </div>
+          <CRMSection />
+        </div>
+
       </div>
     </div>
   );

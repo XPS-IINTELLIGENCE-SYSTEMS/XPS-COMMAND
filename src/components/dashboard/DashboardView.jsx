@@ -204,7 +204,7 @@ export default function DashboardView({ onNavigate, sidebarPhases }) {
       <div className="relative z-10 p-5 md:p-8 max-w-[1500px] mx-auto">
 
         {/* HEADER */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-24">
           <h1 className="text-3xl md:text-5xl font-extrabold xps-gold-slow-shimmer tracking-tight" style={{ fontFamily: "'Montserrat', sans-serif" }}>
             COMMAND CENTER
           </h1>

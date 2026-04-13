@@ -3,11 +3,11 @@ import NavIcon from "./shared/NavIcon";
 
 const navItems = [
   { id: "command", label: "Dashboard", sub: "Full workflow overview" },
+  { id: "crm", label: "CRM", sub: "Pipeline board" },
   { id: "start_here", label: "Start Here", sub: "Get set up" },
   { id: "find_work", label: "Discovery", sub: "Signal-based prospecting" },
   { id: "xpress_leads", label: "XPress Pipeline", sub: "Contractor & operator leads" },
   { id: "job_leads", label: "Jobs Pipeline", sub: "End-buyer project leads" },
-  { id: "crm", label: "CRM", sub: "Pipeline board" },
   { id: "get_work", label: "Contact", sub: "Outreach & comms" },
   { id: "follow_up", label: "Follow-Up", sub: "Sequences & reminders" },
   { id: "win_work", label: "Close", sub: "Proposals & closing" },
@@ -17,6 +17,7 @@ const navItems = [
   { id: "tips", label: "Tips & Tricks", sub: "Pro knowledge" },
   { id: "agents", label: "Agents", sub: "AI agent command" },
   { id: "settings", label: "Settings", sub: "Account & preferences" },
+  { id: "admin", label: "Admin", sub: "Admin operator panel" },
 ];
 
 export default function MobileNav({ activeView, onViewChange }) {

@@ -53,11 +53,7 @@ export default function StartHereView({ onNavigate }) {
             <span className="text-xs font-semibold xps-silver-subtle-gold">GETTING STARTED</span>
           </div>
 
-          <div className="relative inline-flex items-center justify-center mb-6">
-            <div className="absolute inset-0 rounded-full bg-primary/10 blur-2xl scale-150" />
-            <div className="relative w-16 h-16 md:w-20 md:h-20 rounded-2xl metallic-silver-bg flex items-center justify-center rotate-3 hover:rotate-0 transition-transform duration-500">
-              <Compass className="w-8 h-8 md:w-10 md:h-10 text-background" />
-            </div>
+
           </div>
 
           <h1 className="text-3xl md:text-4xl font-extrabold leading-tight" style={{ fontFamily: "'Montserrat', sans-serif" }}>
@@ -97,16 +93,16 @@ export default function StartHereView({ onNavigate }) {
                   className={cn(
                     "shimmer-card w-full flex items-center gap-4 p-5 rounded-xl transition-all text-left group",
                     isDone
-                      ? "glass-card border-emerald-500/30 !bg-emerald-500/[0.06]"
+                      ? "glass-card border-primary/30"
                       : "glass-card"
                   )}
                 >
                   <div className={cn(
                     "shimmer-icon-container w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300",
-                    isDone ? "bg-emerald-500/15" : "bg-secondary"
+                    isDone ? "bg-primary/15" : "bg-secondary"
                   )}>
                     {isDone ? (
-                      <CheckCircle2 className="w-6 h-6 text-emerald-400" />
+                      <CheckCircle2 className="w-6 h-6 text-primary" />
                     ) : (
                       <StepIcon className="w-6 h-6 shimmer-icon metallic-silver-icon" />
                     )}
@@ -114,8 +110,8 @@ export default function StartHereView({ onNavigate }) {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-0.5">
                       <span className="text-[10px] font-mono font-bold text-primary/70">0{i + 1}</span>
-                      <span className={cn("text-sm font-semibold", isDone ? "text-emerald-400" : "text-foreground")}>{step.title}</span>
-                      {isDone && <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400">DONE</span>}
+                      <span className={cn("text-sm font-semibold", isDone ? "text-primary" : "text-foreground")}>{step.title}</span>
+                      {isDone && <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-primary/20 text-primary">DONE</span>}
                     </div>
                     <p className="text-xs text-muted-foreground leading-relaxed">{step.desc}</p>
                   </div>

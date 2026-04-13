@@ -19,6 +19,7 @@ const phases = [
 ];
 
 const utilityNav = [
+  { id: "task_scheduler", label: "Task Scheduler", desc: "Scraper control center" },
   { id: "agents", label: "Agent Command", desc: "All agents & tools" },
   { id: "settings", label: "Settings", desc: "Account & preferences" },
 ];

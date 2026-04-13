@@ -1,6 +1,7 @@
 import StartHereView from "./phases/StartHereView";
 import DashboardView from "./dashboard/DashboardView";
 import DiscoverView from "./phases/DiscoverView";
+import TaskSchedulerView from "./scheduler/TaskSchedulerView";
 import ContactView from "./phases/ContactView";
 import FollowUpView from "./phases/FollowUpView";
 import CloseView from "./phases/CloseView";
@@ -47,6 +48,8 @@ export default function ContentArea({ activeView, onChatCommand, onNavigate }) {
       return wrapper(<TipsView />);
     case "agents":
       return wrapper(<AgentCommandPage />);
+    case "task_scheduler":
+      return wrapper(<TaskSchedulerView />);
     case "settings":
       return wrapper(<SettingsView />);
     default:

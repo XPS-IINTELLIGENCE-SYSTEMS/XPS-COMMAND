@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Loader2, Search, Package, Hammer, Users, Phone, Clock, Trophy, HardHat, DollarSign, BarChart3, Lightbulb, Bot } from "lucide-react";
+import { Loader2, Search, Package, Hammer, Users, Phone, Clock, Trophy, HardHat, DollarSign, BarChart3, Lightbulb, Bot, TrendingUp } from "lucide-react";
 import CRMSection from "./CRMSection";
 import { base44 } from "@/api/base44Client";
 import { cn } from "@/lib/utils";
@@ -33,7 +33,7 @@ export default function DashboardView({ onNavigate }) {
   };
 
   if (loading || !d) return (
-    <div className="flex items-center justify-center h-full">
+    <div className="flex items-center justify-center h-full bg-transparent">
       <Loader2 className="w-8 h-8 animate-spin text-primary" />
     </div>
   );
@@ -75,11 +75,11 @@ export default function DashboardView({ onNavigate }) {
   const biggestDeal = [...proposals].sort((a,b)=>(b.total_value||0)-(a.total_value||0))[0];
 
   return (
-    <div className="h-full overflow-y-auto hex-bg">
-      <div className="relative z-10 p-5 md:p-8 space-y-5 max-w-[1500px] mx-auto">
+    <div className="h-full overflow-y-auto bg-transparent">
+      <div className="relative z-10 p-5 md:p-8 space-y-6 max-w-[1500px] mx-auto">
 
         {/* ===== HEADER ===== */}
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-4">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
             <h1 className="text-3xl md:text-4xl font-extrabold xps-gold-slow-shimmer tracking-tight" style={{ fontFamily: "'Montserrat', sans-serif" }}>
               COMMAND CENTER
@@ -93,7 +93,29 @@ export default function DashboardView({ onNavigate }) {
           </div>
         </div>
 
-        {/* ===== WORKFLOW ROWS ===== */}
+        {/* ===== TOP METRICS — 4 key numbers ===== */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <MetricTile label="Total Leads" value={leads.length} sub={`${xp.length} XPress · ${jobs.length} Jobs`} />
+          <MetricTile label="Won Revenue" value={`$${(wonValue/1000).toFixed(0)}k`} sub={`${won.length} deals closed`} />
+          <MetricTile label="Active Pipeline" value={`$${(totalPipeline/1000).toFixed(0)}k`} sub={`${inProposal.length} in proposal`} />
+          <MetricTile label="Collected" value={`$${(paidValue/1000).toFixed(0)}k`} sub={`${overdue.length} overdue`} />
+        </div>
+
+        {/* ===== CRM BOARD — IMMEDIATELY BELOW METRICS ===== */}
+        <div>
+          <div className="mb-4">
+            <h2 className="text-2xl md:text-3xl font-extrabold xps-gold-slow-shimmer tracking-tight" style={{ fontFamily: "'Montserrat', sans-serif" }}>CRM BOARD</h2>
+            <p className="text-sm text-muted-foreground mt-1">Manage every deal from contact to close</p>
+          </div>
+          <CRMSection />
+        </div>
+
+        {/* ===== PIPELINE METRICS — below CRM ===== */}
+        <div>
+          <h2 className="text-2xl md:text-3xl font-extrabold metallic-silver tracking-tight mb-1" style={{ fontFamily: "'Montserrat', sans-serif" }}>PIPELINE METRICS</h2>
+          <p className="text-sm text-muted-foreground mb-4">Click any row to drill down</p>
+        </div>
+
         <WorkflowRow icon={Search} title="DISCOVERY" onClick={() => nav("find_work")} cols={[
           { label: "Incoming", value: incoming.length, sub: "new leads" },
           { label: "Top Score", value: topScore, sub: "best lead score" },
@@ -116,14 +138,6 @@ export default function DashboardView({ onNavigate }) {
           { label: "Highest $", value: `$${(Math.max(...jobs.map(l=>l.estimated_value||0),0)/1000).toFixed(0)}k`, sub: "single project" },
           { label: "Avg Sqft", value: Math.round(jobs.reduce((s,l)=>s+(l.square_footage||0),0)/(jobs.length||1)).toLocaleString(), sub: "per project" },
           { label: "Qualified", value: jobs.filter(l=>l.pipeline_status==="Qualified").length, sub: "ready to bid" },
-        ]} />
-
-        <WorkflowRow icon={Users} title="CRM" onClick={() => nav("crm")} cols={[
-          { label: "Active", value: leads.filter(l=>!["Won","Lost"].includes(l.stage)).length, sub: "in pipeline" },
-          { label: "Pipeline $", value: `$${(totalPipeline/1000).toFixed(0)}k`, sub: "total value" },
-          { label: "Top $", value: `$${(topValue/1000).toFixed(0)}k`, sub: "biggest lead" },
-          { label: "Bottom $", value: `$${(bottomValue/1000).toFixed(0)}k`, sub: "smallest lead" },
-          { label: "Median $", value: `$${(medianValue/1000).toFixed(0)}k`, sub: "middle ground" },
         ]} />
 
         <WorkflowRow icon={Phone} title="CONTACT" onClick={() => nav("get_work")} cols={[
@@ -224,16 +238,18 @@ export default function DashboardView({ onNavigate }) {
           </div>
         </div>
 
-        {/* ===== FULL CRM BELOW ===== */}
-        <div className="pt-4">
-          <div className="mb-5">
-            <h2 className="text-2xl md:text-3xl font-extrabold xps-gold-slow-shimmer tracking-tight" style={{ fontFamily: "'Montserrat', sans-serif" }}>FULL CRM BOARD</h2>
-            <p className="text-base text-muted-foreground mt-1">Manage every deal from contact to close</p>
-          </div>
-          <CRMSection />
-        </div>
-
       </div>
+    </div>
+  );
+}
+
+/* ===== METRIC TILE ===== */
+function MetricTile({ label, value, sub }) {
+  return (
+    <div className="rounded-2xl p-5 bg-white/[0.04] backdrop-blur-2xl border border-white/[0.10] animated-silver-border text-center">
+      <div className="text-2xl md:text-3xl font-extrabold text-foreground">{value}</div>
+      <div className="text-sm font-bold text-muted-foreground mt-1">{label}</div>
+      {sub && <div className="text-xs text-muted-foreground/60 mt-0.5">{sub}</div>}
     </div>
   );
 }

@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { Loader2, Search, Package, Hammer, Phone, Clock, Trophy, HardHat, DollarSign, BarChart3, Lightbulb, Bot, Settings, Compass, CalendarClock, Users, GripVertical, Pencil } from "lucide-react";
 import { getIconColor } from "@/lib/iconColors";
+import useColorRefresh from "@/hooks/useColorRefresh";
+import ColorPicker from "../shared/ColorPicker";
 import { Droppable, Draggable } from "@hello-pangea/dnd";
 import { base44 } from "@/api/base44Client";
 import { cn } from "@/lib/utils";
@@ -102,6 +104,14 @@ export default function DashboardView({ onNavigate, sidebarPhases }) {
   const [editGroupIdx, setEditGroupIdx] = useState(null);
   const [editCardIdx, setEditCardIdx] = useState(null);
   const [editingHeading, setEditingHeading] = useState(null);
+  const [colorPicker, setColorPicker] = useState(null); // { id, x, y, label }
+  useColorRefresh();
+
+  const openColorPicker = (e, id, label) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setColorPicker({ id, x: e.clientX, y: e.clientY, label });
+  };
 
   // Rebuild groups whenever sidebarPhases change
   useEffect(() => {
@@ -290,17 +300,22 @@ export default function DashboardView({ onNavigate, sidebarPhases }) {
                                   </button>
                                 </div>
 
-                                {/* Icon */}
-                                <button onClick={() => nav(card.nav)} className="w-full flex flex-col items-center">
-                                  <div className="w-12 h-12 rounded-xl bg-white/[0.06] border border-white/[0.08] flex items-center justify-center mb-3">
+                                {/* Icon — click to pick color, right-click for picker */}
+                                <div className="w-full flex flex-col items-center">
+                                  <button
+                                    onClick={(e) => openColorPicker(e, card.id, card.label)}
+                                    onContextMenu={(e) => openColorPicker(e, card.id, card.label)}
+                                    className="w-12 h-12 rounded-xl bg-white/[0.06] border border-white/[0.08] flex items-center justify-center mb-3 hover:scale-110 hover:border-white/20 transition-all cursor-pointer"
+                                    title="Click to change icon color"
+                                  >
                                     <Icon className="w-6 h-6" style={{ color: getIconColor(card.id) }} />
-                                  </div>
-                                  <div className="text-sm font-bold text-foreground mb-0.5">{card.label}</div>
+                                  </button>
+                                  <button onClick={() => nav(card.nav)} className="text-sm font-bold text-foreground mb-0.5 hover:text-primary transition-colors">{card.label}</button>
                                   <div className="text-[11px] text-muted-foreground leading-snug">{card.desc}</div>
                                   {statMap[card.id] && (
                                     <div className="mt-2 text-xs font-semibold text-primary/80">{statMap[card.id]}</div>
                                   )}
-                                </button>
+                                </div>
                               </div>
                             )}
                           </Draggable>
@@ -315,6 +330,16 @@ export default function DashboardView({ onNavigate, sidebarPhases }) {
           </div>
         </div>
       </div>
+
+      {/* Color Picker */}
+      {colorPicker && (
+        <ColorPicker
+          targetId={colorPicker.id}
+          position={{ x: colorPicker.x, y: colorPicker.y }}
+          onClose={() => setColorPicker(null)}
+          label={colorPicker.label}
+        />
+      )}
 
       {/* Edit Card Modal */}
       <EditCardModal

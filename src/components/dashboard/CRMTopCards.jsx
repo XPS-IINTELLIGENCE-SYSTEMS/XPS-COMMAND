@@ -1,5 +1,8 @@
+import { useState } from "react";
 import { UserCheck, Clock, Users } from "lucide-react";
-import { CRM_COLORS } from "@/lib/iconColors";
+import { CRM_COLORS, getIconColor, setIconColor } from "@/lib/iconColors";
+import useColorRefresh from "@/hooks/useColorRefresh";
+import ColorPicker from "../shared/ColorPicker";
 
 const CARDS = [
   { id: "contact_first", label: "Contact First", desc: "Highest priority awaiting contact", icon: UserCheck, color: CRM_COLORS.contact_first, nav: "crm" },
@@ -8,6 +11,14 @@ const CARDS = [
 ];
 
 export default function CRMTopCards({ leads, onNavigate }) {
+  const [colorPicker, setColorPicker] = useState(null);
+  useColorRefresh();
+
+  const openPicker = (e, id, label) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setColorPicker({ id, x: e.clientX, y: e.clientY, label });
+  };
   const contactFirst = leads.filter(l =>
     ["Qualified", "Prioritized", "Validated"].includes(l.pipeline_status) && !l.last_contacted
   ).length;
@@ -26,24 +37,39 @@ export default function CRMTopCards({ leads, onNavigate }) {
   };
 
   return (
+    <>
     <div className="grid grid-cols-3 gap-4 mb-10">
       {CARDS.map((card) => {
         const Icon = card.icon;
         return (
-          <button
+          <div
             key={card.id}
-            onClick={() => onNavigate(card.nav)}
             className="rounded-2xl p-4 md:p-5 text-center transition-all duration-200 bg-white/[0.04] backdrop-blur-2xl border animated-silver-border hover:border-white/[0.25] hover:shadow-[0_0_30px_rgba(255,255,255,0.06)]"
           >
-            <div className="w-12 h-12 rounded-xl bg-white/[0.06] border border-white/[0.08] flex items-center justify-center mb-3 mx-auto">
-              <Icon className="w-6 h-6" style={{ color: card.color }} />
-            </div>
-            <div className="text-sm font-bold text-foreground mb-0.5">{card.label}</div>
-            <div className="text-[11px] text-muted-foreground leading-snug">{card.desc}</div>
-            <div className="mt-2 text-xs font-semibold text-primary/80">{statMap[card.id]}</div>
-          </button>
+            <button
+              onClick={(e) => openPicker(e, card.id, card.label)}
+              className="w-12 h-12 rounded-xl bg-white/[0.06] border border-white/[0.08] flex items-center justify-center mb-3 mx-auto hover:scale-110 hover:border-white/20 transition-all cursor-pointer"
+              title="Click to change color"
+            >
+              <Icon className="w-6 h-6" style={{ color: getIconColor(card.id) || card.color }} />
+            </button>
+            <button onClick={() => onNavigate(card.nav)} className="w-full">
+              <div className="text-sm font-bold text-foreground mb-0.5">{card.label}</div>
+              <div className="text-[11px] text-muted-foreground leading-snug">{card.desc}</div>
+              <div className="mt-2 text-xs font-semibold text-primary/80">{statMap[card.id]}</div>
+            </button>
+          </div>
         );
       })}
     </div>
+    {colorPicker && (
+      <ColorPicker
+        targetId={colorPicker.id}
+        position={{ x: colorPicker.x, y: colorPicker.y }}
+        onClose={() => setColorPicker(null)}
+        label={colorPicker.label}
+      />
+    )}
+    </>
   );
 }

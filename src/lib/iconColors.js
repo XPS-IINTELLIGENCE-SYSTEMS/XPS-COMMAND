@@ -1,32 +1,10 @@
 /**
- * Psychology-Based Icon Color System
- * ===================================
- * Each color is chosen based on color psychology, marketing/sales funnel theory,
- * and UX best practices to subconsciously guide user behavior.
- *
- * COLOR RATIONALE:
- * ─────────────────────────────────────────────────────────────────
- * command      → Gold (#d4af37)        — Authority, premium, leadership. The command center demands presence.
- * crm          → Warm Gold (#c9a227)   — Relationship warmth, trust, long-term value. CRM = people relationships.
- * start_here   → Teal (#2dd4bf)        — Fresh start, clarity, welcoming. Invites new users in without pressure.
- * find_work    → Emerald (#34d399)     — Growth, opportunity, abundance. Discovery = finding green pastures.
- * xpress_leads → Amber (#f59e0b)       — Energy, urgency, momentum. Pipeline leads need forward motion.
- * job_leads    → Bronze (#cd7f32)      — Craftsmanship, hands-on reliability. Jobs = real-world execution.
- * get_work     → Electric Blue (#3b82f6) — Trust, communication, professionalism. Outreach must feel credible.
- * follow_up    → Orange (#f97316)      — Urgency, persistence, warmth. Follow-ups require action without aggression.
- * win_work     → Ruby Red (#ef4444)    — Power, passion, conversion. Closing deals = high stakes, high reward.
- * do_work      → Steel (#94a3b8)       — Precision, dependability, work ethic. Execution = steady and reliable.
- * get_paid     → Money Green (#10b981) — Wealth, success, reward. Collection = the payoff moment.
- * analytics    → Violet (#8b5cf6)      — Intelligence, insight, depth. Analytics = wisdom from data.
- * tips         → Cyan (#06b6d4)        — Knowledge, learning, freshness. Tips = quick, clear insights.
- * agents       → Magenta (#d946ef)     — AI, innovation, futuristic. Agents = cutting-edge tech.
- * task_scheduler → Indigo (#6366f1)    — Organization, control, structure. Scheduling = systematic discipline.
- * settings     → Cool Gray (#64748b)   — Neutral, utilitarian. Settings = background infrastructure.
- * admin        → Dark Gold (#b8860b)   — Governance, authority, control. Admin = elevated access.
- * ─────────────────────────────────────────────────────────────────
+ * Psychology-Based Icon Color System with Live Override Support
+ * =============================================================
+ * Colors are persisted in localStorage so user/AI overrides survive refresh.
  */
 
-const ICON_COLORS = {
+const DEFAULTS = {
   command:        "#d4af37",  // Gold — Authority & Leadership
   crm:            "#c9a227",  // Warm Gold — Relationships & Trust
   start_here:     "#2dd4bf",  // Teal — Fresh Start & Guidance
@@ -46,25 +24,78 @@ const ICON_COLORS = {
   admin:          "#b8860b",  // Dark Gold — Governance & Authority
 };
 
-/**
- * CRM-specific action colors (for CRM top cards)
- * These follow sales psychology:
- *   Contact First = Red-Orange (urgency to act NOW)
- *   Follow Up = Amber (persistent but patient)
- *   In Pipeline = Green (healthy, growing, on-track)
- */
-export const CRM_COLORS = {
-  contact_first:  "#f97316",  // Orange — Act now, highest priority
-  follow_up_crm:  "#f59e0b",  // Amber — Patience with urgency
-  in_pipeline:    "#10b981",  // Green — Healthy pipeline, growth
-};
+const STORAGE_KEY = "xps-icon-color-overrides";
 
-/**
- * Get the icon color for a given phase/section ID.
- * Falls back to gold if the ID is not mapped.
- */
-export function getIconColor(id) {
-  return ICON_COLORS[id] || "#d4af37";
+function loadOverrides() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    return saved ? JSON.parse(saved) : {};
+  } catch { return {}; }
 }
 
-export default ICON_COLORS;
+let overrides = loadOverrides();
+let listeners = [];
+
+export function getIconColor(id) {
+  return overrides[id] || DEFAULTS[id] || "#d4af37";
+}
+
+export function setIconColor(id, color) {
+  overrides[id] = color;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(overrides));
+  listeners.forEach(fn => fn(id, color));
+}
+
+export function resetIconColor(id) {
+  delete overrides[id];
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(overrides));
+  listeners.forEach(fn => fn(id, DEFAULTS[id] || "#d4af37"));
+}
+
+export function resetAllColors() {
+  overrides = {};
+  localStorage.removeItem(STORAGE_KEY);
+  listeners.forEach(fn => fn(null, null));
+}
+
+export function getDefaultColor(id) {
+  return DEFAULTS[id] || "#d4af37";
+}
+
+/** Subscribe to color changes. Returns unsubscribe function. */
+export function subscribeColors(fn) {
+  listeners.push(fn);
+  return () => { listeners = listeners.filter(l => l !== fn); };
+}
+
+export const CRM_COLORS = {
+  contact_first:  "#f97316",
+  follow_up_crm:  "#f59e0b",
+  in_pipeline:    "#10b981",
+};
+
+/** Curated palette for the color picker — psychology-driven presets */
+export const COLOR_PALETTE = [
+  { hex: "#d4af37", name: "Gold", meaning: "Authority & Leadership" },
+  { hex: "#c9a227", name: "Warm Gold", meaning: "Trust & Relationships" },
+  { hex: "#b8860b", name: "Dark Gold", meaning: "Governance & Control" },
+  { hex: "#f59e0b", name: "Amber", meaning: "Energy & Momentum" },
+  { hex: "#f97316", name: "Orange", meaning: "Urgency & Action" },
+  { hex: "#ef4444", name: "Ruby", meaning: "Power & Conversion" },
+  { hex: "#ec4899", name: "Pink", meaning: "Warmth & Empathy" },
+  { hex: "#d946ef", name: "Magenta", meaning: "Innovation & AI" },
+  { hex: "#8b5cf6", name: "Violet", meaning: "Intelligence & Insight" },
+  { hex: "#6366f1", name: "Indigo", meaning: "Organization & Control" },
+  { hex: "#3b82f6", name: "Blue", meaning: "Trust & Communication" },
+  { hex: "#06b6d4", name: "Cyan", meaning: "Knowledge & Clarity" },
+  { hex: "#2dd4bf", name: "Teal", meaning: "Fresh Start & Guidance" },
+  { hex: "#10b981", name: "Emerald", meaning: "Wealth & Reward" },
+  { hex: "#34d399", name: "Green", meaning: "Growth & Opportunity" },
+  { hex: "#cd7f32", name: "Bronze", meaning: "Craftsmanship & Reliability" },
+  { hex: "#94a3b8", name: "Steel", meaning: "Precision & Dependability" },
+  { hex: "#64748b", name: "Slate", meaning: "Neutral & Utilitarian" },
+  { hex: "#e2e8f0", name: "Silver", meaning: "Clean & Modern" },
+  { hex: "#ffffff", name: "White", meaning: "Purity & Simplicity" },
+];
+
+export default DEFAULTS;

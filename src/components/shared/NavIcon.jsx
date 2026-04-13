@@ -1,5 +1,8 @@
+import { useState, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import { getIconColor } from "@/lib/iconColors";
+import useIconColor from "@/hooks/useIconColor";
+import ColorPicker from "./ColorPicker";
 import { Compass, LayoutDashboard, Search, Megaphone, HardHat, DollarSign, Lightbulb, Settings, Zap, Trophy, Users, BarChart3, Bot, Package, Hammer, Phone, Clock, CalendarClock, Shield } from "lucide-react";
 
 const ICON_MAP = {
@@ -41,26 +44,46 @@ const sizes = {
 
 export default function NavIcon({ id, size = "md", active = false, className }) {
   const Icon = ICON_MAP[id];
+  const color = useIconColor(id);
+  const [picker, setPicker] = useState(null);
   if (!Icon) return null;
   const s = sizes[size] || sizes.md;
 
+  const handleContextMenu = useCallback((e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setPicker({ x: e.clientX, y: e.clientY });
+  }, []);
+
   return (
-    <div
-      className={cn(
-        "rounded-lg flex items-center justify-center flex-shrink-0 transition-all duration-200",
-        s.container,
-        active ? "bg-white/[0.08]" : "bg-secondary/60",
-        className
-      )}
-    >
-      <Icon
+    <>
+      <div
+        onContextMenu={handleContextMenu}
         className={cn(
-          s.icon,
-          "transition-colors duration-200",
-          !active && "opacity-60"
+          "rounded-lg flex items-center justify-center flex-shrink-0 transition-all duration-200 cursor-pointer",
+          s.container,
+          active ? "bg-white/[0.08]" : "bg-secondary/60",
+          className
         )}
-        style={{ color: getIconColor(id) }}
-      />
-    </div>
+        title="Right-click to change color"
+      >
+        <Icon
+          className={cn(
+            s.icon,
+            "transition-colors duration-200",
+            !active && "opacity-60"
+          )}
+          style={{ color }}
+        />
+      </div>
+      {picker && (
+        <ColorPicker
+          targetId={id}
+          position={picker}
+          onClose={() => setPicker(null)}
+          label={id.replace(/_/g, " ")}
+        />
+      )}
+    </>
   );
 }

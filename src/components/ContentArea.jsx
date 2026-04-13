@@ -14,10 +14,31 @@ import LeadPipelineView from "./pipeline/LeadPipelineView";
 import AnalyticsView from "./dashboard/AnalyticsView";
 import AgentCommandPage from "./command/AgentCommandPage";
 import AdminInlineView from "./admin/AdminInlineView";
+import NavButtons, { pushView } from "./shared/NavButtons";
+import { useEffect, useRef } from "react";
 
 export default function ContentArea({ activeView, onChatCommand, onNavigate, sidebarPhases }) {
+  const lastPushed = useRef(null);
+
+  useEffect(() => {
+    if (activeView && activeView !== lastPushed.current) {
+      pushView(activeView);
+      lastPushed.current = activeView;
+    }
+  }, [activeView]);
+
+  const handleNavButton = (view, isHistoryNav) => {
+    if (isHistoryNav) {
+      lastPushed.current = view;
+    }
+    if (onNavigate) onNavigate(view);
+  };
+
   const wrapper = (children) => (
-    <div className="flex-1 h-full overflow-hidden border-l border-[#8a8a8a]/15">{children}</div>
+    <div className="flex-1 h-full overflow-hidden border-l border-[#8a8a8a]/15 relative">
+      <NavButtons onNavigate={handleNavButton} />
+      {children}
+    </div>
   );
 
   switch (activeView) {

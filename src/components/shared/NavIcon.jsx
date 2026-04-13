@@ -1,6 +1,5 @@
 import { useState, useCallback } from "react";
 import { cn } from "@/lib/utils";
-import { getIconColor } from "@/lib/iconColors";
 import useIconColor from "@/hooks/useIconColor";
 import ColorPicker from "./ColorPicker";
 import { Compass, LayoutDashboard, Search, Megaphone, HardHat, DollarSign, Lightbulb, Settings, Zap, Trophy, Users, BarChart3, Bot, Package, Hammer, Phone, Clock, CalendarClock, Shield } from "lucide-react";
@@ -27,14 +26,6 @@ const ICON_MAP = {
   admin: Shield,
 };
 
-/**
- * Proportional nav/section icon.
- * Sizes follow Apple HIG touch-target and optical balance rules:
- *   sm  = sidebar nav items (icon 16px in 28px container)
- *   md  = section headers / list items (icon 18px in 32px container)
- *   lg  = page hero headers (icon 22px in 40px container)
- *   xl  = onboarding hero (icon 28px in 48px container)
- */
 const sizes = {
   sm: { container: "w-7 h-7", icon: "w-4 h-4" },
   md: { container: "w-8 h-8", icon: "w-[18px] h-[18px]" },
@@ -43,17 +34,19 @@ const sizes = {
 };
 
 export default function NavIcon({ id, size = "md", active = false, className }) {
-  const Icon = ICON_MAP[id];
   const color = useIconColor(id);
   const [picker, setPicker] = useState(null);
-  if (!Icon) return null;
-  const s = sizes[size] || sizes.md;
 
   const handleContextMenu = useCallback((e) => {
     e.preventDefault();
     e.stopPropagation();
     setPicker({ x: e.clientX, y: e.clientY });
   }, []);
+
+  const Icon = ICON_MAP[id];
+  if (!Icon) return null;
+
+  const s = sizes[size] || sizes.md;
 
   return (
     <>

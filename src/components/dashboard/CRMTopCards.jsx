@@ -38,6 +38,12 @@ export default function CRMTopCards({ leads, onNavigate }) {
 
   return (
     <>
+    <div className="text-center mb-4">
+      <h2 className="text-lg md:text-xl font-extrabold xps-gold-slow-shimmer tracking-wide" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+        Priority Actions
+      </h2>
+      <p className="text-[11px] text-muted-foreground mt-0.5">Your most urgent leads — take action now</p>
+    </div>
     <div className="grid grid-cols-3 gap-4 mb-10">
       {CARDS.map((card) => {
         const Icon = card.icon;

@@ -20,7 +20,6 @@ const WORKFLOW_CARDS = [
   { id: "agents", label: "Agents", desc: "AI agent command", icon: Bot, nav: "agents" },
   { id: "task_scheduler", label: "Task Scheduler", desc: "Scraper control center", icon: CalendarClock, nav: "task_scheduler" },
   { id: "settings", label: "Settings", desc: "Account & preferences", icon: Settings, nav: "settings" },
-  { id: "admin", label: "Admin", desc: "Admin operator panel", icon: Shield, nav: "admin" },
 ];
 
 export default function DashboardView({ onNavigate }) {

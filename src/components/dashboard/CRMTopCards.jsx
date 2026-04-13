@@ -2,6 +2,7 @@ import { useState } from "react";
 import { UserCheck, Clock, Users } from "lucide-react";
 import { CRM_COLORS, getIconColor, setIconColor } from "@/lib/iconColors";
 import useColorRefresh from "@/hooks/useColorRefresh";
+import useEditorMode from "@/hooks/useEditorMode";
 import ColorPicker from "../shared/ColorPicker";
 
 const CARDS = [
@@ -13,8 +14,10 @@ const CARDS = [
 export default function CRMTopCards({ leads, onNavigate }) {
   const [colorPicker, setColorPicker] = useState(null);
   useColorRefresh();
+  const editorMode = useEditorMode();
 
   const openPicker = (e, id, label) => {
+    if (!editorMode) return;
     e.preventDefault();
     e.stopPropagation();
     setColorPicker({ id, x: e.clientX, y: e.clientY, label });

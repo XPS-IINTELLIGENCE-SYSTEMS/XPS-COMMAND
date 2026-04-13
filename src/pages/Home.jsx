@@ -8,9 +8,13 @@ import ChatPanel from "../components/ChatPanel";
 import MobileNav from "../components/MobileNav";
 import MobileTabBar from "../components/mobile/MobileTabBar";
 import { DragDropContext } from "@hello-pangea/dnd";
+import WorkflowLanding from "../components/dashboard/WorkflowLanding";
 
 export default function Home() {
   const [activeView, setActiveView] = useState("command");
+  const [showWorkflowLanding, setShowWorkflowLanding] = useState(() => {
+    return !localStorage.getItem("xps-workflow-landing-seen");
+  });
   const [sidebarPhases, setSidebarPhases] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [chatOpen, setChatOpen] = useState(true);
@@ -174,8 +178,15 @@ export default function Home() {
     }
   };
 
+  const handleWorkflowSelect = (view) => {
+    localStorage.setItem("xps-workflow-landing-seen", "true");
+    setShowWorkflowLanding(false);
+    setActiveView(view);
+  };
+
   return (
     <DragDropContext onDragEnd={handleGlobalDragEnd}>
+    {showWorkflowLanding && <WorkflowLanding onSelect={handleWorkflowSelect} />}
     <div className="h-[100dvh] w-screen overflow-hidden" style={{ border: '1.5px solid #a0a0a0', animation: 'silver-border-anim 4s ease infinite' }}>
       <div className="h-full w-full flex flex-col md:flex-row overflow-hidden bg-background">
       {/* ========== MOBILE LAYOUT ========== */}

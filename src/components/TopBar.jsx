@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Search, Sun, Moon, X, Loader2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import EditorModeToggle from "./shared/EditorModeToggle";
 
 export default function TopBar({ children, theme, onThemeToggle, height = 48 }) {
   const toggleButtons = children ? (Array.isArray(children) ? children : [children]) : [];
@@ -99,6 +100,7 @@ export default function TopBar({ children, theme, onThemeToggle, height = 48 }) 
       </div>
 
       <div className="flex items-center gap-2">
+        <EditorModeToggle />
         <button
           onClick={onThemeToggle}
           className="shimmer-card p-2 rounded-xl hover:bg-secondary/50 text-muted-foreground transition-colors"

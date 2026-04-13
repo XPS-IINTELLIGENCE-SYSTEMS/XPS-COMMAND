@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Loader2, Search, Package, Hammer, Phone, Clock, Trophy, HardHat, DollarSign, BarChart3, Lightbulb, Bot, Settings, Compass, CalendarClock, Users, GripVertical, Pencil } from "lucide-react";
 import { getIconColor } from "@/lib/iconColors";
 import useColorRefresh from "@/hooks/useColorRefresh";
+import useEditorMode from "@/hooks/useEditorMode";
 import ColorPicker from "../shared/ColorPicker";
 import { Droppable, Draggable } from "@hello-pangea/dnd";
 import { base44 } from "@/api/base44Client";
@@ -107,8 +108,10 @@ export default function DashboardView({ onNavigate, sidebarPhases }) {
   const [editingHeading, setEditingHeading] = useState(null);
   const [colorPicker, setColorPicker] = useState(null); // { id, x, y, label }
   useColorRefresh();
+  const editorMode = useEditorMode();
 
   const openColorPicker = (e, id, label) => {
+    if (!editorMode) return; // Only allow color picking in editor mode
     e.preventDefault();
     e.stopPropagation();
     setColorPicker({ id, x: e.clientX, y: e.clientY, label });
@@ -306,10 +309,10 @@ export default function DashboardView({ onNavigate, sidebarPhases }) {
                                 {/* Icon */}
                                 <div className="w-full flex flex-col items-center">
                                   <button
-                                    onClick={(e) => openColorPicker(e, card.id, card.label)}
+                                    onClick={(e) => editorMode ? openColorPicker(e, card.id, card.label) : nav(card.nav)}
                                     onContextMenu={(e) => openColorPicker(e, card.id, card.label)}
                                     className="w-12 h-12 rounded-xl bg-white/[0.06] border border-white/[0.08] flex items-center justify-center mb-3 hover:scale-110 hover:border-white/20 transition-all cursor-pointer"
-                                    title="Click to change icon color"
+                                    title={editorMode ? "Click to change icon color" : ""}
                                   >
                                     <Icon className="w-6 h-6" style={{ color: getIconColor(card.id) }} />
                                   </button>

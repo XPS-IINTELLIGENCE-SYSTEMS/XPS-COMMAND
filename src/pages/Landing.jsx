@@ -2,7 +2,7 @@ import { ArrowRight, ShieldCheck, Download } from "lucide-react";
 import { Link } from "react-router-dom";
 import LandingNav from "../components/landing/LandingNav";
 import PageHexGlow from "../components/PageHexGlow";
-import DownloadCTA from "../components/landing/DownloadCTA";
+import FloatingDownloadBtn from "../components/landing/FloatingDownloadBtn";
 
 const stats = [
   { value: "60+", label: "LOCATIONS" },
@@ -18,10 +18,8 @@ export default function Landing() {
       <div className="relative z-[1]">
       <LandingNav />
 
-      {/* Mobile Download CTA - top of page */}
-      <div className="md:hidden px-4 pt-6">
-        <DownloadCTA />
-      </div>
+      {/* Floating Download Button - mobile only */}
+      <FloatingDownloadBtn />
 
       {/* Hero */}
       <div className="flex flex-col items-center text-center px-6 pt-16 md:pt-28 pb-20">

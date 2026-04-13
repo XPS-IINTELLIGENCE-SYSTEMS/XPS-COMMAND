@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import useIconColor from "@/hooks/useIconColor";
+import useEditorMode from "@/hooks/useEditorMode";
 import ColorPicker from "./ColorPicker";
 import { Compass, LayoutDashboard, Search, Megaphone, HardHat, DollarSign, Lightbulb, Settings, Zap, Trophy, Users, BarChart3, Bot, Package, Hammer, Phone, Clock, CalendarClock, Shield, Layers } from "lucide-react";
 
@@ -37,12 +38,14 @@ const sizes = {
 export default function NavIcon({ id, size = "md", active = false, className }) {
   const color = useIconColor(id);
   const [picker, setPicker] = useState(null);
+  const editorMode = useEditorMode();
 
   const handleContextMenu = useCallback((e) => {
+    if (!editorMode) return;
     e.preventDefault();
     e.stopPropagation();
     setPicker({ x: e.clientX, y: e.clientY });
-  }, []);
+  }, [editorMode]);
 
   const Icon = ICON_MAP[id];
   if (!Icon) return null;

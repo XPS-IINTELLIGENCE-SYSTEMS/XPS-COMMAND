@@ -44,7 +44,7 @@ export default function FollowUpView({ onChatCommand }) {
 
   return (
     <div className="h-full overflow-y-auto">
-      <div className="p-4 md:p-6 space-y-6">
+      <div className="p-4 md:p-8 space-y-10">
         <div className="text-center pt-2 pb-4">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 mb-4">
             <NavIcon id="follow_up" size="sm" active />

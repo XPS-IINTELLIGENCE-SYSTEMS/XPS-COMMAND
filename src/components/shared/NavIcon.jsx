@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import useIconColor from "@/hooks/useIconColor";
 import ColorPicker from "./ColorPicker";
-import { Compass, LayoutDashboard, Search, Megaphone, HardHat, DollarSign, Lightbulb, Settings, Zap, Trophy, Users, BarChart3, Bot, Package, Hammer, Phone, Clock, CalendarClock, Shield } from "lucide-react";
+import { Compass, LayoutDashboard, Search, Megaphone, HardHat, DollarSign, Lightbulb, Settings, Zap, Trophy, Users, BarChart3, Bot, Package, Hammer, Phone, Clock, CalendarClock, Shield, Layers } from "lucide-react";
 
 const ICON_MAP = {
   start_here: Compass,
@@ -24,6 +24,7 @@ const ICON_MAP = {
   task_scheduler: CalendarClock,
   settings: Settings,
   admin: Shield,
+  templates: Layers,
 };
 
 const sizes = {

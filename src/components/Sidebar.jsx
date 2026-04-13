@@ -20,6 +20,7 @@ const DEFAULT_PHASES = [
   { id: "get_paid", label: "Collect", num: "5", desc: "Invoice & collect" },
   { id: "analytics", label: "Analytics", num: null, desc: "Charts & revenue" },
   { id: "tips", label: "Tips & Tricks", num: null, desc: "Pro knowledge" },
+  { id: "templates", label: "Templates", num: null, desc: "Ready-to-use templates" },
 ];
 
 const DEFAULT_UTILITY = [

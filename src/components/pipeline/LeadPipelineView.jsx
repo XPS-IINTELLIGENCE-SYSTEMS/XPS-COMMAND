@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import PipelineRow from "./PipelineRow";
 import LeadDetailPanel from "./LeadDetailPanel";
 import AddLeadModal from "./AddLeadModal";
+import NavIcon from "../shared/NavIcon";
 
 const TABS = [
   { id: "XPress", label: "XPRESS PIPELINE", desc: "Material · Equipment · Training Sales", icon: Package },
@@ -67,7 +68,7 @@ export default function LeadPipelineView({ onChatCommand, forcedTab }) {
   return (
     <div className="h-full flex overflow-hidden">
       <div className="flex-1 flex flex-col overflow-hidden">
-        <div className="flex-shrink-0 p-4 md:p-5 bg-white/[0.02] backdrop-blur-xl border-b border-white/[0.06] space-y-3">
+        <div className="flex-shrink-0 p-4 md:p-6 bg-white/[0.02] backdrop-blur-xl border-b border-white/[0.06] space-y-4">
           {!forcedTab && (
             <div className="flex gap-2 mb-2">
               {TABS.map(tab => {
@@ -95,13 +96,18 @@ export default function LeadPipelineView({ onChatCommand, forcedTab }) {
             </div>
           )}
 
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-xl font-extrabold text-foreground">
-                {activeTab === "XPress" ? "XPRESS PIPELINE" : "JOBS PIPELINE"}
-              </h1>
-              <p className="text-sm text-muted-foreground">{filtered.length} leads</p>
+          <div className="text-center pt-1 pb-2">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 mb-3">
+              <NavIcon id={activeTab === "XPress" ? "xpress_leads" : "job_leads"} size="sm" active />
+              <span className="text-xs font-semibold text-foreground">{activeTab === "XPress" ? "XPRESS · PIPELINE" : "JOBS · PIPELINE"}</span>
             </div>
+            <h1 className="text-2xl md:text-3xl font-extrabold xps-gold-slow-shimmer" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+              {activeTab === "XPress" ? "XPRESS PIPELINE" : "JOBS PIPELINE"}
+            </h1>
+            <p className="mt-1 text-xs text-muted-foreground">{filtered.length} leads in pipeline</p>
+          </div>
+          <div className="flex items-center justify-end">
+            <div></div>
             <div className="flex gap-2">
               <Button variant="outline" size="sm" className="text-sm" onClick={load}><RefreshCcw className="w-4 h-4 mr-2" />Refresh</Button>
               <Button size="sm" className="text-sm" onClick={() => setAdding(true)}><Plus className="w-4 h-4 mr-2" />Add Lead</Button>
@@ -110,7 +116,7 @@ export default function LeadPipelineView({ onChatCommand, forcedTab }) {
           <Input placeholder="Search leads..." value={search} onChange={e => setSearch(e.target.value)} className="h-10 text-sm bg-white/[0.04] border-white/[0.1] rounded-xl" />
         </div>
 
-        <div className="flex-1 overflow-y-auto p-3 md:p-4 space-y-4">
+        <div className="flex-1 overflow-y-auto p-3 md:p-6 space-y-8">
           <PipelineRow
             title="INCOMING"
             subtitle={activeTab === "XPress" ? "Raw contractor leads from ChatGPT, scraper, attachments, Drive, Supabase" : "Incoming job/project leads from all sources"}

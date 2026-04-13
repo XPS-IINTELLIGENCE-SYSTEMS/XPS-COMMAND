@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Loader2, Search, Package, Hammer, Phone, Clock, Trophy, HardHat, DollarSign, BarChart3, Lightbulb, Bot, Settings, Compass, CalendarClock, Users, GripVertical, Pencil } from "lucide-react";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import { Droppable, Draggable } from "@hello-pangea/dnd";
 import { base44 } from "@/api/base44Client";
 import { cn } from "@/lib/utils";
 import EditCardModal from "./EditCardModal";
@@ -52,12 +52,11 @@ const DEFAULT_GROUPS = [
 ];
 
 function buildGroupsFromSidebar(phases) {
-  // Skip "command" itself, chunk the rest into rows of 3
   const items = phases.filter(p => p.id !== "command");
   const groups = [];
   for (let i = 0; i < items.length; i += 3) {
     const chunk = items.slice(i, i + 3);
-    const heading = i === 0 ? "Workflow" : `Row ${Math.floor(i / 3) + 1}`;
+    const heading = chunk.map(c => c.label).join(" · ");
     groups.push({
       heading,
       cards: chunk.map(p => ({
@@ -127,19 +126,34 @@ export default function DashboardView({ onNavigate, sidebarPhases }) {
 
   const nav = useCallback((v) => { if (onNavigate) onNavigate(v); }, [onNavigate]);
 
-  // Drag & drop within a group row
-  const onDragEnd = useCallback((result) => {
-    const { source, destination } = result;
-    if (!destination) return;
+  // Called from parent DragDropContext via onDashboardDragEnd
+  const handleInternalDrag = useCallback((source, destination) => {
     const srcGroupIdx = parseInt(source.droppableId.split("-")[1]);
     const dstGroupIdx = parseInt(destination.droppableId.split("-")[1]);
-
     const updated = groups.map(g => ({ ...g, cards: [...g.cards] }));
     const [moved] = updated[srcGroupIdx].cards.splice(source.index, 1);
     updated[dstGroupIdx].cards.splice(destination.index, 0, moved);
     setGroups(updated);
     saveGroups(updated);
   }, [groups]);
+
+  // Expose for parent
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.__dashboardDragHandler = handleInternalDrag;
+      window.__dashboardAddCard = (card, groupIdx) => {
+        const updated = groups.map(g => ({ ...g, cards: [...g.cards] }));
+        // Add to specified group or last group
+        const targetIdx = groupIdx != null && groupIdx < updated.length ? groupIdx : updated.length - 1;
+        if (targetIdx >= 0 && !updated[targetIdx].cards.find(c => c.id === card.id)) {
+          updated[targetIdx].cards.push(card);
+          setGroups(updated);
+          saveGroups(updated);
+        }
+      };
+    }
+    return () => { window.__dashboardDragHandler = null; window.__dashboardAddCard = null; };
+  }, [handleInternalDrag, groups]);
 
   const handleEditCard = (gIdx, cIdx) => {
     setEditCard(groups[gIdx].cards[cIdx]);
@@ -204,7 +218,7 @@ export default function DashboardView({ onNavigate, sidebarPhases }) {
       <div className="relative z-10 p-5 md:p-8 max-w-[1500px] mx-auto">
 
         {/* HEADER */}
-        <div className="text-center mb-24">
+        <div className="text-center mb-32">
           <h1 className="text-3xl md:text-5xl font-extrabold xps-gold-slow-shimmer tracking-tight" style={{ fontFamily: "'Montserrat', sans-serif" }}>
             COMMAND CENTER
           </h1>
@@ -215,7 +229,7 @@ export default function DashboardView({ onNavigate, sidebarPhases }) {
         <CRMTopCards leads={d.leads} onNavigate={nav} />
 
         {/* GROUPED CARD ROWS */}
-        <DragDropContext onDragEnd={onDragEnd}>
+        <div>
           <div className="space-y-10">
             {groups.map((group, gIdx) => (
               <div key={gIdx}>
@@ -299,7 +313,7 @@ export default function DashboardView({ onNavigate, sidebarPhases }) {
               </div>
             ))}
           </div>
-        </DragDropContext>
+        </div>
       </div>
 
       {/* Edit Card Modal */}

@@ -7,6 +7,7 @@ import ContentArea from "../components/ContentArea";
 import ChatPanel from "../components/ChatPanel";
 import MobileNav from "../components/MobileNav";
 import MobileTabBar from "../components/mobile/MobileTabBar";
+import { DragDropContext } from "@hello-pangea/dnd";
 
 export default function Home() {
   const [activeView, setActiveView] = useState("command");
@@ -32,6 +33,58 @@ export default function Home() {
     return saved ? parseInt(saved) : 48;
   });
   const isTopBarResizing = useRef(false);
+  const sidebarDragEndRef = useRef(null);
+
+  // Unified drag handler for sidebar + dashboard
+  const handleGlobalDragEnd = useCallback((result) => {
+    const { source, destination } = result;
+    if (!destination) return;
+
+    const srcId = source.droppableId;
+    const dstId = destination.droppableId;
+
+    // Sidebar internal reorder
+    if ((srcId === "workflow" || srcId === "system") && (dstId === "workflow" || dstId === "system")) {
+      if (sidebarDragEndRef.current) sidebarDragEndRef.current(result);
+      return;
+    }
+
+    // Dashboard internal reorder
+    if (srcId.startsWith("group-") && dstId.startsWith("group-")) {
+      if (window.__dashboardDragHandler) {
+        window.__dashboardDragHandler(source, destination);
+      }
+      return;
+    }
+
+    // Sidebar → Dashboard drop
+    if ((srcId === "workflow" || srcId === "system") && dstId.startsWith("group-")) {
+      // Get the item from sidebar phases
+      const phases = JSON.parse(localStorage.getItem('xps-sidebar-phases') || '[]');
+      const utility = JSON.parse(localStorage.getItem('xps-sidebar-utility') || '[]');
+      const srcList = srcId === "workflow" ? phases : utility;
+      const item = srcList[source.index];
+      if (item && window.__dashboardAddCard) {
+        const ICON_MAP = {
+          crm: "Users", start_here: "Compass", find_work: "Search", xpress_leads: "Package",
+          job_leads: "Hammer", get_work: "Phone", follow_up: "Clock", win_work: "Trophy",
+          do_work: "HardHat", get_paid: "DollarSign", analytics: "BarChart3", tips: "Lightbulb",
+          agents: "Bot", task_scheduler: "CalendarClock", settings: "Settings", admin: "Users",
+        };
+        const card = {
+          id: item.id,
+          label: item.label,
+          desc: item.desc || "",
+          icon: ICON_MAP[item.id] || "Settings",
+          nav: item.id,
+          iconColor: "#d4af37",
+        };
+        const groupIdx = parseInt(dstId.split("-")[1]);
+        window.__dashboardAddCard(card, groupIdx);
+      }
+      return;
+    }
+  }, []);
 
   const startResize = useCallback((e) => {
     e.preventDefault();
@@ -168,9 +221,10 @@ export default function Home() {
       </div>
 
       {/* ========== DESKTOP LAYOUT ========== */}
+      <DragDropContext onDragEnd={handleGlobalDragEnd}>
       <div className="hidden md:flex flex-row" style={{ width: sidebarOpen ? sidebarWidth : 0, minWidth: sidebarOpen ? sidebarWidth : 0, transition: isResizing.current ? 'none' : 'width 0.3s, min-width 0.3s' }}>
         <div className="flex-1 overflow-hidden">
-          <Sidebar activeView={activeView} onViewChange={setActiveView} onPhasesChange={setSidebarPhases} />
+          <Sidebar activeView={activeView} onViewChange={setActiveView} onPhasesChange={setSidebarPhases} onDragEndRef={sidebarDragEndRef} />
         </div>
         {sidebarOpen && (
           <div
@@ -208,6 +262,7 @@ export default function Home() {
         </div>
       </div>
 
+      </DragDropContext>
       <div className="hidden md:flex flex-row" style={{ width: chatOpen ? chatWidth : 0, minWidth: chatOpen ? chatWidth : 0, transition: isChatResizing.current ? 'none' : 'width 0.3s, min-width 0.3s' }}>
         {chatOpen && (
           <div

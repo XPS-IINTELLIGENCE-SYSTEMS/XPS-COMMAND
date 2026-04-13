@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import { Droppable, Draggable } from "@hello-pangea/dnd";
 import { GripVertical, Plus, X, Check, Pencil } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import NavIcon from "./shared/NavIcon";
@@ -138,7 +138,7 @@ function AddItemForm({ onAdd, onCancel }) {
   );
 }
 
-export default function Sidebar({ activeView, onViewChange, onPhasesChange }) {
+export default function Sidebar({ activeView, onViewChange, onPhasesChange, onDragEndRef }) {
   const [phases, setPhases] = useState(() => {
     const saved = loadNav("xps-sidebar-phases", DEFAULT_PHASES);
     // Migrate: rename "Dashboard" to "Command" if cached
@@ -175,6 +175,11 @@ export default function Sidebar({ activeView, onViewChange, onPhasesChange }) {
       if (onPhasesChange) onPhasesChange(newPhases);
     }
   }, [phases, utility]);
+
+  // Expose onDragEnd to parent via ref callback
+  useEffect(() => {
+    if (onDragEndRef) onDragEndRef.current = onDragEnd;
+  }, [onDragEnd, onDragEndRef]);
 
   const editItem = (section, idx, field, value) => {
     if (section === "workflow") {
@@ -226,7 +231,7 @@ export default function Sidebar({ activeView, onViewChange, onPhasesChange }) {
 
       {/* Navigation with DnD */}
       <ScrollArea className="flex-1">
-        <DragDropContext onDragEnd={onDragEnd}>
+        <div>
           <nav className="py-4 px-3 space-y-6">
             <div>
               <div className="flex items-center justify-between px-2 mb-3">
@@ -302,7 +307,7 @@ export default function Sidebar({ activeView, onViewChange, onPhasesChange }) {
               )}
             </div>
           </nav>
-        </DragDropContext>
+        </div>
       </ScrollArea>
     </div>
   );

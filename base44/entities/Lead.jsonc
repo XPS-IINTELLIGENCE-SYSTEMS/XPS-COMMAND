@@ -96,6 +96,7 @@
       "type": "string",
       "enum": [
         "Incoming",
+        "Validated",
         "Qualified",
         "Prioritized",
         "Contacted",
@@ -110,8 +111,9 @@
       "type": "string",
       "enum": [
         "Incoming",
-        "Qualified",
-        "Prioritized"
+        "Validated",
+        "Prioritized",
+        "Qualified"
       ],
       "default": "Incoming",
       "description": "Lead pipeline validation status"

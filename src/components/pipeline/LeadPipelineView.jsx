@@ -57,6 +57,7 @@ export default function LeadPipelineView({ onChatCommand }) {
   );
 
   const incoming = filtered.filter(l => l.pipeline_status === "Incoming" || (!l.pipeline_status && l.stage === "Incoming") || (!l.pipeline_status && l.stage === "New"));
+  const validated = filtered.filter(l => l.pipeline_status === "Validated" || l.stage === "Validated");
   const prioritized = filtered.filter(l => l.pipeline_status === "Prioritized" || l.stage === "Prioritized");
   const qualified = filtered.filter(l => l.pipeline_status === "Qualified" || l.stage === "Qualified");
 
@@ -108,7 +109,7 @@ export default function LeadPipelineView({ onChatCommand }) {
           <Input placeholder="Search leads..." value={search} onChange={e => setSearch(e.target.value)} className="h-8 text-xs glass-input rounded-lg" />
         </div>
 
-        {/* 3-level pipeline rows: Incoming → Prioritized & Scored → Qualified */}
+        {/* 4-level pipeline rows */}
         <div className="flex-1 overflow-y-auto p-3 md:p-4 space-y-4">
           <PipelineRow
             title="INCOMING"
@@ -118,8 +119,15 @@ export default function LeadPipelineView({ onChatCommand }) {
             onLeadClick={setSelected}
           />
           <PipelineRow
+            title="VALIDATED"
+            subtitle={activeTab === "XPress" ? "Confirmed real businesses with verified contact info" : "Verified projects with confirmed scope and contact"}
+            leads={validated}
+            colorKey="Validated"
+            onLeadClick={setSelected}
+          />
+          <PipelineRow
             title="PRIORITIZED & SCORED"
-            subtitle={activeTab === "XPress" ? "Validated, scored & prioritized by AI — ranked by product/training fit" : "Scored & ranked by project value, timeline, and fit"}
+            subtitle={activeTab === "XPress" ? "AI-scored & ranked by product/training fit" : "Scored & ranked by project value, timeline, and fit"}
             leads={prioritized}
             colorKey="Prioritized"
             onLeadClick={setSelected}

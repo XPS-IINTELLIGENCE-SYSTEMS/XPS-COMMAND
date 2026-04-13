@@ -5,8 +5,9 @@ import LeadCard from "./LeadCard";
 
 const ROW_COLORS = {
   Incoming: "border-l-blue-400",
-  Qualified: "border-l-emerald-400",
+  Validated: "border-l-cyan-400",
   Prioritized: "border-l-primary",
+  Qualified: "border-l-emerald-400",
 };
 
 export default function PipelineRow({ title, subtitle, leads, colorKey, onLeadClick }) {

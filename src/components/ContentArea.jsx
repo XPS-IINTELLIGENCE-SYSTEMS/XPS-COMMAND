@@ -23,12 +23,13 @@ const plainViews = {
   outreach: OutreachView,
   crm: CRMView,
   lead_pipeline: LeadPipelineView,
+  xpress_leads: LeadPipelineView,
+  job_leads: LeadPipelineView,
   analytics: AnalyticsView,
   agents: AgentCommandPage,
 };
 
 export default function ContentArea({ activeView, onChatCommand, onNavigate }) {
-  // Start Here gets its own handler so steps can navigate
   if (activeView === "start_here") {
     return (
       <div className="flex-1 h-full overflow-hidden border-l border-[#8a8a8a]/15">
@@ -54,12 +55,12 @@ export default function ContentArea({ activeView, onChatCommand, onNavigate }) {
   }
 
   const ViewComponent = plainViews[activeView] || CommandCenterView;
+  const forcedTab = activeView === 'xpress_leads' ? 'XPress' : activeView === 'job_leads' ? 'Jobs' : null;
+  const needsChat = ['lead_pipeline', 'xpress_leads', 'job_leads'].includes(activeView);
 
-  // Pass onChatCommand to views that support it
-  const needsChat = activeView === 'lead_pipeline';
   return (
     <div className="flex-1 h-full overflow-hidden border-l border-[#8a8a8a]/15">
-      {needsChat ? <ViewComponent onChatCommand={onChatCommand} /> : <ViewComponent />}
+      {needsChat ? <ViewComponent onChatCommand={onChatCommand} forcedTab={forcedTab} /> : <ViewComponent />}
     </div>
   );
 }

@@ -14,13 +14,13 @@ const TABS = [
   { id: "Jobs", label: "JOBS PIPELINE", desc: "Contract Work · Projects", icon: Hammer },
 ];
 
-export default function LeadPipelineView({ onChatCommand }) {
+export default function LeadPipelineView({ onChatCommand, forcedTab }) {
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState(null);
   const [adding, setAdding] = useState(false);
-  const [activeTab, setActiveTab] = useState("XPress");
+  const [activeTab, setActiveTab] = useState(forcedTab || "XPress");
   const { toast } = useToast();
 
   const load = useCallback(async () => {
@@ -47,7 +47,6 @@ export default function LeadPipelineView({ onChatCommand }) {
     toast({ title: "Deleted", description: "Lead removed" });
   };
 
-  // Filter by tab type — default to XPress if no lead_type set
   const byType = leads.filter(l => (l.lead_type || "XPress") === activeTab);
 
   const filtered = byType.filter(l =>
@@ -68,31 +67,31 @@ export default function LeadPipelineView({ onChatCommand }) {
   return (
     <div className="h-full flex overflow-hidden">
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Header with tabs */}
         <div className="flex-shrink-0 p-3 md:p-4 glass-panel space-y-2">
-          {/* Tab switcher */}
-          <div className="flex gap-2 mb-2">
-            {TABS.map(tab => {
-              const Icon = tab.icon;
-              const isActive = activeTab === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => { setActiveTab(tab.id); setSelected(null); }}
-                  className={cn(
-                    "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all flex-1",
-                    isActive ? "glass-card-active text-primary" : "glass-card text-muted-foreground hover:text-foreground"
-                  )}
-                >
-                  <Icon className="w-4 h-4" />
-                  <div className="text-left">
-                    <div className="text-[11px] font-bold">{tab.label}</div>
-                    <div className="text-[9px] opacity-60">{tab.desc}</div>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
+          {!forcedTab && (
+            <div className="flex gap-2 mb-2">
+              {TABS.map(tab => {
+                const Icon = tab.icon;
+                const isActive = activeTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => { setActiveTab(tab.id); setSelected(null); }}
+                    className={cn(
+                      "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all flex-1",
+                      isActive ? "glass-card-active text-primary" : "glass-card text-muted-foreground hover:text-foreground"
+                    )}
+                  >
+                    <Icon className="w-4 h-4" />
+                    <div className="text-left">
+                      <div className="text-[11px] font-bold">{tab.label}</div>
+                      <div className="text-[9px] opacity-60">{tab.desc}</div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          )}
 
           <div className="flex items-center justify-between">
             <div>
@@ -109,7 +108,6 @@ export default function LeadPipelineView({ onChatCommand }) {
           <Input placeholder="Search leads..." value={search} onChange={e => setSearch(e.target.value)} className="h-8 text-xs glass-input rounded-lg" />
         </div>
 
-        {/* 4-level pipeline rows */}
         <div className="flex-1 overflow-y-auto p-3 md:p-4 space-y-4">
           <PipelineRow
             title="INCOMING"

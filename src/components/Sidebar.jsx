@@ -214,7 +214,7 @@ export default function Sidebar({ activeView, onViewChange, onPhasesChange, onDr
   };
 
   return (
-    <div className="w-full h-full bg-sidebar/80 backdrop-blur-xl border-r border-white/[0.06] flex flex-col">
+    <div className="w-full h-full bg-sidebar border-r border-white/[0.06] flex flex-col">
       {/* Logo */}
       <div className="px-4 py-5 border-b border-sidebar-border">
         <a href="/dashboard" className="flex items-center gap-2.5 transition-all duration-300 hover:scale-105">

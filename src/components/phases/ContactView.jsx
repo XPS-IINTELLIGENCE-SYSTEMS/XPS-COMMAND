@@ -61,14 +61,14 @@ export default function ContactView({ onChatCommand }) {
           ))}
         </HScrollRow>
 
-        <HScrollRow title="NEEDS FIRST CONTACT" subtitle="Qualified but not yet contacted" icon={Mail} count={qualified.length} accentColor="text-cyan-400">
+        <HScrollRow title="NEEDS FIRST CONTACT" subtitle="Qualified but not yet contacted" icon={Mail} count={qualified.length}>
           {qualified.slice(0, 15).map(l => (
             <HCard key={l.id} title={l.company} subtitle={l.contact_name} meta={l.email || l.phone || "No info"} icon={l.lead_type === "XPress" ? Package : Hammer} onClick={() => fire(`Write an outreach email for ${l.company}`)} />
           ))}
           {qualified.length === 0 && <EmptyCard text="All qualified leads contacted" />}
         </HScrollRow>
 
-        <HScrollRow title="NEEDS FOLLOW-UP" subtitle="Contacted but no response" icon={Clock} count={needsFollowup.length} accentColor="text-orange-400">
+        <HScrollRow title="NEEDS FOLLOW-UP" subtitle="Contacted but no response" icon={Clock} count={needsFollowup.length}>
           {needsFollowup.slice(0, 15).map(l => (
             <HCard key={l.id} title={l.company} subtitle={l.contact_name} meta={l.stage} icon={l.lead_type === "XPress" ? Package : Hammer} onClick={() => fire(`Follow up with ${l.company}`)} />
           ))}
@@ -88,7 +88,7 @@ export default function ContactView({ onChatCommand }) {
 
 function EmptyCard({ text }) {
   return (
-    <div className="flex-shrink-0 w-[240px] rounded-xl p-4 bg-white/[0.02] border border-white/[0.06] flex items-center justify-center">
+    <div className="flex-shrink-0 w-[240px] rounded-xl p-4 bg-black/60 border border-white/[0.06] flex items-center justify-center">
       <span className="text-[11px] text-muted-foreground/50">{text}</span>
     </div>
   );

@@ -69,14 +69,14 @@ export default function DiscoverView({ onChatCommand }) {
           <div className="flex items-center gap-2 px-2 py-4 text-xs text-muted-foreground"><Loader2 className="w-3 h-3 animate-spin" /> Loading pipeline data...</div>
         ) : (
           <>
-            <HScrollRow title="XPRESS INCOMING" subtitle="Latest contractor leads from scraper" icon={Package} count={xpressIncoming.length} accentColor="text-amber-400">
+            <HScrollRow title="XPRESS PIPELINE — INCOMING" subtitle="Latest contractor leads from scraper" icon={Package} count={xpressIncoming.length}>
               {xpressIncoming.slice(0, 15).map(l => (
                 <HCard key={l.id} title={l.company} subtitle={`${l.city || ""}, ${l.state || "AZ"} · ${l.source || ""}`} meta={l.score ? `Score: ${l.score}` : null} icon={Package} />
               ))}
               {xpressIncoming.length === 0 && <EmptyCard text="No XPress leads incoming" />}
             </HScrollRow>
 
-            <HScrollRow title="JOBS INCOMING" subtitle="Latest end-buyer project leads" icon={Hammer} count={jobsIncoming.length} accentColor="text-blue-400">
+            <HScrollRow title="JOBS PIPELINE — INCOMING" subtitle="Latest end-buyer project leads" icon={Hammer} count={jobsIncoming.length}>
               {jobsIncoming.slice(0, 15).map(l => (
                 <HCard key={l.id} title={l.company} subtitle={`${l.vertical || ""} · ${l.city || ""}`} meta={l.estimated_value ? `$${l.estimated_value.toLocaleString()}` : null} icon={Hammer} />
               ))}
@@ -97,7 +97,7 @@ export default function DiscoverView({ onChatCommand }) {
 
 function EmptyCard({ text }) {
   return (
-    <div className="flex-shrink-0 w-[240px] rounded-xl p-4 bg-white/[0.02] border border-white/[0.06] flex items-center justify-center">
+    <div className="flex-shrink-0 w-[240px] rounded-xl p-4 bg-black/60 border border-white/[0.06] flex items-center justify-center">
       <span className="text-[11px] text-muted-foreground/50">{text}</span>
     </div>
   );

@@ -10,7 +10,7 @@ import LeadDetailPanel from "./LeadDetailPanel";
 import AddLeadModal from "./AddLeadModal";
 
 const TABS = [
-  { id: "XPress", label: "XPS XPRESS", desc: "Material · Equipment · Training Sales", icon: Package },
+  { id: "XPress", label: "XPRESS PIPELINE", desc: "Material · Equipment · Training Sales", icon: Package },
   { id: "Jobs", label: "JOBS PIPELINE", desc: "Contract Work · Projects", icon: Hammer },
 ];
 
@@ -96,7 +96,7 @@ export default function LeadPipelineView({ onChatCommand, forcedTab }) {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-base font-bold text-foreground">
-                {activeTab === "XPress" ? "XPS XPress Lead Pipeline" : "Jobs Lead Pipeline"}
+                {activeTab === "XPress" ? "XPRESS PIPELINE" : "JOBS PIPELINE"}
               </h1>
               <p className="text-[11px] text-muted-foreground">{filtered.length} leads</p>
             </div>

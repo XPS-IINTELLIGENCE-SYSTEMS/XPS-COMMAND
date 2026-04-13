@@ -65,28 +65,28 @@ export default function CollectView({ onChatCommand }) {
           ))}
         </HScrollRow>
 
-        <HScrollRow title="OVERDUE" subtitle="Needs immediate attention" icon={Bell} count={overdue.length} accentColor="text-red-400">
+        <HScrollRow title="OVERDUE" subtitle="Needs immediate attention" icon={Bell} count={overdue.length}>
           {overdue.map(i => (
             <HCard key={i.id} title={i.client_name} subtitle={`${i.invoice_number} · Overdue`} meta={`$${(i.total || 0).toLocaleString()}`} icon={Bell} onClick={() => fire(`Follow up on invoice ${i.invoice_number}`)} />
           ))}
           {overdue.length === 0 && <EmptyCard text="No overdue invoices" />}
         </HScrollRow>
 
-        <HScrollRow title="SENT & AWAITING" icon={Send} count={sent.length} accentColor="text-blue-400">
+        <HScrollRow title="SENT & AWAITING" icon={Send} count={sent.length}>
           {sent.map(i => (
             <HCard key={i.id} title={i.client_name} subtitle={`${i.invoice_number} · ${i.status}`} meta={`$${(i.total || 0).toLocaleString()}`} icon={Send} />
           ))}
           {sent.length === 0 && <EmptyCard text="No sent invoices" />}
         </HScrollRow>
 
-        <HScrollRow title="PAID" icon={CreditCard} count={paid.length} accentColor="text-emerald-400">
+        <HScrollRow title="PAID" icon={CreditCard} count={paid.length}>
           {paid.map(i => (
             <HCard key={i.id} title={i.client_name} subtitle={i.invoice_number} meta={`$${(i.total || 0).toLocaleString()}`} icon={CreditCard} />
           ))}
           {paid.length === 0 && <EmptyCard text="No paid invoices yet" />}
         </HScrollRow>
 
-        <HScrollRow title="DRAFTS" icon={Receipt} count={drafts.length} accentColor="text-slate-400">
+        <HScrollRow title="DRAFTS" icon={Receipt} count={drafts.length}>
           {drafts.map(i => (
             <HCard key={i.id} title={i.client_name} subtitle={i.invoice_number} meta={`$${(i.total || 0).toLocaleString()}`} icon={Receipt} onClick={() => fire(`Finalize invoice ${i.invoice_number}`)} />
           ))}
@@ -99,7 +99,7 @@ export default function CollectView({ onChatCommand }) {
 
 function EmptyCard({ text }) {
   return (
-    <div className="flex-shrink-0 w-[240px] rounded-xl p-4 bg-white/[0.02] border border-white/[0.06] flex items-center justify-center">
+    <div className="flex-shrink-0 w-[240px] rounded-xl p-4 bg-black/60 border border-white/[0.06] flex items-center justify-center">
       <span className="text-[11px] text-muted-foreground/50">{text}</span>
     </div>
   );

@@ -8,14 +8,7 @@ import { cn } from "@/lib/utils";
 import HScrollRow from "../shared/HScrollRow";
 
 const CRM_STAGES = ["Contacted", "Qualified", "Proposal", "Negotiation", "Won", "Lost"];
-const STAGE_COLORS = {
-  Contacted: "text-blue-400",
-  Qualified: "text-yellow-400",
-  Proposal: "text-orange-400",
-  Negotiation: "text-purple-400",
-  Won: "text-emerald-400",
-  Lost: "text-red-400",
-};
+// Removed per-stage colors — unified design system
 
 export default function CRMView() {
   const [leads, setLeads] = useState([]);
@@ -75,15 +68,15 @@ export default function CRMView() {
 
         {/* Tab switcher */}
         <div className="flex gap-2">
-          {[{ id: "XPress", label: "XPS XPRESS CRM", icon: Package, color: "text-amber-400" }, { id: "Jobs", label: "JOBS CRM", icon: Hammer, color: "text-blue-400" }].map(tab => (
+          {[{ id: "XPress", label: "XPRESS PIPELINE CRM", icon: Package }, { id: "Jobs", label: "JOBS PIPELINE CRM", icon: Hammer }].map(tab => (
             <button key={tab.id} onClick={() => { setActiveTab(tab.id); setSelected(null); }}
               className={cn(
                 "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all flex-1",
                 activeTab === tab.id
-                  ? "bg-white/[0.08] border border-white/[0.18] shadow-[0_0_20px_rgba(212,175,55,0.1)]"
-                  : "bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.06]"
+                  ? "bg-primary/[0.08] border border-primary/40 shadow-[0_0_20px_rgba(212,175,55,0.12)]"
+                  : "bg-black/60 border border-white/[0.06] hover:border-primary/30 hover:bg-primary/[0.05]"
               )}>
-              <tab.icon className={cn("w-4 h-4", activeTab === tab.id ? tab.color : "text-muted-foreground")} />
+              <tab.icon className={cn("w-4 h-4", activeTab === tab.id ? "text-primary" : "text-muted-foreground")} />
               {tab.label}
             </button>
           ))}
@@ -97,12 +90,12 @@ export default function CRMView() {
         {CRM_STAGES.map(stage => {
           const stageLeads = filtered.filter(l => l.stage === stage);
           return (
-            <HScrollRow key={stage} title={stage.toUpperCase()} count={stageLeads.length} accentColor={STAGE_COLORS[stage]}>
-              {stageLeads.map(l => (
-                <CRMCard key={l.id} lead={l} onClick={() => setSelected(l)} />
+            <HScrollRow key={stage} title={stage.toUpperCase()} count={stageLeads.length}>
+              {stageLeads.map((l, i) => (
+               <CRMCard key={l.id} lead={l} onClick={() => setSelected(l)} index={i} />
               ))}
               {stageLeads.length === 0 && (
-                <div className="flex-shrink-0 w-[240px] rounded-xl p-4 bg-white/[0.02] border border-white/[0.06] flex items-center justify-center">
+                <div className="flex-shrink-0 w-[240px] rounded-xl p-4 bg-black/60 border border-white/[0.06] flex items-center justify-center">
                   <span className="text-[10px] text-muted-foreground/40">No leads in {stage}</span>
                 </div>
               )}
@@ -156,16 +149,19 @@ export default function CRMView() {
   );
 }
 
-function CRMCard({ lead, onClick }) {
+function CRMCard({ lead, onClick, index = 0 }) {
+  const isGlass = index % 2 === 1;
   return (
     <button onClick={onClick}
       className={cn(
-        "group flex-shrink-0 w-[240px] md:w-[260px] rounded-xl p-4 text-left transition-all duration-300",
-        "bg-white/[0.03] backdrop-blur-md border border-white/[0.08]",
-        "hover:bg-white/[0.08] hover:border-white/[0.18] hover:shadow-[0_0_24px_rgba(212,175,55,0.12)]",
-        "hover:scale-[1.02]"
+        "group flex-shrink-0 w-[240px] md:w-[260px] rounded-xl p-4 text-left transition-all duration-300 hover:scale-[1.03]",
+        isGlass
+          ? "bg-white/[0.04] backdrop-blur-xl border border-white/[0.10]"
+          : "bg-black/80 border border-white/[0.06]",
+        "hover:border-primary/40 hover:shadow-[0_0_28px_rgba(212,175,55,0.18),0_0_8px_rgba(192,192,192,0.12)]",
+        "hover:bg-primary/[0.08]"
       )}>
-      <div className="text-xs font-semibold text-foreground truncate group-hover:text-primary transition-colors">{lead.company}</div>
+      <div className="text-xs font-semibold text-foreground truncate group-hover:text-primary transition-colors duration-300">{lead.company}</div>
       <div className="text-[10px] text-muted-foreground truncate mt-0.5">{lead.contact_name}</div>
       {lead.estimated_value > 0 && <div className="text-[10px] font-bold text-primary mt-1">${lead.estimated_value.toLocaleString()}</div>}
       <div className="flex items-center gap-2 mt-1.5">

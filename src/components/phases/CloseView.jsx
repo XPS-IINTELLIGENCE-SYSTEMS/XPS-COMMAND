@@ -59,28 +59,28 @@ export default function CloseView({ onChatCommand }) {
           ))}
         </HScrollRow>
 
-        <HScrollRow title="DRAFTS" subtitle="Proposals being prepared" icon={FileText} count={drafts.length} accentColor="text-slate-400">
+        <HScrollRow title="DRAFTS" subtitle="Proposals being prepared" icon={FileText} count={drafts.length}>
           {drafts.map(p => (
             <HCard key={p.id} title={p.client_name} subtitle={p.service_type} meta={`$${(p.total_value || 0).toLocaleString()}`} icon={FileText} onClick={() => fire(`Show proposal for ${p.client_name}`)} />
           ))}
           {drafts.length === 0 && <EmptyCard text="No draft proposals" />}
         </HScrollRow>
 
-        <HScrollRow title="SENT & PENDING" subtitle="Waiting for response" icon={Send} count={sent.length} accentColor="text-blue-400">
+        <HScrollRow title="SENT & PENDING" subtitle="Waiting for response" icon={Send} count={sent.length}>
           {sent.map(p => (
             <HCard key={p.id} title={p.client_name} subtitle={`${p.service_type} · ${p.status}`} meta={`$${(p.total_value || 0).toLocaleString()}`} icon={Send} onClick={() => fire(`Follow up on proposal for ${p.client_name}`)} />
           ))}
           {sent.length === 0 && <EmptyCard text="No pending proposals" />}
         </HScrollRow>
 
-        <HScrollRow title="WON" subtitle="Closed and approved" icon={Trophy} count={won.length} accentColor="text-emerald-400">
+        <HScrollRow title="WON" subtitle="Closed and approved" icon={Trophy} count={won.length}>
           {won.map(p => (
             <HCard key={p.id} title={p.client_name} subtitle={p.service_type} meta={`$${(p.total_value || 0).toLocaleString()}`} icon={Trophy} />
           ))}
           {won.length === 0 && <EmptyCard text="No won deals yet" />}
         </HScrollRow>
 
-        <HScrollRow title="LOST" count={lost.length} accentColor="text-red-400">
+        <HScrollRow title="LOST" count={lost.length}>
           {lost.map(p => (
             <HCard key={p.id} title={p.client_name} subtitle={p.service_type} meta={`$${(p.total_value || 0).toLocaleString()}`} icon={FileText} />
           ))}
@@ -93,7 +93,7 @@ export default function CloseView({ onChatCommand }) {
 
 function EmptyCard({ text }) {
   return (
-    <div className="flex-shrink-0 w-[240px] rounded-xl p-4 bg-white/[0.02] border border-white/[0.06] flex items-center justify-center">
+    <div className="flex-shrink-0 w-[240px] rounded-xl p-4 bg-black/60 border border-white/[0.06] flex items-center justify-center">
       <span className="text-[11px] text-muted-foreground/50">{text}</span>
     </div>
   );

@@ -58,14 +58,14 @@ export default function ExecuteView({ onChatCommand }) {
           ))}
         </HScrollRow>
 
-        <HScrollRow title="ACTIVE JOBS" subtitle="Won deals in execution" icon={Flag} count={activeJobs.length} accentColor="text-emerald-400">
+        <HScrollRow title="ACTIVE JOBS" subtitle="Won deals in execution" icon={Flag} count={activeJobs.length}>
           {activeJobs.map(l => (
             <HCard key={l.id} title={l.company} subtitle={l.location} meta={l.estimated_value ? `$${l.estimated_value.toLocaleString()}` : "Active"} icon={HardHat} onClick={() => fire(`Show job details for ${l.company}`)} />
           ))}
           {activeJobs.length === 0 && <EmptyCard text="No active jobs" />}
         </HScrollRow>
 
-        <HScrollRow title="COMING UP" subtitle="In negotiation — will be on deck soon" icon={CalendarClock} count={negotiating.length} accentColor="text-purple-400">
+        <HScrollRow title="COMING UP" subtitle="In negotiation — will be on deck soon" icon={CalendarClock} count={negotiating.length}>
           {negotiating.map(l => (
             <HCard key={l.id} title={l.company} subtitle={l.contact_name} meta={l.estimated_value ? `$${l.estimated_value.toLocaleString()}` : "Negotiating"} icon={Users} />
           ))}
@@ -78,7 +78,7 @@ export default function ExecuteView({ onChatCommand }) {
 
 function EmptyCard({ text }) {
   return (
-    <div className="flex-shrink-0 w-[240px] rounded-xl p-4 bg-white/[0.02] border border-white/[0.06] flex items-center justify-center">
+    <div className="flex-shrink-0 w-[240px] rounded-xl p-4 bg-black/60 border border-white/[0.06] flex items-center justify-center">
       <span className="text-[11px] text-muted-foreground/50">{text}</span>
     </div>
   );

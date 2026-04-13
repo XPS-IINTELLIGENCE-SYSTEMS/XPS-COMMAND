@@ -83,15 +83,15 @@ Keep each tip under 20 words. Be specific and tactical.`,
             <p className="text-xs text-muted-foreground mt-1">Full workflow at a glance</p>
           </div>
           <div className="flex gap-3 text-center">
-            <div className="glass-card rounded-lg px-4 py-2">
+            <div className="rounded-lg px-4 py-2 bg-black/80 border border-white/[0.06]">
               <div className="text-lg font-bold text-primary">${(totalPipeline / 1000).toFixed(0)}k</div>
               <div className="text-[9px] text-muted-foreground">Pipeline</div>
             </div>
-            <div className="glass-card rounded-lg px-4 py-2">
-              <div className="text-lg font-bold text-emerald-400">${(wonValue / 1000).toFixed(0)}k</div>
+            <div className="rounded-lg px-4 py-2 bg-white/[0.04] backdrop-blur-xl border border-white/[0.10]">
+              <div className="text-lg font-bold text-primary">${(wonValue / 1000).toFixed(0)}k</div>
               <div className="text-[9px] text-muted-foreground">Won</div>
             </div>
-            <div className="glass-card rounded-lg px-4 py-2">
+            <div className="rounded-lg px-4 py-2 bg-black/80 border border-white/[0.06]">
               <div className="text-lg font-bold text-foreground">{leads.length}</div>
               <div className="text-[9px] text-muted-foreground">Total Leads</div>
             </div>
@@ -107,7 +107,7 @@ Keep each tip under 20 words. Be specific and tactical.`,
         </HScrollRow>
 
         {/* Row 2: XPress Pipeline */}
-        <HScrollRow title="XPS XPRESS PIPELINE" subtitle="Contractors & operators" icon={Package} count={xpressLeads.length} accentColor="text-amber-400">
+        <HScrollRow title="XPRESS PIPELINE" subtitle="Contractors & operators" icon={Package} count={xpressLeads.length}>
           {xpressLeads.slice(0, 15).map(l => (
             <HCard key={l.id} title={l.company} subtitle={`${l.city || ""} · ${l.ai_insight?.slice(0, 40) || ""}`} meta={l.score ? `Score: ${l.score} · P${l.priority || 0}` : l.pipeline_status} icon={Package} onClick={() => nav("xpress_leads")} />
           ))}
@@ -115,7 +115,7 @@ Keep each tip under 20 words. Be specific and tactical.`,
         </HScrollRow>
 
         {/* Row 3: Jobs Pipeline */}
-        <HScrollRow title="JOBS PIPELINE" subtitle="End-buyer project leads" icon={Hammer} count={jobsLeads.length} accentColor="text-blue-400">
+        <HScrollRow title="JOBS PIPELINE" subtitle="End-buyer project leads" icon={Hammer} count={jobsLeads.length}>
           {jobsLeads.slice(0, 15).map(l => (
             <HCard key={l.id} title={l.company} subtitle={`${l.vertical || ""} · ${l.city || ""}`} meta={l.estimated_value ? `$${l.estimated_value.toLocaleString()}` : l.pipeline_status} icon={Hammer} onClick={() => nav("job_leads")} />
           ))}
@@ -131,7 +131,7 @@ Keep each tip under 20 words. Be specific and tactical.`,
         </HScrollRow>
 
         {/* Row 5: Contact */}
-        <HScrollRow title="CONTACT — NEEDS OUTREACH" subtitle="Qualified leads waiting for first contact" icon={Phone} count={needsContact.length} accentColor="text-cyan-400">
+        <HScrollRow title="CONTACT — NEEDS OUTREACH" subtitle="Qualified leads waiting for first contact" icon={Phone} count={needsContact.length}>
           {needsContact.map(l => (
             <HCard key={l.id} title={l.company} subtitle={l.contact_name} meta={l.email || l.phone || "No contact info"} icon={Phone} onClick={() => nav("get_work")}>
               <div className="text-[9px] text-muted-foreground">{l.ai_insight?.slice(0, 60)}</div>
@@ -141,7 +141,7 @@ Keep each tip under 20 words. Be specific and tactical.`,
         </HScrollRow>
 
         {/* Row 6: Close */}
-        <HScrollRow title="CLOSE — WON DEALS" subtitle="Closed and won" icon={Trophy} count={wonDeals.length} accentColor="text-emerald-400">
+        <HScrollRow title="CLOSE — WON DEALS" subtitle="Closed and won" icon={Trophy} count={wonDeals.length}>
           {wonDeals.slice(0, 10).map(p => (
             <HCard key={p.id} title={p.client_name} subtitle={p.service_type} meta={`$${(p.total_value || 0).toLocaleString()}`} icon={Trophy} onClick={() => nav("win_work")} />
           ))}
@@ -149,7 +149,7 @@ Keep each tip under 20 words. Be specific and tactical.`,
         </HScrollRow>
 
         {/* Row 7: Execute */}
-        <HScrollRow title="EXECUTE — ON DECK" subtitle="Active jobs to manage" icon={HardHat} count={activeJobs.length} accentColor="text-orange-400">
+        <HScrollRow title="EXECUTE — ON DECK" subtitle="Active jobs to manage" icon={HardHat} count={activeJobs.length}>
           {activeJobs.slice(0, 10).map(l => (
             <HCard key={l.id} title={l.company} subtitle={l.location} meta={l.estimated_value ? `$${l.estimated_value.toLocaleString()}` : "Active"} icon={HardHat} onClick={() => nav("do_work")} />
           ))}
@@ -157,7 +157,7 @@ Keep each tip under 20 words. Be specific and tactical.`,
         </HScrollRow>
 
         {/* Row 8: Collect */}
-        <HScrollRow title="COLLECT — OUTSTANDING" subtitle="Invoices to collect" icon={DollarSign} count={overdueInvoices.length} accentColor="text-red-400">
+        <HScrollRow title="COLLECT — OUTSTANDING" subtitle="Invoices to collect" icon={DollarSign} count={overdueInvoices.length}>
           {overdueInvoices.slice(0, 10).map(i => (
             <HCard key={i.id} title={i.client_name} subtitle={`${i.invoice_number} · ${i.status}`} meta={`$${(i.total || 0).toLocaleString()}`} icon={DollarSign} onClick={() => nav("get_paid")} />
           ))}
@@ -165,7 +165,7 @@ Keep each tip under 20 words. Be specific and tactical.`,
         </HScrollRow>
 
         {/* Row 9: Analytics */}
-        <HScrollRow title="ANALYTICS — KEY NUMBERS" icon={BarChart3} accentColor="text-violet-400">
+        <HScrollRow title="ANALYTICS — KEY NUMBERS" icon={BarChart3}>
           <StatCard label="Total Leads" value={leads.length} />
           <StatCard label="XPress Leads" value={xpressLeads.length} />
           <StatCard label="Jobs Leads" value={jobsLeads.length} />
@@ -177,7 +177,7 @@ Keep each tip under 20 words. Be specific and tactical.`,
         </HScrollRow>
 
         {/* Row 10: Tips & Tricks */}
-        <HScrollRow title="AI TIPS & TRICKS" subtitle="Based on your workflow" icon={Lightbulb} accentColor="text-yellow-400">
+        <HScrollRow title="AI TIPS & TRICKS" subtitle="Based on your workflow" icon={Lightbulb}>
           {tips ? tips.map((t, i) => (
             <HCard key={i} title={t.category || `Tip ${i + 1}`} subtitle={t.tip} icon={Lightbulb} />
           )) : (
@@ -188,7 +188,7 @@ Keep each tip under 20 words. Be specific and tactical.`,
         </HScrollRow>
 
         {/* Row 11: Agents */}
-        <HScrollRow title="AGENTS — QUICK ACCESS" icon={Bot} accentColor="text-indigo-400">
+        <HScrollRow title="AGENTS — QUICK ACCESS" icon={Bot}>
           <HCard title="XPS Assistant" subtitle="General AI help" icon={Bot} onClick={() => nav("agents")} />
           <HCard title="Lead Scraper" subtitle="Run manual scrape" icon={Search} onClick={() => nav("find_work")} />
           <HCard title="Sales Director" subtitle="Pipeline coaching" icon={Trophy} onClick={() => nav("agents")} />
@@ -201,7 +201,7 @@ Keep each tip under 20 words. Be specific and tactical.`,
 
 function EmptyCard({ text }) {
   return (
-    <div className="flex-shrink-0 w-[240px] rounded-xl p-4 bg-white/[0.02] border border-white/[0.06] flex items-center justify-center">
+    <div className="flex-shrink-0 w-[240px] rounded-xl p-4 bg-black/60 border border-white/[0.06] flex items-center justify-center">
       <span className="text-[11px] text-muted-foreground/50">{text}</span>
     </div>
   );
@@ -209,7 +209,7 @@ function EmptyCard({ text }) {
 
 function StatCard({ label, value }) {
   return (
-    <div className="flex-shrink-0 w-[160px] rounded-xl p-4 bg-white/[0.03] backdrop-blur-md border border-white/[0.08] hover:bg-white/[0.08] hover:border-white/[0.18] transition-all">
+    <div className="flex-shrink-0 w-[160px] rounded-xl p-4 bg-black/80 border border-white/[0.06] hover:border-primary/40 hover:bg-primary/[0.08] hover:shadow-[0_0_28px_rgba(212,175,55,0.18)] transition-all duration-300">
       <div className="text-lg font-bold text-foreground">{value}</div>
       <div className="text-[10px] text-muted-foreground mt-0.5">{label}</div>
     </div>

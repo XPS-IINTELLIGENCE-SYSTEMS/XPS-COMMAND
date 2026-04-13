@@ -10,6 +10,7 @@ const phases = [
   { id: "job_leads", label: "Jobs Pipeline", num: null, desc: "End-buyer project leads" },
   { id: "crm", label: "CRM", num: null, desc: "Pipeline board" },
   { id: "get_work", label: "Contact", num: "2", desc: "Outreach & comms" },
+  { id: "follow_up", label: "Follow-Up", num: null, desc: "Sequences & reminders" },
   { id: "win_work", label: "Close", num: "3", desc: "Proposals & closing" },
   { id: "do_work", label: "Execute", num: "4", desc: "Jobs & execution" },
   { id: "get_paid", label: "Collect", num: "5", desc: "Invoice & collect" },

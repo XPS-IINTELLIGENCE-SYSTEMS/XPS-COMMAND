@@ -9,6 +9,7 @@ const navItems = [
   { id: "job_leads", label: "Jobs Pipeline", sub: "End-buyer project leads" },
   { id: "crm", label: "CRM", sub: "Pipeline board" },
   { id: "get_work", label: "Contact", sub: "Outreach & comms" },
+  { id: "follow_up", label: "Follow-Up", sub: "Sequences & reminders" },
   { id: "win_work", label: "Close", sub: "Proposals & closing" },
   { id: "do_work", label: "Execute", sub: "Jobs & execution" },
   { id: "get_paid", label: "Collect", sub: "Invoice & collect" },

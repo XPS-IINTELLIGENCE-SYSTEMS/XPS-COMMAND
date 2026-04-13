@@ -2,6 +2,7 @@ import StartHereView from "./phases/StartHereView";
 import DashboardView from "./dashboard/DashboardView";
 import DiscoverView from "./phases/DiscoverView";
 import ContactView from "./phases/ContactView";
+import FollowUpView from "./phases/FollowUpView";
 import CloseView from "./phases/CloseView";
 import ExecuteView from "./phases/ExecuteView";
 import CollectView from "./phases/CollectView";
@@ -32,6 +33,8 @@ export default function ContentArea({ activeView, onChatCommand, onNavigate }) {
       return wrapper(<CRMView />);
     case "get_work":
       return wrapper(<ContactView onChatCommand={onChatCommand} />);
+    case "follow_up":
+      return wrapper(<FollowUpView onChatCommand={onChatCommand} />);
     case "win_work":
       return wrapper(<CloseView onChatCommand={onChatCommand} />);
     case "do_work":

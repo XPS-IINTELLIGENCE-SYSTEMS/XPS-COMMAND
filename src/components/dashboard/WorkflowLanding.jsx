@@ -58,7 +58,7 @@ export default function WorkflowLanding({ onSelect }) {
         </div>
 
         {/* Grid of square cards — 3 per row */}
-        <div className="grid grid-cols-3 gap-3 px-5 pb-5 max-h-[65vh] overflow-y-auto scrollbar-hide">
+        <div className="grid grid-cols-3 gap-2 px-5 pb-5 max-h-[65vh] overflow-y-auto scrollbar-hide">
           {ITEMS.map(item => {
             const Icon = item.icon;
             const color = getIconColor(item.id);
@@ -66,7 +66,7 @@ export default function WorkflowLanding({ onSelect }) {
               <button
                 key={item.id}
                 onClick={() => onSelect(item.id)}
-                className="group aspect-square rounded-xl flex flex-col items-center justify-center gap-2 transition-all duration-300 animated-silver-border hover:scale-105 active:scale-95"
+                className="group rounded-xl flex flex-col items-center justify-center gap-1.5 py-3 transition-all duration-300 animated-silver-border hover:scale-105 active:scale-95"
                 style={{
                   background: "#000",
                 }}

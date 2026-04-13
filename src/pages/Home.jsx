@@ -175,6 +175,7 @@ export default function Home() {
   };
 
   return (
+    <DragDropContext onDragEnd={handleGlobalDragEnd}>
     <div className="h-[100dvh] w-screen overflow-hidden" style={{ border: '1.5px solid #a0a0a0', animation: 'silver-border-anim 4s ease infinite' }}>
       <div className="h-full w-full flex flex-col md:flex-row overflow-hidden bg-background">
       {/* ========== MOBILE LAYOUT ========== */}
@@ -221,7 +222,6 @@ export default function Home() {
       </div>
 
       {/* ========== DESKTOP LAYOUT ========== */}
-      <DragDropContext onDragEnd={handleGlobalDragEnd}>
       <div className="hidden md:flex flex-row" style={{ width: sidebarOpen ? sidebarWidth : 0, minWidth: sidebarOpen ? sidebarWidth : 0, transition: isResizing.current ? 'none' : 'width 0.3s, min-width 0.3s' }}>
         <div className="flex-1 overflow-hidden">
           <Sidebar activeView={activeView} onViewChange={setActiveView} onPhasesChange={setSidebarPhases} onDragEndRef={sidebarDragEndRef} />
@@ -262,7 +262,6 @@ export default function Home() {
         </div>
       </div>
 
-      </DragDropContext>
       <div className="hidden md:flex flex-row" style={{ width: chatOpen ? chatWidth : 0, minWidth: chatOpen ? chatWidth : 0, transition: isChatResizing.current ? 'none' : 'width 0.3s, min-width 0.3s' }}>
         {chatOpen && (
           <div
@@ -279,5 +278,6 @@ export default function Home() {
       </div>
       </div>
     </div>
+    </DragDropContext>
   );
 }

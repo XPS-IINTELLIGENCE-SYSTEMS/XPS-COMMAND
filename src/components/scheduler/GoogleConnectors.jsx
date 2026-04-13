@@ -17,30 +17,11 @@ export default function GoogleConnectors() {
   const [connecting, setConnecting] = useState(null);
   const { toast } = useToast();
 
-  // Check connection status by trying backend functions
+  // Check connection status — all start as unknown until user connects
   useEffect(() => {
-    const checkAll = async () => {
-      const results = {};
-      for (const c of CONNECTORS) {
-        try {
-          // Try a lightweight call — if it works, we're connected
-          if (c.fn === "gmailMessages") {
-            await base44.functions.invoke(c.fn, { action: "list" });
-          } else if (c.fn === "googleDriveFiles") {
-            await base44.functions.invoke(c.fn, {});
-          } else {
-            // For Calendar/Sheets we just mark as unknown until connected
-            results[c.id] = "unknown";
-            continue;
-          }
-          results[c.id] = "connected";
-        } catch {
-          results[c.id] = "disconnected";
-        }
-      }
-      setStatuses(results);
-    };
-    checkAll();
+    // We don't auto-check because there's no lightweight "am I connected" API.
+    // Status updates happen after connect/disconnect actions.
+    setStatuses({});
   }, []);
 
   const connect = async (connector) => {

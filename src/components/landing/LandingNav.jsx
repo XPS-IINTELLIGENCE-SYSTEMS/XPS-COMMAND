@@ -44,7 +44,7 @@ export default function LandingNav() {
 
       {/* Mobile nav drawer */}
       {open && (
-        <div className="absolute top-full left-0 right-0 z-50 md:hidden" style={{ background: 'rgba(10,12,20,0.55)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+        <div className="absolute top-full left-0 right-0 z-50 md:hidden" style={{ background: 'rgba(10,12,20,0.25)', backdropFilter: 'blur(32px) saturate(1.4)', WebkitBackdropFilter: 'blur(32px) saturate(1.4)', borderBottom: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 8px 32px rgba(0,0,0,0.3)' }}>
           <div className="flex flex-col px-6 py-4 gap-1">
             <Link to="/custom-login" onClick={() => setOpen(false)} className="text-base font-semibold text-right py-3 border-b border-white/[0.08] metallic-gold">
               Sign In

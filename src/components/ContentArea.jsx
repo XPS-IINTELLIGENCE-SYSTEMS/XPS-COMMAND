@@ -14,6 +14,7 @@ import LeadPipelineView from "./pipeline/LeadPipelineView";
 import AnalyticsView from "./dashboard/AnalyticsView";
 import AgentCommandPage from "./command/AgentCommandPage";
 import AdminInlineView from "./admin/AdminInlineView";
+import TemplatesView from "./templates/TemplatesView";
 import NavButtons, { pushView } from "./shared/NavButtons";
 import { useEffect, useRef } from "react";
 
@@ -76,6 +77,8 @@ export default function ContentArea({ activeView, onChatCommand, onNavigate, sid
       return wrapper(<SettingsView />);
     case "admin":
       return wrapper(<AdminInlineView />);
+    case "templates":
+      return wrapper(<TemplatesView />);
     default:
       return wrapper(<DashboardView onNavigate={onNavigate} sidebarPhases={sidebarPhases} />);
   }

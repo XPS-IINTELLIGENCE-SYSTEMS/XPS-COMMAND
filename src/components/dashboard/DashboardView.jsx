@@ -1,206 +1,217 @@
-import { Phone, Mail, Sparkles, ArrowUpRight, ChevronRight, Clock, TrendingUp, Zap, Target, DollarSign, Users, Flame, ShieldCheck } from "lucide-react";
-import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { useState, useEffect } from "react";
+import { Loader2, Search, Package, Hammer, Users, Phone, Trophy, HardHat, DollarSign, BarChart3, Lightbulb, Bot, MapPin, Sparkles, ArrowRight } from "lucide-react";
+import { base44 } from "@/api/base44Client";
+import HScrollRow from "../shared/HScrollRow";
+import HCard from "../shared/HCard";
 
-const hotLeads = [];
+export default function DashboardView({ onNavigate }) {
+  const [data, setData] = useState(null);
+  const [tips, setTips] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-const revenueData = [
-  { month: "Oct", value: 0 }, { month: "Nov", value: 0 }, { month: "Dec", value: 0 },
-  { month: "Jan", value: 0 }, { month: "Feb", value: 0 }, { month: "Mar", value: 0 },
-];
+  useEffect(() => {
+    loadAll();
+  }, []);
 
-const stats = [
-  { label: "Pipeline", value: "$0", sub: "No data yet", icon: DollarSign },
-  { label: "Hot Leads", value: "0", sub: "Add leads to get started", icon: Flame },
-  { label: "Close Rate", value: "0%", sub: "No deals yet", icon: Target },
-  { label: "Avg Deal", value: "$0", sub: "No deals yet", icon: TrendingUp },
-];
+  const loadAll = async () => {
+    setLoading(true);
+    const [leads, proposals, invoices, emails] = await Promise.all([
+      base44.entities.Lead.list("-created_date", 300),
+      base44.entities.Proposal.list("-created_date", 100),
+      base44.entities.Invoice.list("-created_date", 100),
+      base44.entities.OutreachEmail.list("-created_date", 100),
+    ]);
+    setData({ leads, proposals, invoices, emails });
+    setLoading(false);
 
-const quickActions = [
-  { label: "New Lead", icon: Users, desc: "Add a prospect" },
-  { label: "AI Proposal", icon: Sparkles, desc: "Generate instantly" },
-  { label: "Send Outreach", icon: Mail, desc: "Email or SMS" },
-  { label: "Web Research", icon: Zap, desc: "Scrape & analyze" },
-];
+    // Generate tips async
+    generateTips(leads, proposals, invoices);
+  };
 
-export default function DashboardView() {
+  const generateTips = async (leads, proposals, invoices) => {
+    const xpressCount = leads.filter(l => l.lead_type === "XPress").length;
+    const jobsCount = leads.filter(l => l.lead_type === "Jobs").length;
+    const wonCount = proposals.filter(p => p.status === "Approved").length;
+    const paidCount = invoices.filter(i => i.status === "Paid").length;
+    const overdueCount = invoices.filter(i => i.status === "Overdue").length;
+
+    const result = await base44.integrations.Core.InvokeLLM({
+      prompt: `You are an AI business coach for XPS Xtreme Polishing Systems (epoxy/concrete polishing). Give 4 quick, actionable tips based on these metrics:
+- XPress pipeline leads: ${xpressCount}
+- Jobs pipeline leads: ${jobsCount}
+- Won proposals: ${wonCount}
+- Paid invoices: ${paidCount}
+- Overdue invoices: ${overdueCount}
+Keep each tip under 20 words. Be specific and tactical.`,
+      response_json_schema: {
+        type: "object",
+        properties: {
+          tips: { type: "array", items: { type: "object", properties: { tip: { type: "string" }, category: { type: "string" } } } }
+        }
+      }
+    });
+    setTips(result.tips || []);
+  };
+
+  if (loading || !data) {
+    return <div className="flex items-center justify-center h-full"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>;
+  }
+
+  const { leads, proposals, invoices, emails } = data;
+  const xpressLeads = leads.filter(l => l.lead_type === "XPress");
+  const jobsLeads = leads.filter(l => l.lead_type === "Jobs");
+  const crmLeads = leads.filter(l => ["Contacted", "Qualified", "Proposal", "Negotiation"].includes(l.stage));
+  const needsContact = leads.filter(l => l.pipeline_status === "Qualified" && l.stage === "Incoming").slice(0, 15);
+  const wonDeals = proposals.filter(p => p.status === "Approved");
+  const activeJobs = leads.filter(l => l.stage === "Won");
+  const overdueInvoices = invoices.filter(i => i.status === "Overdue" || i.status === "Sent");
+  const sentEmails = emails.filter(e => e.status === "Sent" || e.status === "Queued");
+
+  const totalPipeline = leads.reduce((s, l) => s + (l.estimated_value || 0), 0);
+  const wonValue = wonDeals.reduce((s, p) => s + (p.total_value || 0), 0);
+  const overdueValue = overdueInvoices.reduce((s, i) => s + (i.total || 0), 0);
+
+  const nav = (view) => { if (onNavigate) onNavigate(view); };
+
   return (
-    <div className="p-4 md:p-8 space-y-6 md:space-y-8 overflow-y-auto h-full">
-      {/* Hero Greeting */}
-      <div className="relative overflow-hidden rounded-2xl border border-border bg-card p-6 md:p-8">
-        <div className="absolute inset-0 opacity-[0.03]" style={{backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100' viewBox='0 0 56 100'%3E%3Cpath d='M28 66L0 50L0 16L28 0L56 16L56 50L28 66ZM28 100L0 84L0 50L28 34L56 50L56 84L28 100Z' fill='none' stroke='rgba(212,175,55,0.5)' stroke-width='0.8'/%3E%3C/svg%3E\")", backgroundSize: '56px 100px'}} />
-        <div className="relative z-[1]">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="shimmer-icon-container w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center transition-all duration-300">
-              <ShieldCheck className="w-6 h-6 metallic-gold-icon shimmer-icon" />
-            </div>
-            <div>
-              <h1 className="text-2xl md:text-3xl font-extrabold text-foreground" style={{ fontFamily: "'Montserrat', sans-serif" }}>
-                <span className="xps-gold-slow-shimmer">Welcome, Jeremy</span>
-              </h1>
-              <p className="text-sm text-muted-foreground mt-0.5">Your AI command center is ready — let's dominate.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Quick Actions */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        {quickActions.map((action) => {
-          const Icon = action.icon;
-          return (
-            <button key={action.label} className="shimmer-card bg-card border border-border rounded-2xl p-4 flex flex-col items-center text-center gap-2 cursor-pointer hover:border-primary/30 transition-all">
-              <div className="shimmer-icon-container w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center transition-all duration-300">
-                <Icon className="w-5 h-5 metallic-gold-icon shimmer-icon" />
-              </div>
-              <div className="text-sm font-semibold text-foreground">{action.label}</div>
-              <div className="text-xs text-muted-foreground">{action.desc}</div>
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Stats row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        {stats.map((stat) => {
-          const StatIcon = stat.icon;
-          return (
-            <div key={stat.label} className="shimmer-card bg-card rounded-2xl border border-border p-4 md:p-5 cursor-default">
-              <div className="flex items-center justify-between mb-3">
-                <div className="text-xs font-medium text-muted-foreground tracking-wide uppercase">{stat.label}</div>
-                <div className="shimmer-icon-container w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center transition-all duration-300">
-                  <StatIcon className="w-4 h-4 metallic-gold-icon shimmer-icon" />
-                </div>
-              </div>
-              <div className="text-2xl md:text-3xl font-extrabold metallic-gold" style={{ fontFamily: "'Montserrat', sans-serif" }}>{stat.value}</div>
-              <div className="text-sm text-muted-foreground mt-1">{stat.sub}</div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Hot leads — THE most important section */}
-      <div>
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 metallic-gold-icon" />
-            <h2 className="text-sm font-bold text-foreground">AI-Prioritized Leads</h2>
-          </div>
-          <button className="flex items-center gap-1 text-xs text-primary font-medium">
-            View All <ChevronRight className="w-3 h-3" />
-          </button>
-        </div>
-        <div className="space-y-2">
-          {hotLeads.map((lead) => (
-            <div key={lead.company} className="shimmer-card bg-card rounded-2xl border border-border p-3 md:p-4 cursor-default">
-              <div className="flex items-start justify-between mb-2">
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-semibold text-foreground">{lead.company}</span>
-                    <span className="text-[10px] font-bold text-primary bg-primary/10 px-1.5 py-0.5 rounded-md">{lead.score}</span>
-                  </div>
-                  <div className="text-sm text-muted-foreground mt-0.5">{lead.contact} · {lead.sqft}</div>
-                </div>
-                <span className="text-base font-bold text-foreground flex-shrink-0 ml-3">{lead.value}</span>
-              </div>
-              
-              {/* AI Insight */}
-              <div className="flex items-start gap-2 mb-3 bg-primary/5 rounded-xl px-3 py-2">
-                <Sparkles className="w-3 h-3 text-primary mt-0.5 flex-shrink-0" />
-                <span className="text-sm text-foreground/80">{lead.reason}</span>
-              </div>
-
-              {/* Action buttons — one-tap to act */}
-              <div className="flex items-center gap-2">
-                <button className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-semibold active:scale-[0.97] transition-transform">
-                  <Phone className="w-3.5 h-3.5" /> AI Call
-                </button>
-                <button className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-secondary text-foreground text-xs font-medium border border-border active:scale-[0.97] transition-transform">
-                  <Mail className="w-3.5 h-3.5" /> AI Email
-                </button>
-                <button className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-secondary text-foreground text-xs font-medium border border-border active:scale-[0.97] transition-transform">
-                  <Sparkles className="w-3.5 h-3.5" /> AI Pitch
-                </button>
-                <div className="ml-auto">
-                  <button className="p-2 rounded-xl hover:bg-secondary transition-colors">
-                    <ArrowUpRight className="w-4 h-4 text-muted-foreground" />
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Revenue chart */}
-      <div className="shimmer-card bg-card rounded-2xl border border-border p-4 md:p-6 cursor-default">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-3">
-            <div className="shimmer-icon-container w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center transition-all duration-300">
-              <TrendingUp className="w-5 h-5 metallic-gold-icon shimmer-icon" />
-            </div>
-            <div>
-              <h3 className="text-sm font-bold text-foreground">Revenue Pipeline</h3>
-              <p className="text-sm text-muted-foreground">6-month trend</p>
-            </div>
-          </div>
-          <div className="shimmer-card flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-primary/20 bg-primary/5">
-            <TrendingUp className="w-3.5 h-3.5 metallic-gold-icon" />
-            <span className="text-xs font-semibold xps-gold-slow-shimmer">+18%</span>
-          </div>
-        </div>
-        <ResponsiveContainer width="100%" height={160}>
-          <AreaChart data={revenueData}>
-            <defs>
-              <linearGradient id="goldGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="hsl(40, 60%, 58%)" stopOpacity={0.25} />
-                <stop offset="95%" stopColor="hsl(40, 60%, 58%)" stopOpacity={0} />
-              </linearGradient>
-            </defs>
-            <XAxis dataKey="month" tick={{ fontSize: 10, fill: 'hsl(240, 5%, 55%)' }} axisLine={false} tickLine={false} />
-            <YAxis tick={{ fontSize: 10, fill: 'hsl(240, 5%, 55%)' }} axisLine={false} tickLine={false} tickFormatter={(v) => `$${v / 1000}K`} />
-            <Tooltip contentStyle={{ background: 'hsl(240, 8%, 7%)', border: '1px solid hsl(240, 6%, 14%)', borderRadius: 12, fontSize: 11 }} />
-            <Area type="monotone" dataKey="value" stroke="hsl(40, 60%, 58%)" fill="url(#goldGradient)" strokeWidth={2} />
-          </AreaChart>
-        </ResponsiveContainer>
-      </div>
-
-      {/* Today's schedule hint */}
-      <div className="shimmer-card bg-card rounded-2xl border border-border p-5 flex items-center gap-4 cursor-default">
-        <div className="shimmer-icon-container w-12 h-12 rounded-xl bg-secondary flex items-center justify-center flex-shrink-0 transition-all duration-300">
-          <Clock className="w-6 h-6 metallic-silver-icon shimmer-icon" />
-        </div>
-        <div className="flex-1 min-w-0">
-          <div className="text-sm font-semibold text-foreground">No follow-ups scheduled</div>
-          <div className="text-sm text-muted-foreground mt-0.5">Schedule calls to see them here</div>
-        </div>
-        <div className="shimmer-card px-3 py-1.5 rounded-full border border-border hover:border-primary/30 transition-all cursor-pointer">
-          <span className="text-xs font-medium text-muted-foreground">Schedule</span>
-        </div>
-      </div>
-
-      {/* System Status */}
-      <div className="shimmer-card bg-card rounded-2xl border border-border p-5">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="shimmer-icon-container w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center transition-all duration-300">
-            <Zap className="w-5 h-5 metallic-gold-icon shimmer-icon" />
-          </div>
+    <div className="h-full overflow-y-auto">
+      <div className="p-4 md:p-6 space-y-6 max-w-[1400px] mx-auto">
+        {/* Header */}
+        <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-sm font-bold text-foreground">AI System Status</h3>
-            <p className="text-sm text-muted-foreground">All systems operational</p>
+            <h1 className="text-xl md:text-2xl font-extrabold xps-gold-slow-shimmer" style={{ fontFamily: "'Montserrat', sans-serif" }}>COMMAND CENTER</h1>
+            <p className="text-xs text-muted-foreground mt-1">Full workflow at a glance</p>
+          </div>
+          <div className="flex gap-3 text-center">
+            <div className="glass-card rounded-lg px-4 py-2">
+              <div className="text-lg font-bold text-primary">${(totalPipeline / 1000).toFixed(0)}k</div>
+              <div className="text-[9px] text-muted-foreground">Pipeline</div>
+            </div>
+            <div className="glass-card rounded-lg px-4 py-2">
+              <div className="text-lg font-bold text-emerald-400">${(wonValue / 1000).toFixed(0)}k</div>
+              <div className="text-[9px] text-muted-foreground">Won</div>
+            </div>
+            <div className="glass-card rounded-lg px-4 py-2">
+              <div className="text-lg font-bold text-foreground">{leads.length}</div>
+              <div className="text-[9px] text-muted-foreground">Total Leads</div>
+            </div>
           </div>
         </div>
-        <div className="grid grid-cols-3 gap-3">
-          {[{label: "XPS Agent", status: "Online"}, {label: "SEO Engine", status: "Active"}, {label: "Lead Scoring", status: "Ready"}].map(s => (
-            <div key={s.label} className="flex items-center gap-2 p-3 rounded-xl bg-secondary/50 border border-border">
-              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              <div>
-                <div className="text-sm font-semibold text-foreground">{s.label}</div>
-                <div className="text-xs text-muted-foreground">{s.status}</div>
-              </div>
-            </div>
+
+        {/* Row 1: Discovery */}
+        <HScrollRow title="DISCOVERY" subtitle="What we're finding right now" icon={Search} count={leads.filter(l => l.pipeline_status === "Incoming").length}>
+          {leads.filter(l => l.pipeline_status === "Incoming").slice(0, 12).map(l => (
+            <HCard key={l.id} title={l.company} subtitle={l.contact_name || l.location} meta={l.score ? `Score: ${l.score}` : null} icon={l.lead_type === "XPress" ? Package : Hammer} onClick={() => nav(l.lead_type === "XPress" ? "xpress_leads" : "job_leads")} />
           ))}
-        </div>
+          {leads.filter(l => l.pipeline_status === "Incoming").length === 0 && <EmptyCard text="No incoming leads yet" />}
+        </HScrollRow>
+
+        {/* Row 2: XPress Pipeline */}
+        <HScrollRow title="XPS XPRESS PIPELINE" subtitle="Contractors & operators" icon={Package} count={xpressLeads.length} accentColor="text-amber-400">
+          {xpressLeads.slice(0, 15).map(l => (
+            <HCard key={l.id} title={l.company} subtitle={`${l.city || ""} · ${l.ai_insight?.slice(0, 40) || ""}`} meta={l.score ? `Score: ${l.score} · P${l.priority || 0}` : l.pipeline_status} icon={Package} onClick={() => nav("xpress_leads")} />
+          ))}
+          {xpressLeads.length === 0 && <EmptyCard text="No XPress leads — scraper runs every 6hrs" />}
+        </HScrollRow>
+
+        {/* Row 3: Jobs Pipeline */}
+        <HScrollRow title="JOBS PIPELINE" subtitle="End-buyer project leads" icon={Hammer} count={jobsLeads.length} accentColor="text-blue-400">
+          {jobsLeads.slice(0, 15).map(l => (
+            <HCard key={l.id} title={l.company} subtitle={`${l.vertical || ""} · ${l.city || ""}`} meta={l.estimated_value ? `$${l.estimated_value.toLocaleString()}` : l.pipeline_status} icon={Hammer} onClick={() => nav("job_leads")} />
+          ))}
+          {jobsLeads.length === 0 && <EmptyCard text="No Jobs leads yet" />}
+        </HScrollRow>
+
+        {/* Row 4: CRM Top Leads */}
+        <HScrollRow title="CRM — TOP ACTIVE LEADS" subtitle="Currently in pipeline stages" icon={Users} count={crmLeads.length}>
+          {crmLeads.slice(0, 15).map(l => (
+            <HCard key={l.id} title={l.company} subtitle={`${l.stage} · ${l.contact_name || ""}`} meta={l.estimated_value ? `$${l.estimated_value.toLocaleString()}` : null} icon={Users} onClick={() => nav("crm")} />
+          ))}
+          {crmLeads.length === 0 && <EmptyCard text="No leads in CRM stages yet" />}
+        </HScrollRow>
+
+        {/* Row 5: Contact */}
+        <HScrollRow title="CONTACT — NEEDS OUTREACH" subtitle="Qualified leads waiting for first contact" icon={Phone} count={needsContact.length} accentColor="text-cyan-400">
+          {needsContact.map(l => (
+            <HCard key={l.id} title={l.company} subtitle={l.contact_name} meta={l.email || l.phone || "No contact info"} icon={Phone} onClick={() => nav("get_work")}>
+              <div className="text-[9px] text-muted-foreground">{l.ai_insight?.slice(0, 60)}</div>
+            </HCard>
+          ))}
+          {needsContact.length === 0 && <EmptyCard text="All qualified leads have been contacted" />}
+        </HScrollRow>
+
+        {/* Row 6: Close */}
+        <HScrollRow title="CLOSE — WON DEALS" subtitle="Closed and won" icon={Trophy} count={wonDeals.length} accentColor="text-emerald-400">
+          {wonDeals.slice(0, 10).map(p => (
+            <HCard key={p.id} title={p.client_name} subtitle={p.service_type} meta={`$${(p.total_value || 0).toLocaleString()}`} icon={Trophy} onClick={() => nav("win_work")} />
+          ))}
+          {wonDeals.length === 0 && <EmptyCard text="No deals closed yet" />}
+        </HScrollRow>
+
+        {/* Row 7: Execute */}
+        <HScrollRow title="EXECUTE — ON DECK" subtitle="Active jobs to manage" icon={HardHat} count={activeJobs.length} accentColor="text-orange-400">
+          {activeJobs.slice(0, 10).map(l => (
+            <HCard key={l.id} title={l.company} subtitle={l.location} meta={l.estimated_value ? `$${l.estimated_value.toLocaleString()}` : "Active"} icon={HardHat} onClick={() => nav("do_work")} />
+          ))}
+          {activeJobs.length === 0 && <EmptyCard text="No active jobs on deck" />}
+        </HScrollRow>
+
+        {/* Row 8: Collect */}
+        <HScrollRow title="COLLECT — OUTSTANDING" subtitle="Invoices to collect" icon={DollarSign} count={overdueInvoices.length} accentColor="text-red-400">
+          {overdueInvoices.slice(0, 10).map(i => (
+            <HCard key={i.id} title={i.client_name} subtitle={`${i.invoice_number} · ${i.status}`} meta={`$${(i.total || 0).toLocaleString()}`} icon={DollarSign} onClick={() => nav("get_paid")} />
+          ))}
+          {overdueInvoices.length === 0 && <EmptyCard text="No outstanding invoices" />}
+        </HScrollRow>
+
+        {/* Row 9: Analytics */}
+        <HScrollRow title="ANALYTICS — KEY NUMBERS" icon={BarChart3} accentColor="text-violet-400">
+          <StatCard label="Total Leads" value={leads.length} />
+          <StatCard label="XPress Leads" value={xpressLeads.length} />
+          <StatCard label="Jobs Leads" value={jobsLeads.length} />
+          <StatCard label="Pipeline Value" value={`$${(totalPipeline / 1000).toFixed(0)}k`} />
+          <StatCard label="Won Value" value={`$${(wonValue / 1000).toFixed(0)}k`} />
+          <StatCard label="Proposals Sent" value={proposals.filter(p => p.status === "Sent").length} />
+          <StatCard label="Overdue $" value={`$${(overdueValue / 1000).toFixed(0)}k`} />
+          <StatCard label="Emails Sent" value={sentEmails.length} />
+        </HScrollRow>
+
+        {/* Row 10: Tips & Tricks */}
+        <HScrollRow title="AI TIPS & TRICKS" subtitle="Based on your workflow" icon={Lightbulb} accentColor="text-yellow-400">
+          {tips ? tips.map((t, i) => (
+            <HCard key={i} title={t.category || `Tip ${i + 1}`} subtitle={t.tip} icon={Lightbulb} />
+          )) : (
+            <div className="flex items-center gap-2 px-4 py-3 text-xs text-muted-foreground">
+              <Loader2 className="w-3 h-3 animate-spin" /> Generating tips...
+            </div>
+          )}
+        </HScrollRow>
+
+        {/* Row 11: Agents */}
+        <HScrollRow title="AGENTS — QUICK ACCESS" icon={Bot} accentColor="text-indigo-400">
+          <HCard title="XPS Assistant" subtitle="General AI help" icon={Bot} onClick={() => nav("agents")} />
+          <HCard title="Lead Scraper" subtitle="Run manual scrape" icon={Search} onClick={() => nav("find_work")} />
+          <HCard title="Sales Director" subtitle="Pipeline coaching" icon={Trophy} onClick={() => nav("agents")} />
+          <HCard title="SEO Marketing" subtitle="Content & SEO" icon={Sparkles} onClick={() => nav("agents")} />
+        </HScrollRow>
       </div>
+    </div>
+  );
+}
+
+function EmptyCard({ text }) {
+  return (
+    <div className="flex-shrink-0 w-[240px] rounded-xl p-4 bg-white/[0.02] border border-white/[0.06] flex items-center justify-center">
+      <span className="text-[11px] text-muted-foreground/50">{text}</span>
+    </div>
+  );
+}
+
+function StatCard({ label, value }) {
+  return (
+    <div className="flex-shrink-0 w-[160px] rounded-xl p-4 bg-white/[0.03] backdrop-blur-md border border-white/[0.08] hover:bg-white/[0.08] hover:border-white/[0.18] transition-all">
+      <div className="text-lg font-bold text-foreground">{value}</div>
+      <div className="text-[10px] text-muted-foreground mt-0.5">{label}</div>
     </div>
   );
 }

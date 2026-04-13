@@ -2,15 +2,19 @@ import { cn } from "@/lib/utils";
 import NavIcon from "./shared/NavIcon";
 
 const navItems = [
-  { id: "command", label: "Dashboard", sub: "Pipeline & metrics" },
-  { id: "lead_pipeline", label: "Lead Pipeline", sub: "Incoming → Qualified → Prioritized" },
-  { id: "analytics", label: "Analytics", sub: "Charts & revenue" },
-  { id: "find_work", label: "Discover", sub: "Signal-based prospecting" },
-  { id: "get_work", label: "Engage", sub: "Outreach & comms" },
+  { id: "command", label: "Dashboard", sub: "Full workflow overview" },
+  { id: "start_here", label: "Start Here", sub: "Get set up" },
+  { id: "find_work", label: "Discovery", sub: "Signal-based prospecting" },
+  { id: "xpress_leads", label: "XPS XPress Leads", sub: "Contractor & operator leads" },
+  { id: "job_leads", label: "Job Leads", sub: "End-buyer project leads" },
+  { id: "crm", label: "CRM", sub: "Pipeline board" },
+  { id: "get_work", label: "Contact", sub: "Outreach & comms" },
   { id: "win_work", label: "Close", sub: "Proposals & closing" },
   { id: "do_work", label: "Execute", sub: "Jobs & execution" },
   { id: "get_paid", label: "Collect", sub: "Invoice & collect" },
-  { id: "agents", label: "Agent Command", sub: "All agents, browser, tools" },
+  { id: "analytics", label: "Analytics", sub: "Charts & revenue" },
+  { id: "tips", label: "Tips & Tricks", sub: "Pro knowledge" },
+  { id: "agents", label: "Agents", sub: "AI agent command" },
   { id: "settings", label: "Settings", sub: "Account & preferences" },
 ];
 

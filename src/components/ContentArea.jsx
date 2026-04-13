@@ -1,66 +1,52 @@
 import StartHereView from "./phases/StartHereView";
-import CommandCenterView from "./phases/CommandCenterView";
-import PhaseView from "./phases/PhaseView";
+import DashboardView from "./dashboard/DashboardView";
+import DiscoverView from "./phases/DiscoverView";
+import ContactView from "./phases/ContactView";
+import CloseView from "./phases/CloseView";
+import ExecuteView from "./phases/ExecuteView";
+import CollectView from "./phases/CollectView";
 import TipsView from "./phases/TipsView";
 import SettingsView from "./dashboard/SettingsView";
-import LeadsView from "./dashboard/LeadsView";
-import ResearchView from "./dashboard/ResearchView";
-import OutreachView from "./dashboard/OutreachView";
 import CRMView from "./dashboard/CRMView";
 import LeadPipelineView from "./pipeline/LeadPipelineView";
 import AnalyticsView from "./dashboard/AnalyticsView";
 import AgentCommandPage from "./command/AgentCommandPage";
 
-// Phase views use the new interactive PhaseView system
-const phaseViews = ["find_work", "get_work", "win_work", "do_work", "get_paid"];
-
-// Views that don't need chat commands but may need navigation
-const plainViews = {
-  tips: TipsView,
-  settings: SettingsView,
-  leads: LeadsView,
-  research: ResearchView,
-  outreach: OutreachView,
-  crm: CRMView,
-  lead_pipeline: LeadPipelineView,
-  xpress_leads: LeadPipelineView,
-  job_leads: LeadPipelineView,
-  analytics: AnalyticsView,
-  agents: AgentCommandPage,
-};
-
 export default function ContentArea({ activeView, onChatCommand, onNavigate }) {
-  if (activeView === "start_here") {
-    return (
-      <div className="flex-1 h-full overflow-hidden border-l border-[#8a8a8a]/15">
-        <StartHereView onNavigate={onNavigate} />
-      </div>
-    );
-  }
-
-  if (activeView === "command") {
-    return (
-      <div className="flex-1 h-full overflow-hidden border-l border-[#8a8a8a]/15">
-        <CommandCenterView onNavigate={onNavigate} />
-      </div>
-    );
-  }
-
-  if (phaseViews.includes(activeView)) {
-    return (
-      <div className="flex-1 h-full overflow-hidden border-l border-[#8a8a8a]/15">
-        <PhaseView phaseId={activeView} onChatCommand={onChatCommand} />
-      </div>
-    );
-  }
-
-  const ViewComponent = plainViews[activeView] || CommandCenterView;
-  const forcedTab = activeView === 'xpress_leads' ? 'XPress' : activeView === 'job_leads' ? 'Jobs' : null;
-  const needsChat = ['lead_pipeline', 'xpress_leads', 'job_leads'].includes(activeView);
-
-  return (
-    <div className="flex-1 h-full overflow-hidden border-l border-[#8a8a8a]/15">
-      {needsChat ? <ViewComponent onChatCommand={onChatCommand} forcedTab={forcedTab} /> : <ViewComponent />}
-    </div>
+  const wrapper = (children) => (
+    <div className="flex-1 h-full overflow-hidden border-l border-[#8a8a8a]/15">{children}</div>
   );
+
+  switch (activeView) {
+    case "command":
+      return wrapper(<DashboardView onNavigate={onNavigate} />);
+    case "start_here":
+      return wrapper(<StartHereView onNavigate={onNavigate} />);
+    case "find_work":
+      return wrapper(<DiscoverView onChatCommand={onChatCommand} />);
+    case "xpress_leads":
+      return wrapper(<LeadPipelineView onChatCommand={onChatCommand} forcedTab="XPress" />);
+    case "job_leads":
+      return wrapper(<LeadPipelineView onChatCommand={onChatCommand} forcedTab="Jobs" />);
+    case "crm":
+      return wrapper(<CRMView />);
+    case "get_work":
+      return wrapper(<ContactView onChatCommand={onChatCommand} />);
+    case "win_work":
+      return wrapper(<CloseView onChatCommand={onChatCommand} />);
+    case "do_work":
+      return wrapper(<ExecuteView onChatCommand={onChatCommand} />);
+    case "get_paid":
+      return wrapper(<CollectView onChatCommand={onChatCommand} />);
+    case "analytics":
+      return wrapper(<AnalyticsView />);
+    case "tips":
+      return wrapper(<TipsView />);
+    case "agents":
+      return wrapper(<AgentCommandPage />);
+    case "settings":
+      return wrapper(<SettingsView />);
+    default:
+      return wrapper(<DashboardView onNavigate={onNavigate} />);
+  }
 }

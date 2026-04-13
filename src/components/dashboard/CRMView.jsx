@@ -1,19 +1,20 @@
 import { useState, useEffect, useCallback } from "react";
-import { Users, Plus, ChevronRight, Loader2, Sparkles, Phone, Mail, DollarSign, MapPin, X, RefreshCcw } from "lucide-react";
+import { Users, Package, Hammer, Plus, Loader2, RefreshCcw, MapPin, Sparkles, DollarSign, Phone, Mail, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { base44 } from "@/api/base44Client";
 import { useToast } from "@/components/ui/use-toast";
+import { cn } from "@/lib/utils";
+import HScrollRow from "../shared/HScrollRow";
 
-const STAGES = ["New", "Contacted", "Qualified", "Proposal", "Negotiation", "Won", "Lost"];
+const CRM_STAGES = ["Contacted", "Qualified", "Proposal", "Negotiation", "Won", "Lost"];
 const STAGE_COLORS = {
-  New: "border-t-slate-400",
-  Contacted: "border-t-blue-400",
-  Qualified: "border-t-yellow-400",
-  Proposal: "border-t-orange-400",
-  Negotiation: "border-t-purple-400",
-  Won: "border-t-green-400",
-  Lost: "border-t-red-400",
+  Contacted: "text-blue-400",
+  Qualified: "text-yellow-400",
+  Proposal: "text-orange-400",
+  Negotiation: "text-purple-400",
+  Won: "text-emerald-400",
+  Lost: "text-red-400",
 };
 
 export default function CRMView() {
@@ -21,8 +22,7 @@ export default function CRMView() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState(null);
-  const [adding, setAdding] = useState(false);
-  const [newLead, setNewLead] = useState({ company: "", contact_name: "", email: "", phone: "", location: "", stage: "New", estimated_value: 0 });
+  const [activeTab, setActiveTab] = useState("XPress");
   const { toast } = useToast();
 
   const load = useCallback(async () => {
@@ -45,30 +45,16 @@ export default function CRMView() {
 
   const moveStage = async (leadId, newStage) => {
     await base44.entities.Lead.update(leadId, { stage: newStage });
-    toast({ title: "Updated", description: `Lead moved to ${newStage}` });
+    toast({ title: "Updated", description: `Moved to ${newStage}` });
+    if (selected?.id === leadId) setSelected({ ...selected, stage: newStage });
   };
 
-  const createLead = async () => {
-    if (!newLead.company.trim()) return;
-    await base44.entities.Lead.create(newLead);
-    setAdding(false);
-    setNewLead({ company: "", contact_name: "", email: "", phone: "", location: "", stage: "New", estimated_value: 0 });
-    toast({ title: "Created", description: "New lead added" });
-  };
-
-  const deleteLead = async (id) => {
-    await base44.entities.Lead.delete(id);
-    setSelected(null);
-    toast({ title: "Deleted", description: "Lead removed" });
-  };
-
-  const filtered = leads.filter(l =>
+  const byType = leads.filter(l => (l.lead_type || "XPress") === activeTab);
+  const filtered = byType.filter(l =>
     !search || (l.company || "").toLowerCase().includes(search.toLowerCase()) ||
     (l.contact_name || "").toLowerCase().includes(search.toLowerCase())
   );
 
-  const grouped = {};
-  STAGES.forEach(s => { grouped[s] = filtered.filter(l => l.stage === s); });
   const totalValue = filtered.reduce((s, l) => s + (l.estimated_value || 0), 0);
 
   if (loading) {
@@ -78,126 +64,118 @@ export default function CRMView() {
   return (
     <div className="h-full flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="flex-shrink-0 p-3 md:p-4 glass-panel space-y-2">
+      <div className="flex-shrink-0 p-3 md:p-4 space-y-3 border-b border-white/[0.06]">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-base font-bold text-foreground">{filtered.length} Leads · ${totalValue.toLocaleString()} pipeline</h1>
+            <h1 className="text-lg font-extrabold xps-gold-slow-shimmer" style={{ fontFamily: "'Montserrat', sans-serif" }}>CRM PIPELINE</h1>
+            <p className="text-[11px] text-muted-foreground">{filtered.length} leads · ${totalValue.toLocaleString()} value</p>
           </div>
-          <div className="flex gap-2">
-            <Button variant="outline" size="sm" className="h-8 text-xs" onClick={load}><RefreshCcw className="w-3 h-3 mr-1" />Refresh</Button>
-            <Button size="sm" className="h-8 text-xs" onClick={() => setAdding(true)}><Plus className="w-3 h-3 mr-1" />Add Lead</Button>
-          </div>
+          <Button variant="outline" size="sm" className="h-8 text-xs" onClick={load}><RefreshCcw className="w-3 h-3 mr-1" />Refresh</Button>
         </div>
-        <Input placeholder="Search leads..." value={search} onChange={e => setSearch(e.target.value)} className="h-8 text-xs bg-secondary/30 rounded-lg" />
-      </div>
 
-      {/* Pipeline Board */}
-      <div className="flex-1 overflow-x-auto overflow-y-hidden">
-        <div className="flex h-full min-w-max">
-          {STAGES.map(stage => (
-            <div key={stage} className={`w-52 flex-shrink-0 flex flex-col border-r border-border/50 ${STAGE_COLORS[stage]} border-t-2`}>
-              <div className="px-3 py-2 flex items-center justify-between bg-white/[0.03]">
-                <span className="text-xs font-bold text-foreground">{stage}</span>
-                <span className="text-[10px] bg-secondary px-1.5 py-0.5 rounded text-muted-foreground">{grouped[stage].length}</span>
-              </div>
-              <div className="flex-1 overflow-y-auto p-1.5 space-y-1.5">
-                {grouped[stage].map(lead => (
-                  <button
-                    key={lead.id}
-                    onClick={() => setSelected(lead)}
-                    className="w-full text-left glass-card rounded-lg p-2.5 transition-all"
-                  >
-                    <div className="text-xs font-semibold text-foreground truncate">{lead.company}</div>
-                    <div className="text-[10px] text-muted-foreground truncate">{lead.contact_name}</div>
-                    {lead.estimated_value > 0 && (
-                      <div className="text-[10px] font-bold text-primary mt-1">${lead.estimated_value.toLocaleString()}</div>
-                    )}
-                    {lead.location && (
-                      <div className="text-[10px] text-muted-foreground/60 mt-0.5 flex items-center gap-0.5">
-                        <MapPin className="w-2.5 h-2.5" />{lead.location}
-                      </div>
-                    )}
-                    {lead.score > 0 && (
-                      <div className="mt-1.5 flex items-center gap-1">
-                        <Sparkles className="w-2.5 h-2.5 text-primary" />
-                        <span className="text-[10px] text-primary font-bold">{lead.score}</span>
-                      </div>
-                    )}
-                  </button>
-                ))}
-              </div>
-            </div>
+        {/* Tab switcher */}
+        <div className="flex gap-2">
+          {[{ id: "XPress", label: "XPS XPRESS CRM", icon: Package, color: "text-amber-400" }, { id: "Jobs", label: "JOBS CRM", icon: Hammer, color: "text-blue-400" }].map(tab => (
+            <button key={tab.id} onClick={() => { setActiveTab(tab.id); setSelected(null); }}
+              className={cn(
+                "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all flex-1",
+                activeTab === tab.id
+                  ? "bg-white/[0.08] border border-white/[0.18] shadow-[0_0_20px_rgba(212,175,55,0.1)]"
+                  : "bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.06]"
+              )}>
+              <tab.icon className={cn("w-4 h-4", activeTab === tab.id ? tab.color : "text-muted-foreground")} />
+              {tab.label}
+            </button>
           ))}
         </div>
+
+        <Input placeholder="Search..." value={search} onChange={e => setSearch(e.target.value)} className="h-8 text-xs bg-white/[0.04] border-white/[0.1] rounded-lg" />
       </div>
 
-      {/* Lead Detail Drawer */}
+      {/* CRM Stages as horizontal scroll rows */}
+      <div className="flex-1 overflow-y-auto p-3 md:p-4 space-y-4">
+        {CRM_STAGES.map(stage => {
+          const stageLeads = filtered.filter(l => l.stage === stage);
+          return (
+            <HScrollRow key={stage} title={stage.toUpperCase()} count={stageLeads.length} accentColor={STAGE_COLORS[stage]}>
+              {stageLeads.map(l => (
+                <CRMCard key={l.id} lead={l} onClick={() => setSelected(l)} />
+              ))}
+              {stageLeads.length === 0 && (
+                <div className="flex-shrink-0 w-[240px] rounded-xl p-4 bg-white/[0.02] border border-white/[0.06] flex items-center justify-center">
+                  <span className="text-[10px] text-muted-foreground/40">No leads in {stage}</span>
+                </div>
+              )}
+            </HScrollRow>
+          );
+        })}
+      </div>
+
+      {/* Detail Panel */}
       {selected && (
         <div className="fixed inset-0 z-50 flex justify-end" onClick={() => setSelected(null)}>
-          <div className="absolute inset-0 bg-black/40" />
-          <div className="relative w-80 glass-panel h-full overflow-y-auto shadow-2xl" onClick={e => e.stopPropagation()}>
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+          <div className="relative w-80 bg-card/95 backdrop-blur-xl h-full overflow-y-auto shadow-2xl border-l border-white/[0.1]" onClick={e => e.stopPropagation()}>
             <div className="p-4 space-y-4">
               <div className="flex items-start justify-between">
                 <div>
                   <h2 className="text-base font-bold text-foreground">{selected.company}</h2>
                   <p className="text-sm text-muted-foreground">{selected.contact_name}</p>
+                  <p className="text-[10px] text-primary font-bold mt-1">{selected.stage} · {selected.lead_type}</p>
                 </div>
                 <button onClick={() => setSelected(null)}><X className="w-4 h-4 text-muted-foreground" /></button>
               </div>
-
               <div className="space-y-2 text-sm">
                 {selected.email && <div className="flex items-center gap-2 text-muted-foreground"><Mail className="w-3.5 h-3.5" />{selected.email}</div>}
                 {selected.phone && <div className="flex items-center gap-2 text-muted-foreground"><Phone className="w-3.5 h-3.5" />{selected.phone}</div>}
                 {selected.location && <div className="flex items-center gap-2 text-muted-foreground"><MapPin className="w-3.5 h-3.5" />{selected.location}</div>}
                 {selected.estimated_value > 0 && <div className="flex items-center gap-2 text-primary font-bold"><DollarSign className="w-3.5 h-3.5" />${selected.estimated_value.toLocaleString()}</div>}
               </div>
-
               {selected.ai_insight && (
-                <div className="glass-card rounded-lg p-3 text-xs text-foreground/80">
+                <div className="rounded-lg p-3 text-xs text-foreground/80 bg-white/[0.04] border border-white/[0.08]">
                   <div className="flex items-center gap-1 text-primary font-semibold mb-1"><Sparkles className="w-3 h-3" />AI Insight</div>
                   {selected.ai_insight}
                 </div>
               )}
-
               <div>
-                <label className="text-xs font-medium text-muted-foreground mb-1 block">Move to Stage</label>
-                <div className="flex flex-wrap gap-1">
-                  {STAGES.filter(s => s !== selected.stage).map(s => (
-                    <button key={s} onClick={() => { moveStage(selected.id, s); setSelected({ ...selected, stage: s }); }}
-                      className="px-2 py-1 text-[10px] font-medium rounded bg-secondary hover:bg-secondary/80 text-foreground border border-border">
+                <label className="text-xs font-medium text-muted-foreground mb-2 block">Move to Stage</label>
+                <div className="flex flex-wrap gap-1.5">
+                  {CRM_STAGES.filter(s => s !== selected.stage).map(s => (
+                    <button key={s} onClick={() => moveStage(selected.id, s)}
+                      className="px-3 py-1.5 text-[10px] font-medium rounded-lg bg-white/[0.04] hover:bg-white/[0.1] border border-white/[0.1] hover:border-white/[0.2] text-foreground transition-all">
                       {s}
                     </button>
                   ))}
                 </div>
               </div>
-
-              <Button variant="destructive" size="sm" className="w-full text-xs" onClick={() => deleteLead(selected.id)}>Delete Lead</Button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Add Lead Modal */}
-      {adding && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center" onClick={() => setAdding(false)}>
-          <div className="absolute inset-0 bg-black/40" />
-          <div className="relative glass-panel rounded-xl p-5 w-96 space-y-3 shadow-2xl" onClick={e => e.stopPropagation()}>
-            <h3 className="text-sm font-bold text-foreground">Add New Lead</h3>
-            <Input placeholder="Company name *" value={newLead.company} onChange={e => setNewLead({ ...newLead, company: e.target.value })} className="h-9 text-sm" />
-            <Input placeholder="Contact name" value={newLead.contact_name} onChange={e => setNewLead({ ...newLead, contact_name: e.target.value })} className="h-9 text-sm" />
-            <div className="grid grid-cols-2 gap-2">
-              <Input placeholder="Email" value={newLead.email} onChange={e => setNewLead({ ...newLead, email: e.target.value })} className="h-9 text-sm" />
-              <Input placeholder="Phone" value={newLead.phone} onChange={e => setNewLead({ ...newLead, phone: e.target.value })} className="h-9 text-sm" />
-            </div>
-            <Input placeholder="Location (City, State)" value={newLead.location} onChange={e => setNewLead({ ...newLead, location: e.target.value })} className="h-9 text-sm" />
-            <Input type="number" placeholder="Estimated value ($)" value={newLead.estimated_value || ""} onChange={e => setNewLead({ ...newLead, estimated_value: Number(e.target.value) })} className="h-9 text-sm" />
-            <div className="flex gap-2 pt-1">
-              <Button variant="outline" size="sm" className="flex-1" onClick={() => setAdding(false)}>Cancel</Button>
-              <Button size="sm" className="flex-1" onClick={createLead}>Create Lead</Button>
             </div>
           </div>
         </div>
       )}
     </div>
+  );
+}
+
+function CRMCard({ lead, onClick }) {
+  return (
+    <button onClick={onClick}
+      className={cn(
+        "group flex-shrink-0 w-[240px] md:w-[260px] rounded-xl p-4 text-left transition-all duration-300",
+        "bg-white/[0.03] backdrop-blur-md border border-white/[0.08]",
+        "hover:bg-white/[0.08] hover:border-white/[0.18] hover:shadow-[0_0_24px_rgba(212,175,55,0.12)]",
+        "hover:scale-[1.02]"
+      )}>
+      <div className="text-xs font-semibold text-foreground truncate group-hover:text-primary transition-colors">{lead.company}</div>
+      <div className="text-[10px] text-muted-foreground truncate mt-0.5">{lead.contact_name}</div>
+      {lead.estimated_value > 0 && <div className="text-[10px] font-bold text-primary mt-1">${lead.estimated_value.toLocaleString()}</div>}
+      <div className="flex items-center gap-2 mt-1.5">
+        {lead.score > 0 && (
+          <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-primary/15 text-primary">Score: {lead.score}</span>
+        )}
+        {lead.location && (
+          <span className="text-[9px] text-muted-foreground/60 flex items-center gap-0.5"><MapPin className="w-2.5 h-2.5" />{lead.city || lead.location}</span>
+        )}
+      </div>
+    </button>
   );
 }

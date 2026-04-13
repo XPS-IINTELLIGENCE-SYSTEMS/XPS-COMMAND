@@ -139,7 +139,11 @@ function AddItemForm({ onAdd, onCancel }) {
 }
 
 export default function Sidebar({ activeView, onViewChange, onPhasesChange }) {
-  const [phases, setPhases] = useState(() => loadNav("xps-sidebar-phases", DEFAULT_PHASES));
+  const [phases, setPhases] = useState(() => {
+    const saved = loadNav("xps-sidebar-phases", DEFAULT_PHASES);
+    // Migrate: rename "Dashboard" to "Command" if cached
+    return saved.map(p => p.id === "command" && p.label === "Dashboard" ? { ...p, label: "Command" } : p);
+  });
   const [utility, setUtility] = useState(() => loadNav("xps-sidebar-utility", DEFAULT_UTILITY));
   const [addingTo, setAddingTo] = useState(null); // "workflow" | "system" | null
 

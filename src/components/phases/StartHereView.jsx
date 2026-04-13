@@ -53,9 +53,6 @@ export default function StartHereView({ onNavigate }) {
             <span className="text-xs font-semibold xps-silver-subtle-gold">GETTING STARTED</span>
           </div>
 
-
-          </div>
-
           <h1 className="text-3xl md:text-4xl font-extrabold leading-tight" style={{ fontFamily: "'Montserrat', sans-serif" }}>
             <span className="xps-gold-slow-shimmer">START HERE</span>
           </h1>

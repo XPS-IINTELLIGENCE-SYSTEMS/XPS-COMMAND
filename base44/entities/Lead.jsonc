@@ -83,6 +83,15 @@
       "type": "number",
       "description": "Priority ranking 1-10 (10=highest)"
     },
+    "lead_type": {
+      "type": "string",
+      "enum": [
+        "XPress",
+        "Jobs"
+      ],
+      "default": "XPress",
+      "description": "XPress = material/equipment/training sales leads. Jobs = contract work leads."
+    },
     "stage": {
       "type": "string",
       "enum": [

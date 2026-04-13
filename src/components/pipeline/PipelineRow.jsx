@@ -56,7 +56,7 @@ export default function PipelineRow({ title, subtitle, leads, colorKey, onLeadCl
         style={{ scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch" }}
       >
         {leads.length === 0 ? (
-          <div className="flex-shrink-0 w-64 h-32 glass-card rounded-xl flex items-center justify-center text-xs text-muted-foreground/50">
+          <div className="flex-shrink-0 w-56 h-44 glass-card rounded-xl flex items-center justify-center text-xs text-muted-foreground/50">
             No leads yet
           </div>
         ) : (

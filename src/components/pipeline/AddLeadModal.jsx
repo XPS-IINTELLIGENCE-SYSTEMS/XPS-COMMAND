@@ -8,11 +8,11 @@ const EMPTY = {
   company: "", contact_name: "", email: "", phone: "", website: "",
   city: "", state: "", zip: "", employee_count: 0, existing_material: "",
   equipment_used: "", estimated_value: 0, stage: "Incoming",
-  pipeline_status: "Incoming", ingestion_source: "Manual"
+  pipeline_status: "Incoming", ingestion_source: "Manual", lead_type: "XPress"
 };
 
-export default function AddLeadModal({ onClose }) {
-  const [form, setForm] = useState(EMPTY);
+export default function AddLeadModal({ onClose, defaultType = "XPress" }) {
+  const [form, setForm] = useState({ ...EMPTY, lead_type: defaultType });
   const { toast } = useToast();
 
   const set = (k, v) => setForm(p => ({ ...p, [k]: v }));
@@ -51,16 +51,25 @@ export default function AddLeadModal({ onClose }) {
         <Input placeholder="Existing floor material" value={form.existing_material} onChange={e => set("existing_material", e.target.value)} className="h-9 text-sm" />
         <Input placeholder="Equipment used" value={form.equipment_used} onChange={e => set("equipment_used", e.target.value)} className="h-9 text-sm" />
 
-        {/* Source selector */}
-        <div>
-          <label className="text-[10px] text-muted-foreground font-medium mb-1 block">Ingestion Source</label>
-          <select value={form.ingestion_source} onChange={e => set("ingestion_source", e.target.value)} className="w-full h-9 text-sm glass-input rounded-lg px-2 text-foreground bg-transparent">
-            <option value="Manual">Manual</option>
-            <option value="ChatGPT">ChatGPT</option>
-            <option value="Attachment">Attachment</option>
-            <option value="Google Drive">Google Drive</option>
-            <option value="Supabase">Supabase</option>
-          </select>
+        {/* Type selector */}
+        <div className="grid grid-cols-2 gap-2">
+          <div>
+            <label className="text-[10px] text-muted-foreground font-medium mb-1 block">Pipeline Type</label>
+            <select value={form.lead_type} onChange={e => set("lead_type", e.target.value)} className="w-full h-9 text-sm glass-input rounded-lg px-2 text-foreground bg-transparent">
+              <option value="XPress">XPS XPress (Sales)</option>
+              <option value="Jobs">Jobs (Contract Work)</option>
+            </select>
+          </div>
+          <div>
+            <label className="text-[10px] text-muted-foreground font-medium mb-1 block">Ingestion Source</label>
+            <select value={form.ingestion_source} onChange={e => set("ingestion_source", e.target.value)} className="w-full h-9 text-sm glass-input rounded-lg px-2 text-foreground bg-transparent">
+              <option value="Manual">Manual</option>
+              <option value="ChatGPT">ChatGPT</option>
+              <option value="Attachment">Attachment</option>
+              <option value="Google Drive">Google Drive</option>
+              <option value="Supabase">Supabase</option>
+            </select>
+          </div>
         </div>
 
         <div className="flex gap-2 pt-2">

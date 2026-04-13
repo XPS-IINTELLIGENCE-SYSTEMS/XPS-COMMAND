@@ -30,7 +30,7 @@ export default function LeadDetailPanel({ lead, onClose, onDelete, onChatCommand
           </button>
         </div>
 
-        {/* Score + Priority */}
+        {/* Score + Priority + Vertical */}
         <div className="flex gap-3">
           {lead.score > 0 && (
             <div className="glass-card rounded-lg p-3 flex-1 text-center">
@@ -44,10 +44,10 @@ export default function LeadDetailPanel({ lead, onClose, onDelete, onChatCommand
               <div className="text-[9px] text-muted-foreground font-semibold mt-0.5">PRIORITY</div>
             </div>
           )}
-          {lead.estimated_value > 0 && (
+          {lead.vertical && (
             <div className="glass-card rounded-lg p-3 flex-1 text-center">
-              <div className="text-lg font-black text-primary">${(lead.estimated_value / 1000).toFixed(0)}k</div>
-              <div className="text-[9px] text-muted-foreground font-semibold mt-0.5">VALUE</div>
+              <div className="text-xs font-black text-foreground">{lead.vertical}</div>
+              <div className="text-[9px] text-muted-foreground font-semibold mt-0.5">VERTICAL</div>
             </div>
           )}
         </div>

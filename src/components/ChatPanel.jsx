@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback, forwardRef, useImperativeHandle } from "react";
 import { Send, Plus, Loader2, Sparkles, Globe, Pencil, Database, Code, Search, GitBranch, Layers, Bot, Wrench, TrendingUp } from "lucide-react";
 import AgentSwitcher, { AGENTS } from "./chat/AgentSwitcher";
+import QuickActionButtons from "./chat/QuickActionButtons";
 import AgentTab from "./chat/AgentTab";
 import SubAgentChat from "./chat/SubAgentChat";
 import { Button } from "@/components/ui/button";
@@ -87,7 +88,7 @@ function MessageBubble({ message, isLatestAssistant }) {
   );
 }
 
-const ChatPanel = forwardRef(function ChatPanel({ mobile = false }, ref) {
+const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, ref) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [conversation, setConversation] = useState(null);
@@ -252,7 +253,7 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false }, ref) {
   const quickActions = agentQuickActions[currentAgentName] || defaultActions;
 
   return (
-    <div className={`${mobile ? 'w-full' : 'w-[320px] min-w-[320px]'} h-full ${mobile ? '' : 'border-l border-[#8a8a8a]/30'} flex flex-col bg-background`}>
+    <div className={`${mobile ? 'w-full' : ''} h-full ${mobile ? '' : 'border-l border-[#8a8a8a]/30'} flex flex-col bg-background`} style={!mobile ? { width: '100%' } : undefined}>
       {/* Agent Switcher Bar */}
       <div className={`${mobile ? 'min-h-[36px]' : 'min-h-[40px]'} border-b border-border flex items-center gap-1 px-2 py-1`}>
         <div className="flex-1 overflow-hidden">
@@ -358,6 +359,17 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false }, ref) {
                 <GitBranch className="w-2.5 h-2.5 metallic-silver-icon shimmer-icon" /> Add Helper
               </button>
             </div>
+          </div>
+          <QuickActionButtons onSend={(cmd) => {
+            setInput(cmd);
+            setTimeout(() => {
+              if (conversation && !loading) {
+                setInput('');
+                setLoading(true);
+                base44.agents.addMessage(conversation, { role: 'user', content: cmd }).then(() => setLoading(false));
+              }
+            }, 100);
+          }} />
           </div>
         )}
       </div>

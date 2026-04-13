@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Search, Sun, Moon, X, Loader2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
-export default function TopBar({ children, theme, onThemeToggle }) {
+export default function TopBar({ children, theme, onThemeToggle, height = 48 }) {
   const toggleButtons = children ? (Array.isArray(children) ? children : [children]) : [];
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
@@ -54,7 +54,7 @@ export default function TopBar({ children, theme, onThemeToggle }) {
   };
 
   return (
-    <div className="h-12 min-h-[48px] border-b border-border flex items-center justify-between px-4 bg-card/50 backdrop-blur-sm">
+    <div className="border-b border-border flex items-center justify-between px-4 bg-card/50 backdrop-blur-sm" style={{ height, minHeight: height }}>
       <div className="flex items-center gap-2">
         {toggleButtons[0]}
       </div>

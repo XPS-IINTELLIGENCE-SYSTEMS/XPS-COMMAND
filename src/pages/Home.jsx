@@ -21,6 +21,16 @@ export default function Home() {
     return saved ? parseInt(saved) : 220;
   });
   const isResizing = useRef(false);
+  const [chatWidth, setChatWidth] = useState(() => {
+    const saved = localStorage.getItem("xps-chat-width");
+    return saved ? parseInt(saved) : 320;
+  });
+  const isChatResizing = useRef(false);
+  const [topBarHeight, setTopBarHeight] = useState(() => {
+    const saved = localStorage.getItem("xps-topbar-height");
+    return saved ? parseInt(saved) : 48;
+  });
+  const isTopBarResizing = useRef(false);
 
   const startResize = useCallback((e) => {
     e.preventDefault();
@@ -39,6 +49,50 @@ export default function Home() {
       document.removeEventListener('mousemove', onMove);
       document.removeEventListener('mouseup', onUp);
       setSidebarWidth(w => { localStorage.setItem('xps-sidebar-width', w); return w; });
+    };
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+  }, []);
+
+  const startChatResize = useCallback((e) => {
+    e.preventDefault();
+    isChatResizing.current = true;
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+    const onMove = (ev) => {
+      if (!isChatResizing.current) return;
+      const newW = Math.max(220, Math.min(600, window.innerWidth - ev.clientX));
+      setChatWidth(newW);
+    };
+    const onUp = () => {
+      isChatResizing.current = false;
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+      setChatWidth(w => { localStorage.setItem('xps-chat-width', w); return w; });
+    };
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+  }, []);
+
+  const startTopBarResize = useCallback((e) => {
+    e.preventDefault();
+    isTopBarResizing.current = true;
+    document.body.style.cursor = 'row-resize';
+    document.body.style.userSelect = 'none';
+    const onMove = (ev) => {
+      if (!isTopBarResizing.current) return;
+      const newH = Math.max(36, Math.min(80, ev.clientY));
+      setTopBarHeight(newH);
+    };
+    const onUp = () => {
+      isTopBarResizing.current = false;
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+      setTopBarHeight(h => { localStorage.setItem('xps-topbar-height', h); return h; });
     };
     document.addEventListener('mousemove', onMove);
     document.addEventListener('mouseup', onUp);
@@ -131,20 +185,41 @@ export default function Home() {
       <div className="hex-bg hidden md:flex flex-1 flex-col overflow-hidden relative">
         <HexGlow />
         <div className="relative z-[2] flex flex-col flex-1 overflow-hidden">
-          <TopBar activeView={activeView} theme={theme} onThemeToggle={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
-            <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-1.5 rounded-md hover:bg-secondary/50 text-muted-foreground hover:text-foreground transition-colors" title={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}>
-              {sidebarOpen ? <PanelLeftClose className="w-4 h-4" /> : <PanelLeftOpen className="w-4 h-4" />}
-            </button>
-            <button onClick={() => setChatOpen(!chatOpen)} className="p-1.5 rounded-md hover:bg-secondary/50 text-muted-foreground hover:text-foreground transition-colors" title={chatOpen ? 'Collapse chat' : 'Expand chat'}>
-              {chatOpen ? <PanelRightClose className="w-4 h-4" /> : <PanelRightOpen className="w-4 h-4" />}
-            </button>
-          </TopBar>
+          <div style={{ height: topBarHeight, minHeight: topBarHeight, transition: isTopBarResizing.current ? 'none' : 'height 0.2s' }} className="relative">
+            <TopBar activeView={activeView} theme={theme} onThemeToggle={() => setTheme(theme === 'dark' ? 'light' : 'dark')} height={topBarHeight}>
+              <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-1.5 rounded-md hover:bg-secondary/50 text-muted-foreground hover:text-foreground transition-colors" title={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}>
+                {sidebarOpen ? <PanelLeftClose className="w-4 h-4" /> : <PanelLeftOpen className="w-4 h-4" />}
+              </button>
+              <button onClick={() => setChatOpen(!chatOpen)} className="p-1.5 rounded-md hover:bg-secondary/50 text-muted-foreground hover:text-foreground transition-colors" title={chatOpen ? 'Collapse chat' : 'Expand chat'}>
+                {chatOpen ? <PanelRightClose className="w-4 h-4" /> : <PanelRightOpen className="w-4 h-4" />}
+              </button>
+            </TopBar>
+            {/* Top bar bottom resize handle */}
+            <div
+              onMouseDown={startTopBarResize}
+              className="absolute bottom-0 left-0 right-0 h-1.5 cursor-row-resize group z-10"
+              title="Drag to resize top bar"
+            >
+              <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-border group-hover:bg-primary/50 transition-colors" />
+            </div>
+          </div>
           <ContentArea activeView={activeView} onChatCommand={handleChatCommand} onNavigate={setActiveView} />
         </div>
       </div>
 
-      <div className={`hidden md:block transition-all duration-300 ease-in-out ${chatOpen ? 'w-[320px] min-w-[320px]' : 'w-0 min-w-0'} overflow-hidden`}>
-        <ChatPanel ref={chatRef} />
+      <div className="hidden md:flex flex-row" style={{ width: chatOpen ? chatWidth : 0, minWidth: chatOpen ? chatWidth : 0, transition: isChatResizing.current ? 'none' : 'width 0.3s, min-width 0.3s' }}>
+        {chatOpen && (
+          <div
+            onMouseDown={startChatResize}
+            className="w-1.5 cursor-col-resize flex-shrink-0 group relative hover:bg-primary/20 transition-colors"
+            title="Drag to resize chat"
+          >
+            <div className="absolute inset-y-0 right-0 w-[3px] bg-border group-hover:bg-primary/50 transition-colors" />
+          </div>
+        )}
+        <div className="flex-1 overflow-hidden">
+          <ChatPanel ref={chatRef} chatWidth={chatWidth} />
+        </div>
       </div>
       </div>
     </div>

@@ -1,217 +1,255 @@
 import { useState, useEffect } from "react";
-import { Loader2, Search, Package, Hammer, Users, Phone, Trophy, HardHat, DollarSign, BarChart3, Lightbulb, Bot, MapPin, Sparkles, ArrowRight } from "lucide-react";
+import { Loader2, Search, Package, Hammer, Users, Phone, Clock, Trophy, HardHat, DollarSign, BarChart3, Lightbulb, Bot } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import HScrollRow from "../shared/HScrollRow";
-import HCard from "../shared/HCard";
+import { cn } from "@/lib/utils";
 
 export default function DashboardView({ onNavigate }) {
-  const [data, setData] = useState(null);
+  const [d, setD] = useState(null);
   const [tips, setTips] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    loadAll();
-  }, []);
+  useEffect(() => { load(); }, []);
 
-  const loadAll = async () => {
+  const load = async () => {
     setLoading(true);
     const [leads, proposals, invoices, emails] = await Promise.all([
-      base44.entities.Lead.list("-created_date", 300),
-      base44.entities.Proposal.list("-created_date", 100),
-      base44.entities.Invoice.list("-created_date", 100),
-      base44.entities.OutreachEmail.list("-created_date", 100),
+      base44.entities.Lead.list("-created_date", 500),
+      base44.entities.Proposal.list("-created_date", 200),
+      base44.entities.Invoice.list("-created_date", 200),
+      base44.entities.OutreachEmail.list("-created_date", 200),
     ]);
-    setData({ leads, proposals, invoices, emails });
+    setD({ leads, proposals, invoices, emails });
     setLoading(false);
-
-    // Generate tips async
-    generateTips(leads, proposals, invoices);
+    genTips(leads, proposals, invoices);
   };
 
-  const generateTips = async (leads, proposals, invoices) => {
-    const xpressCount = leads.filter(l => l.lead_type === "XPress").length;
-    const jobsCount = leads.filter(l => l.lead_type === "Jobs").length;
-    const wonCount = proposals.filter(p => p.status === "Approved").length;
-    const paidCount = invoices.filter(i => i.status === "Paid").length;
-    const overdueCount = invoices.filter(i => i.status === "Overdue").length;
-
-    const result = await base44.integrations.Core.InvokeLLM({
-      prompt: `You are an AI business coach for XPS Xtreme Polishing Systems (epoxy/concrete polishing). Give 4 quick, actionable tips based on these metrics:
-- XPress pipeline leads: ${xpressCount}
-- Jobs pipeline leads: ${jobsCount}
-- Won proposals: ${wonCount}
-- Paid invoices: ${paidCount}
-- Overdue invoices: ${overdueCount}
-Keep each tip under 20 words. Be specific and tactical.`,
-      response_json_schema: {
-        type: "object",
-        properties: {
-          tips: { type: "array", items: { type: "object", properties: { tip: { type: "string" }, category: { type: "string" } } } }
-        }
-      }
+  const genTips = async (leads, proposals, invoices) => {
+    const r = await base44.integrations.Core.InvokeLLM({
+      prompt: `You are an AI coach for XPS (epoxy/concrete polishing). Give 3 sharp tips based on: ${leads.length} leads, ${proposals.filter(p=>p.status==="Approved").length} won, ${invoices.filter(i=>i.status==="Overdue").length} overdue invoices. Under 15 words each.`,
+      response_json_schema: { type: "object", properties: { tips: { type: "array", items: { type: "string" } } } }
     });
-    setTips(result.tips || []);
+    setTips(r.tips || []);
   };
 
-  if (loading || !data) {
-    return <div className="flex items-center justify-center h-full"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>;
-  }
+  if (loading || !d) return <div className="flex items-center justify-center h-full"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>;
 
-  const { leads, proposals, invoices, emails } = data;
-  const xpressLeads = leads.filter(l => l.lead_type === "XPress");
-  const jobsLeads = leads.filter(l => l.lead_type === "Jobs");
-  const crmLeads = leads.filter(l => ["Contacted", "Qualified", "Proposal", "Negotiation"].includes(l.stage));
-  const needsContact = leads.filter(l => l.pipeline_status === "Qualified" && l.stage === "Incoming").slice(0, 15);
-  const wonDeals = proposals.filter(p => p.status === "Approved");
+  const { leads, proposals, invoices, emails } = d;
+  const xp = leads.filter(l => l.lead_type === "XPress");
+  const jobs = leads.filter(l => l.lead_type === "Jobs");
+  const incoming = leads.filter(l => l.pipeline_status === "Incoming");
+  const contacted = leads.filter(l => l.stage === "Contacted");
+  const followNeeded = leads.filter(l => l.stage === "Contacted");
+  const inProposal = leads.filter(l => l.stage === "Proposal" || l.stage === "Negotiation");
+  const won = proposals.filter(p => p.status === "Approved");
+  const lost = proposals.filter(p => p.status === "Rejected");
   const activeJobs = leads.filter(l => l.stage === "Won");
-  const overdueInvoices = invoices.filter(i => i.status === "Overdue" || i.status === "Sent");
-  const sentEmails = emails.filter(e => e.status === "Sent" || e.status === "Queued");
+  const overdue = invoices.filter(i => i.status === "Overdue");
+  const paid = invoices.filter(i => i.status === "Paid");
+  const sentEmails = emails.filter(e => e.status === "Sent");
 
-  const totalPipeline = leads.reduce((s, l) => s + (l.estimated_value || 0), 0);
-  const wonValue = wonDeals.reduce((s, p) => s + (p.total_value || 0), 0);
-  const overdueValue = overdueInvoices.reduce((s, i) => s + (i.total || 0), 0);
+  const values = leads.map(l => l.estimated_value || 0).filter(v => v > 0);
+  const topValue = Math.max(...(values.length ? values : [0]));
+  const bottomValue = Math.min(...(values.length ? values : [0]));
+  const medianValue = values.length ? values.sort((a,b)=>a-b)[Math.floor(values.length/2)] : 0;
+  const totalPipeline = values.reduce((s,v)=>s+v, 0);
+  const avgScore = leads.length ? Math.round(leads.reduce((s,l)=>s+(l.score||0),0)/leads.length) : 0;
+  const topScore = Math.max(...leads.map(l=>l.score||0));
+  const wonValue = won.reduce((s,p)=>s+(p.total_value||0),0);
+  const paidValue = paid.reduce((s,i)=>s+(i.total||0),0);
+  const overdueValue = overdue.reduce((s,i)=>s+(i.total||0),0);
 
-  const nav = (view) => { if (onNavigate) onNavigate(view); };
+  const pValues = proposals.map(p => p.total_value || 0).filter(v => v > 0);
+  const avgDeal = pValues.length ? Math.round(pValues.reduce((s,v)=>s+v,0)/pValues.length) : 0;
+  const winRate = proposals.length ? Math.round((won.length / proposals.length) * 100) : 0;
+
+  // Predicted: simple projection based on pipeline * win rate
+  const predicted = Math.round(totalPipeline * (winRate / 100));
+
+  const nav = (v) => { if (onNavigate) onNavigate(v); };
+
+  const topXpressLead = xp.sort((a,b)=>(b.score||0)-(a.score||0))[0];
+  const topJobLead = jobs.sort((a,b)=>(b.score||0)-(a.score||0))[0];
+  const biggestDeal = [...proposals].sort((a,b)=>(b.total_value||0)-(a.total_value||0))[0];
 
   return (
     <div className="h-full overflow-y-auto">
-      <div className="p-4 md:p-6 space-y-6 max-w-[1400px] mx-auto">
+      <div className="p-4 md:p-6 space-y-4 max-w-[1400px] mx-auto">
         {/* Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mb-2">
           <div>
             <h1 className="text-xl md:text-2xl font-extrabold xps-gold-slow-shimmer" style={{ fontFamily: "'Montserrat', sans-serif" }}>COMMAND CENTER</h1>
-            <p className="text-xs text-muted-foreground mt-1">Full workflow at a glance</p>
+            <p className="text-[11px] text-muted-foreground mt-0.5">Workflow intelligence · Top down · Left to right</p>
           </div>
-          <div className="flex gap-3 text-center">
-            <div className="rounded-lg px-4 py-2 bg-black/80 border border-white/[0.06]">
-              <div className="text-lg font-bold text-primary">${(totalPipeline / 1000).toFixed(0)}k</div>
-              <div className="text-[9px] text-muted-foreground">Pipeline</div>
-            </div>
-            <div className="rounded-lg px-4 py-2 bg-white/[0.04] backdrop-blur-xl border border-white/[0.10]">
-              <div className="text-lg font-bold text-primary">${(wonValue / 1000).toFixed(0)}k</div>
-              <div className="text-[9px] text-muted-foreground">Won</div>
-            </div>
-            <div className="rounded-lg px-4 py-2 bg-black/80 border border-white/[0.06]">
-              <div className="text-lg font-bold text-foreground">{leads.length}</div>
-              <div className="text-[9px] text-muted-foreground">Total Leads</div>
-            </div>
+          <div className="flex gap-2">
+            <MetricPill label="Pipeline" value={`$${(totalPipeline/1000).toFixed(0)}k`} />
+            <MetricPill label="Predicted" value={`$${(predicted/1000).toFixed(0)}k`} />
+            <MetricPill label="Win Rate" value={`${winRate}%`} />
           </div>
         </div>
 
-        {/* Row 1: Discovery */}
-        <HScrollRow title="DISCOVERY" subtitle="What we're finding right now" icon={Search} count={leads.filter(l => l.pipeline_status === "Incoming").length}>
-          {leads.filter(l => l.pipeline_status === "Incoming").slice(0, 12).map(l => (
-            <HCard key={l.id} title={l.company} subtitle={l.contact_name || l.location} meta={l.score ? `Score: ${l.score}` : null} icon={l.lead_type === "XPress" ? Package : Hammer} onClick={() => nav(l.lead_type === "XPress" ? "xpress_leads" : "job_leads")} />
-          ))}
-          {leads.filter(l => l.pipeline_status === "Incoming").length === 0 && <EmptyCard text="No incoming leads yet" />}
-        </HScrollRow>
+        {/* === ROW 1: DISCOVERY === */}
+        <WorkflowRow icon={Search} title="DISCOVERY" onClick={() => nav("find_work")} cols={[
+          { label: "Incoming", value: incoming.length, sub: "new leads" },
+          { label: "Top Score", value: topScore, sub: "best lead score" },
+          { label: "Avg Score", value: avgScore, sub: "across all leads" },
+          { label: "Total Leads", value: leads.length, sub: "in system" },
+          { label: "Sources Active", value: new Set(leads.map(l=>l.ingestion_source)).size, sub: "feed channels" },
+        ]} />
 
-        {/* Row 2: XPress Pipeline */}
-        <HScrollRow title="XPRESS PIPELINE" subtitle="Contractors & operators" icon={Package} count={xpressLeads.length}>
-          {xpressLeads.slice(0, 15).map(l => (
-            <HCard key={l.id} title={l.company} subtitle={`${l.city || ""} · ${l.ai_insight?.slice(0, 40) || ""}`} meta={l.score ? `Score: ${l.score} · P${l.priority || 0}` : l.pipeline_status} icon={Package} onClick={() => nav("xpress_leads")} />
-          ))}
-          {xpressLeads.length === 0 && <EmptyCard text="No XPress leads — scraper runs every 6hrs" />}
-        </HScrollRow>
+        {/* === ROW 2: XPRESS PIPELINE === */}
+        <WorkflowRow icon={Package} title="XPRESS PIPELINE" onClick={() => nav("xpress_leads")} cols={[
+          { label: "Total", value: xp.length, sub: "contractor leads" },
+          { label: "Top Lead", value: topXpressLead?.company || "—", sub: topXpressLead ? `Score: ${topXpressLead.score || 0}` : "", isText: true },
+          { label: "Highest Value", value: `$${(Math.max(...xp.map(l=>l.estimated_value||0))/1000).toFixed(0)}k`, sub: "single lead" },
+          { label: "Median Value", value: `$${(medianValue/1000).toFixed(1)}k`, sub: "pipeline median" },
+          { label: "Qualified", value: xp.filter(l=>l.pipeline_status==="Qualified").length, sub: "ready for outreach" },
+        ]} />
 
-        {/* Row 3: Jobs Pipeline */}
-        <HScrollRow title="JOBS PIPELINE" subtitle="End-buyer project leads" icon={Hammer} count={jobsLeads.length}>
-          {jobsLeads.slice(0, 15).map(l => (
-            <HCard key={l.id} title={l.company} subtitle={`${l.vertical || ""} · ${l.city || ""}`} meta={l.estimated_value ? `$${l.estimated_value.toLocaleString()}` : l.pipeline_status} icon={Hammer} onClick={() => nav("job_leads")} />
-          ))}
-          {jobsLeads.length === 0 && <EmptyCard text="No Jobs leads yet" />}
-        </HScrollRow>
+        {/* === ROW 3: JOBS PIPELINE === */}
+        <WorkflowRow icon={Hammer} title="JOBS PIPELINE" onClick={() => nav("job_leads")} cols={[
+          { label: "Total", value: jobs.length, sub: "project leads" },
+          { label: "Top Lead", value: topJobLead?.company || "—", sub: topJobLead ? `${topJobLead.vertical || ""} · Score: ${topJobLead.score || 0}` : "", isText: true },
+          { label: "Highest Value", value: `$${(Math.max(...jobs.map(l=>l.estimated_value||0), 0)/1000).toFixed(0)}k`, sub: "single project" },
+          { label: "Avg Sqft", value: Math.round(jobs.reduce((s,l)=>s+(l.square_footage||0),0)/(jobs.length||1)).toLocaleString(), sub: "per project" },
+          { label: "Qualified", value: jobs.filter(l=>l.pipeline_status==="Qualified").length, sub: "ready to bid" },
+        ]} />
 
-        {/* Row 4: CRM Top Leads */}
-        <HScrollRow title="CRM — TOP ACTIVE LEADS" subtitle="Currently in pipeline stages" icon={Users} count={crmLeads.length}>
-          {crmLeads.slice(0, 15).map(l => (
-            <HCard key={l.id} title={l.company} subtitle={`${l.stage} · ${l.contact_name || ""}`} meta={l.estimated_value ? `$${l.estimated_value.toLocaleString()}` : null} icon={Users} onClick={() => nav("crm")} />
-          ))}
-          {crmLeads.length === 0 && <EmptyCard text="No leads in CRM stages yet" />}
-        </HScrollRow>
+        {/* === ROW 4: CRM === */}
+        <WorkflowRow icon={Users} title="CRM" onClick={() => nav("crm")} cols={[
+          { label: "Active Leads", value: leads.filter(l=>!["Won","Lost"].includes(l.stage)).length, sub: "in pipeline" },
+          { label: "Pipeline $", value: `$${(totalPipeline/1000).toFixed(0)}k`, sub: "total value" },
+          { label: "Top $", value: `$${(topValue/1000).toFixed(0)}k`, sub: "biggest lead" },
+          { label: "Bottom $", value: `$${(bottomValue/1000).toFixed(0)}k`, sub: "smallest lead" },
+          { label: "Median $", value: `$${(medianValue/1000).toFixed(0)}k`, sub: "middle ground" },
+        ]} />
 
-        {/* Row 5: Contact */}
-        <HScrollRow title="CONTACT — NEEDS OUTREACH" subtitle="Qualified leads waiting for first contact" icon={Phone} count={needsContact.length}>
-          {needsContact.map(l => (
-            <HCard key={l.id} title={l.company} subtitle={l.contact_name} meta={l.email || l.phone || "No contact info"} icon={Phone} onClick={() => nav("get_work")}>
-              <div className="text-[9px] text-muted-foreground">{l.ai_insight?.slice(0, 60)}</div>
-            </HCard>
-          ))}
-          {needsContact.length === 0 && <EmptyCard text="All qualified leads have been contacted" />}
-        </HScrollRow>
+        {/* === ROW 5: CONTACT === */}
+        <WorkflowRow icon={Phone} title="CONTACT" onClick={() => nav("get_work")} cols={[
+          { label: "Needs Contact", value: leads.filter(l=>l.pipeline_status==="Qualified"&&l.stage==="Incoming").length, sub: "qualified, not contacted" },
+          { label: "Contacted", value: contacted.length, sub: "awaiting reply" },
+          { label: "Emails Sent", value: sentEmails.length, sub: "total outreach" },
+          { label: "Open Rate", value: emails.filter(e=>e.status==="Opened").length ? `${Math.round(emails.filter(e=>e.status==="Opened").length/Math.max(sentEmails.length,1)*100)}%` : "0%", sub: "email opens" },
+          { label: "Replied", value: emails.filter(e=>e.status==="Replied").length, sub: "got response" },
+        ]} />
 
-        {/* Row 6: Close */}
-        <HScrollRow title="CLOSE — WON DEALS" subtitle="Closed and won" icon={Trophy} count={wonDeals.length}>
-          {wonDeals.slice(0, 10).map(p => (
-            <HCard key={p.id} title={p.client_name} subtitle={p.service_type} meta={`$${(p.total_value || 0).toLocaleString()}`} icon={Trophy} onClick={() => nav("win_work")} />
-          ))}
-          {wonDeals.length === 0 && <EmptyCard text="No deals closed yet" />}
-        </HScrollRow>
+        {/* === ROW 6: FOLLOW-UP === */}
+        <WorkflowRow icon={Clock} title="FOLLOW-UP" onClick={() => nav("follow_up")} cols={[
+          { label: "Awaiting Reply", value: followNeeded.length, sub: "contacted, no response" },
+          { label: "Follow-Ups Sent", value: emails.filter(e=>e.email_type==="Follow-Up").length, sub: "follow-up emails" },
+          { label: "Stale > 7d", value: contacted.filter(l => { const d = new Date(l.last_contacted); return d && (Date.now()-d.getTime())>7*86400000; }).length, sub: "needs attention" },
+          { label: "In Proposal", value: inProposal.length, sub: "proposal stage" },
+          { label: "Predicted Close", value: `$${(inProposal.reduce((s,l)=>s+(l.estimated_value||0),0)/1000).toFixed(0)}k`, sub: "proposal pipeline" },
+        ]} />
 
-        {/* Row 7: Execute */}
-        <HScrollRow title="EXECUTE — ON DECK" subtitle="Active jobs to manage" icon={HardHat} count={activeJobs.length}>
-          {activeJobs.slice(0, 10).map(l => (
-            <HCard key={l.id} title={l.company} subtitle={l.location} meta={l.estimated_value ? `$${l.estimated_value.toLocaleString()}` : "Active"} icon={HardHat} onClick={() => nav("do_work")} />
-          ))}
-          {activeJobs.length === 0 && <EmptyCard text="No active jobs on deck" />}
-        </HScrollRow>
+        {/* === ROW 7: CLOSE === */}
+        <WorkflowRow icon={Trophy} title="CLOSE" onClick={() => nav("win_work")} cols={[
+          { label: "Won", value: won.length, sub: `$${(wonValue/1000).toFixed(0)}k total` },
+          { label: "Lost", value: lost.length, sub: "rejected" },
+          { label: "Win Rate", value: `${winRate}%`, sub: `${proposals.length} total proposals` },
+          { label: "Avg Deal", value: `$${(avgDeal/1000).toFixed(0)}k`, sub: "per proposal" },
+          { label: "Biggest Win", value: biggestDeal ? `$${((biggestDeal.total_value||0)/1000).toFixed(0)}k` : "—", sub: biggestDeal?.client_name || "" },
+        ]} />
 
-        {/* Row 8: Collect */}
-        <HScrollRow title="COLLECT — OUTSTANDING" subtitle="Invoices to collect" icon={DollarSign} count={overdueInvoices.length}>
-          {overdueInvoices.slice(0, 10).map(i => (
-            <HCard key={i.id} title={i.client_name} subtitle={`${i.invoice_number} · ${i.status}`} meta={`$${(i.total || 0).toLocaleString()}`} icon={DollarSign} onClick={() => nav("get_paid")} />
-          ))}
-          {overdueInvoices.length === 0 && <EmptyCard text="No outstanding invoices" />}
-        </HScrollRow>
+        {/* === ROW 8: EXECUTE === */}
+        <WorkflowRow icon={HardHat} title="EXECUTE" onClick={() => nav("do_work")} cols={[
+          { label: "Active Jobs", value: activeJobs.length, sub: "in execution" },
+          { label: "Job Value", value: `$${(activeJobs.reduce((s,l)=>s+(l.estimated_value||0),0)/1000).toFixed(0)}k`, sub: "total on deck" },
+          { label: "Negotiating", value: leads.filter(l=>l.stage==="Negotiation").length, sub: "coming soon" },
+          { label: "Avg Job $", value: activeJobs.length ? `$${(activeJobs.reduce((s,l)=>s+(l.estimated_value||0),0)/activeJobs.length/1000).toFixed(0)}k` : "—", sub: "per job" },
+          { label: "Predicted", value: `$${(predicted/1000).toFixed(0)}k`, sub: "projected revenue" },
+        ]} />
 
-        {/* Row 9: Analytics */}
-        <HScrollRow title="ANALYTICS — KEY NUMBERS" icon={BarChart3}>
-          <StatCard label="Total Leads" value={leads.length} />
-          <StatCard label="XPress Leads" value={xpressLeads.length} />
-          <StatCard label="Jobs Leads" value={jobsLeads.length} />
-          <StatCard label="Pipeline Value" value={`$${(totalPipeline / 1000).toFixed(0)}k`} />
-          <StatCard label="Won Value" value={`$${(wonValue / 1000).toFixed(0)}k`} />
-          <StatCard label="Proposals Sent" value={proposals.filter(p => p.status === "Sent").length} />
-          <StatCard label="Overdue $" value={`$${(overdueValue / 1000).toFixed(0)}k`} />
-          <StatCard label="Emails Sent" value={sentEmails.length} />
-        </HScrollRow>
+        {/* === ROW 9: COLLECT === */}
+        <WorkflowRow icon={DollarSign} title="COLLECT" onClick={() => nav("get_paid")} cols={[
+          { label: "Collected", value: `$${(paidValue/1000).toFixed(0)}k`, sub: `${paid.length} invoices` },
+          { label: "Outstanding", value: `$${(overdueValue/1000).toFixed(0)}k`, sub: `${overdue.length} overdue` },
+          { label: "Invoices Out", value: invoices.filter(i=>i.status==="Sent").length, sub: "awaiting payment" },
+          { label: "Collection %", value: paid.length ? `${Math.round(paidValue/(paidValue+overdueValue||1)*100)}%` : "0%", sub: "of total billed" },
+          { label: "Avg Invoice", value: invoices.length ? `$${(invoices.reduce((s,i)=>s+(i.total||0),0)/invoices.length/1000).toFixed(0)}k` : "—", sub: "per invoice" },
+        ]} />
 
-        {/* Row 10: Tips & Tricks */}
-        <HScrollRow title="AI TIPS & TRICKS" subtitle="Based on your workflow" icon={Lightbulb}>
-          {tips ? tips.map((t, i) => (
-            <HCard key={i} title={t.category || `Tip ${i + 1}`} subtitle={t.tip} icon={Lightbulb} />
-          )) : (
-            <div className="flex items-center gap-2 px-4 py-3 text-xs text-muted-foreground">
-              <Loader2 className="w-3 h-3 animate-spin" /> Generating tips...
-            </div>
-          )}
-        </HScrollRow>
+        {/* === ROW 10: ANALYTICS === */}
+        <WorkflowRow icon={BarChart3} title="ANALYTICS" onClick={() => nav("analytics")} cols={[
+          { label: "Total Revenue", value: `$${((wonValue+paidValue)/1000).toFixed(0)}k`, sub: "won + collected" },
+          { label: "Pipeline", value: `$${(totalPipeline/1000).toFixed(0)}k`, sub: "total value" },
+          { label: "Predicted", value: `$${(predicted/1000).toFixed(0)}k`, sub: `at ${winRate}% win rate` },
+          { label: "Leads/Source", value: Math.round(leads.length / Math.max(new Set(leads.map(l=>l.ingestion_source)).size, 1)), sub: "avg per channel" },
+          { label: "Cost/Lead", value: "—", sub: "add expenses" },
+        ]} />
 
-        {/* Row 11: Agents */}
-        <HScrollRow title="AGENTS — QUICK ACCESS" icon={Bot}>
-          <HCard title="XPS Assistant" subtitle="General AI help" icon={Bot} onClick={() => nav("agents")} />
-          <HCard title="Lead Scraper" subtitle="Run manual scrape" icon={Search} onClick={() => nav("find_work")} />
-          <HCard title="Sales Director" subtitle="Pipeline coaching" icon={Trophy} onClick={() => nav("agents")} />
-          <HCard title="SEO Marketing" subtitle="Content & SEO" icon={Sparkles} onClick={() => nav("agents")} />
-        </HScrollRow>
+        {/* === ROW 11: TIPS === */}
+        <div className="rounded-xl bg-white/[0.04] backdrop-blur-xl border border-white/[0.10] p-4">
+          <div className="flex items-center gap-2 mb-3">
+            <Lightbulb className="w-4 h-4 text-primary" />
+            <span className="text-sm font-bold text-foreground">AI TIPS</span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {tips ? tips.map((t, i) => (
+              <div key={i} className={cn("rounded-lg p-3 text-xs text-foreground/80", i % 2 === 0 ? "bg-black/80 border border-white/[0.06]" : "bg-white/[0.04] border border-white/[0.10]")}>
+                <Lightbulb className="w-3 h-3 text-primary mb-1" />
+                {t}
+              </div>
+            )) : <div className="text-xs text-muted-foreground flex items-center gap-2"><Loader2 className="w-3 h-3 animate-spin" />Generating...</div>}
+          </div>
+        </div>
+
+        {/* === ROW 12: AGENTS === */}
+        <div className="rounded-xl bg-black/80 border border-white/[0.06] p-4 cursor-pointer hover:border-primary/40 hover:bg-primary/[0.08] transition-all duration-300" onClick={() => nav("agents")}>
+          <div className="flex items-center gap-2 mb-2">
+            <Bot className="w-4 h-4 text-primary" />
+            <span className="text-sm font-bold text-foreground">AGENTS</span>
+          </div>
+          <div className="grid grid-cols-4 gap-3">
+            {["XPS Assistant", "Lead Scraper", "Sales Director", "SEO Marketing"].map((name, i) => (
+              <div key={i} className={cn("rounded-lg p-3 text-center", i % 2 === 0 ? "bg-white/[0.04] border border-white/[0.10]" : "bg-black/60 border border-white/[0.06]")}>
+                <Bot className="w-4 h-4 text-muted-foreground mx-auto mb-1" />
+                <div className="text-[10px] font-semibold text-foreground">{name}</div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
-function EmptyCard({ text }) {
+/* === Shared Components === */
+
+function MetricPill({ label, value }) {
   return (
-    <div className="flex-shrink-0 w-[240px] rounded-xl p-4 bg-black/60 border border-white/[0.06] flex items-center justify-center">
-      <span className="text-[11px] text-muted-foreground/50">{text}</span>
+    <div className="rounded-lg px-3 py-1.5 bg-black/80 border border-white/[0.06] text-center">
+      <div className="text-sm font-bold text-primary">{value}</div>
+      <div className="text-[8px] text-muted-foreground">{label}</div>
     </div>
   );
 }
 
-function StatCard({ label, value }) {
+function WorkflowRow({ icon: Icon, title, cols, onClick }) {
   return (
-    <div className="flex-shrink-0 w-[160px] rounded-xl p-4 bg-black/80 border border-white/[0.06] hover:border-primary/40 hover:bg-primary/[0.08] hover:shadow-[0_0_28px_rgba(212,175,55,0.18)] transition-all duration-300">
-      <div className="text-lg font-bold text-foreground">{value}</div>
-      <div className="text-[10px] text-muted-foreground mt-0.5">{label}</div>
+    <div
+      onClick={onClick}
+      className="group rounded-xl bg-white/[0.04] backdrop-blur-xl border border-white/[0.10] hover:border-primary/40 hover:shadow-[0_0_28px_rgba(212,175,55,0.12)] transition-all duration-300 cursor-pointer overflow-hidden"
+    >
+      {/* Row header */}
+      <div className="flex items-center gap-2 px-4 py-2.5 border-b border-white/[0.06]">
+        <Icon className="w-4 h-4 text-primary" />
+        <span className="text-xs font-bold text-foreground tracking-wider">{title}</span>
+        <span className="text-[9px] text-muted-foreground ml-auto group-hover:text-primary transition-colors">View →</span>
+      </div>
+      {/* Columns */}
+      <div className="grid grid-cols-5 divide-x divide-white/[0.06]">
+        {cols.map((col, i) => (
+          <div key={i} className={cn(
+            "px-3 py-3 text-center transition-all duration-300",
+            i % 2 === 0 ? "bg-black/40" : "bg-transparent",
+            "group-hover:bg-primary/[0.04]"
+          )}>
+            <div className={cn("font-bold text-foreground", col.isText ? "text-[11px] truncate" : "text-base")}>{col.value}</div>
+            <div className="text-[10px] font-semibold text-muted-foreground mt-0.5">{col.label}</div>
+            {col.sub && <div className="text-[8px] text-muted-foreground/50 mt-0.5 truncate">{col.sub}</div>}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

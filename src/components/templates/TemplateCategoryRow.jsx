@@ -21,7 +21,7 @@ export default function TemplateCategoryRow({ category, isOpen, onToggle }) {
           </div>
           <div>
             <h2 className="text-base font-extrabold xps-gold-slow-shimmer tracking-wide" style={{ fontFamily: "'Montserrat', sans-serif" }}>{category.title}</h2>
-            <p className="text-[11px] text-muted-foreground">{category.desc}</p>
+            <p className="text-[11px] text-white/40">{category.desc}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -50,7 +50,7 @@ export default function TemplateCategoryRow({ category, isOpen, onToggle }) {
           >
             {tmpl.preview && <div className="text-2xl mb-2">{tmpl.preview}</div>}
             <div className="text-sm font-bold text-white">{tmpl.name}</div>
-            <p className="text-[11px] text-muted-foreground mt-1 leading-relaxed">{tmpl.desc}</p>
+            <p className="text-[11px] text-white/40 mt-1 leading-relaxed">{tmpl.desc}</p>
           </button>
         ))}
 

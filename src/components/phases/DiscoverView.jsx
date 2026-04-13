@@ -44,15 +44,15 @@ export default function DiscoverView({ onChatCommand }) {
 
   return (
     <div className="h-full overflow-y-auto">
-      <div className="p-4 md:p-8 space-y-10">
+      <div className="p-4 md:p-8 space-y-12">
         {/* Header */}
         <div className="text-center pt-2 pb-4">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 mb-4">
             <NavIcon id="find_work" size="sm" active />
-            <span className="text-xs font-semibold text-foreground">DISCOVERY · 15 TOOLS</span>
+            <span className="text-xs font-semibold text-white">DISCOVERY · 15 TOOLS</span>
           </div>
           <h1 className="text-2xl md:text-3xl font-extrabold xps-gold-slow-shimmer" style={{ fontFamily: "'Montserrat', sans-serif" }}>DISCOVER</h1>
-          <p className="mt-2 text-xs text-muted-foreground">Find leads, research prospects, build pipeline — all AI-powered</p>
+          <p className="mt-2 text-xs text-white/40">Find leads, research prospects, build pipeline — all AI-powered</p>
         </div>
 
         {/* Tools Row — Horizontal */}

@@ -5,7 +5,6 @@ import {
   ChevronDown, ChevronUp, X
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import AdminChat from "./AdminChat";
 import AdminEditorCanvas from "./AdminEditorCanvas";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -159,7 +158,7 @@ export default function AdminInlineView() {
           <MobileToolDropdown activeTool={activeTool} setActiveTool={setActiveTool} />
         </div>
 
-        {/* Active Tool or Chat */}
+        {/* Active Tool or Empty Canvas */}
         <div className="flex-1 overflow-hidden">
           {activeTool ? (
             <div className="h-full flex flex-col">
@@ -174,22 +173,21 @@ export default function AdminInlineView() {
               </div>
             </div>
           ) : (
-            <AdminChat />
+            <div className="h-full flex items-center justify-center">
+              <div className="text-center">
+                <p className="text-sm text-muted-foreground">Select a tool above to begin</p>
+              </div>
+            </div>
           )}
         </div>
       </div>
     );
   }
 
-  // Desktop layout
+  // Desktop layout — no chat, center is full editor canvas
   return (
     <div className="h-full flex overflow-hidden">
-      {/* Left: Chat */}
-      <div className="w-[320px] min-w-[320px] border-r border-white/[0.08] flex-shrink-0">
-        <AdminChat />
-      </div>
-
-      {/* Center: Editor Canvas */}
+      {/* Center: Editor Canvas (full width) */}
       <div className="flex-1 overflow-hidden">
         <AdminEditorCanvas activeTool={activeTool} />
       </div>

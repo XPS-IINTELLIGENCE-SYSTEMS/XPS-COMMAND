@@ -22,12 +22,12 @@ export default function TemplatesView() {
 
   return (
     <div className="h-full overflow-y-auto">
-      <div className="p-4 md:p-8 space-y-10">
+      <div className="p-4 md:p-8 space-y-12">
         {/* Hero */}
         <div className="text-center pt-2 pb-4">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 mb-4">
             <Layers className="w-4 h-4 text-primary" />
-            <span className="text-xs font-semibold text-foreground">TEMPLATES · LIBRARY</span>
+            <span className="text-xs font-semibold text-white">TEMPLATES · LIBRARY</span>
           </div>
           <h1
             className="text-2xl md:text-3xl font-extrabold xps-gold-slow-shimmer tracking-tight"
@@ -35,7 +35,7 @@ export default function TemplatesView() {
           >
             XPS TEMPLATES
           </h1>
-          <p className="mt-2 text-xs text-muted-foreground max-w-xl mx-auto">
+          <p className="mt-2 text-xs text-white/40 max-w-xl mx-auto">
             Ready-to-use templates for every stage of your business — agents, workflows, proposals, themes, and more
           </p>
           <div className="mt-4 max-w-md mx-auto">

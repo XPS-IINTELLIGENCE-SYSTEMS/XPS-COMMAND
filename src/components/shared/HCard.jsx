@@ -33,7 +33,7 @@ export default function HCard({ title, subtitle, meta, icon: Icon, onClick, chil
         )}
         <div className="flex-1 min-w-0">
           <div className="text-base font-bold text-foreground truncate group-hover:text-white transition-colors duration-300">{title}</div>
-          {subtitle && <div className="text-sm text-muted-foreground truncate mt-1">{subtitle}</div>}
+          {subtitle && <div className="text-sm text-white/70 truncate mt-1">{subtitle}</div>}
           {meta && <div className="text-sm font-bold text-primary mt-1.5">{meta}</div>}
         </div>
       </div>

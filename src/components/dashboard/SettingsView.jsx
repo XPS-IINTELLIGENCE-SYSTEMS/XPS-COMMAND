@@ -8,6 +8,8 @@ import { useToast } from "@/components/ui/use-toast";
 import SettingsConnectors from "../settings/SettingsConnectors";
 import SettingsAIMode from "../settings/SettingsAIMode";
 import SettingsEditLock from "../settings/SettingsEditLock";
+import SettingsProfile from "../settings/SettingsProfile";
+import SettingsAPITokens from "../settings/SettingsAPITokens";
 
 export default function SettingsView() {
   const [loading, setLoading] = useState(true);
@@ -88,45 +90,26 @@ export default function SettingsView() {
 
   return (
     <div className="p-4 md:p-6 overflow-y-auto h-full">
-      <div className="max-w-3xl mx-auto space-y-6">
+      <div className="max-w-3xl mx-auto space-y-10">
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-2xl md:text-3xl font-extrabold xps-gold-slow-shimmer tracking-tight" style={{ fontFamily: "'Montserrat', sans-serif" }}>
             SETTINGS
           </h1>
-          <p className="text-sm text-muted-foreground mt-1">Account, integrations, and app preferences</p>
+          <p className="text-sm text-white/40 mt-1">Account, integrations, and app preferences</p>
         </div>
 
         {/* Edit Lock */}
         <SettingsEditLock />
 
-        {/* Profile */}
-        <div className="glass-card rounded-2xl p-4">
-          <div className="flex items-center gap-2.5 mb-3">
-            <div className="w-8 h-8 rounded-xl bg-secondary flex items-center justify-center">
-              <User className="w-4 h-4 text-muted-foreground" />
-            </div>
-            <div>
-              <h3 className="text-sm font-semibold text-foreground">Profile</h3>
-              <p className="text-[10px] text-muted-foreground">Your account details</p>
-            </div>
-          </div>
-          <div className="space-y-2">
-            {[
-              { label: "Display Name", value: user?.full_name || "Not set" },
-              { label: "Email", value: user?.email || "Not set" },
-              { label: "Role", value: role },
-            ].map(item => (
-              <div key={item.label} className="flex items-center justify-between py-2 px-2 rounded-lg hover:bg-white/[0.03] border-b border-border/30 last:border-0">
-                <span className="text-sm text-muted-foreground">{item.label}</span>
-                <span className="text-sm text-foreground font-medium capitalize">{item.value}</span>
-              </div>
-            ))}
-          </div>
-        </div>
+        {/* Profile (editable with add/delete/modify) */}
+        <SettingsProfile />
 
         {/* Connectors — Real Base44 Technology */}
         <SettingsConnectors />
+
+        {/* API Tokens */}
+        <SettingsAPITokens />
 
         {/* AI Autonomy Mode */}
         <SettingsAIMode />
@@ -138,8 +121,8 @@ export default function SettingsView() {
               <Bell className="w-4 h-4 text-muted-foreground" />
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-foreground">Notifications</h3>
-              <p className="text-[10px] text-muted-foreground">Choose how you get alerted</p>
+              <h3 className="text-sm font-semibold xps-gold-slow-shimmer" style={{ fontFamily: "'Montserrat', sans-serif" }}>NOTIFICATIONS</h3>
+              <p className="text-[10px] text-white/40">Choose how you get alerted</p>
             </div>
           </div>
           <div className="space-y-2">
@@ -163,8 +146,8 @@ export default function SettingsView() {
               <Palette className="w-4 h-4 text-muted-foreground" />
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-foreground">Appearance</h3>
-              <p className="text-[10px] text-muted-foreground">Visual preferences</p>
+              <h3 className="text-sm font-semibold xps-gold-slow-shimmer" style={{ fontFamily: "'Montserrat', sans-serif" }}>APPEARANCE</h3>
+              <p className="text-[10px] text-white/40">Visual preferences</p>
             </div>
           </div>
           <div className="space-y-2">

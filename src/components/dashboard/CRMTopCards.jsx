@@ -45,7 +45,7 @@ export default function CRMTopCards({ leads, onNavigate }) {
       <h2 className="text-lg md:text-xl font-extrabold xps-gold-slow-shimmer tracking-wide" style={{ fontFamily: "'Montserrat', sans-serif" }}>
         Priority Actions
       </h2>
-      <p className="text-[11px] text-muted-foreground mt-0.5">Your most urgent leads — take action now</p>
+      <p className="text-[11px] text-white/40 mt-0.5">Your most urgent leads — take action now</p>
     </div>
     <div className="flex md:grid md:grid-cols-3 gap-3 md:gap-4 mb-10 overflow-x-auto md:overflow-visible scrollbar-hide snap-x snap-mandatory pb-2 md:pb-0 -mx-2 px-2 md:mx-0 md:px-0">
       {CARDS.map((card) => {

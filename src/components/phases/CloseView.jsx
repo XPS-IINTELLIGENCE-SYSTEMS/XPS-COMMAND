@@ -41,14 +41,14 @@ export default function CloseView({ onChatCommand }) {
 
   return (
     <div className="h-full overflow-y-auto">
-      <div className="p-4 md:p-8 space-y-10">
+      <div className="p-4 md:p-8 space-y-12">
         <div className="text-center pt-2 pb-4">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 mb-4">
             <NavIcon id="win_work" size="sm" active />
-            <span className="text-xs font-semibold text-foreground">CLOSE · PROPOSALS</span>
+            <span className="text-xs font-semibold text-white">CLOSE · PROPOSALS</span>
           </div>
           <h1 className="text-2xl md:text-3xl font-extrabold xps-gold-slow-shimmer" style={{ fontFamily: "'Montserrat', sans-serif" }}>CLOSE</h1>
-          <p className="mt-2 text-xs text-muted-foreground">Proposals, bids, negotiations, and wins — ${wonValue.toLocaleString()} won</p>
+          <p className="mt-2 text-xs text-white/40">Proposals, bids, negotiations, and wins — ${wonValue.toLocaleString()} won</p>
         </div>
 
         <HScrollRow title="CLOSING TOOLS" icon={Trophy} count={CLOSE_TOOLS.length}>

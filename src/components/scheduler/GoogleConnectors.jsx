@@ -17,16 +17,32 @@ export default function GoogleConnectors() {
   const [connecting, setConnecting] = useState(null);
   const { toast } = useToast();
 
-  // Check connection status — all start as unknown until user connects
+  // Check connection status on mount by trying to call backend functions
   useEffect(() => {
-    // We don't auto-check because there's no lightweight "am I connected" API.
-    // Status updates happen after connect/disconnect actions.
-    setStatuses({});
+    const checkAll = async () => {
+      const isAuthed = await base44.auth.isAuthenticated();
+      if (!isAuthed) return;
+      for (const c of CONNECTORS) {
+        try {
+          await base44.functions.invoke(c.fn, {});
+          setStatuses(prev => ({ ...prev, [c.id]: "connected" }));
+        } catch {
+          setStatuses(prev => ({ ...prev, [c.id]: "disconnected" }));
+        }
+      }
+    };
+    checkAll();
   }, []);
 
   const connect = async (connector) => {
     setConnecting(connector.id);
     try {
+      const isAuthed = await base44.auth.isAuthenticated();
+      if (!isAuthed) {
+        base44.auth.redirectToLogin(window.location.pathname);
+        setConnecting(null);
+        return;
+      }
       const url = await base44.connectors.connectAppUser(connector.id);
       const popup = window.open(url, "_blank", "width=600,height=700");
       const timer = setInterval(() => {

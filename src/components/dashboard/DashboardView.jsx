@@ -236,7 +236,7 @@ export default function DashboardView({ onNavigate, sidebarPhases }) {
           <h1 className="text-3xl md:text-5xl font-extrabold xps-gold-slow-shimmer tracking-tight" style={{ fontFamily: "'Montserrat', sans-serif" }}>
             COMMAND CENTER
           </h1>
-          <p className="text-sm text-muted-foreground mt-2">Drag cards to reorder · Click pencil to edit</p>
+          <p className="text-sm text-white/40 mt-2">Drag cards to reorder · Click pencil to edit</p>
         </div>
 
         {/* CRM TOP CARDS */}
@@ -244,7 +244,7 @@ export default function DashboardView({ onNavigate, sidebarPhases }) {
 
         {/* GROUPED CARD ROWS */}
         <div>
-          <div className="space-y-10">
+          <div className="space-y-14">
             {groups.map((group, gIdx) => (
               <div key={gIdx}>
                 {/* Editable group heading */}

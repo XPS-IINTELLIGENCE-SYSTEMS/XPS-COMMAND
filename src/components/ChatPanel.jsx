@@ -282,65 +282,8 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
             </div>
           ) : messages.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center px-4">
-              {!mobile && (
-                <>
-                  <div className="w-14 h-14 rounded-2xl bg-secondary flex items-center justify-center mb-3 shimmer-card">
-                    {(() => { const AIcon = activeAgentConfig?.icon || Wrench; return <AIcon className={`w-7 h-7 shimmer-icon ${activeAgentConfig?.color || 'metallic-silver-icon'}`} />; })()}
-                  </div>
-                  <h3 className="text-sm font-bold xps-gold-slow-shimmer mb-1" style={{ fontFamily: "'Montserrat', sans-serif" }}>{activeAgentConfig?.fullName || activeAgentConfig?.name}</h3>
-                  <p className="text-[10px] text-muted-foreground mb-4">
-                   {activeAgentConfig?.desc}
-                  </p>
-                </>
-              )}
-              <div className={`space-y-1.5 w-full ${mobile ? 'grid grid-cols-2 gap-1.5 space-y-0' : ''}`}>
-                {quickActions.map((action) => {
-                  const Icon = action.icon;
-                  return (
-                    <button
-                      key={action.label}
-                      onClick={() => {
-                        setInput(action.label);
-                      }}
-                      className="shimmer-card glass-card w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left"
-                    >
-                      <Icon className="w-3 h-3 metallic-silver-icon shimmer-icon flex-shrink-0" />
-                      <span className="text-[10px] text-foreground">{action.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          ) : (
-            messages.map((msg, i) => {
-              const isLatestAssistant = msg.role === "assistant" && i === messages.length - 1;
-              return <MessageBubble key={i} message={msg} isLatestAssistant={isLatestAssistant} />;
-            })
-          )}
-        </div>
-      )}
-
-      {/* Input */}
-      <div className={`${mobile ? 'p-2 pb-8' : 'p-3'} border-t border-border ${activeAgentId !== "main" && !mobile ? "hidden" : ""}`}>
-        <div className="flex gap-2">
-          <input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSend()}
-            placeholder={`Command ${activeAgentConfig?.name || 'agent'}...`}
-            className={`flex-1 glass-input rounded-lg px-3 chat-input-metallic ${mobile ? 'py-2.5 text-sm' : 'py-2 text-xs'} text-foreground placeholder:text-muted-foreground focus:outline-none`}
-            disabled={loading || initializing}
-          />
-          <Button
-            size="icon"
-            className={`${mobile ? 'h-10 w-10' : 'h-8 w-8'} metallic-gold-bg text-background hover:brightness-110 rounded-lg`}
-            onClick={handleSend}
-            disabled={loading || initializing || !input.trim()}
-          >
-            {loading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
-          </Button>
-        </div>
-        {!mobile && (
+            {!mobile && (
+          <>
           <div className="flex items-center gap-2 mt-2">
             <div className="flex items-center gap-1 text-[9px] text-muted-foreground">
               <Globe className="w-2.5 h-2.5 metallic-silver-icon" /> Web
@@ -370,7 +313,7 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
               }
             }, 100);
           }} />
-          </div>
+          </>
         )}
       </div>
     </div>

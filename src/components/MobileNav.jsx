@@ -3,7 +3,7 @@ import NavIcon from "./shared/NavIcon";
 
 const navItems = [
   { id: "command", label: "Dashboard", sub: "Pipeline & metrics" },
-  { id: "crm", label: "CRM Pipeline", sub: "Manage all leads" },
+  { id: "lead_pipeline", label: "Lead Pipeline", sub: "Incoming → Qualified → Prioritized" },
   { id: "analytics", label: "Analytics", sub: "Charts & revenue" },
   { id: "find_work", label: "Discover", sub: "Signal-based prospecting" },
   { id: "get_work", label: "Engage", sub: "Outreach & comms" },

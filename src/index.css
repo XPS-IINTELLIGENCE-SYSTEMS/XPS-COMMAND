@@ -340,6 +340,10 @@
   border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
+/* Hide scrollbar utility */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 6px;

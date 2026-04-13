@@ -18,6 +18,10 @@
       "type": "string",
       "description": "Contact phone number"
     },
+    "website": {
+      "type": "string",
+      "description": "Company website URL"
+    },
     "vertical": {
       "type": "string",
       "enum": [
@@ -39,6 +43,30 @@
       "type": "string",
       "description": "City, State"
     },
+    "city": {
+      "type": "string",
+      "description": "City"
+    },
+    "state": {
+      "type": "string",
+      "description": "State"
+    },
+    "zip": {
+      "type": "string",
+      "description": "ZIP code"
+    },
+    "employee_count": {
+      "type": "number",
+      "description": "Number of employees"
+    },
+    "existing_material": {
+      "type": "string",
+      "description": "Current flooring material in use"
+    },
+    "equipment_used": {
+      "type": "string",
+      "description": "Equipment currently used at facility"
+    },
     "square_footage": {
       "type": "number",
       "description": "Estimated square footage"
@@ -51,26 +79,72 @@
       "type": "number",
       "description": "AI lead score 0-100"
     },
+    "priority": {
+      "type": "number",
+      "description": "Priority ranking 1-10 (10=highest)"
+    },
     "stage": {
       "type": "string",
       "enum": [
-        "New",
-        "Contacted",
+        "Incoming",
         "Qualified",
+        "Prioritized",
+        "Contacted",
         "Proposal",
         "Negotiation",
         "Won",
         "Lost"
       ],
-      "default": "New"
+      "default": "Incoming"
+    },
+    "pipeline_status": {
+      "type": "string",
+      "enum": [
+        "Incoming",
+        "Qualified",
+        "Prioritized"
+      ],
+      "default": "Incoming",
+      "description": "Lead pipeline validation status"
+    },
+    "ingestion_source": {
+      "type": "string",
+      "enum": [
+        "ChatGPT",
+        "Scraper",
+        "Attachment",
+        "Google Drive",
+        "Supabase",
+        "Manual",
+        "HubSpot",
+        "Other"
+      ],
+      "default": "Manual",
+      "description": "How this lead was ingested"
     },
     "source": {
       "type": "string",
-      "description": "Lead source (website, referral, AI, cold outreach, etc.)"
+      "description": "Lead source detail"
     },
     "ai_insight": {
       "type": "string",
       "description": "AI-generated insight about this lead"
+    },
+    "ai_recommendation": {
+      "type": "string",
+      "description": "AI product recommendation based on XPS products vs their existing line"
+    },
+    "profile_data": {
+      "type": "string",
+      "description": "JSON string of deep business profile data"
+    },
+    "profile_url": {
+      "type": "string",
+      "description": "Link to full profile on Google Drive"
+    },
+    "validation_notes": {
+      "type": "string",
+      "description": "Notes from the validation agent"
     },
     "notes": {
       "type": "string",
@@ -80,6 +154,10 @@
       "type": "string",
       "format": "date-time",
       "description": "Last contact date"
+    },
+    "years_in_business": {
+      "type": "number",
+      "description": "Years the company has been in business"
     }
   },
   "required": [

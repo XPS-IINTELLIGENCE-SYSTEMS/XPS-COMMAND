@@ -5,7 +5,7 @@ import NavIcon from "./shared/NavIcon";
 const phases = [
   { id: "start_here", label: "Start Here", num: null, desc: "Get set up in minutes" },
   { id: "command", label: "Dashboard", num: null, desc: "Pipeline & metrics" },
-  { id: "crm", label: "CRM Pipeline", num: null, desc: "Manage all leads" },
+  { id: "lead_pipeline", label: "Lead Pipeline", num: null, desc: "Incoming → Qualified → Prioritized" },
   { id: "analytics", label: "Analytics", num: null, desc: "Charts & revenue" },
   { id: "find_work", label: "Discover", num: "1", desc: "Signal-based prospecting" },
   { id: "get_work", label: "Engage", num: "2", desc: "Outreach & comms" },

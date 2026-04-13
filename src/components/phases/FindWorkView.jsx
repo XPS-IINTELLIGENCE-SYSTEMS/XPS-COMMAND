@@ -2,6 +2,7 @@ import { MapPin, Search, Users, Target, TrendingUp, Database, Mail, Send, Phone,
 import WorkflowToolCard from "../shared/WorkflowToolCard";
 import WorkflowSection from "../shared/WorkflowSection";
 import NavIcon from "../shared/NavIcon";
+import ScraperConfigModule from "../pipeline/ScraperConfigModule";
 
 export default function FindWorkView({ onChatCommand }) {
   const fire = (cmd) => {
@@ -38,6 +39,12 @@ export default function FindWorkView({ onChatCommand }) {
           <WorkflowToolCard num="1.4" label="AI Deep Research" Icon={Target} statusBadge="Research"
             description="Scrapes their website, reviews, social media, recent news, and existing floor photos."
             onAction={fire} chatCommand="Do deep research on my highest scored lead" />
+        </WorkflowSection>
+
+        <WorkflowSection title="SCRAPER CONFIGURATION" subtitle="Configure and manage your timed lead scraper jobs.">
+          <div className="col-span-full">
+            <ScraperConfigModule />
+          </div>
         </WorkflowSection>
 
         <WorkflowSection title="SCORING & ORGANIZATION" subtitle="Let AI rank and organize your leads.">

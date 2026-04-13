@@ -7,6 +7,7 @@ import LeadsView from "./dashboard/LeadsView";
 import ResearchView from "./dashboard/ResearchView";
 import OutreachView from "./dashboard/OutreachView";
 import CRMView from "./dashboard/CRMView";
+import LeadPipelineView from "./pipeline/LeadPipelineView";
 import AnalyticsView from "./dashboard/AnalyticsView";
 import AgentCommandPage from "./command/AgentCommandPage";
 
@@ -21,6 +22,7 @@ const plainViews = {
   research: ResearchView,
   outreach: OutreachView,
   crm: CRMView,
+  lead_pipeline: LeadPipelineView,
   analytics: AnalyticsView,
   agents: AgentCommandPage,
 };
@@ -52,9 +54,12 @@ export default function ContentArea({ activeView, onChatCommand, onNavigate }) {
   }
 
   const ViewComponent = plainViews[activeView] || CommandCenterView;
+
+  // Pass onChatCommand to views that support it
+  const needsChat = activeView === 'lead_pipeline';
   return (
     <div className="flex-1 h-full overflow-hidden border-l border-[#8a8a8a]/15">
-      <ViewComponent />
+      {needsChat ? <ViewComponent onChatCommand={onChatCommand} /> : <ViewComponent />}
     </div>
   );
 }

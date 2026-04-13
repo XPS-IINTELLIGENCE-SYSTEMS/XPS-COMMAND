@@ -6,6 +6,7 @@ const ICON_MAP = {
   command: LayoutDashboard,
   agent_hub: Zap,
   crm: Users,
+  lead_pipeline: Users,
   analytics: BarChart3,
   agents: Bot,
   find_work: Search,

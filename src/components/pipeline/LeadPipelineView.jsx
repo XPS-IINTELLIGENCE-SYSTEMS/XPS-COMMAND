@@ -67,7 +67,7 @@ export default function LeadPipelineView({ onChatCommand, forcedTab }) {
   return (
     <div className="h-full flex overflow-hidden">
       <div className="flex-1 flex flex-col overflow-hidden">
-        <div className="flex-shrink-0 p-3 md:p-4 glass-panel space-y-2">
+        <div className="flex-shrink-0 p-4 md:p-5 bg-white/[0.02] backdrop-blur-xl border-b border-white/[0.06] space-y-3">
           {!forcedTab && (
             <div className="flex gap-2 mb-2">
               {TABS.map(tab => {
@@ -78,14 +78,16 @@ export default function LeadPipelineView({ onChatCommand, forcedTab }) {
                     key={tab.id}
                     onClick={() => { setActiveTab(tab.id); setSelected(null); }}
                     className={cn(
-                      "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all flex-1",
-                      isActive ? "glass-card-active text-primary" : "glass-card text-muted-foreground hover:text-foreground"
+                      "flex items-center gap-2.5 px-5 py-3 rounded-xl text-sm font-bold transition-all flex-1",
+                      isActive
+                        ? "bg-white/[0.08] backdrop-blur-2xl border border-white/[0.2] text-primary shadow-[0_0_20px_rgba(255,255,255,0.06)]"
+                        : "bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] text-muted-foreground hover:text-foreground hover:border-white/[0.18]"
                     )}
                   >
                     <Icon className="w-4 h-4" />
                     <div className="text-left">
-                      <div className="text-[11px] font-bold">{tab.label}</div>
-                      <div className="text-[9px] opacity-60">{tab.desc}</div>
+                      <div className="text-sm font-bold">{tab.label}</div>
+                      <div className="text-xs opacity-60">{tab.desc}</div>
                     </div>
                   </button>
                 );
@@ -95,17 +97,17 @@ export default function LeadPipelineView({ onChatCommand, forcedTab }) {
 
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-base font-bold text-foreground">
+              <h1 className="text-xl font-extrabold text-foreground">
                 {activeTab === "XPress" ? "XPRESS PIPELINE" : "JOBS PIPELINE"}
               </h1>
-              <p className="text-[11px] text-muted-foreground">{filtered.length} leads</p>
+              <p className="text-sm text-muted-foreground">{filtered.length} leads</p>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" size="sm" className="h-8 text-xs" onClick={load}><RefreshCcw className="w-3 h-3 mr-1" />Refresh</Button>
-              <Button size="sm" className="h-8 text-xs" onClick={() => setAdding(true)}><Plus className="w-3 h-3 mr-1" />Add Lead</Button>
+              <Button variant="outline" size="sm" className="text-sm" onClick={load}><RefreshCcw className="w-4 h-4 mr-2" />Refresh</Button>
+              <Button size="sm" className="text-sm" onClick={() => setAdding(true)}><Plus className="w-4 h-4 mr-2" />Add Lead</Button>
             </div>
           </div>
-          <Input placeholder="Search leads..." value={search} onChange={e => setSearch(e.target.value)} className="h-8 text-xs glass-input rounded-lg" />
+          <Input placeholder="Search leads..." value={search} onChange={e => setSearch(e.target.value)} className="h-10 text-sm bg-white/[0.04] border-white/[0.1] rounded-xl" />
         </div>
 
         <div className="flex-1 overflow-y-auto p-3 md:p-4 space-y-4">

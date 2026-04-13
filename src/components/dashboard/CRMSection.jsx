@@ -50,7 +50,7 @@ export default function CRMSection() {
 
   if (loading) {
     return (
-      <div className="glass-card rounded-2xl p-8 flex items-center justify-center">
+      <div className="rounded-2xl p-8 flex items-center justify-center bg-white/[0.03] backdrop-blur-2xl border border-white/[0.10] animated-silver-border">
         <Loader2 className="w-6 h-6 animate-spin text-primary" />
       </div>
     );
@@ -58,12 +58,12 @@ export default function CRMSection() {
 
   return (
     <>
-      <div className="glass-card rounded-2xl overflow-hidden">
+      <div className="rounded-2xl overflow-hidden bg-white/[0.03] backdrop-blur-2xl border border-white/[0.10] animated-silver-border">
         {/* CRM Header */}
         <div className="px-6 py-5 border-b border-white/[0.06] bg-white/[0.02]">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 mb-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-primary/15 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-white/[0.06] border border-white/[0.08] flex items-center justify-center">
                 <Users className="w-5 h-5 text-primary" />
               </div>
               <div>
@@ -88,8 +88,8 @@ export default function CRMSection() {
                 className={cn(
                   "flex items-center gap-2.5 px-5 py-3 rounded-xl text-sm font-bold transition-all flex-1",
                   activeTab === tab.id
-                    ? "glass-card-active"
-                    : "glass-card hover:border-primary/30"
+                    ? "bg-white/[0.08] backdrop-blur-2xl border border-white/[0.2] shadow-[0_0_20px_rgba(255,255,255,0.06)]"
+                    : "bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] hover:border-white/[0.18]"
                 )}
               >
                 <tab.icon className={cn("w-5 h-5", activeTab === tab.id ? "text-primary" : "text-muted-foreground")} />
@@ -102,7 +102,7 @@ export default function CRMSection() {
             placeholder="Search leads..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="h-10 text-sm glass-input rounded-xl"
+            className="h-10 text-sm bg-white/[0.04] border-white/[0.1] rounded-xl"
           />
         </div>
 
@@ -116,7 +116,7 @@ export default function CRMSection() {
                   <CRMCard key={l.id} lead={l} onClick={() => setSelected(l)} index={i} />
                 ))}
                 {stageLeads.length === 0 && (
-                  <div className="flex-shrink-0 w-[260px] rounded-xl p-5 glass-card flex items-center justify-center">
+                  <div className="flex-shrink-0 w-[270px] rounded-2xl p-5 bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] flex items-center justify-center">
                     <span className="text-sm text-muted-foreground/50">No leads in {stage}</span>
                   </div>
                 )}
@@ -130,7 +130,7 @@ export default function CRMSection() {
       {selected && (
         <div className="fixed inset-0 z-50 flex justify-end" onClick={() => setSelected(null)}>
           <div className="absolute inset-0 bg-black/50 backdrop-blur-md" />
-          <div className="relative w-96 glass-panel h-full overflow-y-auto shadow-2xl" onClick={e => e.stopPropagation()}>
+          <div className="relative w-96 bg-black/90 backdrop-blur-2xl border-l border-white/[0.1] h-full overflow-y-auto shadow-2xl" onClick={e => e.stopPropagation()}>
             <div className="p-6 space-y-5">
               <div className="flex items-start justify-between">
                 <div>
@@ -149,7 +149,7 @@ export default function CRMSection() {
                 {selected.estimated_value > 0 && <div className="flex items-center gap-3 text-primary font-bold text-lg"><DollarSign className="w-5 h-5" />${selected.estimated_value.toLocaleString()}</div>}
               </div>
               {selected.ai_insight && (
-                <div className="glass-card rounded-xl p-4 text-sm text-foreground/80">
+                <div className="rounded-xl p-4 text-sm text-foreground/80 bg-white/[0.05] border border-white/[0.1]">
                   <div className="flex items-center gap-2 text-primary font-semibold mb-2"><Sparkles className="w-4 h-4" />AI Insight</div>
                   {selected.ai_insight}
                 </div>
@@ -159,7 +159,7 @@ export default function CRMSection() {
                 <div className="flex flex-wrap gap-2">
                   {CRM_STAGES.filter(s => s !== selected.stage).map(s => (
                     <button key={s} onClick={() => moveStage(selected.id, s)}
-                      className="px-4 py-2 text-sm font-semibold rounded-xl glass-card hover:border-primary/40 text-foreground transition-all">
+                      className="px-4 py-2 text-sm font-semibold rounded-xl bg-white/[0.05] border border-white/[0.1] hover:border-white/[0.25] hover:bg-white/[0.1] text-foreground transition-all">
                       {s}
                     </button>
                   ))}
@@ -178,17 +178,19 @@ function CRMCard({ lead, onClick, index = 0 }) {
   return (
     <button onClick={onClick}
       className={cn(
-        "group flex-shrink-0 w-[260px] md:w-[280px] rounded-xl p-5 text-left transition-all duration-300 hover:scale-[1.03]",
-        isGlass ? "glass-card" : "bg-black/70 border border-white/[0.06]",
-        "hover:border-primary/40 hover:shadow-[0_0_28px_rgba(212,175,55,0.18)]",
-        "hover:bg-primary/[0.08]"
+        "group flex-shrink-0 w-[270px] md:w-[290px] rounded-2xl p-5 text-left transition-all duration-300 hover:scale-[1.03]",
+        isGlass
+          ? "bg-white/[0.05] backdrop-blur-2xl border border-white/[0.12] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]"
+          : "bg-black/70 backdrop-blur-xl border border-white/[0.08]",
+        "hover:border-white/[0.25] hover:shadow-[0_0_30px_rgba(255,255,255,0.08),0_8px_32px_rgba(0,0,0,0.3)]",
+        "hover:bg-white/[0.08]"
       )}>
-      <div className="text-base font-bold text-foreground truncate group-hover:text-primary transition-colors duration-300">{lead.company}</div>
+      <div className="text-base font-bold text-foreground truncate group-hover:text-white transition-colors duration-300">{lead.company}</div>
       <div className="text-sm text-muted-foreground truncate mt-1">{lead.contact_name}</div>
-      {lead.estimated_value > 0 && <div className="text-sm font-bold text-primary mt-2">${lead.estimated_value.toLocaleString()}</div>}
+      {lead.estimated_value > 0 && <div className="text-base font-bold text-primary mt-2">${lead.estimated_value.toLocaleString()}</div>}
       <div className="flex items-center gap-2 mt-2">
         {lead.score > 0 && (
-          <span className="text-xs font-bold px-2 py-1 rounded-lg bg-primary/15 text-primary">Score: {lead.score}</span>
+          <span className="text-xs font-bold px-2.5 py-1 rounded-lg bg-white/[0.06] border border-white/[0.1] text-foreground">Score: {lead.score}</span>
         )}
         {lead.location && (
           <span className="text-xs text-muted-foreground/60 flex items-center gap-1"><MapPin className="w-3 h-3" />{lead.city || lead.location}</span>

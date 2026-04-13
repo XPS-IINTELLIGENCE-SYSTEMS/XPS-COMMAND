@@ -29,20 +29,20 @@ export default function PipelineRow({ title, subtitle, leads, colorKey, onLeadCl
   };
 
   return (
-    <div className={cn("border-l-4 rounded-r-xl glass-panel p-3", ROW_COLORS[colorKey] || "border-l-white/20")}>
+    <div className={cn("border-l-4 rounded-r-2xl p-4 bg-white/[0.03] backdrop-blur-2xl border border-white/[0.10] animated-silver-border", ROW_COLORS[colorKey] || "border-l-white/20")}>
       {/* Row header */}
-      <div className="flex items-center justify-between mb-2 px-1">
+      <div className="flex items-center justify-between mb-3 px-1">
         <div>
-          <h3 className="text-sm font-bold text-foreground">{title}</h3>
-          {subtitle && <p className="text-[10px] text-muted-foreground">{subtitle}</p>}
+          <h3 className="text-base font-bold text-foreground">{title}</h3>
+          {subtitle && <p className="text-xs text-muted-foreground">{subtitle}</p>}
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/[0.06] text-muted-foreground">{leads.length}</span>
+          <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-white/[0.06] border border-white/[0.1] text-muted-foreground">{leads.length}</span>
           <div className="flex gap-1">
-            <button onClick={() => scroll(-1)} disabled={!canScrollLeft} className={cn("p-1 rounded-lg transition-all", canScrollLeft ? "hover:bg-white/10 text-foreground" : "text-muted-foreground/30 cursor-default")}>
+            <button onClick={() => scroll(-1)} disabled={!canScrollLeft} className={cn("p-1.5 rounded-lg transition-all", canScrollLeft ? "hover:bg-white/10 text-foreground" : "text-muted-foreground/30 cursor-default")}>
               <ChevronLeft className="w-4 h-4" />
             </button>
-            <button onClick={() => scroll(1)} disabled={!canScrollRight} className={cn("p-1 rounded-lg transition-all", canScrollRight ? "hover:bg-white/10 text-foreground" : "text-muted-foreground/30 cursor-default")}>
+            <button onClick={() => scroll(1)} disabled={!canScrollRight} className={cn("p-1.5 rounded-lg transition-all", canScrollRight ? "hover:bg-white/10 text-foreground" : "text-muted-foreground/30 cursor-default")}>
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
@@ -53,11 +53,11 @@ export default function PipelineRow({ title, subtitle, leads, colorKey, onLeadCl
       <div
         ref={scrollRef}
         onScroll={checkScroll}
-        className="flex gap-3 overflow-x-auto pb-1 scrollbar-hide"
+        className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide"
         style={{ scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch" }}
       >
         {leads.length === 0 ? (
-          <div className="flex-shrink-0 w-56 h-44 glass-card rounded-xl flex items-center justify-center text-xs text-muted-foreground/50">
+          <div className="flex-shrink-0 w-64 h-52 rounded-2xl bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] flex items-center justify-center text-sm text-muted-foreground/50">
             No leads yet
           </div>
         ) : (

@@ -175,9 +175,9 @@ export default function DashboardView({ onNavigate }) {
         ]} />
 
         {/* AI TIPS */}
-        <div className="glass-card rounded-2xl p-5">
+        <div className="rounded-2xl p-6 bg-white/[0.03] backdrop-blur-2xl border border-white/[0.10] animated-silver-border">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-xl bg-primary/15 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-white/[0.06] border border-white/[0.08] flex items-center justify-center">
               <Lightbulb className="w-5 h-5 text-primary" />
             </div>
             <span className="text-lg font-bold text-foreground">AI TIPS</span>
@@ -185,8 +185,8 @@ export default function DashboardView({ onNavigate }) {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {tips ? tips.map((t, i) => (
               <div key={i} className={cn(
-                "rounded-xl p-4 text-sm font-medium text-foreground/90",
-                i % 2 === 0 ? "glass-card" : "bg-black/70 border border-white/[0.08]"
+                "rounded-xl p-5 text-sm font-medium text-foreground/90 animated-silver-border",
+                i % 2 === 0 ? "bg-black/50 border border-white/[0.08]" : "bg-white/[0.05] border border-white/[0.12]"
               )}>
                 <Lightbulb className="w-4 h-4 text-primary mb-2" />
                 {t}
@@ -201,11 +201,11 @@ export default function DashboardView({ onNavigate }) {
 
         {/* AGENTS */}
         <div
-          className="glass-card rounded-2xl p-5 cursor-pointer hover:border-primary/40 transition-all duration-300"
+          className="rounded-2xl p-6 cursor-pointer transition-all duration-300 bg-white/[0.03] backdrop-blur-2xl border border-white/[0.10] animated-silver-border hover:border-white/[0.25] hover:shadow-[0_0_30px_rgba(255,255,255,0.06)]"
           onClick={() => nav("agents")}
         >
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-xl bg-primary/15 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-white/[0.06] border border-white/[0.08] flex items-center justify-center">
               <Bot className="w-5 h-5 text-primary" />
             </div>
             <span className="text-lg font-bold text-foreground">AGENTS</span>
@@ -214,8 +214,8 @@ export default function DashboardView({ onNavigate }) {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {["XPS Assistant", "Lead Scraper", "Sales Director", "SEO Marketing"].map((name, i) => (
               <div key={i} className={cn(
-                "rounded-xl p-4 text-center",
-                i % 2 === 0 ? "glass-card" : "bg-black/70 border border-white/[0.08]"
+                "rounded-xl p-5 text-center animated-silver-border",
+                i % 2 === 0 ? "bg-black/50 border border-white/[0.08]" : "bg-white/[0.05] border border-white/[0.12]"
               )}>
                 <Bot className="w-6 h-6 text-muted-foreground mx-auto mb-2" />
                 <div className="text-sm font-bold text-foreground">{name}</div>
@@ -241,9 +241,9 @@ export default function DashboardView({ onNavigate }) {
 /* ===== GLASS PILL ===== */
 function GlassPill({ label, value }) {
   return (
-    <div className="glass-card rounded-xl px-5 py-3 text-center min-w-[100px]">
-      <div className="text-xl font-extrabold text-primary">{value}</div>
-      <div className="text-xs font-semibold text-muted-foreground mt-0.5">{label}</div>
+    <div className="rounded-xl px-6 py-4 text-center min-w-[120px] bg-white/[0.05] backdrop-blur-2xl border border-white/[0.12] animated-silver-border">
+      <div className="text-2xl font-extrabold text-primary">{value}</div>
+      <div className="text-xs font-bold text-muted-foreground mt-1">{label}</div>
     </div>
   );
 }
@@ -253,14 +253,14 @@ function WorkflowRow({ icon: Icon, title, cols, onClick }) {
   return (
     <div
       onClick={onClick}
-      className="group glass-card rounded-2xl overflow-hidden cursor-pointer hover:border-primary/40 hover:shadow-[0_0_40px_rgba(212,175,55,0.15),0_0_80px_rgba(212,175,55,0.05)] transition-all duration-300"
+      className="group rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 bg-white/[0.03] backdrop-blur-2xl border border-white/[0.10] animated-silver-border hover:border-white/[0.25] hover:shadow-[0_0_40px_rgba(255,255,255,0.06),0_8px_32px_rgba(0,0,0,0.3)]"
     >
       {/* Row header */}
-      <div className="flex items-center gap-3 px-5 py-3.5 border-b border-white/[0.06] bg-white/[0.02]">
-        <div className="w-9 h-9 rounded-lg bg-primary/15 flex items-center justify-center">
+      <div className="flex items-center gap-3 px-5 py-4 border-b border-white/[0.06] bg-white/[0.02]">
+        <div className="w-10 h-10 rounded-xl bg-white/[0.06] border border-white/[0.08] flex items-center justify-center">
           <Icon className="w-5 h-5 text-primary" />
         </div>
-        <span className="text-base font-extrabold text-foreground tracking-wider">{title}</span>
+        <span className="text-lg font-extrabold text-foreground tracking-wider">{title}</span>
         <span className="text-sm text-muted-foreground ml-auto opacity-0 group-hover:opacity-100 transition-opacity">View →</span>
       </div>
 
@@ -270,16 +270,16 @@ function WorkflowRow({ icon: Icon, title, cols, onClick }) {
           <div
             key={i}
             className={cn(
-              "px-4 py-4 text-center transition-all duration-300",
+              "px-4 py-5 text-center transition-all duration-300",
               i % 2 === 0
-                ? "bg-black/30 backdrop-blur-md"
-                : "bg-white/[0.03] backdrop-blur-xl",
-              "group-hover:bg-primary/[0.05]"
+                ? "bg-black/40 backdrop-blur-md"
+                : "bg-white/[0.04] backdrop-blur-xl",
+              "group-hover:bg-white/[0.06]"
             )}
           >
             <div className={cn(
               "font-extrabold text-foreground leading-tight",
-              col.isText ? "text-base truncate" : "text-2xl"
+              col.isText ? "text-lg truncate" : "text-2xl"
             )}>
               {col.value}
             </div>

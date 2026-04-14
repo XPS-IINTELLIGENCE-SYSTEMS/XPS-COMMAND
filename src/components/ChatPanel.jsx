@@ -1,50 +1,44 @@
 import { useState, useEffect, useRef, useCallback, forwardRef, useImperativeHandle } from "react";
-import { Send, Plus, Loader2, Sparkles, Globe, Pencil, Database, Code, Search, GitBranch, Layers, Bot, Wrench, TrendingUp } from "lucide-react";
+import { Send, Plus, Loader2, Sparkles, Globe, Pencil, Database, Code, Search, GitBranch, TrendingUp, CheckCircle2, AlertCircle, Clock, ChevronDown } from "lucide-react";
 import AgentSwitcher, { AGENTS } from "./chat/AgentSwitcher";
 import QuickActionButtons from "./chat/QuickActionButtons";
-import AgentTab from "./chat/AgentTab";
 import SubAgentChat from "./chat/SubAgentChat";
 import { Button } from "@/components/ui/button";
 import { base44 } from "@/api/base44Client";
 import ReactMarkdown from "react-markdown";
 
-function TypingText({ text }) {
-  const [displayed, setDisplayed] = useState("");
-  const [done, setDone] = useState(false);
-
-  useEffect(() => {
-    if (!text) return;
-    if (text.length < 5) {
-      setDisplayed(text);
-      setDone(true);
-      return;
-    }
-    setDisplayed("");
-    setDone(false);
-    let i = 0;
-    const speed = Math.max(8, Math.min(25, 1500 / text.length));
-    const timer = setInterval(() => {
-      i += 1;
-      if (i >= text.length) {
-        setDisplayed(text);
-        setDone(true);
-        clearInterval(timer);
-      } else {
-        setDisplayed(text.slice(0, i));
-      }
-    }, speed);
-    return () => clearInterval(timer);
-  }, [text]);
+/* ── Tool call badge ── */
+function ToolCallBadge({ tc }) {
+  const name = tc.name?.split(".").pop() || "Processing";
+  const isRunning = tc.status === "in_progress" || tc.status === "running" || tc.status === "pending";
+  const isFailed = tc.status === "failed" || tc.status === "error";
+  const isDone = tc.status === "completed" || tc.status === "success";
 
   return (
-    <ReactMarkdown className="text-[11px] leading-relaxed text-foreground/90 max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 [&_p]:my-0.5 [&_ul]:my-0.5 [&_ol]:my-0.5 [&_li]:my-0.5 [&_code]:text-primary [&_code]:bg-secondary [&_code]:px-1 [&_code]:rounded [&_a]:text-primary [&_strong]:text-foreground [&_h1]:text-xs [&_h2]:text-[11px] [&_h3]:text-[11px]">
-      {done ? text : displayed + "▍"}
-    </ReactMarkdown>
+    <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground bg-secondary/50 rounded-md px-2 py-1">
+      {isRunning ? <Loader2 className="w-2.5 h-2.5 animate-spin text-primary" /> :
+       isFailed ? <AlertCircle className="w-2.5 h-2.5 text-destructive" /> :
+       isDone ? <CheckCircle2 className="w-2.5 h-2.5 text-green-500" /> :
+       <Clock className="w-2.5 h-2.5 text-muted-foreground" />}
+      <span className="truncate max-w-[180px]">{name}</span>
+      {isDone && <span className="text-green-500/70 ml-auto">✓</span>}
+    </div>
   );
 }
 
-function MessageBubble({ message, isLatestAssistant }) {
+/* ── Markdown renderer ── */
+const mdClasses = "text-[11px] leading-relaxed text-foreground/90 max-w-none prose prose-invert prose-xs [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 [&_p]:my-1 [&_ul]:my-1 [&_ol]:my-1 [&_li]:my-0.5 [&_code]:text-primary [&_code]:bg-secondary [&_code]:px-1 [&_code]:rounded [&_pre]:bg-secondary/80 [&_pre]:rounded-lg [&_pre]:p-2 [&_pre]:overflow-x-auto [&_a]:text-primary [&_a]:underline [&_strong]:text-foreground [&_h1]:text-xs [&_h1]:font-bold [&_h1]:mt-3 [&_h1]:mb-1 [&_h2]:text-[11px] [&_h2]:font-bold [&_h2]:mt-2 [&_h2]:mb-1 [&_h3]:text-[11px] [&_h3]:font-semibold [&_h3]:mt-2 [&_h3]:mb-0.5 [&_table]:text-[10px] [&_th]:px-2 [&_th]:py-1 [&_th]:border [&_th]:border-white/10 [&_td]:px-2 [&_td]:py-1 [&_td]:border [&_td]:border-white/10 [&_blockquote]:border-l-2 [&_blockquote]:border-primary/40 [&_blockquote]:pl-2 [&_blockquote]:text-foreground/70 [&_hr]:border-white/10";
+
+function MarkdownContent({ text }) {
+  if (!text) return null;
+  return <ReactMarkdown className={mdClasses}>{text}</ReactMarkdown>;
+}
+
+/* ── Message bubble ── */
+function MessageBubble({ message, isStreaming }) {
   const isUser = message.role === "user";
+  const hasToolCalls = message.tool_calls?.length > 0;
+  const hasContent = !!message.content;
 
   return (
     <div className={`flex gap-2.5 ${isUser ? "justify-end" : "justify-start"}`}>
@@ -52,42 +46,35 @@ function MessageBubble({ message, isLatestAssistant }) {
         <img src="https://media.base44.com/images/public/69db3269c791af3f48cfaee9/583965fcb_IMAGEWITHWHITEOUTLINE.jpg" alt="XPS" className="w-6 h-6 object-contain flex-shrink-0 mt-0.5" />
       )}
       <div className={`max-w-[85%] ${isUser ? "order-first" : ""}`}>
-        {message.tool_calls?.length > 0 && (
+        {hasToolCalls && (
           <div className="mb-1.5 space-y-1">
-            {message.tool_calls.map((tc, i) => (
-              <div key={i} className="flex items-center gap-1.5 text-[10px] text-muted-foreground bg-secondary/50 rounded-md px-2 py-1">
-                {tc.status === "in_progress" || tc.status === "running" ? (
-                  <Loader2 className="w-2.5 h-2.5 animate-spin text-primary" />
-                ) : (
-                  <Sparkles className="w-2.5 h-2.5 text-primary" />
-                )}
-                <span>{tc.name?.split(".").pop() || "Processing"}</span>
-              </div>
-            ))}
+            {message.tool_calls.map((tc, i) => <ToolCallBadge key={i} tc={tc} />)}
           </div>
         )}
-        {message.content && (
+        {hasContent && (
           isUser ? (
             <div className="rounded-xl px-3 py-2 bg-secondary/80 border border-[#8a8a8a]/30">
               <p className="text-xs leading-relaxed metallic-gold-silver-text font-medium">{message.content}</p>
             </div>
           ) : (
             <div className="py-1">
-              {isLatestAssistant ? (
-                <TypingText text={message.content} />
-              ) : (
-                <ReactMarkdown className="text-[11px] leading-relaxed text-foreground/90 max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 [&_p]:my-0.5 [&_ul]:my-0.5 [&_ol]:my-0.5 [&_li]:my-0.5 [&_code]:text-primary [&_code]:bg-secondary [&_code]:px-1 [&_code]:rounded [&_a]:text-primary [&_strong]:text-foreground">
-                  {message.content}
-                </ReactMarkdown>
-              )}
+              <MarkdownContent text={message.content} />
+              {isStreaming && <span className="inline-block w-1.5 h-3.5 bg-primary/70 animate-pulse ml-0.5 align-text-bottom rounded-sm" />}
             </div>
           )
+        )}
+        {!hasContent && !hasToolCalls && isStreaming && (
+          <div className="py-1 flex items-center gap-1.5">
+            <Loader2 className="w-3 h-3 animate-spin text-primary" />
+            <span className="text-[10px] text-muted-foreground">Thinking...</span>
+          </div>
         )}
       </div>
     </div>
   );
 }
 
+/* ── Main ChatPanel ── */
 const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, ref) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
@@ -97,6 +84,7 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
   const scrollRef = useRef(null);
   const [currentAgentName, setCurrentAgentName] = useState("xps_assistant");
   const conversationRef = useRef(null);
+  const prevMsgCountRef = useRef(0);
 
   const [agents, setAgents] = useState([
     { id: "main", name: "XPS Agent", type: "main", status: "active" },
@@ -106,8 +94,7 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
 
   const spawnSubAgent = useCallback((name, task) => {
     const id = `sub_${nextSubId}`;
-    const agentName = name || `Sub-Agent ${nextSubId}`;
-    setAgents(prev => [...prev, { id, name: agentName, type: "sub", status: "spawning", task: task || "" }]);
+    setAgents(prev => [...prev, { id, name: name || `Sub-Agent ${nextSubId}`, type: "sub", status: "spawning", task: task || "" }]);
     setNextSubId(n => n + 1);
     setActiveAgentId(id);
     return id;
@@ -122,55 +109,51 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
     setAgents(prev => prev.map(a => a.id === id ? { ...a, status } : a));
   }, []);
 
-  // Expose sendCommand to parent via ref
   useImperativeHandle(ref, () => ({
     sendCommand: async (command) => {
       if (!command) return;
       setActiveAgentId("main");
-      // Wait for conversation to be ready
       const conv = conversationRef.current;
-      if (!conv) {
-        // Queue the command for after init
-        setInput(command);
-        return;
-      }
+      if (!conv) { setInput(command); return; }
       setLoading(true);
       await base44.agents.addMessage(conv, { role: "user", content: command });
       setLoading(false);
     }
   }));
 
-  useEffect(() => {
-    initConversation();
-  }, [currentAgentName]);
+  useEffect(() => { initConversation(); }, [currentAgentName]);
 
+  // Subscribe to real-time updates
   useEffect(() => {
     if (!conversation?.id) return;
     const unsubscribe = base44.agents.subscribeToConversation(conversation.id, (data) => {
       if (data?.messages) {
         setMessages(data.messages);
+        // Auto-detect when agent finishes responding
+        const last = data.messages[data.messages.length - 1];
+        if (last?.role === "assistant" && last?.content && data.messages.length > prevMsgCountRef.current) {
+          setLoading(false);
+        }
+        prevMsgCountRef.current = data.messages.length;
       }
     });
     return () => { if (unsubscribe) unsubscribe(); };
   }, [conversation?.id]);
 
+  // Scroll to bottom on new messages
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
-  }, [messages.length]);
-
-  useEffect(() => {
-    if (!scrollRef.current || messages.length === 0) return;
-    const lastMsg = messages[messages.length - 1];
-    if (lastMsg?.role !== 'assistant') return;
+    if (!scrollRef.current) return;
     const el = scrollRef.current;
-    el.scrollTop = el.scrollHeight;
-    const interval = setInterval(() => {
-      el.scrollTop = el.scrollHeight;
-    }, 120);
-    return () => clearInterval(interval);
+    requestAnimationFrame(() => { el.scrollTop = el.scrollHeight; });
   }, [messages]);
+
+  // Keep scrolling while streaming
+  useEffect(() => {
+    if (!scrollRef.current || !loading) return;
+    const el = scrollRef.current;
+    const interval = setInterval(() => { el.scrollTop = el.scrollHeight; }, 200);
+    return () => clearInterval(interval);
+  }, [loading]);
 
   const initConversation = async () => {
     setInitializing(true);
@@ -193,7 +176,7 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
     setInput("");
     setLoading(true);
     await base44.agents.addMessage(conversation, { role: "user", content: msg });
-    setLoading(false);
+    // Loading will be cleared by subscription when agent responds
   };
 
   const handleNewChat = async () => {
@@ -215,13 +198,6 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
   };
 
   const activeAgentConfig = AGENTS.find(a => a.id === currentAgentName) || AGENTS[0];
-
-  const defaultActions = [
-    { label: "What can you do?", icon: Search },
-    { label: "Show my pipeline status", icon: Database },
-    { label: "Research a company", icon: Globe },
-    { label: "Help me with a task", icon: Pencil },
-  ];
 
   const agentQuickActions = {
     xps_assistant: [
@@ -249,12 +225,15 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
       { label: "Close strategy for top lead", icon: TrendingUp },
     ],
   };
+  const quickActions = agentQuickActions[currentAgentName] || agentQuickActions.xps_assistant;
 
-  const quickActions = agentQuickActions[currentAgentName] || defaultActions;
+  // Determine if the last message is currently streaming
+  const lastMsg = messages[messages.length - 1];
+  const isLastStreaming = loading && lastMsg?.role === "assistant";
 
   return (
     <div className={`${mobile ? 'w-full' : ''} h-full ${mobile ? '' : 'border-l border-[#8a8a8a]/30'} flex flex-col bg-background`} style={!mobile ? { width: '100%' } : undefined}>
-      {/* Agent Switcher Bar */}
+      {/* Agent Switcher */}
       <div className={`${mobile ? 'min-h-[36px]' : 'min-h-[40px]'} border-b border-border flex items-center gap-1 px-2 py-1`}>
         <div className="flex-1 overflow-hidden">
           <AgentSwitcher activeAgent={currentAgentName} onSwitch={handleAgentSwitch} mobile={mobile} />
@@ -264,15 +243,10 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
         </Button>
       </div>
 
-
-
-      {/* Messages / Sub-agent view */}
+      {/* Messages */}
       {activeAgentId !== "main" && !mobile ? (
         <div className="flex-1 overflow-hidden">
-          <SubAgentChat
-            agent={agents.find(a => a.id === activeAgentId)}
-            onStatusChange={updateSubAgentStatus}
-          />
+          <SubAgentChat agent={agents.find(a => a.id === activeAgentId)} onStatusChange={updateSubAgentStatus} />
         </div>
       ) : (
         <div ref={scrollRef} className="flex-1 overflow-y-auto p-3 space-y-3">
@@ -285,25 +259,17 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
               {!mobile && (
                 <>
                   <div className="w-14 h-14 rounded-2xl bg-secondary flex items-center justify-center mb-3 shimmer-card">
-                    {(() => { const AIcon = activeAgentConfig?.icon || Wrench; return <AIcon className={`w-7 h-7 shimmer-icon ${activeAgentConfig?.color || 'metallic-silver-icon'}`} />; })()}
+                    {(() => { const AIcon = activeAgentConfig?.icon || Sparkles; return <AIcon className={`w-7 h-7 shimmer-icon ${activeAgentConfig?.color || 'metallic-silver-icon'}`} />; })()}
                   </div>
                   <h3 className="text-sm font-bold xps-gold-slow-shimmer mb-1" style={{ fontFamily: "'Montserrat', sans-serif" }}>{activeAgentConfig?.fullName || activeAgentConfig?.name}</h3>
-                  <p className="text-[10px] text-muted-foreground mb-4">
-                   {activeAgentConfig?.desc}
-                  </p>
+                  <p className="text-[10px] text-muted-foreground mb-4">{activeAgentConfig?.desc}</p>
                 </>
               )}
               <div className={`space-y-1.5 w-full ${mobile ? 'grid grid-cols-2 gap-1.5 space-y-0' : ''}`}>
                 {quickActions.map((action) => {
                   const Icon = action.icon;
                   return (
-                    <button
-                      key={action.label}
-                      onClick={() => {
-                        setInput(action.label);
-                      }}
-                      className="shimmer-card glass-card w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left"
-                    >
+                    <button key={action.label} onClick={() => setInput(action.label)} className="shimmer-card glass-card w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left">
                       <Icon className="w-3 h-3 metallic-silver-icon shimmer-icon flex-shrink-0" />
                       <span className="text-[10px] text-foreground">{action.label}</span>
                     </button>
@@ -313,9 +279,19 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
             </div>
           ) : (
             messages.map((msg, i) => {
-              const isLatestAssistant = msg.role === "assistant" && i === messages.length - 1;
-              return <MessageBubble key={i} message={msg} isLatestAssistant={isLatestAssistant} />;
+              const isStreaming = i === messages.length - 1 && isLastStreaming;
+              return <MessageBubble key={`${i}-${msg.content?.length || 0}`} message={msg} isStreaming={isStreaming} />;
             })
+          )}
+          {/* Show thinking indicator when loading and last message is user */}
+          {loading && lastMsg?.role === "user" && (
+            <div className="flex gap-2.5 justify-start">
+              <img src="https://media.base44.com/images/public/69db3269c791af3f48cfaee9/583965fcb_IMAGEWITHWHITEOUTLINE.jpg" alt="XPS" className="w-6 h-6 object-contain flex-shrink-0 mt-0.5" />
+              <div className="py-1 flex items-center gap-1.5">
+                <Loader2 className="w-3 h-3 animate-spin text-primary" />
+                <span className="text-[10px] text-muted-foreground">Thinking...</span>
+              </div>
+            </div>
           )}
         </div>
       )}
@@ -353,10 +329,7 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
                 <Code className="w-2.5 h-2.5 metallic-silver-icon" /> UI
               </div>
               <div className="ml-auto">
-                <button
-                  onClick={() => spawnSubAgent()}
-                  className="shimmer-card flex items-center gap-1 text-[9px] text-muted-foreground hover:text-foreground transition-colors px-2 py-1 rounded-md"
-                >
+                <button onClick={() => spawnSubAgent()} className="shimmer-card flex items-center gap-1 text-[9px] text-muted-foreground hover:text-foreground transition-colors px-2 py-1 rounded-md">
                   <GitBranch className="w-2.5 h-2.5 metallic-silver-icon shimmer-icon" /> Add Helper
                 </button>
               </div>
@@ -367,7 +340,7 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
                 if (conversation && !loading) {
                   setInput('');
                   setLoading(true);
-                  base44.agents.addMessage(conversation, { role: 'user', content: cmd }).then(() => setLoading(false));
+                  base44.agents.addMessage(conversation, { role: 'user', content: cmd });
                 }
               }, 100);
             }} />

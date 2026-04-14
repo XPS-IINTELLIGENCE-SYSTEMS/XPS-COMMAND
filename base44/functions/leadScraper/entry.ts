@@ -16,61 +16,52 @@ Deno.serve(async (req) => {
     const targetVertical = vertical || 'All';
     const signals = signal_type || 'all';
 
-    // Build a buying-signal focused prompt
     const scrapeResult = await base44.integrations.Core.InvokeLLM({
       prompt: `You are an elite B2B commercial intelligence analyst for XPS Xtreme Polishing Systems, a nationwide epoxy/polished concrete flooring contractor.
 
-YOUR MISSION: Find ${targetCount} HIGH-INTENT COMMERCIAL PROSPECTS in ${location} using BUYING SIGNALS — not just business directories.
+YOUR MISSION: Find EXACTLY ${targetCount} HIGH-INTENT COMMERCIAL PROSPECTS in ${location} using BUYING SIGNALS.
+
+CRITICAL: You MUST return EXACTLY ${targetCount} leads. Not fewer, not more. If you cannot find ${targetCount} leads from buying signals alone, supplement with high-quality directory matches, nearby cities, and related industries until you reach exactly ${targetCount}.
 
 ${signals === 'all' || signals === 'permits' ? `
 ## SIGNAL 1: CONSTRUCTION PERMITS & NEW BUILDS
 Search for recent construction permits, new building permits, tenant improvement permits, and commercial renovation permits in ${location}. These indicate active construction where flooring will be needed.
-Look for: "building permit ${location}", "commercial construction permit ${location}", "tenant improvement ${location}", "new commercial construction ${location}"
 ` : ''}
 
 ${signals === 'all' || signals === 'filings' ? `
 ## SIGNAL 2: NEW BUSINESS FILINGS & EXPANSIONS
 Search for newly registered businesses, new LLC filings, franchise openings, and business expansions in ${location}. New businesses need new floors.
-Look for: "new business filing ${location}", "new LLC ${location}", "franchise opening ${location}", "business expansion ${location}", "new store opening ${location}"
 ` : ''}
 
 ${signals === 'all' || signals === 'real_estate' ? `
 ## SIGNAL 3: COMMERCIAL REAL ESTATE & LEASES
 Search for commercial properties recently sold, leased, or under renovation in ${location}. Property transitions often trigger flooring work.
-Look for: "commercial property sold ${location}", "commercial lease ${location}", "warehouse for sale ${location}", "retail space lease ${location}"
 ` : ''}
 
 ${signals === 'all' || signals === 'facilities' ? `
 ## SIGNAL 4: FACILITY UPGRADES & COMPLAINTS
 Search for businesses with aging facilities, floor damage complaints in reviews, health code violations related to flooring, or planned renovations.
-Look for: reviews mentioning "floor", "dirty", "cracked", "renovation planned", health inspection reports
 ` : ''}
 
 Target industry: ${industry || 'commercial, industrial, retail, food & bev, healthcare, automotive, warehouse'}
 Target vertical: ${targetVertical}
 ${keywords ? `Additional keywords: ${keywords}` : ''}
 
-For EACH prospect found, provide:
-- company: Real business name
+For EACH of the EXACTLY ${targetCount} prospects, provide:
+- company: Real business name (MUST be a real, verifiable business)
 - contact_name: Decision maker (Facility Manager, Owner, GM, VP Operations, Property Manager, General Contractor)
-- email: Email if discoverable
+- email: Email if discoverable (leave empty string if unknown, NEVER use generic "info@" unless real)
 - phone: Phone number if findable
 - vertical: Best match from [Retail, Food & Bev, Warehouse, Automotive, Healthcare, Fitness, Education, Industrial, Residential, Government, Other]
 - location: Full address or city, state
-- square_footage: Estimated square footage (be specific based on business type — warehouse 20K-100K, restaurant 2K-5K, etc.)
+- square_footage: Estimated square footage based on business type (warehouse 20K-100K, restaurant 2K-5K, retail 3K-15K, gym 5K-20K)
 - estimated_value: Calculated as sqft × per-sqft rate: Standard $5, Industrial $7, Healthcare $12, Food $8, Metallic $10, Garage $4
-- source: SPECIFIC source (e.g. "Building Permit #2024-1234", "New LLC Filing Jan 2024", "Commercial Lease Listing on LoopNet", "Google Review mentioning floor damage")
-- notes: WHY this is a hot prospect — what buying signal triggered this? Be specific.
-- signal_type: Which signal category (Permit, New Filing, Real Estate, Facility Issue, Expansion)
-- urgency: Rate 1-5 how time-sensitive this opportunity is (5 = construction underway, 1 = someday maybe)
+- source: SPECIFIC source (e.g. "Building Permit #2024-1234", "New LLC Filing", "LoopNet Listing", "Google Review")
+- notes: WHY this is a hot prospect — what buying signal triggered this
+- signal_type: Which signal category (Permit, New Filing, Real Estate, Facility Issue, Expansion, Directory)
+- urgency: Rate 1-5 how time-sensitive (5 = construction underway, 1 = someday maybe)
 
-CRITICAL RULES:
-1. PRIORITIZE BUYING SIGNALS over directory listings. A business with a fresh building permit is 10x more valuable than a random warehouse.
-2. Include the SPECIFIC signal that makes each lead valuable (permit number, filing date, listing URL, review quote).
-3. Estimate square footage REALISTICALLY based on business type and location.
-4. Calculate estimated_value using XPS pricing matrix, not random numbers.
-5. If you can't find real buying signals, find businesses with INDICATORS of need (old buildings, expanding, multi-location).
-6. NEVER return generic "info@company.com" unless it's the real email. Leave blank if unknown.`,
+FINAL REMINDER: Return EXACTLY ${targetCount} leads in the array. Count them. If the array has fewer than ${targetCount}, add more until it reaches ${targetCount}.`,
       add_context_from_internet: true,
       model: "gemini_3_flash",
       response_json_schema: {
@@ -111,10 +102,57 @@ CRITICAL RULES:
       }
     });
 
-    const leads = scrapeResult.leads || [];
+    let leads = scrapeResult.leads || [];
+
+    // ENFORCE COUNT: If LLM returned fewer, make a supplemental call
+    if (leads.length < targetCount) {
+      const deficit = targetCount - leads.length;
+      const existingNames = leads.map(l => l.company).join(", ");
+
+      const supplementResult = await base44.integrations.Core.InvokeLLM({
+        prompt: `Find EXACTLY ${deficit} more commercial business prospects in ${location} for flooring services.
+Industry: ${industry || 'commercial'}. Vertical: ${targetVertical}.
+DO NOT repeat any of these companies: ${existingNames}
+Return exactly ${deficit} NEW prospects with: company, contact_name, email, phone, vertical, location, square_footage, estimated_value, source, notes, signal_type, urgency.`,
+        add_context_from_internet: true,
+        model: "gemini_3_flash",
+        response_json_schema: {
+          type: "object",
+          properties: {
+            leads: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  company: { type: "string" },
+                  contact_name: { type: "string" },
+                  email: { type: "string" },
+                  phone: { type: "string" },
+                  vertical: { type: "string" },
+                  location: { type: "string" },
+                  square_footage: { type: "number" },
+                  estimated_value: { type: "number" },
+                  source: { type: "string" },
+                  notes: { type: "string" },
+                  signal_type: { type: "string" },
+                  urgency: { type: "number" }
+                }
+              }
+            }
+          }
+        }
+      });
+
+      if (supplementResult.leads) {
+        leads = [...leads, ...supplementResult.leads];
+      }
+    }
+
+    // Trim to exact count if somehow over
+    leads = leads.slice(0, targetCount);
+
     const createdLeads = [];
 
-    // Create leads in CRM with enhanced scoring
     for (const lead of leads) {
       let score = 0;
 
@@ -125,7 +163,7 @@ CRITICAL RULES:
       else if (val >= 10000) score += 15;
       else score += 5;
 
-      // Buying signal strength (30%) — NEW: heaviest weight
+      // Buying signal strength (30%)
       const sig = (lead.signal_type || '').toLowerCase();
       if (sig.includes('permit')) score += 30;
       else if (sig.includes('filing') || sig.includes('new')) score += 25;
@@ -151,6 +189,11 @@ CRITICAL RULES:
 
       const finalScore = Math.min(score, 100);
 
+      // Parse city/state from location
+      const locParts = (lead.location || location || "").split(",").map(s => s.trim());
+      const leadCity = locParts[0] || "";
+      const leadState = locParts[1] || "";
+
       const created = await base44.entities.Lead.create({
         company: lead.company || "Unknown",
         contact_name: lead.contact_name || "",
@@ -158,10 +201,15 @@ CRITICAL RULES:
         phone: lead.phone || "",
         vertical: lead.vertical || "Other",
         location: lead.location || location,
+        city: leadCity,
+        state: leadState,
         square_footage: lead.square_footage || 0,
         estimated_value: lead.estimated_value || 0,
         score: finalScore,
-        stage: "New",
+        stage: "Incoming",
+        pipeline_status: "Incoming",
+        lead_type: "XPress",
+        ingestion_source: "Scraper",
         source: `Signal: ${lead.signal_type || 'Web'} | ${lead.source || 'AI Search'}`,
         ai_insight: `[Signal: ${lead.signal_type || 'General'}] [Urgency: ${lead.urgency || '?'}/5] ${lead.notes || ''}`,
         notes: `Buying signal: ${lead.source || 'N/A'}. ${lead.notes || ''}`

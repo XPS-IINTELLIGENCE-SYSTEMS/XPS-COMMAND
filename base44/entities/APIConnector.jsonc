@@ -1,0 +1,100 @@
+{
+  "name": "APIConnector",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Display name (e.g. ConstructConnect, HubSpot)"
+    },
+    "service_type": {
+      "type": "string",
+      "enum": [
+        "construct_connect",
+        "dodge_reports",
+        "hubspot",
+        "airtable",
+        "google_drive",
+        "google_sheets",
+        "google_calendar",
+        "twilio",
+        "elevenlabs",
+        "openai",
+        "anthropic",
+        "groq",
+        "vercel",
+        "github",
+        "slack",
+        "stripe",
+        "sendgrid",
+        "mailgun",
+        "apify",
+        "brightdata",
+        "zoominfo",
+        "apolloio",
+        "supabase",
+        "heygen",
+        "custom"
+      ],
+      "description": "Service identifier"
+    },
+    "api_key": {
+      "type": "string",
+      "description": "Encrypted API key or token"
+    },
+    "base_url": {
+      "type": "string",
+      "description": "API base URL endpoint"
+    },
+    "webhook_url": {
+      "type": "string",
+      "description": "Auto-generated webhook URL if applicable"
+    },
+    "is_enabled": {
+      "type": "boolean",
+      "default": false
+    },
+    "connection_status": {
+      "type": "string",
+      "enum": [
+        "untested",
+        "connected",
+        "error",
+        "expired"
+      ],
+      "default": "untested"
+    },
+    "last_tested": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_response_ms": {
+      "type": "number",
+      "description": "Last test response time in milliseconds"
+    },
+    "error_log": {
+      "type": "string",
+      "description": "JSON array of last 5 errors"
+    },
+    "docs_url": {
+      "type": "string",
+      "description": "Link to service documentation"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "monthly_calls": {
+      "type": "number",
+      "default": 0,
+      "description": "API calls this month"
+    },
+    "monthly_cost_estimate": {
+      "type": "number",
+      "default": 0,
+      "description": "Estimated cost this month in dollars"
+    }
+  },
+  "required": [
+    "name",
+    "service_type"
+  ]
+}

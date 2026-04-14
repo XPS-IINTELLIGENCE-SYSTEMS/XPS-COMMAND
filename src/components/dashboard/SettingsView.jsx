@@ -10,6 +10,7 @@ import SettingsAIMode from "../settings/SettingsAIMode";
 import SettingsEditLock from "../settings/SettingsEditLock";
 import SettingsProfile from "../settings/SettingsProfile";
 import SettingsAPITokens from "../settings/SettingsAPITokens";
+import ConnectorHub from "../settings/ConnectorHub";
 
 export default function SettingsView() {
   const [loading, setLoading] = useState(true);
@@ -107,6 +108,9 @@ export default function SettingsView() {
 
         {/* Connectors — Real Base44 Technology */}
         <SettingsConnectors />
+
+        {/* API Connector Hub */}
+        <ConnectorHub />
 
         {/* API Tokens */}
         <SettingsAPITokens />

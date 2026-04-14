@@ -1,0 +1,89 @@
+{
+  "name": "RegistryAlert",
+  "type": "object",
+  "properties": {
+    "business_name": {
+      "type": "string",
+      "description": "Registered business name"
+    },
+    "state": {
+      "type": "string",
+      "description": "State of registration"
+    },
+    "entity_type": {
+      "type": "string",
+      "enum": [
+        "LLC",
+        "Corp",
+        "LP",
+        "LLP",
+        "Sole Prop",
+        "Other"
+      ],
+      "default": "LLC"
+    },
+    "formation_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "registered_agent": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "direct_competitor",
+        "potential_customer",
+        "training_candidate",
+        "franchise_candidate",
+        "unknown"
+      ],
+      "default": "unknown"
+    },
+    "search_term_matched": {
+      "type": "string",
+      "description": "Which search term matched this business"
+    },
+    "opportunity_score": {
+      "type": "number",
+      "description": "XPS opportunity score 0-100"
+    },
+    "enriched": {
+      "type": "boolean",
+      "default": false
+    },
+    "website": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "owner_linkedin": {
+      "type": "string"
+    },
+    "lead_created": {
+      "type": "boolean",
+      "default": false
+    },
+    "lead_id": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "processed": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "business_name",
+    "state"
+  ]
+}

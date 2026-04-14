@@ -1,0 +1,76 @@
+{
+  "name": "OvernightRunLog",
+  "type": "object",
+  "properties": {
+    "run_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "target_market": {
+      "type": "string",
+      "description": "Target state/market"
+    },
+    "start_time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "end_time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "leads_created": {
+      "type": "number",
+      "default": 0
+    },
+    "jobs_found": {
+      "type": "number",
+      "default": 0
+    },
+    "bids_generated": {
+      "type": "number",
+      "default": 0
+    },
+    "emails_sent": {
+      "type": "number",
+      "default": 0
+    },
+    "errors_count": {
+      "type": "number",
+      "default": 0
+    },
+    "validation_failures": {
+      "type": "number",
+      "default": 0
+    },
+    "completion_status": {
+      "type": "string",
+      "enum": [
+        "scheduled",
+        "running",
+        "complete",
+        "partial",
+        "failed"
+      ],
+      "default": "scheduled"
+    },
+    "report_sent_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "task_block_status": {
+      "type": "string",
+      "description": "JSON status of each task block"
+    },
+    "executive_summary": {
+      "type": "string"
+    },
+    "error_log": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "run_date",
+    "target_market",
+    "completion_status"
+  ]
+}

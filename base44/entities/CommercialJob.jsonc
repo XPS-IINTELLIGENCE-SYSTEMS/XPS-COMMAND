@@ -1,0 +1,172 @@
+{
+  "name": "CommercialJob",
+  "type": "object",
+  "properties": {
+    "job_name": {
+      "type": "string",
+      "description": "Project name"
+    },
+    "address": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "county": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "zip": {
+      "type": "string"
+    },
+    "owner_name": {
+      "type": "string"
+    },
+    "owner_contact": {
+      "type": "string"
+    },
+    "owner_email": {
+      "type": "string"
+    },
+    "owner_phone": {
+      "type": "string"
+    },
+    "gc_name": {
+      "type": "string",
+      "description": "General contractor name"
+    },
+    "gc_contact": {
+      "type": "string"
+    },
+    "gc_email": {
+      "type": "string"
+    },
+    "gc_phone": {
+      "type": "string"
+    },
+    "architect_name": {
+      "type": "string"
+    },
+    "architect_contact": {
+      "type": "string"
+    },
+    "project_type": {
+      "type": "string",
+      "enum": [
+        "warehouse",
+        "retail",
+        "restaurant",
+        "fitness",
+        "healthcare",
+        "industrial",
+        "data_center",
+        "hotel",
+        "automotive",
+        "brewery",
+        "food_processing",
+        "office",
+        "education",
+        "government",
+        "mixed_use",
+        "other"
+      ],
+      "default": "other"
+    },
+    "total_sqft": {
+      "type": "number"
+    },
+    "flooring_sqft": {
+      "type": "number"
+    },
+    "project_phase": {
+      "type": "string",
+      "enum": [
+        "permit_filed",
+        "design",
+        "pre_bid",
+        "bidding",
+        "under_construction",
+        "complete"
+      ],
+      "default": "permit_filed"
+    },
+    "construction_start_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "flooring_need_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "project_value": {
+      "type": "number"
+    },
+    "estimated_flooring_value": {
+      "type": "number"
+    },
+    "permit_number": {
+      "type": "string"
+    },
+    "permit_source": {
+      "type": "string"
+    },
+    "permit_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "flooring_system_recommendation": {
+      "type": "string"
+    },
+    "urgency_score": {
+      "type": "number",
+      "description": "0-100"
+    },
+    "lead_score": {
+      "type": "number",
+      "description": "0-100"
+    },
+    "route_to": {
+      "type": "string",
+      "enum": [
+        "NCP",
+        "XPress",
+        "Both"
+      ],
+      "default": "NCP"
+    },
+    "bid_status": {
+      "type": "string",
+      "enum": [
+        "not_started",
+        "takeoff_complete",
+        "bid_generated",
+        "sent",
+        "won",
+        "lost",
+        "no_response"
+      ],
+      "default": "not_started"
+    },
+    "source_url": {
+      "type": "string"
+    },
+    "discovery_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "ai_insight": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "job_name",
+    "city",
+    "state",
+    "project_type"
+  ]
+}

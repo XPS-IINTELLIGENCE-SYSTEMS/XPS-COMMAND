@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import EditCardModal from "./EditCardModal";
 import CRMTopCards from "./CRMTopCards";
 import DashboardScrollRow from "./DashboardScrollRow";
+import OvernightMonitor from "./OvernightMonitor";
 
 const ICON_MAP = { Users, Compass, Search, Package, Hammer, Phone, Clock, Trophy, HardHat, DollarSign, BarChart3, Lightbulb, Bot, CalendarClock, Settings };
 
@@ -241,6 +242,11 @@ export default function DashboardView({ onNavigate, sidebarPhases }) {
 
         {/* CRM TOP CARDS */}
         <CRMTopCards leads={d.leads} onNavigate={nav} />
+
+        {/* OVERNIGHT INTELLIGENCE MONITOR */}
+        <div className="mb-10">
+          <OvernightMonitor />
+        </div>
 
         {/* GROUPED CARD ROWS */}
         <div>

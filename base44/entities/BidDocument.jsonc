@@ -1,0 +1,108 @@
+{
+  "name": "BidDocument",
+  "type": "object",
+  "properties": {
+    "job_id": {
+      "type": "string",
+      "description": "Linked CommercialJob ID"
+    },
+    "bid_number": {
+      "type": "string"
+    },
+    "bid_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "recipient_name": {
+      "type": "string"
+    },
+    "recipient_email": {
+      "type": "string"
+    },
+    "recipient_company": {
+      "type": "string"
+    },
+    "project_name": {
+      "type": "string"
+    },
+    "project_address": {
+      "type": "string"
+    },
+    "takeoff_data": {
+      "type": "string",
+      "description": "JSON zone-by-zone breakdown"
+    },
+    "total_material_cost": {
+      "type": "number"
+    },
+    "total_labor_cost": {
+      "type": "number"
+    },
+    "total_bid_value": {
+      "type": "number"
+    },
+    "bid_document_content": {
+      "type": "string",
+      "description": "Full bid text"
+    },
+    "cover_email_subject": {
+      "type": "string"
+    },
+    "cover_email_body": {
+      "type": "string"
+    },
+    "send_status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "queued",
+        "sent",
+        "opened",
+        "responded"
+      ],
+      "default": "draft"
+    },
+    "send_time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "sent_time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "opened_time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "validation_passed": {
+      "type": "boolean",
+      "default": false
+    },
+    "validation_notes": {
+      "type": "string"
+    },
+    "follow_up_scheduled": {
+      "type": "boolean",
+      "default": false
+    },
+    "follow_up_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "outcome": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "won",
+        "lost",
+        "no_response"
+      ],
+      "default": "pending"
+    }
+  },
+  "required": [
+    "job_id",
+    "project_name",
+    "send_status"
+  ]
+}

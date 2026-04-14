@@ -1,0 +1,47 @@
+{
+  "name": "User",
+  "type": "object",
+  "properties": {
+    "role": {
+      "type": "string",
+      "description": "User role in the system",
+      "enum": [
+        "owner",
+        "admin",
+        "manager",
+        "team_member"
+      ]
+    },
+    "territory": {
+      "type": "string",
+      "description": "Assigned territory (state or region)"
+    },
+    "manager_email": {
+      "type": "string",
+      "description": "Email of assigned manager"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "inactive",
+        "suspended"
+      ],
+      "default": "active"
+    },
+    "last_login": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string",
+      "description": "Job title"
+    }
+  },
+  "required": [
+    "role"
+  ]
+}

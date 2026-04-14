@@ -2,17 +2,18 @@
   "name": "UserProfile",
   "type": "object",
   "properties": {
-    "full_name": {
+    "user_email": {
       "type": "string",
-      "description": "User's full name"
+      "description": "Linked user email"
+    },
+    "full_name": {
+      "type": "string"
     },
     "title": {
-      "type": "string",
-      "description": "User's role/title"
+      "type": "string"
     },
     "preferred_tools": {
-      "type": "string",
-      "description": "Comma-separated list of preferred AI tools"
+      "type": "string"
     },
     "ai_mode": {
       "type": "string",
@@ -21,15 +22,37 @@
         "Semi-Autonomous",
         "Basic Chat"
       ],
-      "description": "Preferred AI interaction mode"
+      "default": "Basic Chat"
     },
     "industry": {
+      "type": "string"
+    },
+    "ai_memory": {
       "type": "string",
-      "description": "User's industry or specialty"
+      "description": "JSON \u2014 persistent AI memory about this user"
+    },
+    "ai_conversation_history": {
+      "type": "string",
+      "description": "JSON array \u2014 last 50 messages"
+    },
+    "ai_preferences": {
+      "type": "string",
+      "description": "JSON \u2014 AI style/focus/communication preferences"
+    },
+    "ai_persona_name": {
+      "type": "string",
+      "description": "Custom AI assistant name"
+    },
+    "total_ai_interactions": {
+      "type": "number",
+      "default": 0
+    },
+    "ai_last_active": {
+      "type": "string",
+      "format": "date-time"
     }
   },
   "required": [
-    "full_name",
-    "title"
+    "user_email"
   ]
 }

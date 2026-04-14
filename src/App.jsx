@@ -16,6 +16,9 @@ import About from './pages/About';
 import OperatorSignIn from './pages/OperatorSignIn';
 import AdminPanel from './pages/AdminPanel';
 import CustomLogin from './pages/CustomLogin';
+import OwnerDashboard from './pages/OwnerDashboard';
+import ManagerDashboard from './pages/ManagerDashboard';
+import AdminDashboard from './pages/AdminDashboard';
 
 // Redirect helper for protected routes when not authenticated
 function AuthRedirect({ navigateToLogin }) {
@@ -81,6 +84,9 @@ const AuthenticatedApp = () => {
       <Route path="/op-access" element={<OperatorSignIn />} />
       <Route path="/custom-login" element={<CustomLogin />} />
       <Route path="/admin-panel" element={<AdminPanel />} />
+      <Route path="/owner" element={<OwnerDashboard />} />
+      <Route path="/manager" element={<ManagerDashboard />} />
+      <Route path="/admin" element={<AdminDashboard />} />
       <Route path="/onboarding" element={<Onboarding />} />
       <Route path="/dashboard" element={<Home />} />
       <Route path="*" element={<PageNotFound />} />

@@ -24,6 +24,7 @@ const DEFAULT_PHASES = [
 ];
 
 const DEFAULT_UTILITY = [
+  { id: "knowledge", label: "Knowledge Engine", desc: "AI learning & scraping" },
   { id: "task_scheduler", label: "Task Scheduler", desc: "Scraper control center" },
   { id: "agents", label: "Agent Command", desc: "All agents & tools" },
   { id: "settings", label: "Settings", desc: "Account & preferences" },

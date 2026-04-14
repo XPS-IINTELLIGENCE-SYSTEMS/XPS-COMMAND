@@ -16,6 +16,7 @@ import AnalyticsView from "./dashboard/AnalyticsView";
 import AgentCommandPage from "./command/AgentCommandPage";
 import AdminInlineView from "./admin/AdminInlineView";
 import TemplatesView from "./templates/TemplatesView";
+import KnowledgeView from "./knowledge/KnowledgeView";
 import NavButtons, { pushView } from "./shared/NavButtons";
 import ToolModuleOverlay from "./tools/ToolModuleOverlay";
 import { getToolById } from "./tools/toolRegistry";
@@ -114,6 +115,8 @@ export default function ContentArea({ activeView, onChatCommand, onNavigate, sid
       return wrapper(<AdminInlineView />);
     case "templates":
       return wrapper(<TemplatesView />);
+    case "knowledge":
+      return wrapper(<KnowledgeView />);
     default:
       return wrapper(<DashboardView onNavigate={onNavigate} sidebarPhases={sidebarPhases} />);
   }

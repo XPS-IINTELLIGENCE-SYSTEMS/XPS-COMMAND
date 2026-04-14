@@ -1,0 +1,95 @@
+{
+  "name": "ProductRecommendation",
+  "type": "object",
+  "properties": {
+    "project_type": {
+      "type": "string",
+      "enum": [
+        "warehouse",
+        "retail",
+        "restaurant",
+        "fitness",
+        "healthcare",
+        "industrial",
+        "data_center",
+        "hotel",
+        "automotive",
+        "brewery",
+        "food_processing",
+        "office",
+        "education",
+        "government",
+        "residential_garage",
+        "parking",
+        "other"
+      ],
+      "default": "other"
+    },
+    "environment_type": {
+      "type": "string",
+      "enum": [
+        "indoor_dry",
+        "indoor_wet",
+        "indoor_chemical",
+        "outdoor",
+        "cold_storage",
+        "high_traffic",
+        "food_safe",
+        "clean_room",
+        "esd_sensitive",
+        "other"
+      ],
+      "default": "indoor_dry"
+    },
+    "substrate_condition": {
+      "type": "string",
+      "enum": [
+        "new_concrete",
+        "existing_good",
+        "existing_damaged",
+        "existing_coated",
+        "moisture_issue",
+        "unknown"
+      ],
+      "default": "unknown"
+    },
+    "recommended_xps_product": {
+      "type": "string"
+    },
+    "recommended_system": {
+      "type": "string",
+      "description": "Full system description"
+    },
+    "competing_product": {
+      "type": "string"
+    },
+    "competing_manufacturer": {
+      "type": "string"
+    },
+    "xps_advantages": {
+      "type": "string",
+      "description": "JSON array of advantages"
+    },
+    "price_comparison": {
+      "type": "string",
+      "description": "Price comparison notes"
+    },
+    "technical_justification": {
+      "type": "string"
+    },
+    "sales_talking_points": {
+      "type": "string",
+      "description": "JSON array of talking points"
+    },
+    "application_notes": {
+      "type": "string"
+    },
+    "estimated_sqft_cost": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "project_type",
+    "recommended_xps_product"
+  ]
+}

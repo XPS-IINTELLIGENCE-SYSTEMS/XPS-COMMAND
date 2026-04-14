@@ -1,0 +1,85 @@
+{
+  "name": "RawKnowledge",
+  "type": "object",
+  "properties": {
+    "source_url": {
+      "type": "string"
+    },
+    "source_domain": {
+      "type": "string"
+    },
+    "source_category": {
+      "type": "string",
+      "enum": [
+        "xps_owned",
+        "industry_site",
+        "manufacturer",
+        "ai_tech",
+        "construction_news",
+        "government",
+        "financial",
+        "trends_social",
+        "competitor",
+        "other"
+      ],
+      "default": "other"
+    },
+    "scrape_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "raw_content": {
+      "type": "string"
+    },
+    "cleaned_content": {
+      "type": "string"
+    },
+    "content_type": {
+      "type": "string",
+      "enum": [
+        "article",
+        "product_page",
+        "technical_spec",
+        "pricing",
+        "news",
+        "research",
+        "social_post",
+        "video",
+        "report",
+        "other"
+      ],
+      "default": "article"
+    },
+    "processing_status": {
+      "type": "string",
+      "enum": [
+        "raw",
+        "cleaned",
+        "classified",
+        "extracted",
+        "summarized",
+        "indexed",
+        "failed"
+      ],
+      "default": "raw"
+    },
+    "quality_score": {
+      "type": "number",
+      "description": "0-100"
+    },
+    "word_count": {
+      "type": "number"
+    },
+    "title": {
+      "type": "string"
+    },
+    "error_message": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "source_url",
+    "source_domain",
+    "processing_status"
+  ]
+}

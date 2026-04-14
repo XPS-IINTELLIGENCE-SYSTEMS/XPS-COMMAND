@@ -1,0 +1,82 @@
+{
+  "name": "ManufacturerProfile",
+  "type": "object",
+  "properties": {
+    "company_name": {
+      "type": "string"
+    },
+    "website": {
+      "type": "string"
+    },
+    "headquarters": {
+      "type": "string"
+    },
+    "parent_company": {
+      "type": "string"
+    },
+    "product_lines": {
+      "type": "string",
+      "description": "JSON array of product line objects"
+    },
+    "pricing_data": {
+      "type": "string",
+      "description": "JSON of publicly available pricing"
+    },
+    "technical_specs": {
+      "type": "string",
+      "description": "JSON of key product specs"
+    },
+    "target_markets": {
+      "type": "string",
+      "description": "JSON array of market segments"
+    },
+    "distributor_network": {
+      "type": "string"
+    },
+    "annual_revenue_estimate": {
+      "type": "number"
+    },
+    "employee_count": {
+      "type": "number"
+    },
+    "market_position": {
+      "type": "string",
+      "description": "Market position description"
+    },
+    "vs_xps_strengths": {
+      "type": "string"
+    },
+    "vs_xps_weaknesses": {
+      "type": "string"
+    },
+    "xps_talking_points": {
+      "type": "string",
+      "description": "JSON array of competitive talking points"
+    },
+    "application_guides": {
+      "type": "string",
+      "description": "Key application info"
+    },
+    "last_scraped": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "data_completeness_score": {
+      "type": "number",
+      "description": "0-100"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "needs_update",
+        "archived"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "company_name",
+    "website"
+  ]
+}

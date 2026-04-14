@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Loader2, Search, Package, Hammer, Phone, Clock, Trophy, HardHat, DollarSign, BarChart3, Lightbulb, Bot, Settings, Compass, CalendarClock, Users, GripVertical, Pencil } from "lucide-react";
+import { Loader2, Search, Package, Hammer, Phone, Clock, Trophy, HardHat, DollarSign, BarChart3, Lightbulb, Bot, Settings, Compass, CalendarClock, Users, GripVertical, Pencil, Brain } from "lucide-react";
 import { getIconColor } from "@/lib/iconColors";
 import useColorRefresh from "@/hooks/useColorRefresh";
 import useEditorMode from "@/hooks/useEditorMode";
@@ -11,8 +11,9 @@ import EditCardModal from "./EditCardModal";
 import CRMTopCards from "./CRMTopCards";
 import DashboardScrollRow from "./DashboardScrollRow";
 import OvernightMonitor from "./OvernightMonitor";
+import ScrapeMonitor from "../knowledge/ScrapeMonitor";
 
-const ICON_MAP = { Users, Compass, Search, Package, Hammer, Phone, Clock, Trophy, HardHat, DollarSign, BarChart3, Lightbulb, Bot, CalendarClock, Settings };
+const ICON_MAP = { Users, Compass, Search, Package, Hammer, Phone, Clock, Trophy, HardHat, DollarSign, BarChart3, Lightbulb, Bot, CalendarClock, Settings, Brain };
 
 const DEFAULT_GROUPS = [
   {
@@ -82,6 +83,7 @@ const SIDEBAR_ICON_MAP = {
   job_leads: "Hammer", get_work: "Phone", follow_up: "Clock", win_work: "Trophy",
   do_work: "HardHat", get_paid: "DollarSign", analytics: "BarChart3", tips: "Lightbulb",
   agents: "Bot", task_scheduler: "CalendarClock", settings: "Settings", admin: "Users",
+  knowledge: "Brain",
 };
 
 function loadGroups() {
@@ -243,9 +245,10 @@ export default function DashboardView({ onNavigate, sidebarPhases }) {
         {/* CRM TOP CARDS */}
         <CRMTopCards leads={d.leads} onNavigate={nav} />
 
-        {/* OVERNIGHT INTELLIGENCE MONITOR */}
-        <div className="mb-10">
+        {/* INTELLIGENCE MONITORS */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-10">
           <OvernightMonitor />
+          <ScrapeMonitor />
         </div>
 
         {/* GROUPED CARD ROWS */}

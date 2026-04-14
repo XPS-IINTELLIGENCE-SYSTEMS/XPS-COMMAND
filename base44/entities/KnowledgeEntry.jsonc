@@ -1,0 +1,99 @@
+{
+  "name": "KnowledgeEntry",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Product Info",
+        "Pricing",
+        "Technical Spec",
+        "Market Data",
+        "Industry News",
+        "Competitor Intel",
+        "AI Technology",
+        "Government Regulation",
+        "Financial Data",
+        "Social Trend",
+        "Case Study",
+        "Training Material",
+        "Custom"
+      ],
+      "default": "Industry News"
+    },
+    "subcategory": {
+      "type": "string"
+    },
+    "source_url": {
+      "type": "string"
+    },
+    "source_domain": {
+      "type": "string"
+    },
+    "content": {
+      "type": "string"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "key_facts": {
+      "type": "string",
+      "description": "JSON array of extracted facts"
+    },
+    "tags": {
+      "type": "string",
+      "description": "Comma-separated tags"
+    },
+    "published_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "ingested_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "quality_score": {
+      "type": "number"
+    },
+    "relevance_score": {
+      "type": "number"
+    },
+    "view_count": {
+      "type": "number",
+      "default": 0
+    },
+    "is_competitor_intel": {
+      "type": "boolean",
+      "default": false
+    },
+    "is_pricing_data": {
+      "type": "boolean",
+      "default": false
+    },
+    "is_technical_spec": {
+      "type": "boolean",
+      "default": false
+    },
+    "is_high_priority": {
+      "type": "boolean",
+      "default": false
+    },
+    "raw_knowledge_id": {
+      "type": "string"
+    },
+    "manufacturer_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "category"
+  ]
+}

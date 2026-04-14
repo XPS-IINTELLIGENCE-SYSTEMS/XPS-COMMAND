@@ -1,0 +1,72 @@
+{
+  "name": "SiteImprovement",
+  "type": "object",
+  "properties": {
+    "page_affected": {
+      "type": "string",
+      "description": "Page or component affected"
+    },
+    "improvement_type": {
+      "type": "string",
+      "enum": [
+        "bug_fix",
+        "performance",
+        "ui_enhancement",
+        "new_feature",
+        "seo",
+        "accessibility",
+        "security",
+        "content",
+        "integration"
+      ],
+      "default": "ui_enhancement"
+    },
+    "description": {
+      "type": "string",
+      "description": "What was improved"
+    },
+    "before_screenshot": {
+      "type": "string",
+      "description": "URL to before screenshot"
+    },
+    "after_screenshot": {
+      "type": "string",
+      "description": "URL to after screenshot"
+    },
+    "implemented_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "tested_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "result": {
+      "type": "string",
+      "enum": [
+        "success",
+        "partial",
+        "failed",
+        "reverted"
+      ],
+      "default": "success"
+    },
+    "agent_triggered": {
+      "type": "string",
+      "description": "Which agent initiated this improvement"
+    },
+    "impact_score": {
+      "type": "number",
+      "description": "Impact score 0-100"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes"
+    }
+  },
+  "required": [
+    "page_affected",
+    "improvement_type",
+    "description"
+  ]
+}

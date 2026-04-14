@@ -1,0 +1,70 @@
+{
+  "name": "SEOKeyword",
+  "type": "object",
+  "properties": {
+    "keyword": {
+      "type": "string",
+      "description": "Target keyword or phrase"
+    },
+    "search_volume": {
+      "type": "number",
+      "description": "Estimated monthly search volume"
+    },
+    "difficulty": {
+      "type": "number",
+      "description": "Keyword difficulty score 0-100"
+    },
+    "current_position": {
+      "type": "number",
+      "description": "Current ranking position"
+    },
+    "target_position": {
+      "type": "number",
+      "description": "Target ranking position"
+    },
+    "page_targeting": {
+      "type": "string",
+      "description": "URL of the page targeting this keyword"
+    },
+    "last_checked": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "movement_30_days": {
+      "type": "number",
+      "description": "Position change in last 30 days (positive=improved)"
+    },
+    "opportunity_score": {
+      "type": "number",
+      "description": "Calculated opportunity score 0-100"
+    },
+    "content_status": {
+      "type": "string",
+      "enum": [
+        "no_content",
+        "draft",
+        "published",
+        "optimizing",
+        "ranking"
+      ],
+      "default": "no_content"
+    },
+    "intent": {
+      "type": "string",
+      "enum": [
+        "informational",
+        "commercial",
+        "transactional",
+        "navigational"
+      ],
+      "default": "informational"
+    },
+    "cluster": {
+      "type": "string",
+      "description": "Keyword cluster group name"
+    }
+  },
+  "required": [
+    "keyword"
+  ]
+}

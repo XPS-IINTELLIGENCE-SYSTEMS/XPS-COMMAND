@@ -1,0 +1,103 @@
+{
+  "name": "SocialPost",
+  "type": "object",
+  "properties": {
+    "platform": {
+      "type": "string",
+      "enum": [
+        "Instagram",
+        "Facebook",
+        "LinkedIn",
+        "TikTok",
+        "YouTube",
+        "X/Twitter",
+        "Pinterest",
+        "Google Business",
+        "Houzz",
+        "Reddit",
+        "Quora"
+      ],
+      "description": "Target platform"
+    },
+    "content": {
+      "type": "string",
+      "description": "Post content/caption"
+    },
+    "media_urls": {
+      "type": "string",
+      "description": "Comma-separated media URLs"
+    },
+    "hashtags": {
+      "type": "string",
+      "description": "Comma-separated hashtags"
+    },
+    "scheduled_time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "posted_time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "scheduled",
+        "posted",
+        "failed",
+        "archived"
+      ],
+      "default": "draft"
+    },
+    "likes": {
+      "type": "number",
+      "default": 0
+    },
+    "comments": {
+      "type": "number",
+      "default": 0
+    },
+    "shares": {
+      "type": "number",
+      "default": 0
+    },
+    "reach": {
+      "type": "number",
+      "default": 0
+    },
+    "impressions": {
+      "type": "number",
+      "default": 0
+    },
+    "lead_source_id": {
+      "type": "string",
+      "description": "Lead ID if this post generated a lead"
+    },
+    "campaign": {
+      "type": "string",
+      "description": "Campaign name"
+    },
+    "content_type": {
+      "type": "string",
+      "enum": [
+        "before_after",
+        "product_spotlight",
+        "how_to",
+        "testimonial",
+        "industry_tip",
+        "franchise_spotlight",
+        "training",
+        "job_site_tour",
+        "ad_copy",
+        "blog_promo"
+      ],
+      "default": "industry_tip"
+    }
+  },
+  "required": [
+    "platform",
+    "content",
+    "status"
+  ]
+}

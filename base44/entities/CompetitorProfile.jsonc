@@ -1,0 +1,89 @@
+{
+  "name": "CompetitorProfile",
+  "type": "object",
+  "properties": {
+    "company_name": {
+      "type": "string",
+      "description": "Competitor company name"
+    },
+    "website": {
+      "type": "string",
+      "description": "Primary website URL"
+    },
+    "social_handles": {
+      "type": "string",
+      "description": "JSON of social media handles"
+    },
+    "top_keywords": {
+      "type": "string",
+      "description": "Comma-separated top ranking keywords"
+    },
+    "monthly_traffic_estimate": {
+      "type": "number",
+      "description": "Estimated monthly organic traffic"
+    },
+    "top_pages": {
+      "type": "string",
+      "description": "JSON array of highest-traffic pages"
+    },
+    "content_strategy": {
+      "type": "string",
+      "description": "AI analysis of their content strategy"
+    },
+    "pricing_intel": {
+      "type": "string",
+      "description": "Pricing information gathered"
+    },
+    "last_crawled": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "change_detected": {
+      "type": "boolean",
+      "default": false
+    },
+    "change_summary": {
+      "type": "string",
+      "description": "Summary of recent changes detected"
+    },
+    "threat_level": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "default": "medium"
+    },
+    "strengths": {
+      "type": "string",
+      "description": "Competitive strengths"
+    },
+    "weaknesses": {
+      "type": "string",
+      "description": "Competitive weaknesses"
+    },
+    "backlink_count": {
+      "type": "number",
+      "description": "Estimated backlink count"
+    },
+    "domain_authority": {
+      "type": "number",
+      "description": "Estimated domain authority"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "monitoring",
+        "archived"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "company_name",
+    "website"
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "name": "CrawlResult",
+  "type": "object",
+  "properties": {
+    "url": {
+      "type": "string",
+      "description": "URL that was crawled"
+    },
+    "domain": {
+      "type": "string",
+      "description": "Domain of the crawled URL"
+    },
+    "crawl_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "content_hash": {
+      "type": "string",
+      "description": "Hash for change detection"
+    },
+    "content_type": {
+      "type": "string",
+      "enum": [
+        "competitor_site",
+        "permit_db",
+        "business_registry",
+        "google_maps",
+        "linkedin",
+        "review_platform",
+        "job_board",
+        "news",
+        "social",
+        "franchise_dir",
+        "other"
+      ],
+      "default": "other"
+    },
+    "raw_content": {
+      "type": "string",
+      "description": "Raw scraped content (truncated)"
+    },
+    "processed_content": {
+      "type": "string",
+      "description": "AI-processed and cleaned content"
+    },
+    "diff_from_previous": {
+      "type": "string",
+      "description": "Changes detected from last crawl"
+    },
+    "new_keywords_found": {
+      "type": "string",
+      "description": "Comma-separated new keywords discovered"
+    },
+    "lead_generated_id": {
+      "type": "string",
+      "description": "Lead ID if a lead was created from this crawl"
+    },
+    "competitor_intel_extracted": {
+      "type": "string",
+      "description": "Extracted competitor intelligence JSON"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "processing",
+        "complete",
+        "failed"
+      ],
+      "default": "pending"
+    }
+  },
+  "required": [
+    "url",
+    "domain",
+    "status"
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "name": "AgentJob",
+  "type": "object",
+  "properties": {
+    "agent_type": {
+      "type": "string",
+      "enum": [
+        "Research",
+        "Outreach",
+        "Scraper",
+        "Proposal",
+        "Call",
+        "Content",
+        "Analysis",
+        "SEO",
+        "Social",
+        "Shadow Browser",
+        "Site Builder",
+        "Crawler Network",
+        "Property Builder"
+      ],
+      "description": "Type of agent running this job"
+    },
+    "job_description": {
+      "type": "string",
+      "description": "What the agent needs to do"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "queued",
+        "running",
+        "complete",
+        "failed",
+        "paused",
+        "cancelled"
+      ],
+      "default": "queued",
+      "description": "Current job status"
+    },
+    "priority": {
+      "type": "number",
+      "description": "Priority 1-10 (10=highest)"
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "completed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "result": {
+      "type": "string",
+      "description": "Output or result JSON"
+    },
+    "error": {
+      "type": "string",
+      "description": "Error message if failed"
+    },
+    "trigger_source": {
+      "type": "string",
+      "enum": [
+        "manual",
+        "schedule",
+        "agent_handoff",
+        "webhook",
+        "system"
+      ],
+      "default": "manual"
+    },
+    "parent_job_id": {
+      "type": "string",
+      "description": "Parent job ID if this is a sub-agent task"
+    },
+    "output_handed_to": {
+      "type": "string",
+      "description": "Agent type that received this job's output"
+    },
+    "execution_log": {
+      "type": "string",
+      "description": "Step-by-step execution log"
+    },
+    "memory_context": {
+      "type": "string",
+      "description": "Context carried from previous sessions"
+    }
+  },
+  "required": [
+    "agent_type",
+    "job_description",
+    "status"
+  ]
+}

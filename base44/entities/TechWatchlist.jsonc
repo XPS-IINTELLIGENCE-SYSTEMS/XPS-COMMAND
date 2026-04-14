@@ -1,0 +1,77 @@
+{
+  "name": "TechWatchlist",
+  "type": "object",
+  "properties": {
+    "tool_name": {
+      "type": "string",
+      "description": "Name of the AI tool or technology"
+    },
+    "url": {
+      "type": "string",
+      "description": "URL to the tool"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "AI Model",
+        "SaaS Tool",
+        "API Service",
+        "Framework",
+        "Integration",
+        "Scraping",
+        "Analytics",
+        "Content",
+        "CRM",
+        "Communication",
+        "Other"
+      ],
+      "default": "Other"
+    },
+    "description": {
+      "type": "string",
+      "description": "What the tool does"
+    },
+    "integration_potential_score": {
+      "type": "number",
+      "description": "How well it could integrate with XPS (0-100)"
+    },
+    "implementation_effort": {
+      "type": "string",
+      "enum": [
+        "trivial",
+        "low",
+        "medium",
+        "high",
+        "massive"
+      ],
+      "default": "medium"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "watching",
+        "evaluating",
+        "integrating",
+        "integrated",
+        "rejected"
+      ],
+      "default": "watching"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Evaluation notes"
+    },
+    "discovered_from": {
+      "type": "string",
+      "description": "Where this tool was found"
+    },
+    "discovered_date": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "tool_name",
+    "status"
+  ]
+}

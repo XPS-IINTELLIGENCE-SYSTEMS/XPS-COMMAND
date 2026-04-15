@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { useNavigate } from "react-router-dom";
 import PageHexGlow from "../components/PageHexGlow";
-import { LogIn, Loader2, Shield, Crown, Users, Wrench } from "lucide-react";
+import { LogIn, LogOut, Loader2, Shield, Crown, Users, Wrench, User, ArrowRight } from "lucide-react";
 
 const ROLES = [
   {
@@ -39,6 +39,8 @@ export default function CustomLogin() {
   const [selectedRole, setSelectedRole] = useState(null);
   const [loading, setLoading] = useState(false);
   const [checkingAuth, setCheckingAuth] = useState(true);
+  const [authUser, setAuthUser] = useState(null);
+  const [existingProfile, setExistingProfile] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -53,9 +55,18 @@ export default function CustomLogin() {
 
         // User is authenticated — check if they have a profile
         const user = await base44.auth.me();
+        if (!cancelled) setAuthUser(user);
+
         let profiles = [];
         try {
           profiles = await base44.entities.UserProfile.filter({ user_email: user.email });
+          // Also try matching by created_by if no match
+          if (profiles.length === 0) {
+            const allProfiles = await base44.entities.UserProfile.list();
+            profiles = allProfiles.filter(
+              (p) => p.user_email === user.email || p.created_by === user.email
+            );
+          }
         } catch {
           // If entity access fails, still let them proceed
         }
@@ -63,8 +74,11 @@ export default function CustomLogin() {
         if (cancelled) return;
 
         if (profiles.length > 0) {
-          // Returning user — send to their dashboard
-          navigate(routeForProfile(profiles[0]), { replace: true });
+          // Returning user — show them the page with a "Go to Dashboard" option
+          if (!cancelled) {
+            setExistingProfile(profiles[0]);
+            setCheckingAuth(false);
+          }
         } else {
           // Authenticated but no profile — needs onboarding
           navigate("/onboarding", { replace: true });
@@ -80,11 +94,20 @@ export default function CustomLogin() {
   const handleSignIn = () => {
     if (!selectedRole) return;
     setLoading(true);
-    // Store the selected role for onboarding pre-fill
     try { sessionStorage.setItem("xps-login-role", selectedRole); } catch {}
-    // Redirect to Base44 auth — after login, user comes back to /custom-login
-    // and the useEffect above will route them to onboarding or their dashboard
     base44.auth.redirectToLogin("/custom-login");
+  };
+
+  const handleGoToDashboard = () => {
+    if (existingProfile) {
+      navigate(routeForProfile(existingProfile));
+    } else {
+      navigate("/dashboard");
+    }
+  };
+
+  const handleLogout = () => {
+    base44.auth.logout("/custom-login");
   };
 
   if (checkingAuth) {
@@ -95,26 +118,76 @@ export default function CustomLogin() {
     );
   }
 
+  // Branded header shared by both views
+  const brandHeader = (
+    <>
+      <img
+        src="https://media.base44.com/images/public/69db3269c791af3f48cfaee9/583965fcb_IMAGEWITHWHITEOUTLINE.jpg"
+        alt="XPS"
+        className="w-20 h-20 mx-auto mb-5 object-contain drop-shadow-lg"
+      />
+      <h1
+        className="text-3xl font-black metallic-gold-silver-text tracking-widest mb-1"
+        style={{ fontFamily: "'Montserrat', sans-serif" }}
+      >
+        XPS INTELLIGENCE
+      </h1>
+      <p className="text-xs text-muted-foreground tracking-[0.25em] uppercase mb-8">
+        Contractor Command Platform
+      </p>
+    </>
+  );
+
+  // ── Authenticated view ──
+  if (authUser && existingProfile) {
+    const profileTitle = existingProfile.title || "Team Member";
+    return (
+      <div className="hex-bg min-h-screen bg-background text-foreground relative flex items-center justify-center px-4">
+        <PageHexGlow />
+        <div className="relative z-[1] w-full max-w-md text-center">
+          {brandHeader}
+
+          <div className="glass-card rounded-2xl p-6 animated-silver-border">
+            <div className="w-16 h-16 rounded-2xl metallic-gold-bg mx-auto mb-4 flex items-center justify-center">
+              <User className="w-8 h-8 text-background" />
+            </div>
+            <h2 className="text-lg font-bold text-foreground mb-1">
+              Welcome back, {existingProfile.full_name || authUser.full_name || "User"}
+            </h2>
+            <p className="text-sm text-muted-foreground mb-6">{profileTitle} &bull; {authUser.email}</p>
+
+            <button
+              onClick={handleGoToDashboard}
+              className="w-full flex items-center justify-center gap-3 px-6 py-4 rounded-xl font-bold text-base metallic-gold-bg text-background hover:brightness-110 transition-all duration-300 mb-3"
+            >
+              <ArrowRight className="w-5 h-5" />
+              Go to Dashboard
+            </button>
+
+            <button
+              onClick={handleLogout}
+              className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-xl border border-border text-sm text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all"
+            >
+              <LogOut className="w-4 h-4" />
+              Sign Out
+            </button>
+          </div>
+
+          <p className="text-[10px] text-muted-foreground/40 mt-8 tracking-wider">
+            XTREME POLISHING SYSTEMS &bull; PROPRIETARY &amp; CONFIDENTIAL
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Unauthenticated view — role selection + sign in ──
   return (
     <div className="hex-bg min-h-screen bg-background text-foreground relative flex items-center justify-center px-4">
       <PageHexGlow />
 
       <div className="relative z-[1] w-full max-w-md text-center">
-        {/* Logo */}
-        <img
-          src="https://media.base44.com/images/public/69db3269c791af3f48cfaee9/583965fcb_IMAGEWITHWHITEOUTLINE.jpg"
-          alt="XPS"
-          className="w-20 h-20 mx-auto mb-5 object-contain drop-shadow-lg"
-        />
-        <h1
-          className="text-3xl font-black metallic-gold-silver-text tracking-widest mb-1"
-          style={{ fontFamily: "'Montserrat', sans-serif" }}
-        >
-          XPS INTELLIGENCE
-        </h1>
-        <p className="text-xs text-muted-foreground tracking-[0.25em] uppercase mb-8">
-          Contractor Command Platform
-        </p>
+        {brandHeader}
 
         {/* Role Selection Card */}
         <div className="glass-card rounded-2xl p-6 animated-silver-border text-left">

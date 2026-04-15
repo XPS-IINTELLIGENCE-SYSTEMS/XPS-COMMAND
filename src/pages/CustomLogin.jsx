@@ -1,47 +1,70 @@
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { base44 } from "@/api/base44Client";
 import PageHexGlow from "../components/PageHexGlow";
-import { ArrowRight, Terminal } from "lucide-react";
+import { LogIn, Loader2, Shield } from "lucide-react";
 
 export default function CustomLogin() {
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
-  const enter = (role, path) => {
-    sessionStorage.setItem("xps-role", role);
-    navigate(path, { replace: true });
+  const handleLogin = () => {
+    setLoading(true);
+    base44.auth.redirectToLogin("/onboarding");
   };
 
   return (
     <div className="hex-bg min-h-screen bg-background text-foreground relative flex items-center justify-center px-4">
       <PageHexGlow />
-      <div className="relative z-[1] w-full max-w-md p-8 rounded-xl bg-card/80 backdrop-blur-md border border-border animated-silver-border">
-        <div className="text-center mb-8">
-          <img
-            src="https://media.base44.com/images/public/69db3269c791af3f48cfaee9/583965fcb_IMAGEWITHWHITEOUTLINE.jpg"
-            alt="XPS"
-            className="w-20 h-20 mx-auto mb-4 object-contain"
-          />
-          <h1
-            className="text-3xl font-extrabold metallic-gold-silver-text tracking-wider"
-            style={{ fontFamily: "'Montserrat', sans-serif" }}
-          >
-            XPS Intelligence
-          </h1>
-          <p className="text-sm text-muted-foreground mt-2">Intelligence Platform</p>
-        </div>
 
-        <div className="space-y-3">
+      <div className="relative z-[1] w-full max-w-sm text-center">
+        {/* Logo */}
+        <img
+          src="https://media.base44.com/images/public/69db3269c791af3f48cfaee9/583965fcb_IMAGEWITHWHITEOUTLINE.jpg"
+          alt="XPS"
+          className="w-24 h-24 mx-auto mb-6 object-contain drop-shadow-lg"
+        />
+
+        {/* Title */}
+        <h1
+          className="text-4xl font-black metallic-gold-silver-text tracking-widest mb-1"
+          style={{ fontFamily: "'Montserrat', sans-serif" }}
+        >
+          XPS
+        </h1>
+        <p className="text-sm text-muted-foreground tracking-[0.3em] uppercase mb-10">
+          Intelligence Platform
+        </p>
+
+        {/* Card */}
+        <div className="glass-card rounded-2xl p-8 animated-silver-border">
+          <div className="flex items-center justify-center gap-2 mb-3">
+            <Shield className="w-4 h-4 text-primary/70" />
+            <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">
+              Secure Access
+            </span>
+          </div>
+
+          <p className="text-sm text-muted-foreground mb-6">
+            Sign in to access the XPS command center, intelligence tools, and live dashboards.
+          </p>
+
           <button
-            onClick={() => enter("command", "/onboarding")}
-            className="w-full flex items-center gap-4 px-5 py-4 rounded-xl metallic-gold-bg text-background font-bold text-lg hover:brightness-110 transition-all duration-300"
+            onClick={handleLogin}
+            disabled={loading}
+            className="w-full flex items-center justify-center gap-3 px-6 py-4 rounded-xl metallic-gold-bg text-background font-bold text-base hover:brightness-110 transition-all duration-300 disabled:opacity-70"
           >
-            <Terminal className="w-6 h-6" />
-            <div className="flex-1 text-left">
-              <div>Command Access</div>
-              <div className="text-xs font-normal opacity-70">Enter the command center</div>
-            </div>
-            <ArrowRight className="w-5 h-5" />
+            {loading ? (
+              <Loader2 className="w-5 h-5 animate-spin" />
+            ) : (
+              <LogIn className="w-5 h-5" />
+            )}
+            {loading ? "Redirecting..." : "Sign In"}
           </button>
         </div>
+
+        {/* Footer */}
+        <p className="text-[10px] text-muted-foreground/40 mt-8 tracking-wider">
+          XTREME POLISHING SYSTEMS &bull; PROPRIETARY &amp; CONFIDENTIAL
+        </p>
       </div>
     </div>
   );

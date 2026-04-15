@@ -17,25 +17,26 @@ export default function SmartRedirect() {
 
     (async () => {
       try {
-        // Find profile by user_email
-        let profiles = await base44.entities.UserProfile.filter({ user_email: user.email });
-        
-        // Fallback: search by created_by
-        if (profiles.length === 0) {
-          profiles = await base44.entities.UserProfile.filter({ created_by: user.email });
+        // Admin users always go to owner dashboard
+        if (user.role === "admin") {
+          setTarget("/owner-dashboard");
+          return;
         }
 
-        if (profiles.length === 0) {
-          // No profile — send to onboarding
+        // Try to find profile — check all profiles and match by email
+        const allProfiles = await base44.entities.UserProfile.list("-created_date", 50);
+        const profile = allProfiles.find(
+          p => p.user_email === user.email || p.created_by === user.email
+        );
+
+        if (!profile) {
           setTarget("/onboarding");
           return;
         }
 
-        // Has profile — route by title
-        const profile = profiles[0];
+        // Route by title
         const title = (profile.title || "").toLowerCase();
-
-        if (title.includes("owner") || user.role === "admin") {
+        if (title.includes("owner")) {
           setTarget("/owner-dashboard");
         } else if (title.includes("admin")) {
           setTarget("/admin-dashboard");
@@ -45,7 +46,6 @@ export default function SmartRedirect() {
           setTarget("/dashboard");
         }
       } catch {
-        // On any error, send to main dashboard
         setTarget("/dashboard");
       }
     })();

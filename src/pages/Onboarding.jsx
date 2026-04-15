@@ -46,7 +46,9 @@ const industryOptions = [
 export default function Onboarding() {
   const [step, setStep] = useState(0);
   const [name, setName] = useState("");
-  const [title, setTitle] = useState("");
+  const loginRole = sessionStorage.getItem("xps-login-role") || "";
+  const prefilledTitle = loginRole === "owner" ? "Owner" : loginRole === "manager" ? "Manager" : "";
+  const [title, setTitle] = useState(prefilledTitle);
   const [customTitle, setCustomTitle] = useState("");
   const [selectedTools, setSelectedTools] = useState([]);
   const [aiMode, setAiMode] = useState("");
@@ -74,14 +76,21 @@ export default function Onboarding() {
     setSaving(true);
     const finalTitle = title === "Other" ? customTitle : title;
     const finalIndustry = industry === "Other" ? customIndustry : industry;
+    const user = await base44.auth.me();
     await base44.entities.UserProfile.create({
+      user_email: user.email,
       full_name: name,
       title: finalTitle,
       preferred_tools: selectedTools.join(", "),
       ai_mode: aiMode,
       industry: finalIndustry,
     });
-    navigate("/dashboard");
+    sessionStorage.removeItem("xps-login-role");
+    // Route to role-specific dashboard
+    const t = finalTitle.toLowerCase();
+    if (t.includes("owner")) navigate("/owner");
+    else if (t.includes("manager")) navigate("/manager");
+    else navigate("/dashboard");
   };
 
   const questions = [

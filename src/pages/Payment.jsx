@@ -1,10 +1,12 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { base44 } from "@/api/base44Client";
 import PageHexGlow from "../components/PageHexGlow";
 import LandingNav from "../components/landing/LandingNav";
-import { Check, Zap, Shield, Cpu } from "lucide-react";
+import { Check, Zap, Shield, Cpu, Loader2 } from "lucide-react";
 
 const plans = [
   {
+    id: "starter",
     name: "Starter",
     price: "Free",
     period: "",
@@ -16,10 +18,11 @@ const plans = [
       "Up to 50 Leads / month",
       "Email Support",
     ],
-    cta: "Get Started",
+    cta: "Get Started Free",
     highlight: false,
   },
   {
+    id: "professional",
     name: "Professional",
     price: "$99",
     period: "/mo",
@@ -37,6 +40,7 @@ const plans = [
     highlight: true,
   },
   {
+    id: "enterprise",
     name: "Enterprise",
     price: "Custom",
     period: "",
@@ -56,6 +60,17 @@ const plans = [
 ];
 
 export default function Payment() {
+  const [loadingPlan, setLoadingPlan] = useState(null);
+
+  const handleSelectPlan = (planId) => {
+    // Save selected plan so onboarding/dashboard can reference it
+    sessionStorage.setItem("xps-selected-plan", planId);
+    setLoadingPlan(planId);
+    // This triggers Base44's auth — user creates account or signs in,
+    // then gets redirected to /onboarding to complete setup
+    base44.auth.redirectToLogin("/onboarding");
+  };
+
   return (
     <div className="hex-bg min-h-screen bg-background text-foreground relative">
       <PageHexGlow />
@@ -71,7 +86,7 @@ export default function Payment() {
             <span className="metallic-gold-silver-text">Choose Your Plan</span>
           </h1>
           <p className="text-base md:text-lg text-muted-foreground mt-4 max-w-xl mx-auto">
-            Scale your contracting business with AI-powered tools built for the flooring industry.
+            Pick a plan, create your account, and you're in. Takes less than 2 minutes.
           </p>
         </div>
 
@@ -79,6 +94,7 @@ export default function Payment() {
         <div className="max-w-5xl mx-auto px-6 pb-24 grid grid-cols-1 md:grid-cols-3 gap-6">
           {plans.map((plan) => {
             const PlanIcon = plan.Icon;
+            const isLoading = loadingPlan === plan.id;
             return (
               <div
                 key={plan.name}
@@ -120,16 +136,24 @@ export default function Payment() {
                   ))}
                 </ul>
 
-                <Link
-                  to="/signin"
-                  className={`w-full flex items-center justify-center px-6 py-3 rounded-xl font-bold text-base transition-all duration-300 ${
+                <button
+                  onClick={() => handleSelectPlan(plan.id)}
+                  disabled={!!loadingPlan}
+                  className={`w-full flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold text-base transition-all duration-300 disabled:opacity-50 ${
                     plan.highlight
                       ? "metallic-gold-bg text-background hover:brightness-110"
                       : "border border-border text-foreground hover:bg-secondary"
                   }`}
                 >
-                  {plan.cta}
-                </Link>
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Creating account...
+                    </>
+                  ) : (
+                    plan.cta
+                  )}
+                </button>
               </div>
             );
           })}

@@ -47,16 +47,38 @@ const industryOptions = [
 export default function Onboarding() {
   const [step, setStep] = useState(0);
   const [name, setName] = useState("");
-  const loginRole = sessionStorage.getItem("xps-login-role") || "";
-  const prefilledTitle = loginRole === "owner" ? "Owner" : loginRole === "admin" ? "Admin" : loginRole === "manager" ? "Manager" : loginRole === "team_member" ? "Contractor" : "";
-  const [title, setTitle] = useState(prefilledTitle);
+  const [title, setTitle] = useState("");
   const [customTitle, setCustomTitle] = useState("");
   const [selectedTools, setSelectedTools] = useState([]);
   const [aiMode, setAiMode] = useState("");
   const [industry, setIndustry] = useState("");
   const [customIndustry, setCustomIndustry] = useState("");
   const [saving, setSaving] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
   const navigate = useNavigate();
+
+  // Require authentication — if not logged in, redirect to payment
+  useState(() => {
+    (async () => {
+      const authed = await base44.auth.isAuthenticated();
+      if (!authed) {
+        navigate("/payment", { replace: true });
+        return;
+      }
+      // Pre-fill name from user if available
+      try {
+        const user = await base44.auth.me();
+        if (user.full_name) setName(user.full_name);
+        // Check if already onboarded
+        const profiles = await base44.entities.UserProfile.filter({ user_email: user.email });
+        if (profiles.length > 0) {
+          navigate("/dashboard", { replace: true });
+          return;
+        }
+      } catch {}
+      setAuthChecked(true);
+    })();
+  });
 
   const toggleTool = (id) => {
     setSelectedTools((prev) =>
@@ -86,7 +108,7 @@ export default function Onboarding() {
       ai_mode: aiMode,
       industry: finalIndustry,
     });
-    sessionStorage.removeItem("xps-login-role");
+    sessionStorage.removeItem("xps-selected-plan");
     navigate("/dashboard");
   };
 
@@ -284,6 +306,15 @@ export default function Onboarding() {
       )}
     </div>,
   ];
+
+  if (!authChecked) {
+    return (
+      <div className="hex-bg min-h-screen bg-background flex flex-col items-center justify-center gap-3">
+        <div className="w-6 h-6 border-2 border-white/10 border-t-primary rounded-full animate-spin" />
+        <p className="text-xs text-muted-foreground">Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="hex-bg min-h-screen bg-background flex items-center justify-center p-4 relative">

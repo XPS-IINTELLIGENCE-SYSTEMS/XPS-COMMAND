@@ -4,11 +4,6 @@ import { useNavigate, Link } from "react-router-dom";
 import PageHexGlow from "../components/PageHexGlow";
 import { Loader2 } from "lucide-react";
 
-function getRouteForUser(profile) {
-  // Simple: if user has a profile, go to dashboard; otherwise onboarding
-  return profile ? "/dashboard" : "/onboarding";
-}
-
 const stats = [
   { value: "60+", label: "LOCATIONS" },
   { value: "200+", label: "SALES STAFF" },
@@ -38,20 +33,14 @@ export default function SignInPortal() {
           const profiles = await base44.entities.UserProfile.filter({ user_email: user.email });
           if (profiles.length > 0) {
             profile = profiles[0];
-          } else {
-            const allProfiles = await base44.entities.UserProfile.list();
-            const match = allProfiles.find(
-              (p) => p.user_email === user.email || p.created_by === user.email
-            );
-            if (match) profile = match;
           }
         } catch {
-          // New user
+          // New user — no profile yet
         }
 
         if (cancelled) return;
-        const route = getRouteForUser(profile);
-        navigate(route, { replace: true });
+        // If profile exists → dashboard, otherwise → onboarding
+        navigate(profile ? "/dashboard" : "/onboarding", { replace: true });
       } catch {
         if (!cancelled) setCheckingAuth(false);
       }
@@ -62,6 +51,7 @@ export default function SignInPortal() {
 
   const handleSignIn = () => {
     setLoading(true);
+    // After Base44 auth, user returns to /signin which auto-routes them
     base44.auth.redirectToLogin("/signin");
   };
 
@@ -135,8 +125,8 @@ export default function SignInPortal() {
 
             <p className="text-sm text-muted-foreground mt-6 text-center">
               Don't have an account?{" "}
-              <Link to="/register" className="text-primary hover:underline font-medium">
-                Sign up
+              <Link to="/payment" className="text-primary hover:underline font-medium">
+                Get Started
               </Link>
             </p>
           </div>

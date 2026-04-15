@@ -4,20 +4,8 @@ import { useNavigate, Link } from "react-router-dom";
 import PageHexGlow from "../components/PageHexGlow";
 import { Loader2 } from "lucide-react";
 
-// Email-based routing: determines where a user goes after sign-in
-const ADMIN_EMAILS = ["jeremy@shopxps.com", "j.xpsxpress@gmail.com"];
-const OWNER_EMAILS = ["carblade@aol.com"];
-
-function getRouteForUser(email, profile) {
-  const e = (email || "").toLowerCase().trim();
-  if (OWNER_EMAILS.includes(e)) return "/owner";
-  if (ADMIN_EMAILS.includes(e)) return profile ? "/dashboard" : "/onboarding";
-  // Manager / team member — determined by profile title
-  const title = (profile?.title || "").toLowerCase();
-  if (title.includes("owner")) return "/owner";
-  if (title.includes("manager")) return "/manager";
-  if (title.includes("admin")) return "/dashboard";
-  // Default: team members go to dashboard, new users go to onboarding
+function getRouteForUser(profile) {
+  // Simple: if user has a profile, go to dashboard; otherwise onboarding
   return profile ? "/dashboard" : "/onboarding";
 }
 
@@ -62,7 +50,7 @@ export default function SignInPortal() {
         }
 
         if (cancelled) return;
-        const route = getRouteForUser(user.email, profile);
+        const route = getRouteForUser(profile);
         navigate(route, { replace: true });
       } catch {
         if (!cancelled) setCheckingAuth(false);

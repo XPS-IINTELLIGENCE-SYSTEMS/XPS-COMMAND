@@ -27,15 +27,9 @@ export default function LandingNav() {
       <div className="flex items-center gap-2 md:gap-3">
         <Link
           to="/signin"
-          className="hidden md:inline-flex text-lg font-medium text-white/80 hover:text-white transition-all duration-300"
+          className="hidden md:inline-flex px-6 py-2.5 rounded-full text-base font-semibold text-white transition-all duration-300 hover:scale-105 sign-in-pill"
         >
           Sign In
-        </Link>
-        <Link
-          to="/signin"
-          className="hidden md:inline-flex px-5 py-2.5 rounded-full metallic-gold-bg text-background text-base font-semibold hover:brightness-110 transition-all duration-300"
-        >
-          Learn More
         </Link>
         <button onClick={() => setOpen(!open)} className="md:hidden ml-1 p-1 text-white/80 hover:text-white">
           {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}

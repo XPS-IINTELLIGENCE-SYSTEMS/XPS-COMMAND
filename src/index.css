@@ -340,6 +340,56 @@
   border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
+/* Sign-in pill: black glassmorphic oval with animated gold border */
+@keyframes gold-border-rotate {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.sign-in-pill {
+  position: relative;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: none;
+  z-index: 0;
+}
+
+.sign-in-pill::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  padding: 1.5px;
+  background: linear-gradient(
+    90deg,
+    #b8860b, #d4af37, #f5e6a3, #c0c0c0, #d4af37, #b8860b
+  );
+  background-size: 300% 100%;
+  animation: gold-border-rotate 3s ease infinite;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.sign-in-pill:hover {
+  background: rgba(0, 0, 0, 0.8);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.3), 0 0 40px rgba(212, 175, 55, 0.1);
+}
+
+.light .sign-in-pill {
+  background: rgba(255, 255, 255, 0.7);
+  color: #1a1a2e;
+}
+
+.light .sign-in-pill:hover {
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 20px rgba(180, 134, 11, 0.2);
+}
+
 /* Hide scrollbar utility */
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }

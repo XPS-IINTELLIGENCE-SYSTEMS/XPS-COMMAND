@@ -87,12 +87,7 @@ export default function Onboarding() {
       industry: finalIndustry,
     });
     sessionStorage.removeItem("xps-login-role");
-    // Route to role-specific dashboard
-    const t = finalTitle.toLowerCase();
-    if (t.includes("owner")) navigate("/owner");
-    else if (t.includes("admin")) navigate("/admin");
-    else if (t.includes("manager")) navigate("/manager");
-    else navigate("/dashboard");
+    navigate("/dashboard");
   };
 
   const questions = [

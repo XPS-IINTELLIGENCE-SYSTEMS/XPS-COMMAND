@@ -7,21 +7,12 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import Home from './pages/Home';
 import Landing from './pages/Landing';
-
 import Onboarding from './pages/Onboarding';
 import Platform from './pages/Platform';
 import Solutions from './pages/Solutions';
 import Coverage from './pages/Coverage';
 import About from './pages/About';
-import OperatorSignIn from './pages/OperatorSignIn';
-import AdminPanel from './pages/AdminPanel';
-import CustomLogin from './pages/CustomLogin';
 import SignInPortal from './pages/SignInPortal';
-import OwnerDashboard from './pages/OwnerDashboard';
-import ManagerDashboard from './pages/ManagerDashboard';
-import AdminDashboard from './pages/AdminDashboard';
-import Register from './pages/Register';
-import Payment from './pages/Payment';
 
 // Redirect helper for protected routes when not authenticated
 function AuthRedirect({ navigateToLogin }) {
@@ -54,10 +45,6 @@ const AuthenticatedApp = () => {
           <Route path="/solutions" element={<Solutions />} />
           <Route path="/coverage" element={<Coverage />} />
           <Route path="/about" element={<About />} />
-          <Route path="/op-access" element={<OperatorSignIn />} />
-          <Route path="/custom-login" element={<SignInPortal />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/payment" element={<Payment />} />
           <Route path="/onboarding" element={<Onboarding />} />
           <Route path="*" element={<AuthRedirect navigateToLogin={() => navigateToLogin()} />} />
         </Routes>
@@ -74,15 +61,6 @@ const AuthenticatedApp = () => {
       <Route path="/solutions" element={<Solutions />} />
       <Route path="/coverage" element={<Coverage />} />
       <Route path="/about" element={<About />} />
-      <Route path="/op-access" element={<OperatorSignIn />} />
-      <Route path="/custom-login" element={<SignInPortal />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/payment" element={<Payment />} />
-      <Route path="/landing" element={<Landing />} />
-      <Route path="/admin-panel" element={<AdminPanel />} />
-      <Route path="/owner" element={<OwnerDashboard />} />
-      <Route path="/manager" element={<ManagerDashboard />} />
-      <Route path="/admin" element={<AdminDashboard />} />
       <Route path="/onboarding" element={<Onboarding />} />
       <Route path="/dashboard" element={<Home />} />
       <Route path="*" element={<PageNotFound />} />

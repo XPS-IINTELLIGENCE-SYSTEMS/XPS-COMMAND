@@ -2,33 +2,20 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { useNavigate } from "react-router-dom";
 import PageHexGlow from "../components/PageHexGlow";
-import { Loader2, Crown, ShieldCheck, Users, UserCheck } from "lucide-react";
+import { Loader2, LogIn, UserPlus, ChevronDown } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const roles = [
-  {
-    id: "owner",
-    label: "Owner",
-    desc: "Full platform access — analytics, agents, admin controls",
-    Icon: Crown,
-  },
-  {
-    id: "admin",
-    label: "Admin",
-    desc: "System configuration, user management, full access",
-    Icon: ShieldCheck,
-  },
-  {
-    id: "manager",
-    label: "Manager",
-    desc: "Team performance, pipeline management, analytics",
-    Icon: Users,
-  },
-  {
-    id: "team_member",
-    label: "Team Member",
-    desc: "CRM dashboard, leads, proposals, daily tools",
-    Icon: UserCheck,
-  },
+  { id: "owner", label: "Owner" },
+  { id: "admin", label: "Admin" },
+  { id: "manager", label: "Manager" },
+  { id: "team_member", label: "Team Member" },
 ];
 
 function getDashboardRoute(profile, user) {
@@ -41,6 +28,7 @@ function getDashboardRoute(profile, user) {
 }
 
 export default function SignInPortal() {
+  const [role, setRole] = useState("");
   const [loading, setLoading] = useState(null);
   const [checkingAuth, setCheckingAuth] = useState(true);
   const navigate = useNavigate();
@@ -51,7 +39,6 @@ export default function SignInPortal() {
     const isAuthCallback = params.get("from") === "auth";
 
     (async () => {
-      // Only auto-redirect if this is a callback after login
       if (!isAuthCallback) {
         if (!cancelled) setCheckingAuth(false);
         return;
@@ -75,7 +62,7 @@ export default function SignInPortal() {
             );
           }
         } catch {
-          // New user — no profile access yet
+          // New user
         }
 
         if (cancelled) return;
@@ -94,10 +81,18 @@ export default function SignInPortal() {
     return () => { cancelled = true; };
   }, [navigate]);
 
-  const handleRoleSignIn = (roleId) => {
-    setLoading(roleId);
-    sessionStorage.setItem("xps-login-role", roleId);
+  const handleSignIn = () => {
+    if (!role) return;
+    setLoading("signin");
+    sessionStorage.setItem("xps-login-role", role);
     base44.auth.redirectToLogin("/signin?from=auth");
+  };
+
+  const handleSignUp = () => {
+    if (!role) return;
+    setLoading("signup");
+    sessionStorage.setItem("xps-login-role", role);
+    navigate("/register");
   };
 
   if (checkingAuth) {
@@ -113,7 +108,7 @@ export default function SignInPortal() {
     <div className="hex-bg min-h-screen bg-background text-foreground relative flex items-center justify-center px-4 py-12">
       <PageHexGlow />
 
-      <div className="relative z-[1] w-full max-w-md text-center">
+      <div className="relative z-[1] w-full max-w-sm text-center">
         {/* Brand */}
         <img
           src="https://media.base44.com/images/public/69db3269c791af3f48cfaee9/583965fcb_IMAGEWITHWHITEOUTLINE.jpg"
@@ -126,47 +121,63 @@ export default function SignInPortal() {
         >
           XPS INTELLIGENCE
         </h1>
-        <p className="text-xs text-muted-foreground tracking-[0.25em] uppercase mb-8">
+        <p className="text-xs text-muted-foreground tracking-[0.25em] uppercase mb-10">
           Contractor Command Platform
         </p>
 
-        {/* Role Selection */}
-        <div className="glass-card rounded-2xl p-6 animated-silver-border">
-          <h2 className="text-lg font-bold text-foreground mb-1">Welcome Back</h2>
+        {/* Sign In Card */}
+        <div className="glass-card rounded-2xl p-8 animated-silver-border">
+          <h2 className="text-lg font-bold text-foreground mb-1">Welcome</h2>
           <p className="text-sm text-muted-foreground mb-6">
-            Select your role to sign in
+            Select your role to get started
           </p>
 
-          <div className="grid grid-cols-1 gap-3">
-            {roles.map((role) => {
-              const RoleIcon = role.Icon;
-              const isLoading = loading === role.id;
-              return (
-                <button
-                  key={role.id}
-                  onClick={() => handleRoleSignIn(role.id)}
-                  disabled={loading !== null}
-                  className="shimmer-card group relative w-full flex items-center gap-4 p-4 rounded-xl border border-border bg-card hover:border-primary/30 transition-all duration-300 disabled:opacity-50"
-                >
-                  <div className="shimmer-icon-container w-11 h-11 rounded-xl bg-secondary flex items-center justify-center flex-shrink-0">
-                    {isLoading ? (
-                      <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
-                    ) : (
-                      <RoleIcon className="w-5 h-5 shimmer-icon metallic-silver-icon" />
-                    )}
-                  </div>
-                  <div className="text-left">
-                    <div className="text-sm font-bold text-foreground">
-                      {role.label}
-                    </div>
-                    <p className="text-[11px] text-muted-foreground leading-tight mt-0.5">
-                      {role.desc}
-                    </p>
-                  </div>
-                </button>
-              );
-            })}
+          {/* Role Dropdown */}
+          <Select value={role} onValueChange={setRole}>
+            <SelectTrigger className="w-full h-12 text-base bg-secondary border-border">
+              <SelectValue placeholder="Select your role..." />
+            </SelectTrigger>
+            <SelectContent>
+              {roles.map((r) => (
+                <SelectItem key={r.id} value={r.id}>
+                  {r.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          {/* Buttons */}
+          <div className="flex flex-col gap-3 mt-6">
+            <button
+              onClick={handleSignIn}
+              disabled={!role || loading !== null}
+              className="w-full flex items-center justify-center gap-3 px-6 py-4 rounded-xl font-bold text-base metallic-gold-bg text-background hover:brightness-110 transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              {loading === "signin" ? (
+                <Loader2 className="w-5 h-5 animate-spin" />
+              ) : (
+                <LogIn className="w-5 h-5" />
+              )}
+              {loading === "signin" ? "Redirecting..." : "Sign In"}
+            </button>
+
+            <button
+              onClick={handleSignUp}
+              disabled={!role || loading !== null}
+              className="w-full flex items-center justify-center gap-3 px-6 py-4 rounded-xl font-bold text-base border border-border text-foreground hover:bg-secondary transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              {loading === "signup" ? (
+                <Loader2 className="w-5 h-5 animate-spin" />
+              ) : (
+                <UserPlus className="w-5 h-5" />
+              )}
+              {loading === "signup" ? "Redirecting..." : "Sign Up"}
+            </button>
           </div>
+
+          <p className="text-[11px] text-muted-foreground mt-6">
+            Contact your administrator for access.
+          </p>
         </div>
 
         <p className="text-[10px] text-muted-foreground/40 mt-8 tracking-wider">

@@ -27,7 +27,7 @@ export default function LandingNav() {
       <div className="flex items-center gap-2 md:gap-3">
         <Link
           to="/signin"
-          className="hidden md:inline-flex px-5 py-2 rounded-full text-sm font-semibold text-muted-foreground hover:text-foreground transition-all duration-300"
+          className="px-4 md:px-5 py-2 rounded-full text-sm font-semibold border border-border text-foreground hover:bg-secondary transition-all duration-300"
         >
           Sign In
         </Link>

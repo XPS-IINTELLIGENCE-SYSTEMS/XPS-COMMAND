@@ -313,7 +313,7 @@ export default function Sidebar({ activeView, onViewChange, onPhasesChange, onDr
             {/* Logout */}
             <div className="px-1 mt-2">
               <button
-                onClick={() => base44.auth.logout("/signin")}
+                onClick={() => base44.auth.logout(window.location.origin + "/signin")}
                 className="shimmer-card w-full flex items-center gap-2 rounded-xl text-[13px] font-medium px-3 py-2.5 glass-card text-destructive/70 hover:text-destructive transition-all duration-200"
               >
                 <LogOut className="w-4 h-4" />

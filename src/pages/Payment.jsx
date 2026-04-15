@@ -184,7 +184,7 @@ export default function Payment() {
               Sign In
             </button>
             <button
-              onClick={() => base44.auth.redirectToLogin("/dashboard")}
+              onClick={() => navigate("/signin")}
               className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-primary/40 bg-primary/10 text-primary text-sm font-semibold transition-all duration-300 hover:scale-105 hover:bg-primary/20"
             >
               <img src="https://media.base44.com/images/public/69db3269c791af3f48cfaee9/583965fcb_IMAGEWITHWHITEOUTLINE.jpg" alt="XPS" className="w-5 h-5 object-contain" />

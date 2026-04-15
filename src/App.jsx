@@ -16,6 +16,7 @@ import About from './pages/About';
 import OperatorSignIn from './pages/OperatorSignIn';
 import AdminPanel from './pages/AdminPanel';
 import CustomLogin from './pages/CustomLogin';
+import SignInPortal from './pages/SignInPortal';
 import OwnerDashboard from './pages/OwnerDashboard';
 import ManagerDashboard from './pages/ManagerDashboard';
 import AdminDashboard from './pages/AdminDashboard';
@@ -45,13 +46,14 @@ const AuthenticatedApp = () => {
       // Show public pages without auth, redirect for protected routes
       return (
         <Routes>
-          <Route path="/" element={<CustomLogin />} />
+          <Route path="/" element={<Landing />} />
+          <Route path="/signin" element={<SignInPortal />} />
           <Route path="/platform" element={<Platform />} />
           <Route path="/solutions" element={<Solutions />} />
           <Route path="/coverage" element={<Coverage />} />
           <Route path="/about" element={<About />} />
           <Route path="/op-access" element={<OperatorSignIn />} />
-          <Route path="/custom-login" element={<CustomLogin />} />
+          <Route path="/custom-login" element={<SignInPortal />} />
           <Route path="/onboarding" element={<Onboarding />} />
           <Route path="*" element={<AuthRedirect navigateToLogin={() => navigateToLogin()} />} />
         </Routes>
@@ -62,13 +64,14 @@ const AuthenticatedApp = () => {
   // Render the main app (authenticated)
   return (
     <Routes>
-      <Route path="/" element={<CustomLogin />} />
+      <Route path="/" element={<Landing />} />
+      <Route path="/signin" element={<SignInPortal />} />
       <Route path="/platform" element={<Platform />} />
       <Route path="/solutions" element={<Solutions />} />
       <Route path="/coverage" element={<Coverage />} />
       <Route path="/about" element={<About />} />
       <Route path="/op-access" element={<OperatorSignIn />} />
-      <Route path="/custom-login" element={<CustomLogin />} />
+      <Route path="/custom-login" element={<SignInPortal />} />
       <Route path="/landing" element={<Landing />} />
       <Route path="/admin-panel" element={<AdminPanel />} />
       <Route path="/owner" element={<OwnerDashboard />} />

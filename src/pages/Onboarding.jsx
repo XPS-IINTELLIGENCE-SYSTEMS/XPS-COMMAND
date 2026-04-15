@@ -48,7 +48,7 @@ export default function Onboarding() {
   const [step, setStep] = useState(0);
   const [name, setName] = useState("");
   const loginRole = sessionStorage.getItem("xps-login-role") || "";
-  const prefilledTitle = loginRole === "owner" ? "Owner" : loginRole === "manager" ? "Manager" : "";
+  const prefilledTitle = loginRole === "owner" ? "Owner" : loginRole === "admin" ? "Admin" : loginRole === "manager" ? "Manager" : loginRole === "team_member" ? "Contractor" : "";
   const [title, setTitle] = useState(prefilledTitle);
   const [customTitle, setCustomTitle] = useState("");
   const [selectedTools, setSelectedTools] = useState([]);

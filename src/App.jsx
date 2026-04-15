@@ -88,10 +88,9 @@ const AuthenticatedApp = () => (
 );
 
 const AppRouter = () => {
-  const { isLoadingAuth, isLoadingPublicSettings, authError, isAuthenticated } = useAuth();
+  const { isLoadingAuth, authError, isAuthenticated } = useAuth();
 
-  // Loading state
-  if (isLoadingPublicSettings || isLoadingAuth) {
+  if (isLoadingAuth) {
     return (
       <div className="fixed inset-0 flex items-center justify-center" style={{ backgroundColor: 'hsl(240, 10%, 4%)' }}>
         <div className="w-6 h-6 border-2 border-white/10 border-t-primary rounded-full animate-spin"></div>
@@ -99,17 +98,14 @@ const AppRouter = () => {
     );
   }
 
-  // User not registered for this app
   if (authError?.type === 'user_not_registered') {
     return <UserNotRegisteredError />;
   }
 
-  // Authenticated user — always takes priority over auth errors
   if (isAuthenticated) {
     return <AuthenticatedApp />;
   }
 
-  // Unauthenticated
   return <UnauthenticatedApp />;
 };
 

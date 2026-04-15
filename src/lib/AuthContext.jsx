@@ -52,6 +52,18 @@ export const AuthProvider = ({ children }) => {
         if (appError.status === 403 && appError.data?.extra_data?.reason) {
           const reason = appError.data.extra_data.reason;
           if (reason === 'auth_required') {
+            // auth_required means the app requires login — but we might HAVE a token
+            // Try to authenticate first before giving up
+            if (appParams.token) {
+              try {
+                await checkUserAuth();
+                // If checkUserAuth succeeded, user IS authenticated — don't set error
+                setIsLoadingPublicSettings(false);
+                return; // Exit early — user is logged in
+              } catch {
+                // Token was invalid/expired — fall through to set auth_required
+              }
+            }
             setAuthError({
               type: 'auth_required',
               message: 'Authentication required'

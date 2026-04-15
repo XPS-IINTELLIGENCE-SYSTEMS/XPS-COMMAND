@@ -104,12 +104,12 @@ const AppRouter = () => {
     return <UserNotRegisteredError />;
   }
 
-  // Authenticated user
+  // Authenticated user — always takes priority over auth errors
   if (isAuthenticated) {
     return <AuthenticatedApp />;
   }
 
-  // Unauthenticated (includes auth_required error — that's normal for public apps)
+  // Unauthenticated
   return <UnauthenticatedApp />;
 };
 

@@ -98,14 +98,25 @@ export default function Onboarding() {
     const finalTitle = title === "Other" ? customTitle : title;
     const finalIndustry = industry === "Other" ? customIndustry : industry;
     const user = await base44.auth.me();
-    await base44.entities.UserProfile.create({
+    
+    // Check for existing profile first — prevent duplicates
+    const existing = await base44.entities.UserProfile.filter({ user_email: user.email });
+    const profileData = {
       user_email: user.email,
       full_name: name,
       title: finalTitle,
       preferred_tools: selectedTools.join(", "),
       ai_mode: aiMode,
       industry: finalIndustry,
-    });
+    };
+    
+    if (existing.length > 0) {
+      // Update existing profile instead of creating duplicate
+      await base44.entities.UserProfile.update(existing[0].id, profileData);
+    } else {
+      await base44.entities.UserProfile.create(profileData);
+    }
+    
     sessionStorage.removeItem("xps-selected-plan");
     navigate("/");
   };

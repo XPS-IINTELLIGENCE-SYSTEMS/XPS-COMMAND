@@ -7,10 +7,6 @@ import { Loader2 } from "lucide-react";
 /**
  * SmartRedirect — routes authenticated users to the right dashboard
  * based on whether they've completed onboarding and their role.
- * 
- * Used for:
- * - "/" when authenticated (send to dashboard instead of landing)
- * - Post-auth redirect (after sign-in or sign-up)
  */
 export default function SmartRedirect() {
   const { user } = useAuth();
@@ -20,19 +16,22 @@ export default function SmartRedirect() {
     if (!user) return;
 
     (async () => {
-      // Check if user has completed onboarding
-      let hasProfile = false;
       try {
-        const profiles = await base44.entities.UserProfile.filter({ user_email: user.email });
-        hasProfile = profiles.length > 0;
+        // Find profile by user_email
+        let profiles = await base44.entities.UserProfile.filter({ user_email: user.email });
+        
+        // Fallback: search by created_by
+        if (profiles.length === 0) {
+          profiles = await base44.entities.UserProfile.filter({ created_by: user.email });
+        }
 
-        if (!hasProfile) {
+        if (profiles.length === 0) {
           // No profile — send to onboarding
           setTarget("/onboarding");
           return;
         }
 
-        // Has profile — route by role
+        // Has profile — route by title
         const profile = profiles[0];
         const title = (profile.title || "").toLowerCase();
 
@@ -46,7 +45,7 @@ export default function SmartRedirect() {
           setTarget("/dashboard");
         }
       } catch {
-        // Fallback — send to main dashboard
+        // On any error, send to main dashboard
         setTarget("/dashboard");
       }
     })();

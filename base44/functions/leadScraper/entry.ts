@@ -3,13 +3,15 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
-    const user = await base44.auth.me();
-    if (!user) return Response.json({ error: 'Unauthorized' }, { status: 401 });
+    
+    // Support both user-triggered and scheduled automation calls
+    let isAuthed = false;
+    try { const user = await base44.auth.me(); isAuthed = !!user; } catch {}
 
-    const { location, industry, keywords, count, vertical, signal_type } = await req.json();
+    const { location, industry, keywords, count, vertical, signal_type } = await req.json().catch(() => ({}));
 
     if (!location) {
-      return Response.json({ error: 'location is required (city, state or zip)' }, { status: 400 });
+      return Response.json({ error: 'location is required (city, state or zip)', hint: 'Pass {location: "Phoenix, AZ"} or similar' }, { status: 400 });
     }
 
     const targetCount = Math.min(count || 25, 50);

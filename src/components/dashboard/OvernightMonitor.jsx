@@ -53,7 +53,7 @@ export default function OvernightMonitor() {
 
   useEffect(() => {
     loadLatest();
-    const interval = setInterval(loadLatest, 15000);
+    const interval = setInterval(loadLatest, 60000);
     return () => clearInterval(interval);
   }, [loadLatest]);
 

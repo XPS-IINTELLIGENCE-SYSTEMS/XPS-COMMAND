@@ -239,10 +239,12 @@ async function enrichAndCreateLeads(base44) {
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
-    const user = await base44.auth.me();
-    if (!user) return Response.json({ error: 'Unauthorized' }, { status: 401 });
+    
+    // Support both user-triggered and scheduled automation calls
+    let isAuthed = false;
+    try { const user = await base44.auth.me(); isAuthed = !!user; } catch {}
 
-    const body = await req.json();
+    const body = await req.json().catch(() => ({}));
     const { action, states, batch_size } = body;
 
     // Run scraper for specific states

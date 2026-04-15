@@ -3,9 +3,8 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 const OWNER_EMAIL = "j.xpsxpress@gmail.com";
 
 Deno.serve(async (req) => {
-  const base44 = createClientFromRequest(req);
-  
   try {
+    const base44 = createClientFromRequest(req);
     // Get overnight run data
     const runs = await base44.asServiceRole.entities.OvernightRunLog.list("-run_date", 1);
     const lastRun = runs[0];

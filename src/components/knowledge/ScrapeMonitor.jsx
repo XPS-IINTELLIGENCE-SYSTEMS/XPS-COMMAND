@@ -62,7 +62,7 @@ export default function ScrapeMonitor() {
 
   useEffect(() => {
     loadStats();
-    const interval = setInterval(loadStats, 30000);
+    const interval = setInterval(loadStats, 60000);
     return () => clearInterval(interval);
   }, [loadStats]);
 

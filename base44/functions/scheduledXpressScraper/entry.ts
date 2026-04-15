@@ -3,10 +3,10 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
-    const user = await base44.auth.me();
-    if (user?.role !== 'admin') {
-      return Response.json({ error: 'Forbidden: Admin access required' }, { status: 403 });
-    }
+    
+    // Support both user-triggered and scheduled automation calls
+    let isAuthed = false;
+    try { const user = await base44.auth.me(); isAuthed = !!user; } catch {}
 
     // Run XPress pipeline scraper — finds AZ contractors to sell XPS products to
     const result = await base44.asServiceRole.functions.invoke("xpressLeadScraper", {

@@ -67,7 +67,7 @@ export default function Onboarding() {
         // Check if already onboarded — redirect to dashboard
         const profiles = await base44.entities.UserProfile.filter({ user_email: user.email });
         if (profiles.length > 0) {
-          if (!cancelled) navigate("/", { replace: true });
+          if (!cancelled) navigate("/redirect", { replace: true });
           return;
         }
       } catch {
@@ -118,7 +118,7 @@ export default function Onboarding() {
     }
     
     sessionStorage.removeItem("xps-selected-plan");
-    navigate("/");
+    navigate("/redirect");
   };
 
   const questions = [

@@ -63,8 +63,11 @@ const UnauthenticatedApp = () => (
  */
 const AuthenticatedApp = () => (
   <Routes>
-    {/* "/" → smart redirect to correct dashboard */}
-    <Route path="/" element={<SmartRedirect />} />
+    {/* "/" → Landing page (marketing site home) */}
+    <Route path="/" element={<Landing />} />
+    
+    {/* Smart redirect — used after login to route to correct dashboard */}
+    <Route path="/redirect" element={<SmartRedirect />} />
     
     {/* Sign-in page redirects to smart redirect since already logged in */}
     <Route path="/signin" element={<SmartRedirect />} />

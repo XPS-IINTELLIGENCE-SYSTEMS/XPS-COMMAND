@@ -79,11 +79,11 @@ export default function Payment() {
 
     if (isAuthed) {
       // Already logged in — SmartRedirect will check profile and route accordingly
-      navigate("/");
+      navigate("/redirect");
     } else {
-      // Not logged in — Base44 auth creates account, then "/" triggers SmartRedirect
+      // Not logged in — Base44 auth creates account, then "/redirect" triggers SmartRedirect
       // which sends to onboarding if no profile, or dashboard if profile exists
-      base44.auth.redirectToLogin("/");
+      base44.auth.redirectToLogin("/redirect");
     }
   };
 

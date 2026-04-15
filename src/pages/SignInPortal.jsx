@@ -18,7 +18,7 @@ export default function SignInPortal() {
     setLoading(true);
     // After Base44 auth completes, user returns to "/" which SmartRedirect
     // will route to the correct dashboard based on role/profile
-    base44.auth.redirectToLogin("/");
+    base44.auth.redirectToLogin("/redirect");
   };
 
   return (

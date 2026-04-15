@@ -1,49 +1,42 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import PageHexGlow from "../components/PageHexGlow";
-import { Loader2, LogIn, UserPlus, ChevronDown } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Loader2 } from "lucide-react";
 
-const roles = [
-  { id: "owner", label: "Owner" },
-  { id: "admin", label: "Admin" },
-  { id: "manager", label: "Manager" },
-  { id: "team_member", label: "Team Member" },
-];
+// Email-based routing: determines where a user goes after sign-in
+const ADMIN_EMAILS = ["jeremy@shopxps.com", "j.xpsxpress@gmail.com"];
+const OWNER_EMAILS = ["carblade@aol.com"];
 
-function getDashboardRoute(profile, user) {
+function getRouteForUser(email, profile) {
+  const e = (email || "").toLowerCase().trim();
+  if (OWNER_EMAILS.includes(e)) return "/owner";
+  if (ADMIN_EMAILS.includes(e)) return profile ? "/dashboard" : "/onboarding";
+  // Manager / team member — determined by profile title
   const title = (profile?.title || "").toLowerCase();
   if (title.includes("owner")) return "/owner";
   if (title.includes("manager")) return "/manager";
-  if (title.includes("admin")) return "/admin";
-  if (user?.role === "admin") return "/owner";
-  return "/dashboard";
+  if (title.includes("admin")) return "/dashboard";
+  // Default: team members go to dashboard, new users go to onboarding
+  return profile ? "/dashboard" : "/onboarding";
 }
 
+const stats = [
+  { value: "60+", label: "LOCATIONS" },
+  { value: "200+", label: "SALES STAFF" },
+  { value: "50K+", label: "LEADS" },
+  { value: "24/7", label: "AI SUPPORT" },
+];
+
 export default function SignInPortal() {
-  const [role, setRole] = useState("");
-  const [loading, setLoading] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [checkingAuth, setCheckingAuth] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     let cancelled = false;
-    const params = new URLSearchParams(window.location.search);
-    const isAuthCallback = params.get("from") === "auth";
 
     (async () => {
-      if (!isAuthCallback) {
-        if (!cancelled) setCheckingAuth(false);
-        return;
-      }
-
       try {
         const authed = await base44.auth.isAuthenticated();
         if (!authed) {
@@ -52,27 +45,25 @@ export default function SignInPortal() {
         }
 
         const user = await base44.auth.me();
-        let profiles = [];
+        let profile = null;
         try {
-          profiles = await base44.entities.UserProfile.filter({ user_email: user.email });
-          if (profiles.length === 0) {
+          const profiles = await base44.entities.UserProfile.filter({ user_email: user.email });
+          if (profiles.length > 0) {
+            profile = profiles[0];
+          } else {
             const allProfiles = await base44.entities.UserProfile.list();
-            profiles = allProfiles.filter(
+            const match = allProfiles.find(
               (p) => p.user_email === user.email || p.created_by === user.email
             );
+            if (match) profile = match;
           }
         } catch {
           // New user
         }
 
         if (cancelled) return;
-
-        if (profiles.length > 0) {
-          const route = getDashboardRoute(profiles[0], user);
-          navigate(route, { replace: true });
-        } else {
-          navigate("/onboarding", { replace: true });
-        }
+        const route = getRouteForUser(user.email, profile);
+        navigate(route, { replace: true });
       } catch {
         if (!cancelled) setCheckingAuth(false);
       }
@@ -82,17 +73,8 @@ export default function SignInPortal() {
   }, [navigate]);
 
   const handleSignIn = () => {
-    if (!role) return;
-    setLoading("signin");
-    sessionStorage.setItem("xps-login-role", role);
-    base44.auth.redirectToLogin("/signin?from=auth");
-  };
-
-  const handleSignUp = () => {
-    if (!role) return;
-    setLoading("signup");
-    sessionStorage.setItem("xps-login-role", role);
-    navigate("/register");
+    setLoading(true);
+    base44.auth.redirectToLogin("/signin");
   };
 
   if (checkingAuth) {
@@ -105,84 +87,72 @@ export default function SignInPortal() {
   }
 
   return (
-    <div className="hex-bg min-h-screen bg-background text-foreground relative flex items-center justify-center px-4 py-12">
+    <div className="hex-bg min-h-screen bg-background text-foreground relative">
       <PageHexGlow />
 
-      <div className="relative z-[1] w-full max-w-sm text-center">
-        {/* Brand */}
-        <img
-          src="https://media.base44.com/images/public/69db3269c791af3f48cfaee9/583965fcb_IMAGEWITHWHITEOUTLINE.jpg"
-          alt="XPS"
-          className="w-20 h-20 mx-auto mb-5 object-contain drop-shadow-lg"
-        />
-        <h1
-          className="text-2xl md:text-3xl font-black metallic-gold-silver-text tracking-widest mb-1"
-          style={{ fontFamily: "'Montserrat', sans-serif" }}
-        >
-          XPS INTELLIGENCE
-        </h1>
-        <p className="text-xs text-muted-foreground tracking-[0.25em] uppercase mb-10">
-          Contractor Command Platform
-        </p>
-
-        {/* Sign In Card */}
-        <div className="glass-card rounded-2xl p-8 animated-silver-border">
-          <h2 className="text-lg font-bold text-foreground mb-1">Welcome</h2>
-          <p className="text-sm text-muted-foreground mb-6">
-            Select your role to get started
+      <div className="relative z-[1] min-h-screen flex flex-col md:flex-row">
+        {/* Left panel — branding */}
+        <div className="flex-1 flex flex-col items-center justify-center px-6 py-12 md:py-0">
+          <img
+            src="https://media.base44.com/images/public/69db3269c791af3f48cfaee9/583965fcb_IMAGEWITHWHITEOUTLINE.jpg"
+            alt="XPS"
+            className="w-24 h-24 md:w-28 md:h-28 object-contain drop-shadow-lg mb-6"
+          />
+          <h1
+            className="text-2xl md:text-4xl font-black tracking-wider text-center"
+            style={{ fontFamily: "'Montserrat', sans-serif" }}
+          >
+            <span className="metallic-gold-silver-text">XPS Intelligence</span>
+          </h1>
+          <p className="text-sm md:text-base text-muted-foreground text-center mt-3 max-w-xs leading-relaxed">
+            AI-Powered Sales Command Center for Xtreme Polishing Systems
           </p>
 
-          {/* Role Dropdown */}
-          <Select value={role} onValueChange={setRole}>
-            <SelectTrigger className="w-full h-12 text-base bg-secondary border-border">
-              <SelectValue placeholder="Select your role..." />
-            </SelectTrigger>
-            <SelectContent>
-              {roles.map((r) => (
-                <SelectItem key={r.id} value={r.id}>
-                  {r.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          {/* Buttons */}
-          <div className="flex flex-col gap-3 mt-6">
-            <button
-              onClick={handleSignIn}
-              disabled={!role || loading !== null}
-              className="w-full flex items-center justify-center gap-3 px-6 py-4 rounded-xl font-bold text-base metallic-gold-bg text-background hover:brightness-110 transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
-            >
-              {loading === "signin" ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
-              ) : (
-                <LogIn className="w-5 h-5" />
-              )}
-              {loading === "signin" ? "Redirecting..." : "Sign In"}
-            </button>
-
-            <button
-              onClick={handleSignUp}
-              disabled={!role || loading !== null}
-              className="w-full flex items-center justify-center gap-3 px-6 py-4 rounded-xl font-bold text-base border border-border text-foreground hover:bg-secondary transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
-            >
-              {loading === "signup" ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
-              ) : (
-                <UserPlus className="w-5 h-5" />
-              )}
-              {loading === "signup" ? "Redirecting..." : "Sign Up"}
-            </button>
+          {/* Stats grid */}
+          <div className="grid grid-cols-2 gap-3 mt-10 w-full max-w-[280px]">
+            {stats.map((s) => (
+              <div
+                key={s.label}
+                className="glass-card rounded-xl px-4 py-3 text-center"
+              >
+                <div className="text-xl md:text-2xl font-extrabold metallic-gold">{s.value}</div>
+                <div className="text-[10px] text-muted-foreground tracking-widest font-medium mt-0.5">
+                  {s.label}
+                </div>
+              </div>
+            ))}
           </div>
-
-          <p className="text-[11px] text-muted-foreground mt-6">
-            Contact your administrator for access.
-          </p>
         </div>
 
-        <p className="text-[10px] text-muted-foreground/40 mt-8 tracking-wider">
-          XTREME POLISHING SYSTEMS &bull; PROPRIETARY &amp; CONFIDENTIAL
-        </p>
+        {/* Right panel — sign in form */}
+        <div className="flex-1 flex items-center justify-center px-6 py-12 md:py-0">
+          <div className="w-full max-w-sm">
+            <h2 className="text-2xl font-bold text-foreground mb-1">Welcome back</h2>
+            <p className="text-sm text-muted-foreground mb-8">
+              Sign in to your XPS Intelligence account
+            </p>
+
+            {/* Sign In Button */}
+            <button
+              onClick={handleSignIn}
+              disabled={loading}
+              className="w-full flex items-center justify-center gap-3 px-6 py-4 rounded-xl font-bold text-base metallic-gold-bg text-background hover:brightness-110 transition-all duration-300 disabled:opacity-50"
+            >
+              {loading ? (
+                <Loader2 className="w-5 h-5 animate-spin" />
+              ) : (
+                "Sign In"
+              )}
+            </button>
+
+            <p className="text-sm text-muted-foreground mt-6 text-center">
+              Don't have an account?{" "}
+              <Link to="/register" className="text-primary hover:underline font-medium">
+                Sign up
+              </Link>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

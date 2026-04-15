@@ -4,7 +4,7 @@ import { Download } from "lucide-react";
 export default function FloatingDownloadBtn() {
   return (
     <Link
-      to="/custom-login"
+      to="/payment"
       className="fixed bottom-6 right-4 z-50 md:hidden flex items-center gap-2 px-4 py-3 rounded-full animated-silver-border animate-slide-in-right"
       style={{
         background: "rgba(0,0,0,0.75)",

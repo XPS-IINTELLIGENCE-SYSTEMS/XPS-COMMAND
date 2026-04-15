@@ -73,7 +73,7 @@ export default function CustomLogin() {
 
   const handleSignIn = () => {
     setLoading(true);
-    base44.auth.redirectToLogin("/custom-login");
+    base44.auth.redirectToLogin("/");
   };
 
   // Loading while checking auth

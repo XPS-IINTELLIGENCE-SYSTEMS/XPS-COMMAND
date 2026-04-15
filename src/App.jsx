@@ -38,21 +38,6 @@ const AuthenticatedApp = () => {
     );
   }
 
-  // Handle authentication errors
-  // Public routes — always accessible without auth
-  const publicRoutes = (
-    <Routes>
-      <Route path="/" element={<Landing />} />
-      <Route path="/platform" element={<Platform />} />
-      <Route path="/solutions" element={<Solutions />} />
-      <Route path="/coverage" element={<Coverage />} />
-      <Route path="/about" element={<About />} />
-      <Route path="/op-access" element={<OperatorSignIn />} />
-      <Route path="/custom-login" element={<CustomLogin />} />
-      <Route path="*" element={null} />
-    </Routes>
-  );
-
   if (authError) {
     if (authError.type === 'user_not_registered') {
       return <UserNotRegisteredError />;
@@ -60,7 +45,7 @@ const AuthenticatedApp = () => {
       // Show public pages without auth, redirect for protected routes
       return (
         <Routes>
-          <Route path="/" element={<Landing />} />
+          <Route path="/" element={<CustomLogin />} />
           <Route path="/platform" element={<Platform />} />
           <Route path="/solutions" element={<Solutions />} />
           <Route path="/coverage" element={<Coverage />} />
@@ -77,13 +62,14 @@ const AuthenticatedApp = () => {
   // Render the main app (authenticated)
   return (
     <Routes>
-      <Route path="/" element={<Landing />} />
+      <Route path="/" element={<CustomLogin />} />
       <Route path="/platform" element={<Platform />} />
       <Route path="/solutions" element={<Solutions />} />
       <Route path="/coverage" element={<Coverage />} />
       <Route path="/about" element={<About />} />
       <Route path="/op-access" element={<OperatorSignIn />} />
       <Route path="/custom-login" element={<CustomLogin />} />
+      <Route path="/landing" element={<Landing />} />
       <Route path="/admin-panel" element={<AdminPanel />} />
       <Route path="/owner" element={<OwnerDashboard />} />
       <Route path="/manager" element={<ManagerDashboard />} />

@@ -12,6 +12,7 @@ import CRMTopCards from "./CRMTopCards";
 import DashboardScrollRow from "./DashboardScrollRow";
 import OvernightMonitor from "./OvernightMonitor";
 import ScrapeMonitor from "../knowledge/ScrapeMonitor";
+import HubSpotConnector from "../hubspot/HubSpotConnector";
 
 const ICON_MAP = { Users, Compass, Search, Package, Hammer, Phone, Clock, Trophy, HardHat, DollarSign, BarChart3, Lightbulb, Bot, CalendarClock, Settings, Brain };
 
@@ -245,7 +246,10 @@ export default function DashboardView({ onNavigate, sidebarPhases }) {
         {/* CRM TOP CARDS */}
         <CRMTopCards leads={d.leads} onNavigate={nav} />
 
-        {/* INTELLIGENCE MONITORS */}
+        {/* HUBSPOT + INTELLIGENCE MONITORS */}
+        <div className="mb-6">
+          <HubSpotConnector onSyncComplete={load} />
+        </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-10">
           <OvernightMonitor />
           <ScrapeMonitor />

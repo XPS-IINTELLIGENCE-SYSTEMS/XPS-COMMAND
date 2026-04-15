@@ -10,6 +10,7 @@ import HCard from "../shared/HCard";
 import NavIcon from "../shared/NavIcon";
 import LeadDetailPanel from "./LeadDetailPanel";
 import AddLeadModal from "./AddLeadModal";
+import HubSpotConnector from "../hubspot/HubSpotConnector";
 
 const PIPELINE_TOOLS = {
   XPress: [
@@ -99,9 +100,10 @@ export default function LeadPipelineView({ onChatCommand, onOpenTool, forcedTab 
             <p className="mt-2 text-xs text-white/40">{filtered.length} leads in pipeline</p>
 
             {/* Action bar */}
-            <div className="flex items-center justify-center gap-2 mt-4">
+            <div className="flex items-center justify-center gap-2 mt-4 flex-wrap">
               <Button variant="outline" size="sm" className="text-xs" onClick={load}><RefreshCcw className="w-3.5 h-3.5 mr-1.5" />Refresh</Button>
               <Button size="sm" className="text-xs" onClick={() => setAdding(true)}><Plus className="w-3.5 h-3.5 mr-1.5" />Add Lead</Button>
+              <HubSpotConnector compact onSyncComplete={load} />
             </div>
 
             {/* Search */}

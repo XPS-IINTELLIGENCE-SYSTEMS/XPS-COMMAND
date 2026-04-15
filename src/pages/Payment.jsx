@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import PageHexGlow from "../components/PageHexGlow";
 import LandingNav from "../components/landing/LandingNav";
@@ -61,14 +62,28 @@ const plans = [
 
 export default function Payment() {
   const [loadingPlan, setLoadingPlan] = useState(null);
+  const [isAuthed, setIsAuthed] = useState(false);
+  const navigate = useNavigate();
+
+  // Check if user is already authenticated
+  useEffect(() => {
+    (async () => {
+      const authed = await base44.auth.isAuthenticated();
+      setIsAuthed(authed);
+    })();
+  }, []);
 
   const handleSelectPlan = (planId) => {
-    // Save selected plan so onboarding/dashboard can reference it
     sessionStorage.setItem("xps-selected-plan", planId);
     setLoadingPlan(planId);
-    // This triggers Base44's auth — user creates account or signs in,
-    // then gets redirected to /onboarding to complete setup
-    base44.auth.redirectToLogin("/onboarding");
+
+    if (isAuthed) {
+      // Already logged in — go straight to onboarding
+      navigate("/onboarding");
+    } else {
+      // Not logged in — Base44 auth creates account, then redirects to onboarding
+      base44.auth.redirectToLogin("/onboarding");
+    }
   };
 
   return (
@@ -148,7 +163,7 @@ export default function Payment() {
                   {isLoading ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      Creating account...
+                      Setting up...
                     </>
                   ) : (
                     plan.cta
@@ -159,8 +174,17 @@ export default function Payment() {
           })}
         </div>
 
-        {/* Footer */}
+        {/* Already have an account */}
         <div className="text-center pb-12">
+          <p className="text-sm text-muted-foreground mb-6">
+            Already have an account?{" "}
+            <button
+              onClick={() => navigate("/signin")}
+              className="text-primary hover:underline font-medium"
+            >
+              Sign In
+            </button>
+          </p>
           <p className="text-[10px] text-muted-foreground/40 tracking-wider">
             XTREME POLISHING SYSTEMS &bull; PROPRIETARY &amp; CONFIDENTIAL
           </p>

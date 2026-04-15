@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, ArrowLeft, Check, User, Briefcase, Cpu, Bot, Building2, Zap, ShieldCheck, MessageCircle } from "lucide-react";
 import PageHexGlow from "../components/PageHexGlow";
@@ -57,28 +57,31 @@ export default function Onboarding() {
   const [authChecked, setAuthChecked] = useState(false);
   const navigate = useNavigate();
 
-  // Require authentication — if not logged in, redirect to payment
-  useState(() => {
+  // Auth guard — require login, skip if already onboarded
+  useEffect(() => {
+    let cancelled = false;
     (async () => {
       const authed = await base44.auth.isAuthenticated();
       if (!authed) {
         navigate("/payment", { replace: true });
         return;
       }
-      // Pre-fill name from user if available
       try {
         const user = await base44.auth.me();
-        if (user.full_name) setName(user.full_name);
+        if (!cancelled && user.full_name) setName(user.full_name);
         // Check if already onboarded
         const profiles = await base44.entities.UserProfile.filter({ user_email: user.email });
         if (profiles.length > 0) {
-          navigate("/dashboard", { replace: true });
+          if (!cancelled) navigate("/dashboard", { replace: true });
           return;
         }
-      } catch {}
-      setAuthChecked(true);
+      } catch {
+        // New user — proceed with onboarding
+      }
+      if (!cancelled) setAuthChecked(true);
     })();
-  });
+    return () => { cancelled = true; };
+  }, [navigate]);
 
   const toggleTool = (id) => {
     setSelectedTools((prev) =>

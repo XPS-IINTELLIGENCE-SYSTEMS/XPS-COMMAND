@@ -51,8 +51,8 @@ export default function SignInPortal() {
 
   const handleSignIn = () => {
     setLoading(true);
-    // After Base44 auth, user returns to /signin which auto-routes them
-    base44.auth.redirectToLogin("/signin");
+    // After Base44 auth, user returns to /dashboard directly
+    base44.auth.redirectToLogin("/dashboard");
   };
 
   if (checkingAuth) {

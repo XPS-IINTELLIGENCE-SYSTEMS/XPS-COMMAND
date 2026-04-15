@@ -14,6 +14,7 @@ import Coverage from './pages/Coverage';
 import About from './pages/About';
 import SignInPortal from './pages/SignInPortal';
 import Payment from './pages/Payment';
+import Register from './pages/Register';
 
 // Redirect helper for protected routes when not authenticated
 function AuthRedirect({ navigateToLogin }) {
@@ -48,6 +49,7 @@ const AuthenticatedApp = () => {
           <Route path="/about" element={<About />} />
           <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/payment" element={<Payment />} />
+          <Route path="/register" element={<Register />} />
           <Route path="*" element={<AuthRedirect navigateToLogin={() => navigateToLogin()} />} />
         </Routes>
       );
@@ -65,6 +67,7 @@ const AuthenticatedApp = () => {
       <Route path="/about" element={<About />} />
       <Route path="/onboarding" element={<Onboarding />} />
       <Route path="/payment" element={<Payment />} />
+      <Route path="/register" element={<Register />} />
       <Route path="/dashboard" element={<Home />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>

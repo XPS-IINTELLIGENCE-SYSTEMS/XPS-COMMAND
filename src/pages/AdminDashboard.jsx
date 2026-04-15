@@ -18,7 +18,7 @@ export default function AdminDashboard() {
   }, [theme]);
 
   if (roleLoading) return <div className="min-h-screen bg-background flex items-center justify-center"><Loader2 className="w-6 h-6 text-primary animate-spin" /></div>;
-  if (!user || !["owner"].includes(xpsRole)) {
+  if (!user || !["owner", "admin"].includes(xpsRole)) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center text-center p-8">
         <div>

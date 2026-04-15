@@ -5,7 +5,7 @@ import { base44 } from "@/api/base44Client";
 /**
  * Hook that resolves the user's XPS role from their UserProfile.
  * Returns { xpsRole, profile, loading }
- * xpsRole is one of: "owner", "manager", "team_member"
+ * xpsRole is one of: "owner", "manager", "admin", "team_member"
  */
 export default function useXpsRole() {
   const { user } = useAuth();
@@ -21,12 +21,20 @@ export default function useXpsRole() {
 
     (async () => {
       try {
-        const profiles = await base44.entities.UserProfile.filter({ user_email: user.email });
+        let profiles = await base44.entities.UserProfile.filter({ user_email: user.email });
+        // Fallback: match by created_by
+        if (profiles.length === 0) {
+          const allProfiles = await base44.entities.UserProfile.list();
+          profiles = allProfiles.filter(
+            (p) => p.user_email === user.email || p.created_by === user.email
+          );
+        }
         if (profiles.length > 0) {
           const p = profiles[0];
           setProfile(p);
           const t = (p.title || "").toLowerCase();
           if (t.includes("owner")) setXpsRole("owner");
+          else if (t.includes("admin")) setXpsRole("admin");
           else if (t.includes("manager")) setXpsRole("manager");
           else setXpsRole("team_member");
         } else {

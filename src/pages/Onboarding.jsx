@@ -8,6 +8,7 @@ import { base44 } from "@/api/base44Client";
 
 const titleOptions = [
   "Owner",
+  "Admin",
   "Manager",
   "Sales / Marketing",
   "Contractor",
@@ -89,6 +90,7 @@ export default function Onboarding() {
     // Route to role-specific dashboard
     const t = finalTitle.toLowerCase();
     if (t.includes("owner")) navigate("/owner");
+    else if (t.includes("admin")) navigate("/admin");
     else if (t.includes("manager")) navigate("/manager");
     else navigate("/dashboard");
   };

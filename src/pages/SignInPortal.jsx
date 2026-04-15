@@ -10,32 +10,24 @@ const roles = [
     label: "Owner",
     desc: "Full platform access — analytics, agents, admin controls",
     Icon: Crown,
-    color: "from-amber-500/20 to-yellow-600/10 border-amber-500/40 hover:border-amber-400",
-    iconColor: "text-amber-400",
   },
   {
     id: "admin",
     label: "Admin",
     desc: "System configuration, user management, full access",
     Icon: ShieldCheck,
-    color: "from-blue-500/20 to-indigo-600/10 border-blue-500/40 hover:border-blue-400",
-    iconColor: "text-blue-400",
   },
   {
     id: "manager",
     label: "Manager",
     desc: "Team performance, pipeline management, analytics",
     Icon: Users,
-    color: "from-emerald-500/20 to-teal-600/10 border-emerald-500/40 hover:border-emerald-400",
-    iconColor: "text-emerald-400",
   },
   {
     id: "team_member",
     label: "Team Member",
     desc: "CRM dashboard, leads, proposals, daily tools",
     Icon: UserCheck,
-    color: "from-purple-500/20 to-violet-600/10 border-purple-500/40 hover:border-purple-400",
-    iconColor: "text-purple-400",
   },
 ];
 
@@ -154,13 +146,13 @@ export default function SignInPortal() {
                   key={role.id}
                   onClick={() => handleRoleSignIn(role.id)}
                   disabled={loading !== null}
-                  className={`group relative w-full flex items-center gap-4 p-4 rounded-xl border bg-gradient-to-r ${role.color} transition-all duration-300 hover:scale-[1.02] disabled:opacity-50`}
+                  className="shimmer-card group relative w-full flex items-center gap-4 p-4 rounded-xl border border-border bg-card hover:border-primary/30 transition-all duration-300 disabled:opacity-50"
                 >
-                  <div className="w-11 h-11 rounded-xl bg-background/30 flex items-center justify-center flex-shrink-0">
+                  <div className="shimmer-icon-container w-11 h-11 rounded-xl bg-secondary flex items-center justify-center flex-shrink-0">
                     {isLoading ? (
                       <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
                     ) : (
-                      <RoleIcon className={`w-5 h-5 ${role.iconColor}`} />
+                      <RoleIcon className="w-5 h-5 shimmer-icon metallic-silver-icon" />
                     )}
                   </div>
                   <div className="text-left">

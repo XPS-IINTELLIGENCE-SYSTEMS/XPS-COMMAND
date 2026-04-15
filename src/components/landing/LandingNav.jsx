@@ -27,7 +27,7 @@ export default function LandingNav() {
       <div className="flex items-center gap-2 md:gap-3">
         <Link
           to="/signin"
-          className="px-5 py-2 rounded-full text-sm font-semibold border border-white/30 text-white hover:bg-white/10 transition-all duration-300"
+          className="sign-in-pill px-5 py-2 rounded-full text-sm font-semibold text-white transition-all duration-300"
         >
           Sign In
         </Link>

@@ -42,7 +42,7 @@ export default function Landing() {
         <div className="flex flex-col sm:flex-row items-center gap-4 mt-14">
           <Link
             to="/payment"
-            className="inline-flex items-center gap-2 px-6 py-3 md:px-10 md:py-5 rounded-lg md:rounded-xl metallic-gold-bg text-background text-base md:text-xl font-bold hover:brightness-110 transition-all duration-300 hover:scale-110"
+            className="inline-flex items-center gap-2 px-8 py-3 md:px-10 md:py-4 rounded-full metallic-gold-bg text-background text-base md:text-xl font-bold hover:brightness-110 transition-all duration-300 hover:scale-105"
           >
             Get Started <ArrowRight className="w-4 h-4" />
           </Link>

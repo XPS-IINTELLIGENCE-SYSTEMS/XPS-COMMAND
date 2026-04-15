@@ -9,8 +9,7 @@ export default function Register() {
   const navigate = useNavigate();
 
   const handleCreateAccount = () => {
-    setLoading(true);
-    base44.auth.redirectToLogin("/onboarding");
+    navigate("/payment");
   };
 
   return (

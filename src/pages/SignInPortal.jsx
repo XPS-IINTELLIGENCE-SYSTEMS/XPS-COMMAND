@@ -55,8 +55,16 @@ export default function SignInPortal() {
 
   useEffect(() => {
     let cancelled = false;
+    const params = new URLSearchParams(window.location.search);
+    const isAuthCallback = params.get("from") === "auth";
 
     (async () => {
+      // Only auto-redirect if this is a callback after login
+      if (!isAuthCallback) {
+        if (!cancelled) setCheckingAuth(false);
+        return;
+      }
+
       try {
         const authed = await base44.auth.isAuthenticated();
         if (!authed) {
@@ -97,7 +105,7 @@ export default function SignInPortal() {
   const handleRoleSignIn = (roleId) => {
     setLoading(roleId);
     sessionStorage.setItem("xps-login-role", roleId);
-    base44.auth.redirectToLogin("/signin");
+    base44.auth.redirectToLogin("/signin?from=auth");
   };
 
   if (checkingAuth) {

@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import PageHexGlow from "../components/PageHexGlow";
 import { Loader2 } from "lucide-react";
 
@@ -13,56 +13,13 @@ const stats = [
 
 export default function SignInPortal() {
   const [loading, setLoading] = useState(false);
-  const [checkingAuth, setCheckingAuth] = useState(true);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    let cancelled = false;
-
-    (async () => {
-      try {
-        const authed = await base44.auth.isAuthenticated();
-        if (!authed) {
-          if (!cancelled) setCheckingAuth(false);
-          return;
-        }
-
-        const user = await base44.auth.me();
-        let profile = null;
-        try {
-          const profiles = await base44.entities.UserProfile.filter({ user_email: user.email });
-          if (profiles.length > 0) {
-            profile = profiles[0];
-          }
-        } catch {
-          // New user — no profile yet
-        }
-
-        if (cancelled) return;
-        // If profile exists → dashboard, otherwise → onboarding
-        navigate(profile ? "/dashboard" : "/onboarding", { replace: true });
-      } catch {
-        if (!cancelled) setCheckingAuth(false);
-      }
-    })();
-
-    return () => { cancelled = true; };
-  }, [navigate]);
 
   const handleSignIn = () => {
     setLoading(true);
-    // After Base44 auth, user returns to /dashboard directly
-    base44.auth.redirectToLogin("/dashboard");
+    // After Base44 auth completes, user returns to "/" which SmartRedirect
+    // will route to the correct dashboard based on role/profile
+    base44.auth.redirectToLogin("/");
   };
-
-  if (checkingAuth) {
-    return (
-      <div className="hex-bg min-h-screen bg-background flex flex-col items-center justify-center gap-3">
-        <Loader2 className="w-6 h-6 text-primary animate-spin" />
-        <p className="text-xs text-muted-foreground">Verifying credentials...</p>
-      </div>
-    );
-  }
 
   return (
     <div className="hex-bg min-h-screen bg-background text-foreground relative">
@@ -89,10 +46,7 @@ export default function SignInPortal() {
           {/* Stats grid */}
           <div className="grid grid-cols-2 gap-3 mt-10 w-full max-w-[280px]">
             {stats.map((s) => (
-              <div
-                key={s.label}
-                className="glass-card rounded-xl px-4 py-3 text-center"
-              >
+              <div key={s.label} className="glass-card rounded-xl px-4 py-3 text-center">
                 <div className="text-xl md:text-2xl font-extrabold metallic-gold">{s.value}</div>
                 <div className="text-[10px] text-muted-foreground tracking-widest font-medium mt-0.5">
                   {s.label}

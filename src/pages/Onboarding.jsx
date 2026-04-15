@@ -57,22 +57,17 @@ export default function Onboarding() {
   const [authChecked, setAuthChecked] = useState(false);
   const navigate = useNavigate();
 
-  // Auth guard — require login, skip if already onboarded
+  // Load user info — auth is already guaranteed by App.jsx routing
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      const authed = await base44.auth.isAuthenticated();
-      if (!authed) {
-        navigate("/payment", { replace: true });
-        return;
-      }
       try {
         const user = await base44.auth.me();
         if (!cancelled && user.full_name) setName(user.full_name);
-        // Check if already onboarded
+        // Check if already onboarded — redirect to dashboard
         const profiles = await base44.entities.UserProfile.filter({ user_email: user.email });
         if (profiles.length > 0) {
-          if (!cancelled) navigate("/dashboard", { replace: true });
+          if (!cancelled) navigate("/", { replace: true });
           return;
         }
       } catch {
@@ -112,7 +107,7 @@ export default function Onboarding() {
       industry: finalIndustry,
     });
     sessionStorage.removeItem("xps-selected-plan");
-    navigate("/dashboard");
+    navigate("/");
   };
 
   const questions = [

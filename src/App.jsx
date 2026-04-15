@@ -5,23 +5,92 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
-import Home from './pages/Home';
+import SmartRedirect from './components/SmartRedirect';
+
+// Public pages (SaaS marketing site)
 import Landing from './pages/Landing';
-import Onboarding from './pages/Onboarding';
 import Platform from './pages/Platform';
 import Solutions from './pages/Solutions';
 import Coverage from './pages/Coverage';
 import About from './pages/About';
-import SignInPortal from './pages/SignInPortal';
 import Payment from './pages/Payment';
-import Register from './pages/Register';
+import SignInPortal from './pages/SignInPortal';
+
+// Authenticated pages
+import Onboarding from './pages/Onboarding';
+import Home from './pages/Home';
 import AdminDashboard from './pages/AdminDashboard';
 import ManagerDashboard from './pages/ManagerDashboard';
 import OwnerDashboard from './pages/OwnerDashboard';
 
-const AuthenticatedApp = () => {
-  const { isLoadingAuth, isLoadingPublicSettings, authError } = useAuth();
+/**
+ * PUBLIC ROUTES — visible to everyone (SaaS marketing + auth entry points)
+ * These are the same whether logged in or not.
+ */
+const PublicRoutes = () => (
+  <>
+    <Route path="/platform" element={<Platform />} />
+    <Route path="/solutions" element={<Solutions />} />
+    <Route path="/coverage" element={<Coverage />} />
+    <Route path="/about" element={<About />} />
+    <Route path="/payment" element={<Payment />} />
+  </>
+);
 
+/**
+ * UNAUTHENTICATED — visitor browsing the SaaS site
+ * Flow: Landing → explore pages → Payment (pick plan) → Auth → Onboarding → Dashboard
+ *   OR: Landing → Sign In → Auth → Dashboard
+ */
+const UnauthenticatedApp = () => (
+  <Routes>
+    <Route path="/" element={<Landing />} />
+    <Route path="/signin" element={<SignInPortal />} />
+    {PublicRoutes()}
+    {/* Any unknown route → landing page */}
+    <Route path="/onboarding" element={<Navigate to="/signin" replace />} />
+    <Route path="/dashboard" element={<Navigate to="/signin" replace />} />
+    <Route path="/admin-dashboard" element={<Navigate to="/signin" replace />} />
+    <Route path="/manager-dashboard" element={<Navigate to="/signin" replace />} />
+    <Route path="/owner-dashboard" element={<Navigate to="/signin" replace />} />
+    <Route path="*" element={<Navigate to="/" replace />} />
+  </Routes>
+);
+
+/**
+ * AUTHENTICATED — logged-in user (company employee or SaaS customer)
+ * Flow: SmartRedirect determines where to go based on profile/role
+ */
+const AuthenticatedApp = () => (
+  <Routes>
+    {/* "/" → smart redirect to correct dashboard */}
+    <Route path="/" element={<SmartRedirect />} />
+    
+    {/* Sign-in page redirects to smart redirect since already logged in */}
+    <Route path="/signin" element={<SmartRedirect />} />
+    
+    {/* Public pages still accessible when logged in (SaaS site) */}
+    {PublicRoutes()}
+    <Route path="/landing" element={<Landing />} />
+    
+    {/* Onboarding — for new users who haven't set up profile */}
+    <Route path="/onboarding" element={<Onboarding />} />
+    
+    {/* Dashboards by role */}
+    <Route path="/dashboard" element={<Home />} />
+    <Route path="/admin-dashboard" element={<AdminDashboard />} />
+    <Route path="/manager-dashboard" element={<ManagerDashboard />} />
+    <Route path="/owner-dashboard" element={<OwnerDashboard />} />
+    
+    {/* Catch-all */}
+    <Route path="*" element={<PageNotFound />} />
+  </Routes>
+);
+
+const AppRouter = () => {
+  const { isLoadingAuth, isLoadingPublicSettings, authError, isAuthenticated } = useAuth();
+
+  // Loading state
   if (isLoadingPublicSettings || isLoadingAuth) {
     return (
       <div className="fixed inset-0 flex items-center justify-center" style={{ backgroundColor: 'hsl(240, 10%, 4%)' }}>
@@ -30,53 +99,18 @@ const AuthenticatedApp = () => {
     );
   }
 
-  if (authError) {
-    if (authError.type === 'user_not_registered') {
-      return <UserNotRegisteredError />;
-    } else if (authError.type === 'auth_required') {
-      // Unauthenticated — show public pages, redirect everything else to signin
-      return (
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/signin" element={<SignInPortal />} />
-          <Route path="/platform" element={<Platform />} />
-          <Route path="/solutions" element={<Solutions />} />
-          <Route path="/coverage" element={<Coverage />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/onboarding" element={<Onboarding />} />
-          <Route path="/payment" element={<Payment />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/custom-login" element={<Navigate to="/signin" replace />} />
-          <Route path="/operator-signin" element={<Navigate to="/signin" replace />} />
-          <Route path="/sign-in" element={<Navigate to="/signin" replace />} />
-          <Route path="*" element={<Navigate to="/signin" replace />} />
-        </Routes>
-      );
-    }
+  // User not registered for this app
+  if (authError?.type === 'user_not_registered') {
+    return <UserNotRegisteredError />;
   }
 
-  // Authenticated — all routes available
-  return (
-    <Routes>
-      <Route path="/" element={<Landing />} />
-      <Route path="/signin" element={<SignInPortal />} />
-      <Route path="/platform" element={<Platform />} />
-      <Route path="/solutions" element={<Solutions />} />
-      <Route path="/coverage" element={<Coverage />} />
-      <Route path="/about" element={<About />} />
-      <Route path="/onboarding" element={<Onboarding />} />
-      <Route path="/payment" element={<Payment />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/dashboard" element={<Home />} />
-      <Route path="/admin-dashboard" element={<AdminDashboard />} />
-      <Route path="/manager-dashboard" element={<ManagerDashboard />} />
-      <Route path="/owner-dashboard" element={<OwnerDashboard />} />
-      <Route path="/custom-login" element={<Navigate to="/signin" replace />} />
-      <Route path="/operator-signin" element={<Navigate to="/signin" replace />} />
-      <Route path="/sign-in" element={<Navigate to="/signin" replace />} />
-      <Route path="*" element={<PageNotFound />} />
-    </Routes>
-  );
+  // Authenticated user
+  if (isAuthenticated) {
+    return <AuthenticatedApp />;
+  }
+
+  // Unauthenticated (includes auth_required error — that's normal for public apps)
+  return <UnauthenticatedApp />;
 };
 
 function App() {
@@ -84,7 +118,7 @@ function App() {
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
         <Router>
-          <AuthenticatedApp />
+          <AppRouter />
         </Router>
         <Toaster />
       </QueryClientProvider>

@@ -78,11 +78,12 @@ export default function Payment() {
     setLoadingPlan(planId);
 
     if (isAuthed) {
-      // Already logged in — go straight to onboarding
-      navigate("/onboarding");
+      // Already logged in — SmartRedirect will check profile and route accordingly
+      navigate("/");
     } else {
-      // Not logged in — Base44 auth creates account, then redirects to onboarding
-      base44.auth.redirectToLogin("/onboarding");
+      // Not logged in — Base44 auth creates account, then "/" triggers SmartRedirect
+      // which sends to onboarding if no profile, or dashboard if profile exists
+      base44.auth.redirectToLogin("/");
     }
   };
 

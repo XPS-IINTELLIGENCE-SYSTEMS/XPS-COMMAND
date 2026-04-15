@@ -2,9 +2,10 @@ import { useState, useEffect, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Droppable, Draggable } from "@hello-pangea/dnd";
-import { GripVertical, Plus, X, Check, Pencil } from "lucide-react";
+import { GripVertical, Plus, X, Check, Pencil, LogOut } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import NavIcon from "./shared/NavIcon";
+import { base44 } from "@/api/base44Client";
 
 const DEFAULT_PHASES = [
   { id: "command", label: "Command", num: null, desc: "Pipeline & metrics" },
@@ -307,6 +308,17 @@ export default function Sidebar({ activeView, onViewChange, onPhasesChange, onDr
                   <AddItemForm onAdd={(item) => addItem("system", item)} onCancel={() => setAddingTo(null)} />
                 </div>
               )}
+            </div>
+
+            {/* Logout */}
+            <div className="px-1 mt-2">
+              <button
+                onClick={() => base44.auth.logout("/signin")}
+                className="shimmer-card w-full flex items-center gap-2 rounded-xl text-[13px] font-medium px-3 py-2.5 glass-card text-destructive/70 hover:text-destructive transition-all duration-200"
+              >
+                <LogOut className="w-4 h-4" />
+                <span>Log Out</span>
+              </button>
             </div>
           </nav>
         </div>

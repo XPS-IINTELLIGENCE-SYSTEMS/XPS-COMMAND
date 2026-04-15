@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
-import { useAuth } from "@/lib/AuthContext";
-import { isOwner } from "@/lib/permissions";
-import { AccessDenied } from "@/components/shared/RoleGuard";
+import useXpsRole from "@/hooks/useXpsRole";
 import { base44 } from "@/api/base44Client";
 import { Sun, Moon, Loader2, Play, Download, Send, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -14,7 +12,7 @@ import StrategicAnalytics from "@/components/owner/StrategicAnalytics";
 import AIAssistantButton from "@/components/ai/AIAssistantButton";
 
 export default function OwnerDashboard() {
-  const { user } = useAuth();
+  const { xpsRole, loading: roleLoading, user } = useXpsRole();
   const [theme, setTheme] = useState(() => localStorage.getItem("xps-theme") || "dark");
   const [kpiData, setKpiData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -28,9 +26,20 @@ export default function OwnerDashboard() {
     localStorage.setItem("xps-theme", theme);
   }, [theme]);
 
-  useEffect(() => { loadKPIs(); }, []);
+  useEffect(() => { if (!roleLoading) loadKPIs(); }, [roleLoading]);
 
-  if (!isOwner(user)) return <AccessDenied />;
+  if (roleLoading) return <div className="min-h-screen bg-background flex items-center justify-center"><Loader2 className="w-6 h-6 text-primary animate-spin" /></div>;
+  if (!user || (xpsRole !== "owner" && user?.role !== "admin")) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center text-center p-8">
+        <div>
+          <h2 className="text-xl font-bold text-foreground mb-2">Access Restricted</h2>
+          <p className="text-muted-foreground mb-4">This page is for owners only.</p>
+          <a href="/dashboard" className="text-primary hover:underline">Go to Dashboard</a>
+        </div>
+      </div>
+    );
+  }
 
   const loadKPIs = async () => {
     setLoading(true);

@@ -10,23 +10,30 @@ const ROLES = [
     label: "Owner",
     desc: "Full platform access, executive dashboards & strategy tools",
     Icon: Crown,
-    path: "/owner",
+    route: "/owner",
   },
   {
     id: "manager",
     label: "Manager",
     desc: "Team oversight, pipeline management & performance tracking",
     Icon: Users,
-    path: "/manager",
+    route: "/manager",
   },
   {
     id: "team",
     label: "Team Member",
     desc: "Day-to-day tools, leads, proposals & outreach",
     Icon: Wrench,
-    path: "/dashboard",
+    route: "/dashboard",
   },
 ];
+
+function routeForProfile(profile) {
+  const t = (profile?.title || "").toLowerCase();
+  if (t.includes("owner")) return "/owner";
+  if (t.includes("manager")) return "/manager";
+  return "/dashboard";
+}
 
 export default function CustomLogin() {
   const [selectedRole, setSelectedRole] = useState(null);
@@ -34,38 +41,50 @@ export default function CustomLogin() {
   const [checkingAuth, setCheckingAuth] = useState(true);
   const navigate = useNavigate();
 
-  // If already authenticated, check profile and route
   useEffect(() => {
+    let cancelled = false;
     (async () => {
-      const authed = await base44.auth.isAuthenticated();
-      if (authed) {
-        const user = await base44.auth.me();
-        // Check if they have a profile already (returning user)
-        const profiles = await base44.entities.UserProfile.filter({ user_email: user.email });
-        if (profiles.length > 0) {
-          // Returning user — route based on their saved title/role
-          const profile = profiles[0];
-          const t = (profile.title || "").toLowerCase();
-          if (t.includes("owner")) return navigate("/owner", { replace: true });
-          if (t.includes("manager")) return navigate("/manager", { replace: true });
-          return navigate("/dashboard", { replace: true });
-        } else {
-          // New user — needs onboarding
-          return navigate("/onboarding", { replace: true });
+      try {
+        const authed = await base44.auth.isAuthenticated();
+        if (!authed) {
+          if (!cancelled) setCheckingAuth(false);
+          return;
         }
+
+        // User is authenticated — check if they have a profile
+        const user = await base44.auth.me();
+        let profiles = [];
+        try {
+          profiles = await base44.entities.UserProfile.filter({ user_email: user.email });
+        } catch {
+          // If entity access fails, still let them proceed
+        }
+
+        if (cancelled) return;
+
+        if (profiles.length > 0) {
+          // Returning user — send to their dashboard
+          navigate(routeForProfile(profiles[0]), { replace: true });
+        } else {
+          // Authenticated but no profile — needs onboarding
+          navigate("/onboarding", { replace: true });
+        }
+      } catch {
+        // Any error — just show the login page
+        if (!cancelled) setCheckingAuth(false);
       }
-      setCheckingAuth(false);
     })();
+    return () => { cancelled = true; };
   }, [navigate]);
 
   const handleSignIn = () => {
     if (!selectedRole) return;
     setLoading(true);
-    // Store selected role so onboarding can pre-fill it
-    sessionStorage.setItem("xps-login-role", selectedRole);
-    const role = ROLES.find((r) => r.id === selectedRole);
-    // After auth, send to onboarding (new users) — returning users get auto-routed above
-    base44.auth.redirectToLogin("/onboarding");
+    // Store the selected role for onboarding pre-fill
+    try { sessionStorage.setItem("xps-login-role", selectedRole); } catch {}
+    // Redirect to Base44 auth — after login, user comes back to /custom-login
+    // and the useEffect above will route them to onboarding or their dashboard
+    base44.auth.redirectToLogin("/custom-login");
   };
 
   if (checkingAuth) {
@@ -132,11 +151,7 @@ export default function CustomLogin() {
                     />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div
-                      className={`text-sm font-bold ${
-                        active ? "text-primary" : "text-foreground"
-                      }`}
-                    >
+                    <div className={`text-sm font-bold ${active ? "text-primary" : "text-foreground"}`}>
                       {role.label}
                     </div>
                     <p className="text-[11px] text-muted-foreground leading-snug mt-0.5">
@@ -145,9 +160,7 @@ export default function CustomLogin() {
                   </div>
                   <div
                     className={`w-4 h-4 rounded-full border-2 flex-shrink-0 transition-all ${
-                      active
-                        ? "border-primary bg-primary"
-                        : "border-muted-foreground/30"
+                      active ? "border-primary bg-primary" : "border-muted-foreground/30"
                     }`}
                   >
                     {active && (
@@ -179,7 +192,6 @@ export default function CustomLogin() {
           </button>
         </div>
 
-        {/* Footer */}
         <p className="text-[10px] text-muted-foreground/40 mt-8 tracking-wider">
           XTREME POLISHING SYSTEMS &bull; PROPRIETARY &amp; CONFIDENTIAL
         </p>

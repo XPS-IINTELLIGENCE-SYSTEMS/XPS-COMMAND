@@ -54,17 +54,34 @@ const FEATURES = {
 };
 
 export function isOwner(user) {
-  return user?.email === OWNER_EMAIL || user?.role === "owner";
+  if (!user) return false;
+  if (user.email === OWNER_EMAIL) return true;
+  if (user.role === "owner" || user.role === "admin") return true;
+  // Check xps_role from UserProfile (set during onboarding)
+  if (user.xps_role === "owner") return true;
+  return false;
 }
 
 export function getRoleLevel(role) {
   return ROLE_HIERARCHY[role] || 0;
 }
 
+// Get the effective XPS role (merging Base44 role + UserProfile xps_role)
+export function getXpsRole(user) {
+  if (!user) return null;
+  if (user.email === OWNER_EMAIL) return "owner";
+  // xps_role is set from UserProfile during session
+  if (user.xps_role) return user.xps_role;
+  // Fall back to Base44 role mapping
+  if (user.role === "admin") return "owner";
+  return "team_member";
+}
+
 export function hasMinRole(user, minRole) {
   if (!user) return false;
   if (isOwner(user)) return true;
-  return getRoleLevel(user.role) >= getRoleLevel(minRole);
+  const effectiveRole = getXpsRole(user);
+  return getRoleLevel(effectiveRole) >= getRoleLevel(minRole);
 }
 
 export function canAccessPage(user, path) {
@@ -82,8 +99,7 @@ export function hasFeature(user, feature) {
 
 export function getEffectiveRole(user) {
   if (!user) return null;
-  if (user.email === OWNER_EMAIL) return "owner";
-  return user.role || "team_member";
+  return getXpsRole(user);
 }
 
 export function getRoleLabel(role) {

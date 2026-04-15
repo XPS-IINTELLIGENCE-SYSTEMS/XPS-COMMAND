@@ -1,15 +1,13 @@
 import { useState, useEffect } from "react";
-import { useAuth } from "@/lib/AuthContext";
-import { hasMinRole } from "@/lib/permissions";
-import { AccessDenied } from "@/components/shared/RoleGuard";
-import { Sun, Moon } from "lucide-react";
+import useXpsRole from "@/hooks/useXpsRole";
+import { Sun, Moon, Loader2 } from "lucide-react";
 import HexGlow from "@/components/HexGlow";
 import UserManagementCenter from "@/components/admin/UserManagementCenter";
 import SystemHealthMonitor from "@/components/admin/SystemHealthMonitor";
 import AIAssistantButton from "@/components/ai/AIAssistantButton";
 
 export default function AdminDashboard() {
-  const { user } = useAuth();
+  const { xpsRole, loading: roleLoading, user } = useXpsRole();
   const [theme, setTheme] = useState(() => localStorage.getItem("xps-theme") || "dark");
   const [activeTab, setActiveTab] = useState("users");
 
@@ -19,7 +17,18 @@ export default function AdminDashboard() {
     localStorage.setItem("xps-theme", theme);
   }, [theme]);
 
-  if (!hasMinRole(user, "admin")) return <AccessDenied />;
+  if (roleLoading) return <div className="min-h-screen bg-background flex items-center justify-center"><Loader2 className="w-6 h-6 text-primary animate-spin" /></div>;
+  if (!user || !["owner"].includes(xpsRole)) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center text-center p-8">
+        <div>
+          <h2 className="text-xl font-bold text-foreground mb-2">Access Restricted</h2>
+          <p className="text-muted-foreground mb-4">Admin access required.</p>
+          <a href="/dashboard" className="text-primary hover:underline">Go to Dashboard</a>
+        </div>
+      </div>
+    );
+  }
 
   const tabs = [
     { id: "users", label: "User Management" },

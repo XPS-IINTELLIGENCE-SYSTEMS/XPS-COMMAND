@@ -1,15 +1,13 @@
 import { useState, useEffect } from "react";
-import { useAuth } from "@/lib/AuthContext";
-import { hasMinRole } from "@/lib/permissions";
-import { AccessDenied } from "@/components/shared/RoleGuard";
-import { Sun, Moon } from "lucide-react";
+import useXpsRole from "@/hooks/useXpsRole";
+import { Sun, Moon, Loader2 } from "lucide-react";
 import HexGlow from "@/components/HexGlow";
 import TeamScoreboard from "@/components/manager/TeamScoreboard";
 import PipelineKanban from "@/components/manager/PipelineKanban";
 import AIAssistantButton from "@/components/ai/AIAssistantButton";
 
 export default function ManagerDashboard() {
-  const { user } = useAuth();
+  const { xpsRole, loading: roleLoading, user } = useXpsRole();
   const [theme, setTheme] = useState(() => localStorage.getItem("xps-theme") || "dark");
   const [activeTab, setActiveTab] = useState("team");
 
@@ -19,7 +17,18 @@ export default function ManagerDashboard() {
     localStorage.setItem("xps-theme", theme);
   }, [theme]);
 
-  if (!hasMinRole(user, "manager")) return <AccessDenied />;
+  if (roleLoading) return <div className="min-h-screen bg-background flex items-center justify-center"><Loader2 className="w-6 h-6 text-primary animate-spin" /></div>;
+  if (!user || !["owner", "manager"].includes(xpsRole)) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center text-center p-8">
+        <div>
+          <h2 className="text-xl font-bold text-foreground mb-2">Access Restricted</h2>
+          <p className="text-muted-foreground mb-4">This page is for managers and above.</p>
+          <a href="/dashboard" className="text-primary hover:underline">Go to Dashboard</a>
+        </div>
+      </div>
+    );
+  }
 
   const tabs = [
     { id: "team", label: "Team Performance" },

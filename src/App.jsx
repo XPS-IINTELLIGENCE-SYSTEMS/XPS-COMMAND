@@ -67,7 +67,8 @@ const AuthenticatedApp = () => {
           <Route path="/about" element={<About />} />
           <Route path="/op-access" element={<OperatorSignIn />} />
           <Route path="/custom-login" element={<CustomLogin />} />
-          <Route path="*" element={<AuthRedirect navigateToLogin={navigateToLogin} />} />
+          <Route path="/onboarding" element={<Onboarding />} />
+          <Route path="*" element={<AuthRedirect navigateToLogin={() => navigateToLogin()} />} />
         </Routes>
       );
     }

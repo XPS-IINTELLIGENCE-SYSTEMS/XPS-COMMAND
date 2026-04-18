@@ -232,7 +232,7 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
   const isLastStreaming = loading && lastMsg?.role === "assistant";
 
   return (
-    <div className={`${mobile ? 'w-full' : ''} h-full ${mobile ? '' : 'border-l border-[#8a8a8a]/30'} flex flex-col bg-background`} style={!mobile ? { width: '100%' } : undefined}>
+    <div className={`${mobile ? 'w-full' : ''} h-full ${mobile ? '' : 'border-r border-[#8a8a8a]/30'} flex flex-col bg-background`} style={!mobile ? { width: '100%' } : undefined}>
       {/* Agent Switcher */}
       <div className={`${mobile ? 'min-h-[36px]' : 'min-h-[40px]'} border-b border-border flex items-center gap-1 px-2 py-1`}>
         <div className="flex-1 overflow-hidden">

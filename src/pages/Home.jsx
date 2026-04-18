@@ -98,7 +98,7 @@ export default function Home() {
     document.body.style.userSelect = 'none';
     const onMove = (ev) => {
       if (!isResizing.current) return;
-      const newW = Math.max(160, Math.min(400, ev.clientX));
+      const newW = Math.max(160, Math.min(400, window.innerWidth - ev.clientX));
       setSidebarWidth(newW);
     };
     const onUp = () => {
@@ -120,7 +120,7 @@ export default function Home() {
     document.body.style.userSelect = 'none';
     const onMove = (ev) => {
       if (!isChatResizing.current) return;
-      const newW = Math.max(220, Math.min(600, window.innerWidth - ev.clientX));
+      const newW = Math.max(220, Math.min(600, ev.clientX));
       setChatWidth(newW);
     };
     const onUp = () => {
@@ -234,31 +234,33 @@ export default function Home() {
       </div>
 
       {/* ========== DESKTOP LAYOUT ========== */}
-      <div className="hidden md:flex flex-row" style={{ width: sidebarOpen ? sidebarWidth : 0, minWidth: sidebarOpen ? sidebarWidth : 0, transition: isResizing.current ? 'none' : 'width 0.3s, min-width 0.3s' }}>
+      {/* Chat panel — LEFT */}
+      <div className="hidden md:flex flex-row" style={{ width: chatOpen ? chatWidth : 0, minWidth: chatOpen ? chatWidth : 0, transition: isChatResizing.current ? 'none' : 'width 0.3s, min-width 0.3s' }}>
         <div className="flex-1 overflow-hidden">
-          <Sidebar activeView={activeView} onViewChange={setActiveView} onPhasesChange={setSidebarPhases} onDragEndRef={sidebarDragEndRef} />
+          <ChatPanel ref={chatRef} chatWidth={chatWidth} />
         </div>
-        {sidebarOpen && (
+        {chatOpen && (
           <div
-            onMouseDown={startResize}
+            onMouseDown={startChatResize}
             className="w-1.5 cursor-col-resize flex-shrink-0 group relative hover:bg-primary/20 transition-colors"
-            title="Drag to resize sidebar"
+            title="Drag to resize chat"
           >
-            <div className="absolute inset-y-0 left-0 w-[3px] bg-border group-hover:bg-primary/50 transition-colors" />
+            <div className="absolute inset-y-0 right-0 w-[3px] bg-border group-hover:bg-primary/50 transition-colors" />
           </div>
         )}
       </div>
 
+      {/* Content area — CENTER */}
       <div className="hex-bg hidden md:flex flex-1 flex-col overflow-hidden relative">
         <HexGlow />
         <div className="relative z-[2] flex flex-col flex-1 overflow-hidden">
           <div style={{ height: topBarHeight, minHeight: topBarHeight, transition: isTopBarResizing.current ? 'none' : 'height 0.2s' }} className="relative">
             <TopBar activeView={activeView} theme={theme} onThemeToggle={() => setTheme(theme === 'dark' ? 'light' : 'dark')} height={topBarHeight}>
-              <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-1.5 rounded-md hover:bg-secondary/50 text-muted-foreground hover:text-foreground transition-colors" title={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}>
-                {sidebarOpen ? <PanelLeftClose className="w-4 h-4" /> : <PanelLeftOpen className="w-4 h-4" />}
-              </button>
               <button onClick={() => setChatOpen(!chatOpen)} className="p-1.5 rounded-md hover:bg-secondary/50 text-muted-foreground hover:text-foreground transition-colors" title={chatOpen ? 'Collapse chat' : 'Expand chat'}>
-                {chatOpen ? <PanelRightClose className="w-4 h-4" /> : <PanelRightOpen className="w-4 h-4" />}
+                {chatOpen ? <PanelLeftClose className="w-4 h-4" /> : <PanelLeftOpen className="w-4 h-4" />}
+              </button>
+              <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-1.5 rounded-md hover:bg-secondary/50 text-muted-foreground hover:text-foreground transition-colors" title={sidebarOpen ? 'Collapse tools' : 'Expand tools'}>
+                {sidebarOpen ? <PanelRightClose className="w-4 h-4" /> : <PanelRightOpen className="w-4 h-4" />}
               </button>
             </TopBar>
             {/* Top bar bottom resize handle */}
@@ -274,18 +276,19 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="hidden md:flex flex-row" style={{ width: chatOpen ? chatWidth : 0, minWidth: chatOpen ? chatWidth : 0, transition: isChatResizing.current ? 'none' : 'width 0.3s, min-width 0.3s' }}>
-        {chatOpen && (
+      {/* Sidebar/tools — RIGHT */}
+      <div className="hidden md:flex flex-row" style={{ width: sidebarOpen ? sidebarWidth : 0, minWidth: sidebarOpen ? sidebarWidth : 0, transition: isResizing.current ? 'none' : 'width 0.3s, min-width 0.3s' }}>
+        {sidebarOpen && (
           <div
-            onMouseDown={startChatResize}
+            onMouseDown={startResize}
             className="w-1.5 cursor-col-resize flex-shrink-0 group relative hover:bg-primary/20 transition-colors"
-            title="Drag to resize chat"
+            title="Drag to resize sidebar"
           >
-            <div className="absolute inset-y-0 right-0 w-[3px] bg-border group-hover:bg-primary/50 transition-colors" />
+            <div className="absolute inset-y-0 left-0 w-[3px] bg-border group-hover:bg-primary/50 transition-colors" />
           </div>
         )}
         <div className="flex-1 overflow-hidden">
-          <ChatPanel ref={chatRef} chatWidth={chatWidth} />
+          <Sidebar activeView={activeView} onViewChange={setActiveView} onPhasesChange={setSidebarPhases} onDragEndRef={sidebarDragEndRef} />
         </div>
       </div>
       </div>

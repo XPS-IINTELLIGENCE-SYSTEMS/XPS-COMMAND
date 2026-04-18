@@ -246,7 +246,7 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
       {/* Messages */}
       {activeAgentId !== "main" && !mobile ? (
         <div className="flex-1 overflow-hidden">
-          <SubAgentChat agent={agents.find(a => a.id === activeAgentId)} onStatusChange={updateSubAgentStatus} />
+          <SubAgentChat agent={agents.find(a => a.id === activeAgentId)} onStatusChange={updateSubAgentStatus} onBack={() => setActiveAgentId("main")} />
         </div>
       ) : (
         <div ref={scrollRef} className="flex-1 overflow-y-auto p-3 space-y-3">

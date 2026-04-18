@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { User, LogOut, Sun, Moon } from "lucide-react";
+import { User, LogOut, Sun, Moon, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { base44 } from "@/api/base44Client";
+import { Link } from "react-router-dom";
 
 export default function AccountView({ theme, onThemeToggle }) {
   const [user, setUser] = useState(null);
@@ -47,6 +48,18 @@ export default function AccountView({ theme, onThemeToggle }) {
             </Button>
           </div>
         </div>
+
+        {(user.role === "admin" || user.role === "owner") && (
+          <div className="border-t border-border pt-4">
+            <label className="text-[10px] text-muted-foreground uppercase tracking-wider block mb-3">Admin</label>
+            <div className="flex flex-col gap-2">
+              <Link to="/admin-control"><Button variant="outline" className="w-full gap-2"><Shield className="w-4 h-4" /> Admin Control Panel</Button></Link>
+              <Link to="/owner-dashboard"><Button variant="outline" className="w-full gap-2"><Shield className="w-4 h-4" /> Owner Dashboard</Button></Link>
+              <Link to="/lead-engine"><Button variant="outline" className="w-full gap-2"><Shield className="w-4 h-4" /> Lead Engine</Button></Link>
+              <Link to="/data-bank"><Button variant="outline" className="w-full gap-2"><Shield className="w-4 h-4" /> Data Bank</Button></Link>
+            </div>
+          </div>
+        )}
 
         <Button variant="outline" className="w-full text-destructive border-destructive/30 hover:bg-destructive/10 gap-2" onClick={() => base44.auth.logout()}>
           <LogOut className="w-4 h-4" /> Sign Out

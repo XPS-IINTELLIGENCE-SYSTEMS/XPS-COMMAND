@@ -33,7 +33,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col overflow-x-hidden">
+    <div className="h-screen bg-background flex flex-col overflow-hidden">
       {/* Top Navigation */}
       <AppTopNav
         tabs={NAV_TABS}
@@ -45,14 +45,22 @@ export default function Home() {
         onChatToggle={() => setChatOpen(!chatOpen)}
       />
 
-      {/* Main Content */}
-      <main className="flex-1 pb-20 md:pb-4">
-        <AppContent
-          activeView={activeView}
-          onChatCommand={handleChatCommand}
-          onNavigate={setActiveView}
-        />
-      </main>
+      {/* Desktop: content + chat side by side */}
+      <div className="flex-1 flex overflow-hidden">
+        {/* Main Content */}
+        <main className="flex-1 overflow-y-auto pb-20 md:pb-4">
+          <AppContent
+            activeView={activeView}
+            onChatCommand={handleChatCommand}
+            onNavigate={setActiveView}
+          />
+        </main>
+
+        {/* Desktop Chat Panel — always visible */}
+        <div className="hidden lg:flex w-[360px] flex-shrink-0 border-l border-border flex-col">
+          <ChatPanel ref={chatRef} />
+        </div>
+      </div>
 
       {/* Mobile Bottom Nav */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-card/95 backdrop-blur-md safe-bottom">
@@ -71,11 +79,11 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Chat Drawer */}
+      {/* Mobile Chat Drawer */}
       {chatOpen && (
-        <div className="fixed inset-0 z-[60]">
+        <div className="fixed inset-0 z-[60] lg:hidden">
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setChatOpen(false)} />
-          <div className="absolute right-0 top-0 bottom-0 w-full max-w-md bg-background border-l border-border shadow-2xl flex flex-col animate-in slide-in-from-right duration-200">
+          <div className="absolute right-0 top-0 bottom-0 w-full max-w-md bg-background border-l border-border shadow-2xl flex flex-col">
             <div className="flex items-center justify-between px-4 py-3 border-b border-border">
               <div className="flex items-center gap-2">
                 <img src="https://media.base44.com/images/public/69db3269c791af3f48cfaee9/583965fcb_IMAGEWITHWHITEOUTLINE.jpg" alt="XPS" className="w-6 h-6 object-contain" />

@@ -9,7 +9,7 @@ const NAV_TABS = [
   { id: "xpress_leads", label: "Prospects" },
   { id: "find_work", label: "AI Find" },
   { id: "get_work", label: "Email" },
-  { id: "agents", label: "My AI" },
+  { id: "knowledge", label: "Knowledge" },
   { id: "settings", label: "Account" },
 ];
 

@@ -7,7 +7,7 @@ import CloseView from "../phases/CloseView";
 import ExecuteView from "../phases/ExecuteView";
 import CollectView from "../phases/CollectView";
 import AnalyticsView from "../dashboard/AnalyticsView";
-import AgentCommandPage from "../command/AgentCommandPage";
+// AgentCommandPage removed
 import TaskSchedulerView from "../scheduler/TaskSchedulerView";
 import SettingsView from "../dashboard/SettingsView";
 import CRMView from "../dashboard/CRMView";
@@ -33,7 +33,7 @@ export default function AppContent({ activeView, onChatCommand, onNavigate }) {
       case "do_work": return <ExecuteView {...toolProps} />;
       case "get_paid": return <CollectView {...toolProps} />;
       case "analytics": return <AnalyticsView />;
-      case "agents": return <AgentCommandPage />;
+      case "agents": return <KnowledgeView />;
       case "task_scheduler": return <TaskSchedulerView />;
       case "settings": return <SettingsView />;
       case "admin": return <AdminInlineView />;

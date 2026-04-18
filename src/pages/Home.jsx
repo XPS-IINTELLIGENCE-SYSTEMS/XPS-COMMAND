@@ -9,7 +9,7 @@ import MobileNav from "../components/MobileNav";
 import MobileTabBar from "../components/mobile/MobileTabBar";
 import { DragDropContext } from "@hello-pangea/dnd";
 import WorkflowLanding from "../components/dashboard/WorkflowLanding";
-import AIAssistantButton from "../components/ai/AIAssistantButton";
+
 
 export default function Home() {
   const [activeView, setActiveView] = useState("command");
@@ -290,7 +290,6 @@ export default function Home() {
       </div>
       </div>
     </div>
-    <AIAssistantButton pageContext={`Dashboard - ${activeView}`} />
     </DragDropContext>
   );
 }

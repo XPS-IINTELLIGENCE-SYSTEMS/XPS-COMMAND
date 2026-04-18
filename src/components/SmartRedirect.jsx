@@ -14,8 +14,41 @@ export default function SmartRedirect() {
 
   useEffect(() => {
     if (!user) return;
-    // All users go to the CRM (Home)
-    setTarget("/");
+
+    (async () => {
+      try {
+        // Admin users always go to owner dashboard
+        if (user.role === "admin") {
+          setTarget("/owner-dashboard");
+          return;
+        }
+
+        // Try to find profile — check all profiles and match by email
+        const allProfiles = await base44.entities.UserProfile.list("-created_date", 50);
+        const profile = allProfiles.find(
+          p => p.user_email === user.email || p.created_by === user.email
+        );
+
+        if (!profile) {
+          setTarget("/onboarding");
+          return;
+        }
+
+        // Route by title
+        const title = (profile.title || "").toLowerCase();
+        if (title.includes("owner")) {
+          setTarget("/owner-dashboard");
+        } else if (title.includes("admin")) {
+          setTarget("/admin-dashboard");
+        } else if (title.includes("manager")) {
+          setTarget("/manager-dashboard");
+        } else {
+          setTarget("/dashboard");
+        }
+      } catch {
+        setTarget("/dashboard");
+      }
+    })();
   }, [user]);
 
   if (!target) {

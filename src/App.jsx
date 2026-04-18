@@ -69,24 +69,20 @@ const UnauthenticatedApp = () => (
  */
 const AuthenticatedApp = () => (
   <Routes>
-    {/* "/" → Landing page (marketing site home) */}
-    <Route path="/" element={<Landing />} />
+    {/* Main CRM Dashboard */}
+    <Route path="/" element={<Home />} />
+    <Route path="/dashboard" element={<Home />} />
     
-    {/* Smart redirect — used after login to route to correct dashboard */}
+    {/* Smart redirect */}
     <Route path="/redirect" element={<SmartRedirect />} />
-    
-    {/* Sign-in page redirects to smart redirect since already logged in */}
     <Route path="/signin" element={<SmartRedirect />} />
     
-    {/* Public pages still accessible when logged in (SaaS site) */}
+    {/* Public pages */}
     {PublicRoutes()}
     <Route path="/landing" element={<Landing />} />
-    
-    {/* Onboarding — for new users who haven't set up profile */}
     <Route path="/onboarding" element={<Onboarding />} />
     
-    {/* Dashboards by role */}
-    <Route path="/dashboard" element={<Home />} />
+    {/* Admin pages */}
     <Route path="/admin-dashboard" element={<AdminDashboard />} />
     <Route path="/manager-dashboard" element={<ManagerDashboard />} />
     <Route path="/owner-dashboard" element={<OwnerDashboard />} />

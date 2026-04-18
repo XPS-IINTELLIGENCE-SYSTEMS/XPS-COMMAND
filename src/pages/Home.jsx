@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Sun, Moon, MessageSquare, X } from "lucide-react";
 import AppTopNav from "../components/app/AppTopNav";
 import AppContent from "../components/app/AppContent";
@@ -16,8 +16,28 @@ const NAV_TABS = [
 export default function Home() {
   const [activeView, setActiveView] = useState("command");
   const [chatOpen, setChatOpen] = useState(false);
+  const [chatWidth, setChatWidth] = useState(() => parseInt(localStorage.getItem("xps-chat-width")) || 360);
   const [theme, setTheme] = useState(() => localStorage.getItem("xps-theme") || "dark");
   const chatRef = useRef(null);
+  const resizing = useRef(false);
+
+  const handleMouseDown = useCallback((e) => {
+    e.preventDefault();
+    resizing.current = true;
+    const onMouseMove = (e) => {
+      if (!resizing.current) return;
+      const newWidth = Math.max(280, Math.min(600, e.clientX));
+      setChatWidth(newWidth);
+    };
+    const onMouseUp = () => {
+      resizing.current = false;
+      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseup", onMouseUp);
+      localStorage.setItem("xps-chat-width", chatWidth.toString());
+    };
+    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mouseup", onMouseUp);
+  }, [chatWidth]);
 
   useEffect(() => {
     document.documentElement.classList.remove("light", "dark");
@@ -45,8 +65,20 @@ export default function Home() {
         onChatToggle={() => setChatOpen(!chatOpen)}
       />
 
-      {/* Desktop: content + chat side by side */}
+      {/* Desktop: chat left + content right */}
       <div className="flex-1 flex overflow-hidden">
+        {/* Desktop Chat Panel — left side, resizable */}
+        <div className="hidden lg:flex flex-shrink-0 border-r border-border flex-col relative" style={{ width: chatWidth }}>
+          <ChatPanel ref={chatRef} chatWidth={chatWidth} />
+          {/* Resize handle */}
+          <div
+            onMouseDown={handleMouseDown}
+            className="absolute top-0 right-0 bottom-0 w-1.5 cursor-col-resize z-10 group hover:bg-primary/20 active:bg-primary/30 transition-colors"
+          >
+            <div className="absolute top-1/2 -translate-y-1/2 right-0 w-1 h-8 rounded-full bg-border group-hover:bg-primary/50 transition-colors" />
+          </div>
+        </div>
+
         {/* Main Content */}
         <main className="flex-1 overflow-y-auto pb-20 md:pb-4">
           <AppContent
@@ -55,11 +87,6 @@ export default function Home() {
             onNavigate={setActiveView}
           />
         </main>
-
-        {/* Desktop Chat Panel — always visible */}
-        <div className="hidden lg:flex w-[360px] flex-shrink-0 border-l border-border flex-col">
-          <ChatPanel ref={chatRef} />
-        </div>
       </div>
 
       {/* Mobile Bottom Nav */}

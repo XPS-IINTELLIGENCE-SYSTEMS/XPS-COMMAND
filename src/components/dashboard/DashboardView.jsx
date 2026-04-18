@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
-import { Loader2, Search, Package, Hammer, Phone, Clock, Trophy, HardHat, DollarSign, BarChart3, Lightbulb, Bot, Settings, Compass, CalendarClock, Users, GripVertical, Pencil, Brain } from "lucide-react";
+import { Loader2, Search, Package, Hammer, Phone, Clock, Trophy, HardHat, DollarSign, BarChart3, Lightbulb, Bot, Settings, Compass, CalendarClock, Users, Pencil, Brain } from "lucide-react";
 import { getIconColor } from "@/lib/iconColors";
 import useColorRefresh from "@/hooks/useColorRefresh";
 import useEditorMode from "@/hooks/useEditorMode";
 import ColorPicker from "../shared/ColorPicker";
-import { Droppable, Draggable } from "@hello-pangea/dnd";
+
 import { base44 } from "@/api/base44Client";
 import { cn } from "@/lib/utils";
 import EditCardModal from "./EditCardModal";
@@ -285,65 +285,30 @@ export default function DashboardView({ onNavigate, sidebarPhases }) {
                 </div>
 
                 {/* Card row - horizontal scroll on mobile, grid on desktop */}
-                <Droppable droppableId={`group-${gIdx}`} direction="horizontal">
-                  {(provided) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.droppableProps}
-                      className="flex md:grid md:grid-cols-3 gap-3 md:gap-4 overflow-x-auto md:overflow-visible scrollbar-hide snap-x snap-mandatory pb-2 md:pb-0 -mx-2 px-2 md:mx-0 md:px-0"
-                    >
-                      {group.cards.map((card, cIdx) => {
-                        const Icon = ICON_MAP[card.icon] || Settings;
-                        return (
-                          <Draggable key={card.id} draggableId={card.id} index={cIdx}>
-                            {(prov, snapshot) => (
-                              <div
-                                ref={prov.innerRef}
-                                {...prov.draggableProps}
-                                className={cn(
-                                  "snap-start flex-shrink-0 w-[70vw] sm:w-[45vw] md:w-auto rounded-2xl p-4 md:p-5 text-center transition-all duration-200 bg-white/[0.04] backdrop-blur-2xl border animated-silver-border hover:border-white/[0.25] hover:shadow-[0_0_30px_rgba(255,255,255,0.06)]",
-                                  snapshot.isDragging && "ring-2 ring-primary/50 shadow-2xl scale-105 z-50"
-                                )}
-                                style={{
-                                  ...prov.draggableProps.style,
-                                  borderColor: card.borderColor || undefined,
-                                }}
-                              >
-                                {/* Top bar: drag handle + edit (hidden on mobile) */}
-                                <div className="hidden md:flex items-center justify-between mb-3">
-                                  <div {...prov.dragHandleProps} className="p-1 rounded-md hover:bg-white/10 cursor-grab active:cursor-grabbing">
-                                    <GripVertical className="w-4 h-4 text-muted-foreground/40" />
-                                  </div>
-                                  <button onClick={() => handleEditCard(gIdx, cIdx)} className="p-1 rounded-md hover:bg-white/10">
-                                    <Pencil className="w-3.5 h-3.5 text-muted-foreground/40" />
-                                  </button>
-                                </div>
-
-                                {/* Icon */}
-                                <div className="w-full flex flex-col items-center">
-                                  <button
-                                    onClick={(e) => editorMode ? openColorPicker(e, card.id, card.label) : nav(card.nav)}
-                                    onContextMenu={(e) => openColorPicker(e, card.id, card.label)}
-                                    className="w-12 h-12 rounded-xl bg-white/[0.06] border border-white/[0.08] flex items-center justify-center mb-3 hover:scale-110 hover:border-white/20 transition-all cursor-pointer"
-                                    title={editorMode ? "Click to change icon color" : ""}
-                                  >
-                                    <Icon className="w-6 h-6" style={{ color: getIconColor(card.id) }} />
-                                  </button>
-                                  <button onClick={() => nav(card.nav)} className="text-sm font-bold text-foreground mb-0.5 hover:text-primary transition-colors">{card.label}</button>
-                                  <div className="text-[11px] text-muted-foreground leading-snug">{card.desc}</div>
-                                  {statMap[card.id] && (
-                                    <div className="mt-2 text-xs font-semibold text-primary/80">{statMap[card.id]}</div>
-                                  )}
-                                </div>
-                              </div>
-                            )}
-                          </Draggable>
-                        );
-                      })}
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
+                <div className="flex md:grid md:grid-cols-3 gap-3 md:gap-4 overflow-x-auto md:overflow-visible scrollbar-hide snap-x snap-mandatory pb-2 md:pb-0 -mx-2 px-2 md:mx-0 md:px-0">
+                  {group.cards.map((card, cIdx) => {
+                    const Icon = ICON_MAP[card.icon] || Settings;
+                    return (
+                      <div
+                        key={card.id}
+                        className="snap-start flex-shrink-0 w-[70vw] sm:w-[45vw] md:w-auto rounded-2xl p-4 md:p-5 text-center transition-all duration-200 bg-white/[0.04] backdrop-blur-2xl border animated-silver-border hover:border-white/[0.25] hover:shadow-[0_0_30px_rgba(255,255,255,0.06)] cursor-pointer"
+                        onClick={() => nav(card.nav)}
+                        style={{ borderColor: card.borderColor || undefined }}
+                      >
+                        <div className="w-full flex flex-col items-center">
+                          <div className="w-12 h-12 rounded-xl bg-white/[0.06] border border-white/[0.08] flex items-center justify-center mb-3">
+                            <Icon className="w-6 h-6" style={{ color: getIconColor(card.id) }} />
+                          </div>
+                          <span className="text-sm font-bold text-foreground mb-0.5">{card.label}</span>
+                          <div className="text-[11px] text-muted-foreground leading-snug">{card.desc}</div>
+                          {statMap[card.id] && (
+                            <div className="mt-2 text-xs font-semibold text-primary/80">{statMap[card.id]}</div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             ))}
           </div>

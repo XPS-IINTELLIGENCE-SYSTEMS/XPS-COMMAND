@@ -22,6 +22,9 @@ import Home from './pages/Home';
 import AdminDashboard from './pages/AdminDashboard';
 import ManagerDashboard from './pages/ManagerDashboard';
 import OwnerDashboard from './pages/OwnerDashboard';
+import LeadEngine from './pages/LeadEngine';
+import DataBank from './pages/DataBank';
+import AdminControl from './pages/AdminControl';
 
 /**
  * PUBLIC ROUTES — visible to everyone (SaaS marketing + auth entry points)
@@ -53,6 +56,9 @@ const UnauthenticatedApp = () => (
     <Route path="/admin-dashboard" element={<Navigate to="/signin" replace />} />
     <Route path="/manager-dashboard" element={<Navigate to="/signin" replace />} />
     <Route path="/owner-dashboard" element={<Navigate to="/signin" replace />} />
+    <Route path="/lead-engine" element={<Navigate to="/signin" replace />} />
+    <Route path="/data-bank" element={<Navigate to="/signin" replace />} />
+    <Route path="/admin-control" element={<Navigate to="/signin" replace />} />
     <Route path="*" element={<Navigate to="/" replace />} />
   </Routes>
 );
@@ -84,6 +90,9 @@ const AuthenticatedApp = () => (
     <Route path="/admin-dashboard" element={<AdminDashboard />} />
     <Route path="/manager-dashboard" element={<ManagerDashboard />} />
     <Route path="/owner-dashboard" element={<OwnerDashboard />} />
+    <Route path="/lead-engine" element={<LeadEngine />} />
+    <Route path="/data-bank" element={<DataBank />} />
+    <Route path="/admin-control" element={<AdminControl />} />
     
     {/* Catch-all */}
     <Route path="*" element={<PageNotFound />} />

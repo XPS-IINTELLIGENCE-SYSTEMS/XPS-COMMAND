@@ -1,0 +1,98 @@
+{
+  "name": "DataBankEntry",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Company",
+        "Job/Project",
+        "Social Media",
+        "Competitor",
+        "Market Intel",
+        "Contact",
+        "Other"
+      ],
+      "default": "Company"
+    },
+    "source_type": {
+      "type": "string",
+      "enum": [
+        "Lead Engine",
+        "Web Research",
+        "Manual",
+        "Agent",
+        "Import"
+      ],
+      "default": "Lead Engine"
+    },
+    "raw_data": {
+      "type": "string",
+      "description": "JSON string of scraped data"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string"
+    },
+    "industry": {
+      "type": "string"
+    },
+    "score": {
+      "type": "number",
+      "description": "0-100"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "Critical",
+        "High",
+        "Medium",
+        "Low"
+      ],
+      "default": "Medium"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "New",
+        "Reviewed",
+        "Actioned",
+        "Archived"
+      ],
+      "default": "New"
+    },
+    "tags": {
+      "type": "string"
+    },
+    "source_url": {
+      "type": "string"
+    },
+    "linked_lead_id": {
+      "type": "string"
+    },
+    "company_name": {
+      "type": "string"
+    },
+    "contact_name": {
+      "type": "string"
+    },
+    "contact_email": {
+      "type": "string"
+    },
+    "contact_phone": {
+      "type": "string"
+    },
+    "estimated_value": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "title",
+    "category"
+  ]
+}

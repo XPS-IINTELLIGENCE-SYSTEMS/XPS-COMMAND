@@ -1,337 +1,132 @@
 import { useState, useEffect, useCallback } from "react";
-import { Loader2, Search, Package, Hammer, Phone, Clock, Trophy, HardHat, DollarSign, BarChart3, Lightbulb, Bot, Settings, Compass, CalendarClock, Users, Pencil, Brain } from "lucide-react";
-import { getIconColor } from "@/lib/iconColors";
-import useColorRefresh from "@/hooks/useColorRefresh";
-import useEditorMode from "@/hooks/useEditorMode";
-import ColorPicker from "../shared/ColorPicker";
-
+import { Loader2, Eye, Users, Zap, Package, Hammer, Phone, Clock, Trophy, HardHat, DollarSign, BarChart3, Lightbulb, Bot, Settings, Compass, CalendarClock, Brain, Search, Mail, Map, Database, Shield, BookOpen, Target } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import { cn } from "@/lib/utils";
-import EditCardModal from "./EditCardModal";
-import CRMTopCards from "./CRMTopCards";
-import DashboardScrollRow from "./DashboardScrollRow";
-import OvernightMonitor from "./OvernightMonitor";
-import ScrapeMonitor from "../knowledge/ScrapeMonitor";
-import HubSpotConnector from "../hubspot/HubSpotConnector";
+import { Button } from "@/components/ui/button";
 
-const ICON_MAP = { Users, Compass, Search, Package, Hammer, Phone, Clock, Trophy, HardHat, DollarSign, BarChart3, Lightbulb, Bot, CalendarClock, Settings, Brain };
-
-const DEFAULT_GROUPS = [
-  {
-    heading: "Pipeline Overview",
-    cards: [
-      { id: "xpress_leads", label: "XPress Pipeline", desc: "Contractor & operator leads", icon: "Package", nav: "xpress_leads" },
-      { id: "job_leads", label: "Jobs Pipeline", desc: "End-buyer project leads", icon: "Hammer", nav: "job_leads" },
-      { id: "follow_up", label: "Follow-Up", desc: "Sequences & reminders", icon: "Clock", nav: "follow_up" },
-    ],
-  },
-  {
-    heading: "Prospecting & Discovery",
-    cards: [
-      { id: "start_here", label: "Start Here", desc: "Get set up in minutes", icon: "Compass", nav: "start_here" },
-      { id: "find_work", label: "Discovery", desc: "Signal-based prospecting", icon: "Search", nav: "find_work" },
-      { id: "crm", label: "CRM Board", desc: "Manage every deal", icon: "Users", nav: "crm" },
-    ],
-  },
-  {
-    heading: "Outreach & Closing",
-    cards: [
-      { id: "get_work", label: "Contact", desc: "Outreach & comms", icon: "Phone", nav: "get_work" },
-      { id: "win_work", label: "Close", desc: "Proposals & closing", icon: "Trophy", nav: "win_work" },
-      { id: "do_work", label: "Execute", desc: "Jobs & execution", icon: "HardHat", nav: "do_work" },
-    ],
-  },
-  {
-    heading: "Revenue & Insights",
-    cards: [
-      { id: "get_paid", label: "Collect", desc: "Invoice & collect", icon: "DollarSign", nav: "get_paid" },
-      { id: "analytics", label: "Analytics", desc: "Charts & revenue", icon: "BarChart3", nav: "analytics" },
-      { id: "tips", label: "Tips & Tricks", desc: "Pro knowledge", icon: "Lightbulb", nav: "tips" },
-    ],
-  },
-  {
-    heading: "System & Tools",
-    cards: [
-      { id: "agents", label: "Agents", desc: "AI agent command", icon: "Bot", nav: "agents" },
-      { id: "task_scheduler", label: "Task Scheduler", desc: "Scraper control center", icon: "CalendarClock", nav: "task_scheduler" },
-      { id: "settings", label: "Settings", desc: "Account & preferences", icon: "Settings", nav: "settings" },
-    ],
-  },
+const SYSTEM_MODULES = [
+  { id: "find_work", label: "Vision Cortex", desc: "Strategic intelligence", icon: Eye, nav: "find_work" },
+  { id: "xpress_leads", label: "Prospects", desc: "Lead pipeline", icon: Users, nav: "xpress_leads" },
+  { id: "crm", label: "AI Find", desc: "Discovery engine", icon: Zap, nav: "crm" },
+  { id: "job_leads", label: "Staging Queue", desc: "Lead qualification", icon: Database, nav: "job_leads" },
+  { id: "get_work", label: "Email Center", desc: "Outreach platform", icon: Mail, nav: "get_work" },
+  { id: "follow_up", label: "Prospect Map", desc: "Geographic intel", icon: Map, nav: "follow_up" },
+  { id: "win_work", label: "Oracle Engine", desc: "Deep extraction", icon: Zap, nav: "win_work" },
+  { id: "analytics", label: "Analytics", desc: "Performance tracking", icon: BarChart3, nav: "analytics" },
+  { id: "knowledge", label: "Knowledge Base", desc: "Intel repository", icon: BookOpen, nav: "knowledge" },
+  { id: "agents", label: "Agent Fleet", desc: "AI agent command", icon: Bot, nav: "agents" },
+  { id: "task_scheduler", label: "Task Scheduler", desc: "Scraper control", icon: CalendarClock, nav: "task_scheduler" },
+  { id: "settings", label: "Settings", desc: "System config", icon: Settings, nav: "settings" },
 ];
 
-function buildGroupsFromSidebar(phases) {
-  const items = phases.filter(p => p.id !== "command");
-  const groups = [];
-  for (let i = 0; i < items.length; i += 3) {
-    const chunk = items.slice(i, i + 3);
-    const heading = chunk.map(c => c.label).join(" · ");
-    groups.push({
-      heading,
-      cards: chunk.map(p => ({
-        id: p.id,
-        label: p.label,
-        desc: p.desc || "",
-        icon: SIDEBAR_ICON_MAP[p.id] || "Settings",
-        nav: p.id,
-      })),
-    });
-  }
-  return groups;
-}
+const QUICK_ACTIONS = [
+  { label: "Find Prospects", icon: Target, nav: "find_work", color: "#d4af37" },
+  { label: "Compose Email", icon: Mail, nav: "get_work", color: "#6366f1" },
+  { label: "View Queue", icon: Database, nav: "job_leads", color: "#22c55e" },
+  { label: "Run Scraper", icon: Zap, nav: "task_scheduler", color: "#ef4444" },
+];
 
-const SIDEBAR_ICON_MAP = {
-  crm: "Users", start_here: "Compass", find_work: "Search", xpress_leads: "Package",
-  job_leads: "Hammer", get_work: "Phone", follow_up: "Clock", win_work: "Trophy",
-  do_work: "HardHat", get_paid: "DollarSign", analytics: "BarChart3", tips: "Lightbulb",
-  agents: "Bot", task_scheduler: "CalendarClock", settings: "Settings", admin: "Users",
-  knowledge: "Brain",
-};
-
-function loadGroups() {
-  try {
-    const saved = localStorage.getItem("xps-dash-groups-v2");
-    if (saved) return JSON.parse(saved);
-  } catch {}
-  return DEFAULT_GROUPS;
-}
-function saveGroups(g) { localStorage.setItem("xps-dash-groups-v2", JSON.stringify(g)); }
-
-export default function DashboardView({ onNavigate, sidebarPhases }) {
-  const [groups, setGroups] = useState(() => {
-    // If sidebarPhases provided, build groups from sidebar order
-    if (sidebarPhases && sidebarPhases.length > 0) {
-      return buildGroupsFromSidebar(sidebarPhases);
-    }
-    return loadGroups();
-  });
+export default function DashboardView({ onNavigate }) {
   const [d, setD] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [editCard, setEditCard] = useState(null);
-  const [editGroupIdx, setEditGroupIdx] = useState(null);
-  const [editCardIdx, setEditCardIdx] = useState(null);
-  const [editingHeading, setEditingHeading] = useState(null);
-  const [colorPicker, setColorPicker] = useState(null); // { id, x, y, label }
-  useColorRefresh();
-  const editorMode = useEditorMode();
-
-  const openColorPicker = (e, id, label) => {
-    if (!editorMode) return; // Only allow color picking in editor mode
-    e.preventDefault();
-    e.stopPropagation();
-    setColorPicker({ id, x: e.clientX, y: e.clientY, label });
-  };
-
-  // Rebuild groups whenever sidebarPhases change
-  useEffect(() => {
-    if (sidebarPhases && sidebarPhases.length > 0) {
-      setGroups(buildGroupsFromSidebar(sidebarPhases));
-    }
-  }, [sidebarPhases]);
 
   useEffect(() => { load(); }, []);
 
   const load = async () => {
     setLoading(true);
-    const [leads, proposals, invoices, emails] = await Promise.all([
+    const [leads, proposals, invoices] = await Promise.all([
       base44.entities.Lead.list("-created_date", 500),
       base44.entities.Proposal.list("-created_date", 200),
       base44.entities.Invoice.list("-created_date", 200),
-      base44.entities.OutreachEmail.list("-created_date", 200),
     ]);
-    setD({ leads, proposals, invoices, emails });
+    setD({ leads, proposals, invoices });
     setLoading(false);
   };
 
   const nav = useCallback((v) => { if (onNavigate) onNavigate(v); }, [onNavigate]);
 
-  // Called from parent DragDropContext via onDashboardDragEnd
-  const handleInternalDrag = useCallback((source, destination) => {
-    const srcGroupIdx = parseInt(source.droppableId.split("-")[1]);
-    const dstGroupIdx = parseInt(destination.droppableId.split("-")[1]);
-    const updated = groups.map(g => ({ ...g, cards: [...g.cards] }));
-    const [moved] = updated[srcGroupIdx].cards.splice(source.index, 1);
-    updated[dstGroupIdx].cards.splice(destination.index, 0, moved);
-    setGroups(updated);
-    saveGroups(updated);
-  }, [groups]);
-
-  // Expose for parent
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      window.__dashboardDragHandler = handleInternalDrag;
-      window.__dashboardAddCard = (card, groupIdx) => {
-        const updated = groups.map(g => ({ ...g, cards: [...g.cards] }));
-        // Add to specified group or last group
-        const targetIdx = groupIdx != null && groupIdx < updated.length ? groupIdx : updated.length - 1;
-        if (targetIdx >= 0 && !updated[targetIdx].cards.find(c => c.id === card.id)) {
-          updated[targetIdx].cards.push(card);
-          setGroups(updated);
-          saveGroups(updated);
-        }
-      };
-    }
-    return () => { window.__dashboardDragHandler = null; window.__dashboardAddCard = null; };
-  }, [handleInternalDrag, groups]);
-
-  const handleEditCard = (gIdx, cIdx) => {
-    setEditCard(groups[gIdx].cards[cIdx]);
-    setEditGroupIdx(gIdx);
-    setEditCardIdx(cIdx);
-  };
-
-  const handleSaveCard = (updatedCard) => {
-    const updated = groups.map(g => ({ ...g, cards: [...g.cards] }));
-    updated[editGroupIdx].cards[editCardIdx] = updatedCard;
-    setGroups(updated);
-    saveGroups(updated);
-    setEditCard(null);
-  };
-
-  const handleHeadingSave = (gIdx, newHeading) => {
-    const updated = groups.map((g, i) => i === gIdx ? { ...g, heading: newHeading } : g);
-    setGroups(updated);
-    saveGroups(updated);
-    setEditingHeading(null);
-  };
-
   if (loading || !d) return (
-    <div className="flex items-center justify-center h-full bg-transparent">
-      <Loader2 className="w-8 h-8 animate-spin text-primary" />
+    <div className="flex items-center justify-center h-full">
+      <Loader2 className="w-6 h-6 animate-spin text-primary" />
     </div>
   );
 
-  const { leads, proposals, invoices, emails } = d;
-  const xp = leads.filter(l => l.lead_type === "XPress");
-  const jobs = leads.filter(l => l.lead_type === "Jobs");
-  const followUps = leads.filter(l => l.stage === "Contacted");
-  const won = proposals.filter(p => p.status === "Approved");
-  const paid = invoices.filter(i => i.status === "Paid");
-  const wonValue = won.reduce((s, p) => s + (p.total_value || 0), 0);
-  const paidValue = paid.reduce((s, i) => s + (i.total || 0), 0);
-  const winRate = proposals.length ? Math.round((won.length / proposals.length) * 100) : 0;
-  const xpValue = xp.reduce((s, l) => s + (l.estimated_value || 0), 0);
-  const jobValue = jobs.reduce((s, l) => s + (l.estimated_value || 0), 0);
-
-  const statMap = {
-    crm: `${leads.length} leads`,
-    start_here: "5 steps",
-    find_work: `${leads.filter(l => l.pipeline_status === "Incoming").length} incoming`,
-    xpress_leads: `${xp.length} leads · $${(xpValue / 1000).toFixed(0)}k`,
-    job_leads: `${jobs.length} leads · $${(jobValue / 1000).toFixed(0)}k`,
-    get_work: `${emails.filter(e => e.status === "Sent").length} sent`,
-    follow_up: `${followUps.length} awaiting`,
-    win_work: `${winRate}% win rate`,
-    do_work: `${leads.filter(l => l.stage === "Won").length} active`,
-    get_paid: `$${(paidValue / 1000).toFixed(0)}k collected`,
-    analytics: `$${((wonValue + paidValue) / 1000).toFixed(0)}k revenue`,
-    tips: "Pro tips",
-    agents: "4 agents",
-    task_scheduler: "Scrapers",
-    settings: "Preferences",
-    admin: "Operator tools",
-  };
+  const { leads, proposals, invoices } = d;
+  const activeProspects = leads.filter(l => ["Incoming", "Validated", "Qualified", "Prioritized"].includes(l.pipeline_status)).length;
+  const qualifiedLeads = leads.filter(l => l.stage === "Qualified" || l.stage === "Prioritized").length;
+  const activeCampaigns = leads.filter(l => ["Contacted", "Proposal", "Negotiation"].includes(l.stage)).length;
 
   return (
-    <div className="h-full overflow-y-auto bg-transparent">
-      <div className="relative z-10 p-5 md:p-8 max-w-[1500px] mx-auto">
+    <div className="h-full overflow-y-auto">
+      <div className="max-w-[1100px] mx-auto px-6 py-8">
 
-        {/* HEADER */}
-        <div className="text-center mb-32">
-          <h1 className="text-3xl md:text-5xl font-extrabold xps-gold-slow-shimmer tracking-tight" style={{ fontFamily: "'Montserrat', sans-serif" }}>
-            COMMAND CENTER
-          </h1>
-          <p className="text-sm text-white/40 mt-2">Drag cards to reorder · Click pencil to edit</p>
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-extrabold text-foreground tracking-tight">Dashboard</h1>
+          <p className="text-sm text-muted-foreground mt-1">XPS Intelligence System — Control Plane</p>
         </div>
 
-        {/* CRM TOP CARDS */}
-        <CRMTopCards leads={d.leads} onNavigate={nav} />
-
-        {/* HUBSPOT + INTELLIGENCE MONITORS */}
-        <div className="mb-6">
-          <HubSpotConnector onSyncComplete={load} />
-        </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-10">
-          <OvernightMonitor />
-          <ScrapeMonitor />
+        {/* Stat Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
+          <StatCard label="Active Prospects" value={activeProspects} color="#d4af37" onClick={() => nav("xpress_leads")} />
+          <StatCard label="Qualified Leads" value={qualifiedLeads} color="#22c55e" onClick={() => nav("crm")} />
+          <StatCard label="Active Campaigns" value={activeCampaigns} color="#6366f1" onClick={() => nav("get_work")} />
         </div>
 
-        {/* GROUPED CARD ROWS */}
-        <div>
-          <div className="space-y-14">
-            {groups.map((group, gIdx) => (
-              <div key={gIdx}>
-                {/* Editable group heading */}
-                <div className="text-center mb-4">
-                {editingHeading === gIdx ? (
-                  <input
-                    autoFocus
-                    defaultValue={group.heading}
-                    onBlur={(e) => handleHeadingSave(gIdx, e.target.value)}
-                    onKeyDown={(e) => { if (e.key === "Enter") handleHeadingSave(gIdx, e.target.value); }}
-                    className="text-lg md:text-xl font-extrabold tracking-wide bg-transparent border-b-2 border-primary/40 outline-none text-foreground mb-2 w-full max-w-sm mx-auto xps-gold-slow-shimmer text-center"
-                    style={{ fontFamily: "'Montserrat', sans-serif" }}
-                  />
-                ) : (
-                  <button
-                    onClick={() => setEditingHeading(gIdx)}
-                    className="group inline-flex items-center gap-2"
-                  >
-                    <h2 className="text-lg md:text-xl font-extrabold tracking-wide xps-gold-slow-shimmer" style={{ fontFamily: "'Montserrat', sans-serif" }}>
-                      {group.heading}
-                    </h2>
-                    <Pencil className="w-3.5 h-3.5 text-muted-foreground/40 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </button>
-                )}
-                </div>
-
-                {/* Card row - horizontal scroll on mobile, grid on desktop */}
-                <div className="flex md:grid md:grid-cols-3 gap-3 md:gap-4 overflow-x-auto md:overflow-visible scrollbar-hide snap-x snap-mandatory pb-2 md:pb-0 -mx-2 px-2 md:mx-0 md:px-0">
-                  {group.cards.map((card, cIdx) => {
-                    const Icon = ICON_MAP[card.icon] || Settings;
-                    return (
-                      <div
-                        key={card.id}
-                        className="snap-start flex-shrink-0 w-[70vw] sm:w-[45vw] md:w-auto rounded-2xl p-4 md:p-5 text-center transition-all duration-200 bg-white/[0.04] backdrop-blur-2xl border animated-silver-border hover:border-white/[0.25] hover:shadow-[0_0_30px_rgba(255,255,255,0.06)] cursor-pointer"
-                        onClick={() => nav(card.nav)}
-                        style={{ borderColor: card.borderColor || undefined }}
-                      >
-                        <div className="w-full flex flex-col items-center">
-                          <div className="w-12 h-12 rounded-xl bg-white/[0.06] border border-white/[0.08] flex items-center justify-center mb-3">
-                            <Icon className="w-6 h-6" style={{ color: getIconColor(card.id) }} />
-                          </div>
-                          <span className="text-sm font-bold text-foreground mb-0.5">{card.label}</span>
-                          <div className="text-[11px] text-muted-foreground leading-snug">{card.desc}</div>
-                          {statMap[card.id] && (
-                            <div className="mt-2 text-xs font-semibold text-primary/80">{statMap[card.id]}</div>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
+        {/* System Modules */}
+        <div className="mb-10">
+          <h2 className="text-xs font-extrabold uppercase tracking-[0.2em] text-muted-foreground mb-5">System Modules</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+            {SYSTEM_MODULES.map(mod => {
+              const Icon = mod.icon;
+              return (
+                <button
+                  key={mod.id}
+                  onClick={() => nav(mod.nav)}
+                  className="group rounded-xl p-5 text-left transition-all duration-200 bg-card border border-border hover:border-primary/30 hover:bg-card/80 cursor-pointer"
+                >
+                  <Icon className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors mb-3" />
+                  <div className="text-sm font-bold text-foreground">{mod.label}</div>
+                  <div className="text-[11px] text-muted-foreground mt-0.5">{mod.desc}</div>
+                </button>
+              );
+            })}
           </div>
         </div>
+
+        {/* Quick Actions */}
+        <div className="mb-8">
+          <h2 className="text-xs font-extrabold uppercase tracking-[0.2em] text-muted-foreground mb-4">Quick Actions</h2>
+          <div className="flex flex-wrap gap-3">
+            {QUICK_ACTIONS.map(action => {
+              const Icon = action.icon;
+              return (
+                <Button
+                  key={action.label}
+                  variant="outline"
+                  onClick={() => nav(action.nav)}
+                  className="gap-2 rounded-full px-5 py-2 text-sm font-semibold border-border hover:border-primary/40 transition-all"
+                >
+                  <Icon className="w-4 h-4" style={{ color: action.color }} />
+                  {action.label}
+                </Button>
+              );
+            })}
+          </div>
+        </div>
+
       </div>
-
-      {/* Color Picker */}
-      {colorPicker && (
-        <ColorPicker
-          targetId={colorPicker.id}
-          position={{ x: colorPicker.x, y: colorPicker.y }}
-          onClose={() => setColorPicker(null)}
-          label={colorPicker.label}
-        />
-      )}
-
-      {/* Edit Card Modal */}
-      <EditCardModal
-        open={!!editCard}
-        onClose={() => setEditCard(null)}
-        card={editCard}
-        onSave={handleSaveCard}
-      />
     </div>
+  );
+}
+
+function StatCard({ label, value, color, onClick }) {
+  return (
+    <button
+      onClick={onClick}
+      className="rounded-xl p-5 text-left transition-all bg-card border border-border hover:border-primary/30 cursor-pointer"
+    >
+      <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">{label}</div>
+      <div className="text-3xl font-extrabold" style={{ color }}>{value}</div>
+    </button>
   );
 }

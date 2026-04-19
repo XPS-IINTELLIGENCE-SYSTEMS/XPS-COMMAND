@@ -1,0 +1,70 @@
+{
+  "name": "MessageTemplate",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Template name"
+    },
+    "channel": {
+      "type": "string",
+      "enum": [
+        "Email",
+        "SMS"
+      ],
+      "default": "Email"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Initial Outreach",
+        "Follow-Up",
+        "Proposal",
+        "Thank You",
+        "Reactivation",
+        "Cold Call Intro",
+        "Bid Submission",
+        "Invoice Reminder",
+        "Referral Ask",
+        "Custom"
+      ],
+      "default": "Initial Outreach"
+    },
+    "subject": {
+      "type": "string",
+      "description": "Email subject line (email only)"
+    },
+    "body": {
+      "type": "string",
+      "description": "Message body with {{placeholders}}"
+    },
+    "variables": {
+      "type": "string",
+      "description": "Comma-separated list of available variables e.g. contact_name,company,specialty"
+    },
+    "tone": {
+      "type": "string",
+      "enum": [
+        "Professional",
+        "Casual",
+        "Urgent",
+        "Friendly",
+        "Formal"
+      ],
+      "default": "Professional"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "usage_count": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "name",
+    "channel",
+    "body"
+  ]
+}

@@ -3,12 +3,21 @@ import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
+const NAV_LINKS = [
+  { to: "/", label: "Home" },
+  { to: "/platform", label: "Platform" },
+  { to: "/solutions", label: "Solutions" },
+  { to: "/coverage", label: "Coverage" },
+  { to: "/about", label: "About" },
+];
+
 export default function LandingNav() {
   const [open, setOpen] = useState(false);
   const [isAuthed, setIsAuthed] = useState(false);
   useEffect(() => {
     base44.auth.isAuthenticated().then(setIsAuthed);
   }, []);
+
   return (
     <nav className="relative flex items-center justify-between px-4 md:px-12 py-3 md:py-4 border-b border-border/50">
       <Link to="/" className="flex items-center gap-2 md:gap-4 transition-all duration-300 hover:scale-105 min-w-0">
@@ -22,65 +31,49 @@ export default function LandingNav() {
           <div className="hidden md:block text-xs text-muted-foreground tracking-widest uppercase">Xtreme Polishing Systems</div>
         </div>
       </Link>
+
+      {/* Desktop nav links */}
       <div className="hidden md:flex items-center gap-10 text-lg font-medium text-white">
-        <Link to="/" className="hover:text-foreground cursor-pointer transition-all duration-300 hover:scale-110">Home</Link>
-        <Link to="/platform" className="hover:text-foreground cursor-pointer transition-all duration-300 hover:scale-110">Platform</Link>
-        <Link to="/solutions" className="hover:text-foreground cursor-pointer transition-all duration-300 hover:scale-110">Solutions</Link>
-        <Link to="/coverage" className="hover:text-foreground cursor-pointer transition-all duration-300 hover:scale-110">Coverage</Link>
-        <Link to="/about" className="hover:text-foreground cursor-pointer transition-all duration-300 hover:scale-110">About</Link>
-      </div>
-      <div className="flex items-center gap-2 md:gap-3">
-        {isAuthed ? (
-          <Link
-            to="/redirect"
-            className="sign-in-pill px-5 py-2 rounded-full text-sm font-semibold text-white transition-all duration-300"
-          >
-            Dashboard
+        {NAV_LINKS.map(link => (
+          <Link key={link.to} to={link.to} className="hover:text-foreground cursor-pointer transition-all duration-300 hover:scale-110">
+            {link.label}
           </Link>
-        ) : (
-          <>
-            <Link
-              to="/signin"
-              className="sign-in-pill px-5 py-2 rounded-full text-sm font-semibold text-white transition-all duration-300"
-            >
-              Sign In
-            </Link>
-            <Link
-              to="/payment"
-              className="hidden md:inline-flex px-6 py-2.5 rounded-full text-base font-semibold metallic-gold-bg text-background hover:brightness-110 transition-all duration-300 hover:scale-105"
-            >
-              Get Started
-            </Link>
-          </>
-        )}
-        <button onClick={() => setOpen(!open)} className="md:hidden ml-1 p-1 text-white/80 hover:text-white">
-          {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-        </button>
+        ))}
       </div>
 
-      {/* Mobile nav drawer */}
+      {/* Hamburger only — no separate dashboard button */}
+      <button onClick={() => setOpen(!open)} className="p-2 text-white/80 hover:text-white rounded-lg hover:bg-white/5 transition-colors">
+        {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+      </button>
+
+      {/* Dropdown menu — works on both mobile and desktop */}
       {open && (
-        <div className="absolute top-full left-0 right-0 z-50 md:hidden" style={{ background: 'rgba(10,12,20,0.25)', backdropFilter: 'blur(32px) saturate(1.4)', WebkitBackdropFilter: 'blur(32px) saturate(1.4)', borderBottom: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 8px 32px rgba(0,0,0,0.3)' }}>
+        <div className="absolute top-full right-0 left-0 md:left-auto md:right-4 md:w-64 z-50" style={{ background: 'rgba(10,12,20,0.92)', backdropFilter: 'blur(32px) saturate(1.4)', WebkitBackdropFilter: 'blur(32px) saturate(1.4)', borderBottom: '1px solid rgba(255,255,255,0.1)', borderRadius: '0 0 12px 12px', boxShadow: '0 8px 32px rgba(0,0,0,0.3)' }}>
           <div className="flex flex-col px-6 py-4 gap-1">
+            {/* Auth actions */}
             {isAuthed ? (
-              <Link to="/redirect" onClick={() => setOpen(false)} className="text-base font-semibold text-right py-3 border-b border-white/[0.08] metallic-gold">
-                Dashboard
+              <Link to="/dashboard" onClick={() => setOpen(false)} className="text-base font-semibold text-right py-3 border-b border-white/[0.08] metallic-gold">
+                Go to Dashboard
               </Link>
             ) : (
               <>
                 <Link to="/payment" onClick={() => setOpen(false)} className="text-base font-semibold text-right py-3 border-b border-white/[0.08] metallic-gold">
-                  Get Started
+                  Sign Up
                 </Link>
-                <Link to="/signin" onClick={() => setOpen(false)} className="text-sm font-medium text-right py-3 border-b border-white/[0.08] text-muted-foreground">
+                <Link to="/signin" onClick={() => setOpen(false)} className="text-sm font-medium text-right py-3 border-b border-white/[0.08] text-white/90 hover:text-white">
                   Sign In
                 </Link>
               </>
             )}
-            {[{to:"/",label:"Home"},{to:"/platform",label:"Platform"},{to:"/solutions",label:"Solutions"},{to:"/coverage",label:"Coverage"},{to:"/about",label:"About"}].map(link => (
-              <Link key={link.to} to={link.to} onClick={() => setOpen(false)} className="text-base font-medium text-white/80 hover:text-white py-3 border-b border-white/[0.06] last:border-0 text-right">
-                {link.label}
-              </Link>
-            ))}
+
+            {/* Nav links (mobile) */}
+            <div className="md:hidden">
+              {NAV_LINKS.map(link => (
+                <Link key={link.to} to={link.to} onClick={() => setOpen(false)} className="text-base font-medium text-white/80 hover:text-white py-3 border-b border-white/[0.06] last:border-0 text-right block">
+                  {link.label}
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       )}

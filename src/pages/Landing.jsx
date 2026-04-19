@@ -47,28 +47,19 @@ export default function Landing() {
         </p>
 
         <div className="flex flex-col sm:flex-row items-center gap-4 mt-14">
-          {isAuthed ? (
+          <Link
+            to={isAuthed ? "/dashboard" : "/payment"}
+            className="inline-flex items-center gap-2 px-8 py-3 md:px-10 md:py-4 rounded-full metallic-gold-bg text-background text-base md:text-xl font-bold hover:brightness-110 transition-all duration-300 hover:scale-105"
+          >
+            {isAuthed ? "Go to Dashboard" : "Get Started"} <ArrowRight className="w-4 h-4" />
+          </Link>
+          {!isAuthed && (
             <Link
-              to="/redirect"
-              className="inline-flex items-center gap-2 px-8 py-3 md:px-10 md:py-4 rounded-full metallic-gold-bg text-background text-base md:text-xl font-bold hover:brightness-110 transition-all duration-300 hover:scale-105"
+              to="/signin"
+              className="sign-in-pill inline-flex items-center gap-2 px-6 py-3 md:px-8 md:py-4 rounded-full text-white text-sm md:text-base font-semibold transition-all duration-300 hover:scale-105"
             >
-              Go to Dashboard <ArrowRight className="w-4 h-4" />
+              Sign In
             </Link>
-          ) : (
-            <>
-              <Link
-                to="/payment"
-                className="inline-flex items-center gap-2 px-8 py-3 md:px-10 md:py-4 rounded-full metallic-gold-bg text-background text-base md:text-xl font-bold hover:brightness-110 transition-all duration-300 hover:scale-105"
-              >
-                Get Started <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link
-                to="/signin"
-                className="sign-in-pill inline-flex items-center gap-2 px-6 py-3 md:px-8 md:py-4 rounded-full text-white text-sm md:text-base font-semibold transition-all duration-300 hover:scale-105"
-              >
-                Sign In
-              </Link>
-            </>
           )}
         </div>
 

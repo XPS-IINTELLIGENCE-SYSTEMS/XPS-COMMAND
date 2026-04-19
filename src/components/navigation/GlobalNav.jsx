@@ -100,12 +100,14 @@ export default function GlobalNav() {
           <div
             className="absolute top-full right-0 left-0 md:left-auto md:right-4 md:w-72 z-50 py-2"
             style={{
-              background: "rgba(8, 10, 18, 0.95)",
+              background: "rgba(8, 10, 18, 0.97)",
               backdropFilter: "blur(32px)",
               WebkitBackdropFilter: "blur(32px)",
               borderBottom: "1px solid rgba(255,255,255,0.1)",
               borderRadius: "0 0 12px 12px",
-              boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
+              boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
+              maxHeight: "calc(100vh - 120px)",
+              overflowY: "auto",
             }}
           >
             {/* Auth actions */}

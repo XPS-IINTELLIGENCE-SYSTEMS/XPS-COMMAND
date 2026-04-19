@@ -24,9 +24,9 @@ export default function DashboardCardEditModal({ card, onSave, onClose, showNumb
   const SelectedIcon = ICON_MAP[iconName] || ICON_MAP["Users"];
 
   return (
-    <div className="fixed inset-0 z-[80] flex items-center justify-center">
+    <div className="fixed inset-0 z-[80] flex items-end sm:items-center justify-center">
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative bg-card border border-border rounded-2xl shadow-2xl w-full max-w-md mx-4 max-h-[90vh] overflow-y-auto">
+      <div className="relative bg-card border border-border rounded-t-2xl sm:rounded-2xl shadow-2xl w-full sm:max-w-md sm:mx-4 max-h-[85vh] overflow-y-auto safe-bottom">
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-border">
           <h3 className="text-base font-bold text-foreground">Edit Card</h3>
@@ -62,7 +62,7 @@ export default function DashboardCardEditModal({ card, onSave, onClose, showNumb
           {/* Icon Picker */}
           <div>
             <label className="text-xs font-semibold text-muted-foreground mb-2 block">Icon</label>
-            <div className="grid grid-cols-8 gap-1.5">
+            <div className="grid grid-cols-6 sm:grid-cols-8 gap-1.5">
               {ICON_OPTIONS.map(opt => {
                 const Ic = opt.icon;
                 return (

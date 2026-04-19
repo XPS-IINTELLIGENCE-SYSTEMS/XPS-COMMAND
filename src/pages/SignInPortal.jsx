@@ -30,7 +30,7 @@ export default function SignInPortal() {
         <GlobalNav />
         <div className="flex-1 flex flex-col md:flex-row">
         {/* Left panel — branding */}
-        <div className="flex-1 flex flex-col items-center justify-center px-6 py-12 md:py-0">
+        <div className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 py-8 md:py-0">
           <img
             src="https://media.base44.com/images/public/69db3269c791af3f48cfaee9/583965fcb_IMAGEWITHWHITEOUTLINE.jpg"
             alt="XPS"
@@ -60,7 +60,7 @@ export default function SignInPortal() {
         </div>
 
         {/* Right panel — sign in form */}
-        <div className="flex-1 flex items-center justify-center px-6 py-12 md:py-0">
+        <div className="flex-1 flex items-center justify-center px-4 sm:px-6 py-8 md:py-0 safe-bottom">
           <div className="w-full max-w-sm">
             <h2 className="text-2xl font-bold text-foreground mb-1">Welcome back</h2>
             <p className="text-sm text-muted-foreground mb-8">

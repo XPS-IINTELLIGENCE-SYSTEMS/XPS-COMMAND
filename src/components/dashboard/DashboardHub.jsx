@@ -189,17 +189,17 @@ export default function DashboardHub({ onOpenTool }) {
   return (
     <div className="max-w-[1100px] mx-auto">
       <HexPatternBanner />
-      <div className="px-6 pb-8 -mt-4">
+      <div className="px-3 sm:px-6 pb-8 -mt-4">
 
         {/* Editable Greeting */}
-        <div className="mb-6 group/greet">
+        <div className="mb-4 sm:mb-6 group/greet">
           {editingGreeting ? (
             <div className="space-y-2">
               <input
                 value={greetingDraft}
                 onChange={e => setGreetingDraft(e.target.value)}
                 placeholder={`${autoGreeting()}, ${user?.full_name?.split(" ")[0] || "there"}`}
-                className="text-3xl font-extrabold text-foreground tracking-tight bg-transparent border-b-2 border-primary/40 outline-none w-full pb-1 placeholder:text-muted-foreground/40"
+                className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight bg-transparent border-b-2 border-primary/40 outline-none w-full pb-1 placeholder:text-muted-foreground/40"
                 autoFocus
               />
               <input
@@ -224,13 +224,14 @@ export default function DashboardHub({ onOpenTool }) {
             </div>
           ) : (
             <div className="relative">
-              <h1 className="text-[32px] font-extrabold metallic-gold tracking-tight">
+              <h1 className="text-[24px] sm:text-[32px] font-extrabold metallic-gold tracking-tight leading-tight">
                 {displayGreeting}
               </h1>
-              <p className="text-[15px] text-white mt-1">{subtitle}</p>
+              <p className="text-[13px] sm:text-[15px] text-white mt-1">{subtitle}</p>
+              {/* Edit button — always visible on mobile, hover on desktop */}
               <button
                 onClick={startEditGreeting}
-                className="absolute -right-1 top-0 p-1.5 rounded-lg hover:bg-secondary opacity-0 group-hover/greet:opacity-100 transition-opacity"
+                className="absolute -right-1 top-0 p-2 rounded-lg active:bg-secondary sm:hover:bg-secondary opacity-100 sm:opacity-0 sm:group-hover/greet:opacity-100 transition-opacity"
                 title="Edit greeting"
               >
                 <Pencil className="w-4 h-4 text-muted-foreground" />
@@ -241,12 +242,12 @@ export default function DashboardHub({ onOpenTool }) {
 
         <DragDropContext onDragEnd={onDragEnd}>
           {/* Favorites Section — replaces old stat cards */}
-          <div className="mb-8">
-            <div className="flex items-center gap-2 mb-3">
+          <div className="mb-6 sm:mb-8">
+            <div className="flex items-center gap-2 mb-2 sm:mb-3">
               <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-              <h2 className="text-[15px] font-bold text-white">Favorites</h2>
-              <span className="text-[13px] text-white/60">
-                {favTools.length === 0 ? "— star cards or drag them here" : `${favTools.length} pinned`}
+              <h2 className="text-[13px] sm:text-[15px] font-bold text-white">Favorites</h2>
+              <span className="text-[11px] sm:text-[13px] text-white/60">
+                {favTools.length === 0 ? "— tap ★ to pin" : `${favTools.length} pinned`}
               </span>
             </div>
             <Droppable droppableId="favorites" direction="horizontal">
@@ -259,9 +260,10 @@ export default function DashboardHub({ onOpenTool }) {
                   }`}
                 >
                   {favTools.length === 0 && !snapshot.isDraggingOver && (
-                    <div className="col-span-full flex items-center justify-center py-6 text-xs text-white/50">
+                    <div className="col-span-full flex items-center justify-center py-4 sm:py-6 text-[11px] sm:text-xs text-white/50">
                       <Star className="w-3.5 h-3.5 mr-1.5 text-muted-foreground/50" />
-                      Click the ★ on any card below or drag cards here to pin your favorites
+                      <span className="hidden sm:inline">Click the ★ on any card below or drag cards here to pin your favorites</span>
+                      <span className="sm:hidden">Tap ★ on any card to pin favorites</span>
                     </div>
                   )}
                   {favTools.map((tool, index) => (

@@ -7,8 +7,8 @@ export default function PrivacyDisclaimer({ onAccept }) {
   const [dataConsent, setDataConsent] = useState(false);
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-      <div className="max-w-lg w-full rounded-2xl border border-border bg-card p-6 shadow-2xl">
+    <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/70 backdrop-blur-sm p-0 sm:p-4">
+      <div className="max-w-lg w-full rounded-t-2xl sm:rounded-2xl border border-border bg-card p-4 sm:p-6 shadow-2xl max-h-[90vh] overflow-y-auto safe-bottom">
         <div className="flex items-center gap-3 mb-4">
           <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
             <Shield className="w-5 h-5 text-primary" />
@@ -32,26 +32,26 @@ export default function PrivacyDisclaimer({ onAccept }) {
             </ul>
           </div>
 
-          <label className="flex items-start gap-3 cursor-pointer">
+          <label className="flex items-start gap-3 cursor-pointer p-2 -m-2 rounded-lg active:bg-white/5">
             <input
               type="checkbox"
               checked={privacyAccepted}
               onChange={e => setPrivacyAccepted(e.target.checked)}
-              className="mt-0.5 w-4 h-4 rounded accent-primary"
+              className="mt-1 w-5 h-5 min-w-[20px] rounded accent-primary"
             />
-            <span className="text-sm">
+            <span className="text-[13px] sm:text-sm leading-relaxed">
               I accept the <strong>Privacy Policy</strong> and <strong>Terms of Service</strong>. I understand that data accumulated on this platform is retained by XPS Intelligence.
             </span>
           </label>
 
-          <label className="flex items-start gap-3 cursor-pointer">
+          <label className="flex items-start gap-3 cursor-pointer p-2 -m-2 rounded-lg active:bg-white/5">
             <input
               type="checkbox"
               checked={dataConsent}
               onChange={e => setDataConsent(e.target.checked)}
-              className="mt-0.5 w-4 h-4 rounded accent-primary"
+              className="mt-1 w-5 h-5 min-w-[20px] rounded accent-primary"
             />
-            <span className="text-sm">
+            <span className="text-[13px] sm:text-sm leading-relaxed">
               I consent to XPS Intelligence using my data to <strong>train and improve AI models</strong>. (Opting out limits access to basic tools only, with no data download or export.)
             </span>
           </label>

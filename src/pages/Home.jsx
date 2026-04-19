@@ -7,6 +7,9 @@ import AppContent from "../components/app/AppContent";
 import PageHexGlow from "../components/PageHexGlow";
 import GlobalNav from "../components/navigation/GlobalNav";
 import PrivacyDisclaimer from "../components/admin/PrivacyDisclaimer";
+import MobileBottomBar from "../components/mobile/MobileBottomBar";
+import MobileToolHeader from "../components/mobile/MobileToolHeader";
+import { DEFAULT_TOOLS } from "../components/dashboard/dashboardDefaults";
 
 export default function Home() {
   const [activeView, setActiveView] = useState(null); // null = show dashboard hub
@@ -14,6 +17,7 @@ export default function Home() {
   const [chatOpen, setChatOpen] = useState(true);
   const [theme, setTheme] = useState(() => localStorage.getItem("xps-theme") || "dark");
   const [showPrivacy, setShowPrivacy] = useState(false);
+  const [mobileTab, setMobileTab] = useState("home"); // home, chat, tools, settings
   const chatRef = useRef(null);
   const resizing = useRef(false);
 
@@ -41,6 +45,36 @@ export default function Home() {
     document.documentElement.classList.add(theme);
     localStorage.setItem("xps-theme", theme);
   }, [theme]);
+
+  // Mobile tab handler
+  const handleMobileTab = (tab) => {
+    if (tab === "chat") {
+      setChatOpen(true);
+      setMobileTab("chat");
+    } else if (tab === "home") {
+      setChatOpen(false);
+      setActiveView(null);
+      setMobileTab("home");
+    } else if (tab === "tools") {
+      setChatOpen(false);
+      setMobileTab("tools");
+    } else if (tab === "settings") {
+      setChatOpen(false);
+      setActiveView("settings");
+      setMobileTab("settings");
+    }
+  };
+
+  // When opening a tool, switch mobile tab to home (content view)
+  const handleOpenTool = (toolId) => {
+    setActiveView(toolId);
+    setMobileTab("home");
+  };
+
+  // Get active tool label for mobile header
+  const activeToolLabel = activeView
+    ? (DEFAULT_TOOLS.find(t => t.id === activeView)?.label || "Tool")
+    : null;
 
   // Check if user has accepted privacy policy
   useEffect(() => {
@@ -104,8 +138,8 @@ export default function Home() {
         {/* Global top nav with hamburger, home, back */}
         <GlobalNav />
 
-        {/* Secondary bar: theme toggle + chat toggle */}
-        <div className="h-10 flex items-center justify-end px-4 gap-2 flex-shrink-0 border-b border-white/[0.06]"
+        {/* Secondary bar: theme toggle + chat toggle (desktop only) */}
+        <div className="hidden lg:flex h-10 items-center justify-end px-4 gap-2 flex-shrink-0 border-b border-white/[0.06]"
           style={{ background: "rgba(0,0,0,0.3)" }}
         >
           {activeView && (
@@ -119,39 +153,44 @@ export default function Home() {
           <button onClick={() => setTheme(theme === "dark" ? "light" : "dark")} className="p-1.5 rounded-lg hover:bg-white/10 text-white/50">
             {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </button>
-          <button
-            onClick={() => setChatOpen(!chatOpen)}
-            className={`p-1.5 rounded-lg transition-colors lg:hidden ${chatOpen ? "bg-primary/10 text-primary" : "hover:bg-white/10 text-white/50"}`}
-          >
-            <MessageSquare className="w-4 h-4" />
-          </button>
         </div>
 
+        {/* Mobile tool header when inside a tool view */}
+        {activeView && (
+          <MobileToolHeader
+            title={activeToolLabel}
+            onBack={() => { setActiveView(null); setMobileTab("home"); }}
+          />
+        )}
+
         {/* Content: Dashboard Hub or Tool View */}
-        <main className="flex-1 overflow-y-auto">
+        <main className="flex-1 overflow-y-auto pb-16 lg:pb-0">
           {activeView === null ? (
-            <DashboardHub onOpenTool={setActiveView} />
+            <DashboardHub onOpenTool={handleOpenTool} />
           ) : (
-            <div className="w-full max-w-7xl mx-auto px-4 py-4">
-              <AppContent activeView={activeView} onChatCommand={() => {}} onNavigate={setActiveView} />
+            <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
+              <AppContent activeView={activeView} onChatCommand={() => {}} onNavigate={handleOpenTool} />
             </div>
           )}
         </main>
       </div>
 
-      {/* Mobile Chat Drawer */}
+      {/* Mobile Bottom Tab Bar */}
+      <MobileBottomBar activeTab={mobileTab} onTabChange={handleMobileTab} />
+
+      {/* Mobile Chat Drawer — triggered by bottom bar "Chat" tab */}
       {chatOpen && (
         <div className="fixed inset-0 z-[60] lg:hidden">
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setChatOpen(false)} />
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => { setChatOpen(false); setMobileTab("home"); }} />
           <div className="absolute left-0 top-0 bottom-0 w-full max-w-sm bg-background border-r border-border shadow-2xl flex flex-col">
             <div className="flex items-center justify-between px-4 py-3 border-b border-border">
               <div className="flex items-center gap-2">
                 <img src="https://media.base44.com/images/public/69db3269c791af3f48cfaee9/583965fcb_IMAGEWITHWHITEOUTLINE.jpg" alt="XPS" className="w-6 h-6 object-contain" />
                 <span className="text-sm font-bold xps-gold-slow-shimmer">XPS Agent</span>
               </div>
-              <button onClick={() => setChatOpen(false)} className="p-1.5 rounded-lg hover:bg-secondary"><X className="w-4 h-4 text-muted-foreground" /></button>
+              <button onClick={() => { setChatOpen(false); setMobileTab("home"); }} className="p-1.5 rounded-lg hover:bg-secondary"><X className="w-4 h-4 text-muted-foreground" /></button>
             </div>
-            <div className="flex-1 overflow-hidden"><ChatPanel ref={chatRef} mobile /></div>
+            <div className="flex-1 overflow-hidden pb-14"><ChatPanel ref={chatRef} mobile /></div>
           </div>
         </div>
       )}

@@ -332,7 +332,7 @@ export default function Onboarding() {
       <div className="relative z-[1]">
         <GlobalNav />
       </div>
-      <div className="relative z-[1] flex-1 flex items-center justify-center p-4">
+      <div className="relative z-[1] flex-1 flex items-center justify-center p-3 sm:p-4 safe-bottom">
       <div className="w-full max-w-lg">
         {/* Logo */}
         <div className="flex items-center justify-center gap-3 mb-8">
@@ -364,7 +364,7 @@ export default function Onboarding() {
         </div>
 
         {/* Question */}
-        <div className="bg-card border border-border rounded-2xl p-6">
+        <div className="bg-card border border-border rounded-2xl p-4 sm:p-6">
           {questions[step]}
         </div>
 

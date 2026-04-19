@@ -87,7 +87,11 @@ export const DEFAULT_TOOLS = [
   { id: "agent_builder", label: "Agent Builder", desc: "Build custom AI agents", iconName: "Bot", color: "#f43f5e" },
   { id: "agent_fleet", label: "Agent Fleet", desc: "Fleet library & management", iconName: "Bot", color: "#06b6d4" },
 
-  // 29–31: System
+  // 29–30: Estimating & Pricing
+  { id: "blueprint_takeoff", label: "Blueprint Takeoff", desc: "Upload PDF plans — AI extracts rooms & zones", iconName: "Upload", color: "#06b6d4" },
+  { id: "dynamic_pricing", label: "Dynamic Pricing", desc: "AI bid pricing based on market & costs", iconName: "TrendingUp", color: "#22c55e" },
+
+  // 31–34: System
   { id: "admin", label: "Admin Control", desc: "Users, keys & promo codes", iconName: "Shield", color: "#a855f7" },
   { id: "tool_creator", label: "Tool Creator", desc: "Build unlimited custom tools with AI", iconName: "Wrench", color: "#f43f5e" },
   { id: "system_health", label: "System Health", desc: "Auto-diagnose, heal & optimize", iconName: "Heart", color: "#22c55e" },

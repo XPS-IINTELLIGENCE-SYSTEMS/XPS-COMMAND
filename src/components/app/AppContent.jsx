@@ -27,6 +27,8 @@ import AgentFleetView from "../agents/AgentFleetView";
 import AgentBuilder from "../agents/AgentBuilder";
 import ToolCreatorView from "../dashboard/ToolCreatorView";
 import SystemHealthView from "../dashboard/SystemHealthView";
+import BlueprintTakeoffView from "../takeoff/BlueprintTakeoffView";
+import DynamicPricingView from "../pricing/DynamicPricingView";
 
 export default function AppContent({ activeView, onChatCommand, onNavigate }) {
   switch (activeView) {
@@ -62,6 +64,8 @@ export default function AppContent({ activeView, onChatCommand, onNavigate }) {
     case "agent_fleet": return <AgentFleetView />;
     case "tool_creator": return <ToolCreatorView onSave={(tool) => { /* Tool saved — handled by dashboard */ }} onBack={() => onNavigate?.("settings")} />;
     case "system_health": return <SystemHealthView />;
+    case "blueprint_takeoff": return <BlueprintTakeoffView />;
+    case "dynamic_pricing": return <DynamicPricingView />;
     default: return <div className="text-center py-20 text-muted-foreground">View not found</div>;
   }
 }

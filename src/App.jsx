@@ -14,6 +14,8 @@ import Coverage from './pages/Coverage';
 import About from './pages/About';
 import Payment from './pages/Payment';
 import SignInPortal from './pages/SignInPortal';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfService from './pages/TermsOfService';
 
 // Authenticated pages
 import Onboarding from './pages/Onboarding';
@@ -37,6 +39,8 @@ const PublicRoutes = () => (
     <Route path="/coverage" element={<Coverage />} />
     <Route path="/about" element={<About />} />
     <Route path="/payment" element={<Payment />} />
+    <Route path="/privacy" element={<PrivacyPolicy />} />
+    <Route path="/terms" element={<TermsOfService />} />
   </>
 );
 

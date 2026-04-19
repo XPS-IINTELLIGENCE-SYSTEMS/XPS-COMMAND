@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback, forwardRef, useImperativeHand
 import { Send, Plus, Loader2, Sparkles, Globe, Pencil, Database, Code, Search, GitBranch, TrendingUp, CheckCircle2, AlertCircle, Clock, ChevronDown } from "lucide-react";
 import AgentSwitcher, { AGENTS } from "./chat/AgentSwitcher";
 import QuickActionButtons from "./chat/QuickActionButtons";
+import ChatSmartSuggestions from "./chat/ChatSmartSuggestions";
 import SubAgentChat from "./chat/SubAgentChat";
 import ChatAttachmentButton from "./chat/ChatAttachmentButton";
 import { Button } from "@/components/ui/button";
@@ -299,6 +300,18 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
 
       {/* Input */}
       <div className={`${mobile ? 'p-2 pb-8' : 'p-3'} border-t border-border ${activeAgentId !== "main" && !mobile ? "hidden" : ""}`}>
+        {/* Smart suggestions above input */}
+        <ChatSmartSuggestions
+          messages={messages}
+          loading={loading}
+          mobile={mobile}
+          onSend={(cmd) => {
+            if (conversation && !loading) {
+              setLoading(true);
+              base44.agents.addMessage(conversation, { role: "user", content: cmd });
+            }
+          }}
+        />
         <div className="flex gap-1.5 items-center">
           <ChatAttachmentButton
             mobile={mobile}

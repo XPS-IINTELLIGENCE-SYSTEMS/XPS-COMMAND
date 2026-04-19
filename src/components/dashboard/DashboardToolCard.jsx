@@ -1,13 +1,32 @@
+import { useState, useRef } from "react";
 import { Star, Pencil } from "lucide-react";
 import { ICON_MAP } from "./dashboardDefaults";
+import ToolCardTooltip from "./ToolCardTooltip";
 import { cn } from "@/lib/utils";
 
 export default function DashboardToolCard({ tool, starred, onOpen, onToggleStar, onEdit, dragHandleProps, displayNumber }) {
   const Icon = ICON_MAP[tool.iconName] || ICON_MAP["Users"];
+  const [showTooltip, setShowTooltip] = useState(false);
+  const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
+  const tooltipTimer = useRef(null);
+
+  const handleMouseEnter = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setTooltipPos({ x: rect.left + rect.width / 2, y: rect.top });
+    tooltipTimer.current = setTimeout(() => setShowTooltip(true), 600);
+  };
+  const handleMouseLeave = () => {
+    clearTimeout(tooltipTimer.current);
+    setShowTooltip(false);
+  };
 
   return (
+    <>
+    <ToolCardTooltip tool={tool} visible={showTooltip} position={tooltipPos} />
     <div
       className="group rounded-xl p-3 sm:p-4 text-left cursor-pointer relative active:scale-[0.97] transition-transform"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       style={{
         background: "rgba(0, 0, 0, 0.45)",
         backdropFilter: "blur(20px)",
@@ -45,5 +64,6 @@ export default function DashboardToolCard({ tool, starred, onOpen, onToggleStar,
       <div className="text-[13px] sm:text-[15px] font-bold metallic-gold truncate pr-6">{tool.label}</div>
       <div className="text-[11px] sm:text-[13px] text-white/70 mt-0.5 leading-tight line-clamp-2">{tool.desc}</div>
     </div>
+    </>
   );
 }

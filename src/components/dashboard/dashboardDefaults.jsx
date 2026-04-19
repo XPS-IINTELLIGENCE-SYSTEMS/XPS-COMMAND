@@ -2,7 +2,8 @@ import {
   Users, Briefcase, Building2, Search, FileText, BarChart3,
   BookOpen, Swords, Link2, Shield, Settings, Bot,
   Target, Send, Clock, GitBranch,
-  Upload, Database, Sprout, Sliders, Share2, Globe
+  Upload, Database, Sprout, Sliders, Share2, Globe,
+  Sparkles, Brain, TrendingUp, Heart, Wrench
 } from "lucide-react";
 
 // Master list of all available icons for the icon picker
@@ -29,6 +30,11 @@ export const ICON_OPTIONS = [
   { name: "Settings", icon: Settings },
   { name: "Bot", icon: Bot },
   { name: "Link2", icon: Link2 },
+  { name: "Sparkles", icon: Sparkles },
+  { name: "Brain", icon: Brain },
+  { name: "TrendingUp", icon: TrendingUp },
+  { name: "Heart", icon: Heart },
+  { name: "Wrench", icon: Wrench },
 ];
 
 export const ICON_MAP = Object.fromEntries(ICON_OPTIONS.map(i => [i.name, i.icon]));
@@ -81,7 +87,9 @@ export const DEFAULT_TOOLS = [
   { id: "agent_builder", label: "Agent Builder", desc: "Build custom AI agents", iconName: "Bot", color: "#f43f5e" },
   { id: "agent_fleet", label: "Agent Fleet", desc: "Fleet library & management", iconName: "Bot", color: "#06b6d4" },
 
-  // 29–30: System
+  // 29–31: System
   { id: "admin", label: "Admin Control", desc: "Users, keys & promo codes", iconName: "Shield", color: "#a855f7" },
+  { id: "tool_creator", label: "Tool Creator", desc: "Build unlimited custom tools with AI", iconName: "Wrench", color: "#f43f5e" },
+  { id: "system_health", label: "System Health", desc: "Auto-diagnose, heal & optimize", iconName: "Heart", color: "#22c55e" },
   { id: "settings", label: "Settings", desc: "Account & preferences", iconName: "Settings", color: "#64748b" },
 ];

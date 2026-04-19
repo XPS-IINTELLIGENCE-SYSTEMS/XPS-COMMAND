@@ -1,0 +1,50 @@
+{
+  "name": "SystemHealth",
+  "type": "object",
+  "properties": {
+    "run_type": {
+      "type": "string",
+      "enum": [
+        "diagnose",
+        "optimize",
+        "heal",
+        "enhance",
+        "maintain"
+      ],
+      "default": "diagnose",
+      "description": "Type of system health run"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "running",
+        "complete",
+        "failed"
+      ],
+      "default": "running"
+    },
+    "findings": {
+      "type": "string",
+      "description": "JSON array of findings"
+    },
+    "actions_taken": {
+      "type": "string",
+      "description": "JSON array of actions taken"
+    },
+    "recommendations": {
+      "type": "string",
+      "description": "JSON array of recommendations"
+    },
+    "score": {
+      "type": "number",
+      "description": "System health score 0-100"
+    },
+    "duration_ms": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "run_type",
+    "status"
+  ]
+}

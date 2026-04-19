@@ -25,6 +25,8 @@ import AlgorithmTuningView from "../settings/AlgorithmTuningView";
 import SeedsSourcesView from "../scraper/SeedsSourcesView";
 import AgentFleetView from "../agents/AgentFleetView";
 import AgentBuilder from "../agents/AgentBuilder";
+import ToolCreatorView from "../dashboard/ToolCreatorView";
+import SystemHealthView from "../dashboard/SystemHealthView";
 
 export default function AppContent({ activeView, onChatCommand, onNavigate }) {
   switch (activeView) {
@@ -58,6 +60,8 @@ export default function AppContent({ activeView, onChatCommand, onNavigate }) {
     case "workflows": return <WorkflowCreatorView />;
     case "agent_builder": return <AgentBuilder onSave={() => onNavigate?.("agent_fleet")} onCancel={() => onNavigate?.("agent_fleet")} />;
     case "agent_fleet": return <AgentFleetView />;
+    case "tool_creator": return <ToolCreatorView onSave={(tool) => { /* Tool saved — handled by dashboard */ }} onBack={() => onNavigate?.("settings")} />;
+    case "system_health": return <SystemHealthView />;
     default: return <div className="text-center py-20 text-muted-foreground">View not found</div>;
   }
 }

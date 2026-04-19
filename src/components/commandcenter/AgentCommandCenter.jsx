@@ -1,14 +1,15 @@
 import { useState, useEffect, useCallback } from "react";
 import { base44 } from "@/api/base44Client";
-import { Loader2, RefreshCw, Cpu } from "lucide-react";
+import { Loader2, RefreshCw, Cpu, Eye } from "lucide-react";
 import GoalInput from "./GoalInput";
 import AgentStatusCard from "./AgentStatusCard";
 import LiveActivityFeed from "./LiveActivityFeed";
 import TaskQueue from "./TaskQueue";
 import PerformanceBar from "./PerformanceBar";
 import JobDetailModal from "./JobDetailModal";
+import ShadowBrowserPanel from "./ShadowBrowserPanel";
 
-const AGENT_NAMES = ["Coordinator", "Browser", "Research", "Scraper", "Writer", "Analyst", "Coder", "Scheduler"];
+const AGENT_NAMES = ["Coordinator", "Browser", "Research", "Scraper", "Writer", "Analyst", "Coder", "Scheduler", "Shadow Browser"];
 
 export default function AgentCommandCenter() {
   const [stats, setStats] = useState(null);
@@ -128,6 +129,11 @@ export default function AgentCommandCenter() {
         <div className="lg:col-span-2 bg-card border border-border rounded-xl p-4">
           <TaskQueue queuedJobs={stats?.queued_jobs} onRefresh={loadDashboard} />
         </div>
+      </div>
+
+      {/* Shadow Browser */}
+      <div className="bg-card border border-border rounded-xl p-4">
+        <ShadowBrowserPanel />
       </div>
 
       {/* Job Detail Modal */}

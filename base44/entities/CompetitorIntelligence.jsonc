@@ -1,0 +1,104 @@
+{
+  "name": "CompetitorIntelligence",
+  "type": "object",
+  "properties": {
+    "competitor_name": {
+      "type": "string",
+      "description": "Competitor company name"
+    },
+    "website_url": {
+      "type": "string",
+      "description": "URL that was monitored"
+    },
+    "scan_type": {
+      "type": "string",
+      "enum": [
+        "pricing",
+        "content",
+        "products",
+        "full"
+      ],
+      "default": "full",
+      "description": "What type of scan was performed"
+    },
+    "change_detected": {
+      "type": "boolean",
+      "default": false
+    },
+    "change_type": {
+      "type": "string",
+      "enum": [
+        "pricing_change",
+        "new_content",
+        "product_update",
+        "design_change",
+        "removed_content",
+        "no_change"
+      ],
+      "default": "no_change"
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "default": "low"
+    },
+    "previous_snapshot": {
+      "type": "string",
+      "description": "JSON snapshot of previous scan data"
+    },
+    "current_snapshot": {
+      "type": "string",
+      "description": "JSON snapshot of current scan data"
+    },
+    "diff_summary": {
+      "type": "string",
+      "description": "AI-generated summary of what changed"
+    },
+    "pricing_data": {
+      "type": "string",
+      "description": "JSON of extracted pricing information"
+    },
+    "ai_analysis": {
+      "type": "string",
+      "description": "AI analysis of competitive impact"
+    },
+    "recommendations": {
+      "type": "string",
+      "description": "AI recommendations for XPS response"
+    },
+    "scrape_job_id": {
+      "type": "string",
+      "description": "Linked ScrapeJob ID that triggered this"
+    },
+    "competitor_profile_id": {
+      "type": "string",
+      "description": "Linked CompetitorProfile ID"
+    },
+    "scanned_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "scanned",
+        "reviewed",
+        "actioned",
+        "dismissed"
+      ],
+      "default": "scanned"
+    }
+  },
+  "required": [
+    "competitor_name",
+    "website_url",
+    "scan_type",
+    "status"
+  ]
+}

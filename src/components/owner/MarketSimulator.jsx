@@ -52,7 +52,7 @@ Return detailed analysis.`,
       });
       setResult({ ...res, params: { state, city, radius, segment, horizon } });
     } catch (e) {
-      setResult({ error: e.message });
+      setResult({ error: e?.message || "Simulation failed. Please try again." });
     }
     setLoading(false);
   };

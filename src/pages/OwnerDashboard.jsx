@@ -125,7 +125,7 @@ export default function OwnerDashboard() {
                     <OwnerKPIBar data={kpiData} />
                     {/* Quick Actions */}
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                      <Button variant="outline" className="gap-2 h-auto py-3 flex-col" onClick={() => base44.functions.invoke("overnightRunner", { action: "run", market: "Florida" })}>
+                      <Button variant="outline" className="gap-2 h-auto py-3 flex-col" onClick={async () => { try { await base44.functions.invoke("overnightRunner", { action: "run", market: "Florida" }); } catch {} }}>
                         <Play className="w-5 h-5" /> Run Overnight Intel
                       </Button>
                       <Button variant="outline" className="gap-2 h-auto py-3 flex-col"><Download className="w-5 h-5" /> Export Pipeline</Button>

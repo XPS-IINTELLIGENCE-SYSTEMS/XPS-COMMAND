@@ -13,8 +13,8 @@ export default function CompetitiveIntelCenter() {
   const load = async () => {
     setLoading(true);
     const [comps, mfrs] = await Promise.all([
-      base44.entities.CompetitorProfile.list("-threat_level", 20),
-      base44.entities.ManufacturerProfile.list("-data_completeness_score", 20),
+      base44.entities.CompetitorProfile.list("-created_date", 20).catch(() => []),
+      base44.entities.ManufacturerProfile.list("-created_date", 20).catch(() => []),
     ]);
     setCompetitors(comps);
     setManufacturers(mfrs);

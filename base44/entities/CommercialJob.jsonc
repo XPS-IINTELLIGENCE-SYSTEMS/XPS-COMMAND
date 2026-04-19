@@ -234,6 +234,18 @@
     },
     "notes": {
       "type": "string"
+    },
+    "work_stages": {
+      "type": "string",
+      "description": "JSON array of work stages with completion status"
+    },
+    "material_log": {
+      "type": "string",
+      "description": "JSON array of material usage entries"
+    },
+    "site_photos": {
+      "type": "string",
+      "description": "JSON array of site photo URLs with metadata"
     }
   },
   "required": [

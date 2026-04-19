@@ -5,6 +5,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { base44 } from "@/api/base44Client";
 import ZonePhotoUploader from "./ZonePhotoUploader";
 import PunchListSection from "./PunchListSection";
+import WorkStageChecklist from "./WorkStageChecklist";
+import MaterialLogger from "./MaterialLogger";
+import SitePhotoUploader from "./SitePhotoUploader";
 
 const PHASE_OPTIONS = [
   "discovered", "permit_filed", "design", "pre_bid", "bidding",
@@ -22,6 +25,15 @@ export default function JobDetailView({ job, onBack, onUpdated }) {
   });
   const [punchList, setPunchList] = useState(() => {
     try { return JSON.parse(job.notes?.match(/\[PUNCH\](.*)\[\/PUNCH\]/s)?.[1] || "[]"); } catch { return []; }
+  });
+  const [workStages, setWorkStages] = useState(() => {
+    try { return JSON.parse(job.work_stages || "[]"); } catch { return []; }
+  });
+  const [materialLog, setMaterialLog] = useState(() => {
+    try { return JSON.parse(job.material_log || "[]"); } catch { return []; }
+  });
+  const [sitePhotos, setSitePhotos] = useState(() => {
+    try { return JSON.parse(job.site_photos || "[]"); } catch { return []; }
   });
 
   let takeoff = null;
@@ -48,7 +60,10 @@ export default function JobDetailView({ job, onBack, onUpdated }) {
 
     await base44.entities.CommercialJob.update(job.id, {
       project_phase: phase,
-      notes: updatedNotes
+      notes: updatedNotes,
+      work_stages: JSON.stringify(workStages),
+      material_log: JSON.stringify(materialLog),
+      site_photos: JSON.stringify(sitePhotos)
     });
 
     setSaving(false);
@@ -91,6 +106,21 @@ export default function JobDetailView({ job, onBack, onUpdated }) {
             ))}
           </SelectContent>
         </Select>
+      </div>
+
+      {/* Work stage checklist */}
+      <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10">
+        <WorkStageChecklist stages={workStages} onStagesChange={setWorkStages} />
+      </div>
+
+      {/* Site photos */}
+      <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10">
+        <SitePhotoUploader photos={sitePhotos} onPhotosChange={setSitePhotos} />
+      </div>
+
+      {/* Material log */}
+      <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10">
+        <MaterialLogger entries={materialLog} onEntriesChange={setMaterialLog} />
       </div>
 
       {/* Zone photos */}

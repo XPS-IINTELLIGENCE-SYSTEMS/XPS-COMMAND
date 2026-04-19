@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { base44 } from "@/api/base44Client";
 import PricingTierCard from "./PricingTierCard";
+import BidResultsPanel from "./BidResultsPanel";
 
 const SERVICE_TYPES = [
   "Epoxy Floor Coating", "Polished Concrete", "Decorative Epoxy", "Industrial Epoxy",
@@ -184,6 +185,11 @@ export default function DynamicPricingView() {
           )}
         </div>
       )}
+
+      {/* Market Bid Results Scraper */}
+      <div className="p-5 rounded-xl bg-white/[0.02] border border-white/8">
+        <BidResultsPanel />
+      </div>
     </div>
   );
 }

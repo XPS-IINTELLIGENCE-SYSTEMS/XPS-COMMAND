@@ -37,6 +37,7 @@ import ClientPortalView from "../clientportal/ClientPortalView";
 import AgentCommandCenterView from "../commandcenter/AgentCommandCenter";
 import OutreachAutomationView from "../outreach/OutreachAutomationView";
 import SentimentAnalystView from "../sentiment/SentimentAnalystView";
+import ProjectStatusReportView from "../reports/ProjectStatusReportView";
 
 export default function AppContent({ activeView, onChatCommand, onNavigate }) {
   switch (activeView) {
@@ -82,6 +83,7 @@ export default function AppContent({ activeView, onChatCommand, onNavigate }) {
     case "agent_command": return <AgentCommandCenterView />;
     case "outreach_automation": return <OutreachAutomationView />;
     case "sentiment_analyst": return <SentimentAnalystView />;
+    case "status_reports": return <ProjectStatusReportView />;
     default: return <div className="text-center py-20 text-muted-foreground">View not found</div>;
   }
 }

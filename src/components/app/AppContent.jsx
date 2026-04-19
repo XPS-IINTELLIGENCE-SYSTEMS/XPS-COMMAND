@@ -23,6 +23,8 @@ import SocialScrapeView from "../scraper/SocialScrapeView";
 import TrendsScrapeView from "../scraper/TrendsScrapeView";
 import AlgorithmTuningView from "../settings/AlgorithmTuningView";
 import SeedsSourcesView from "../scraper/SeedsSourcesView";
+import AgentFleetView from "../agents/AgentFleetView";
+import AgentBuilder from "../agents/AgentBuilder";
 
 export default function AppContent({ activeView, onChatCommand, onNavigate }) {
   switch (activeView) {
@@ -54,6 +56,8 @@ export default function AppContent({ activeView, onChatCommand, onNavigate }) {
     case "settings": return <SettingsView />;
     case "scheduler": return <ScraperSchedulerView />;
     case "workflows": return <WorkflowCreatorView />;
+    case "agent_builder": return <AgentBuilder onSave={() => onNavigate?.("agent_fleet")} onCancel={() => onNavigate?.("agent_fleet")} />;
+    case "agent_fleet": return <AgentFleetView />;
     default: return <div className="text-center py-20 text-muted-foreground">View not found</div>;
   }
 }

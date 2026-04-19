@@ -77,7 +77,11 @@ export const DEFAULT_TOOLS = [
   { id: "algorithm", label: "Algorithm Tuning", desc: "Fine-tune scoring & AI", iconName: "Sliders", color: "#f59e0b" },
   { id: "connectors", label: "Connectors", desc: "Integrations & APIs", iconName: "Link2", color: "#84cc16" },
 
-  // 26–27: System
+  // 26–28: AI Agents
+  { id: "agent_builder", label: "Agent Builder", desc: "Build custom AI agents", iconName: "Bot", color: "#f43f5e" },
+  { id: "agent_fleet", label: "Agent Fleet", desc: "Fleet library & management", iconName: "Bot", color: "#06b6d4" },
+
+  // 29–30: System
   { id: "admin", label: "Admin Control", desc: "Users, keys & promo codes", iconName: "Shield", color: "#a855f7" },
   { id: "settings", label: "Settings", desc: "Account & preferences", iconName: "Settings", color: "#64748b" },
 ];

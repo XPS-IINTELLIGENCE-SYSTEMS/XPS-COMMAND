@@ -202,7 +202,20 @@ export default function LeadPipelineView({ forcedTab }) {
                     <td className="px-4 py-3 hidden md:table-cell text-xs text-muted-foreground">{lead.specialty || "—"}</td>
                     <td className="px-4 py-3 hidden lg:table-cell text-xs text-muted-foreground">{lead.city}{lead.state ? `, ${lead.state}` : ""}</td>
                     <td className="px-4 py-3 hidden lg:table-cell text-xs font-medium text-foreground">{lead.estimated_value ? `$${lead.estimated_value.toLocaleString()}` : "—"}</td>
-                    <td className="px-4 py-3"><ScoreBadge score={lead.score} /></td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-1.5">
+                        <ScoreBadge score={lead.score} />
+                        {lead.sentiment_label && (
+                          <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${
+                            lead.sentiment_label === "On Fire" ? "bg-red-500/15 text-red-400" :
+                            lead.sentiment_label === "Hot" ? "bg-orange-500/15 text-orange-400" :
+                            lead.sentiment_label === "Warm" ? "bg-yellow-500/15 text-yellow-400" :
+                            lead.sentiment_label === "Lukewarm" ? "bg-blue-400/15 text-blue-300" :
+                            "bg-blue-600/15 text-blue-500"
+                          }`}>{lead.sentiment_label}</span>
+                        )}
+                      </div>
+                    </td>
                     <td className="px-4 py-3"><StatusBadge status={lead.stage} colorMap={STAGE_COLORS} /></td>
                     <td className="px-4 py-3 hidden md:table-cell"><StatusBadge status={lead.bid_stage || "Not Started"} colorMap={BID_STAGE_COLORS} /></td>
                     <td className="px-4 py-3">

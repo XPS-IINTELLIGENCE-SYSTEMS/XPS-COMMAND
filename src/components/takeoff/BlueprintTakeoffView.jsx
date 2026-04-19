@@ -9,6 +9,7 @@ import TakeoffResultsPanel from "./TakeoffResultsPanel";
 import BlueprintCanvas from "./BlueprintCanvas";
 import ScaleCalibrator from "./ScaleCalibrator";
 import CanvasTakeoffSummary from "./CanvasTakeoffSummary";
+import TakeoffOverlayEditor from "./TakeoffOverlayEditor";
 
 const PROJECT_TYPES = [
   "warehouse", "retail", "restaurant", "fitness", "healthcare", "industrial",
@@ -182,6 +183,13 @@ export default function BlueprintTakeoffView({ onNavigateToProposal }) {
             onZonesChange={setCanvasZones}
           />
 
+          {/* Editable zone overlay */}
+          <TakeoffOverlayEditor
+            zones={canvasZones}
+            scaleFactor={scaleFactor}
+            onZonesChange={setCanvasZones}
+          />
+
           {/* Takeoff summary with proposal link */}
           <CanvasTakeoffSummary
             zones={canvasZones}
@@ -214,7 +222,37 @@ export default function BlueprintTakeoffView({ onNavigateToProposal }) {
           </Button>
 
           {error && <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-sm text-red-400">{error}</div>}
-          {result && <TakeoffResultsPanel takeoff={result.takeoff} jobId={result.job_id} />}
+          {result && (
+            <>
+              <TakeoffResultsPanel takeoff={result.takeoff} jobId={result.job_id} />
+              {result.takeoff?.zones?.length > 0 && (
+                <TakeoffOverlayEditor
+                  zones={result.takeoff.zones.map((z, i) => ({
+                    name: z.zone_name || `Zone ${i + 1}`,
+                    points: z.points || [{ x: 0, y: 0 }],
+                    system: z.recommended_system || z.material_zone || "Epoxy",
+                    manual_sqft: null,
+                    ...z
+                  }))}
+                  scaleFactor={1}
+                  onZonesChange={(updated) => {
+                    setResult(prev => ({
+                      ...prev,
+                      takeoff: {
+                        ...prev.takeoff,
+                        zones: updated.map(z => ({
+                          ...z,
+                          sqft: z.manual_sqft || z.sqft,
+                          zone_name: z.name
+                        })),
+                        total_sqft: updated.reduce((s, z) => s + (z.manual_sqft || z.sqft || 0), 0)
+                      }
+                    }));
+                  }}
+                />
+              )}
+            </>
+          )}
         </>
       )}
     </div>

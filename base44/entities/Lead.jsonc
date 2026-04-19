@@ -122,6 +122,25 @@
       "type": "number",
       "description": "Priority ranking 1-10 (10=highest)"
     },
+    "sentiment_score": {
+      "type": "number",
+      "description": "AI sentiment score 0-100 based on email/meeting analysis"
+    },
+    "sentiment_label": {
+      "type": "string",
+      "enum": [
+        "Cold",
+        "Lukewarm",
+        "Warm",
+        "Hot",
+        "On Fire"
+      ],
+      "description": "Human-readable sentiment category"
+    },
+    "sentiment_notes": {
+      "type": "string",
+      "description": "AI-generated sentiment analysis summary"
+    },
     "lead_type": {
       "type": "string",
       "enum": [

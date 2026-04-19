@@ -99,6 +99,10 @@ export const DEFAULT_TOOLS = [
   { id: "client_portal", label: "Client Portal", desc: "Client photos, approvals & e-sign", iconName: "Building2", color: "#14b8a6" },
   { id: "agent_command", label: "Agent Command", desc: "Autonomous multi-agent engine", iconName: "Sparkles", color: "#d4af37" },
 
+  // Outreach & Sentiment
+  { id: "outreach_automation", label: "Follow-Up Bot", desc: "Auto follow-ups for stale bids", iconName: "Send", color: "#ec4899" },
+  { id: "sentiment_analyst", label: "Sentiment Analyst", desc: "AI intent scoring for leads", iconName: "Brain", color: "#8b5cf6" },
+
   // 32–35: System
   { id: "admin", label: "Admin Control", desc: "Users, keys & promo codes", iconName: "Shield", color: "#a855f7" },
   { id: "tool_creator", label: "Tool Creator", desc: "Build unlimited custom tools with AI", iconName: "Wrench", color: "#f43f5e" },

@@ -1,8 +1,10 @@
 import { useState } from "react";
-import { Upload, FileText, Loader2, CheckCircle, Database, Brain, BookOpen, Swords } from "lucide-react";
+import { Upload, FileText, Loader2, CheckCircle, Database, Brain, BookOpen, Swords, Globe } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import URLScraperModule from "./URLScraperModule";
+import BuildLLMModule from "./BuildLLMModule";
 
 const CATEGORIES = [
   { id: "Product Info", icon: FileText, label: "Product Info" },
@@ -15,6 +17,12 @@ const CATEGORIES = [
   { id: "Custom", icon: FileText, label: "Custom" },
 ];
 
+const TABS = [
+  { id: "upload", label: "File & Manual", icon: Upload },
+  { id: "scraper", label: "URL & Keyword Scraper", icon: Globe },
+  { id: "build_llm", label: "Build Custom LLM", icon: Brain },
+];
+
 export default function KnowledgeUploadView() {
   const [uploading, setUploading] = useState(false);
   const [processing, setProcessing] = useState(false);
@@ -22,6 +30,7 @@ export default function KnowledgeUploadView() {
   const [title, setTitle] = useState("");
   const [manualContent, setManualContent] = useState("");
   const [uploaded, setUploaded] = useState([]);
+  const [activeTab, setActiveTab] = useState("upload");
   const { toast } = useToast();
 
   const handleFileUpload = async (e) => {
@@ -127,11 +136,30 @@ Content: ${manualContent}`,
 
   return (
     <div>
-      <div className="mb-6">
+      <div className="mb-4">
         <h1 className="text-2xl font-bold text-foreground">Knowledge Upload</h1>
-        <p className="text-sm text-muted-foreground mt-1">Upload documents, data, and intelligence to strengthen the system</p>
+        <p className="text-sm text-muted-foreground mt-1">Upload documents, scrape URLs & keywords, or build a custom LLM agent</p>
       </div>
 
+      {/* Tab Switcher */}
+      <div className="flex gap-1 mb-6 overflow-x-auto pb-1">
+        {TABS.map(t => {
+          const TIcon = t.icon;
+          return (
+            <button key={t.id} onClick={() => setActiveTab(t.id)}
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
+                activeTab === t.id ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+              }`}>
+              <TIcon className="w-3.5 h-3.5" /> {t.label}
+            </button>
+          );
+        })}
+      </div>
+
+      {activeTab === "scraper" && <URLScraperModule />}
+      {activeTab === "build_llm" && <BuildLLMModule />}
+
+      {activeTab === "upload" && (<>
       {/* Category Selector */}
       <div className="flex flex-wrap gap-2 mb-6">
         {CATEGORIES.map(c => {
@@ -214,6 +242,7 @@ Content: ${manualContent}`,
           </div>
         </div>
       )}
+      </>)}
     </div>
   );
 }

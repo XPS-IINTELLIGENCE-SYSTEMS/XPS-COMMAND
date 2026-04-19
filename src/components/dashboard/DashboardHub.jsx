@@ -4,7 +4,7 @@ import {
   Users, Briefcase, Building2, Search, Mail, FileText, BarChart3,
   BookOpen, Swords, Link2, Shield, Settings, Bot, Loader2,
   TrendingUp, DollarSign, Target, Send, Clock, GitBranch,
-  Upload, Database, Sprout, Sliders, Share2, Globe, BookOpen
+  Upload, Database, Sprout, Sliders, Share2, Globe
 } from "lucide-react";
 import HexPatternBanner from "../shared/HexPatternBanner";
 

@@ -46,6 +46,27 @@ export default function SettingsView() {
 
   const handleDeleteAccount = async () => {
     setDeleting(true);
+    // Delete user data from related entities before logging out
+    const email = user?.email;
+    if (email) {
+      const [profiles, userProfiles, timeEntries] = await Promise.all([
+        base44.entities.MemberProfile.filter({ email }).catch(() => []),
+        base44.entities.UserProfile.filter({ user_email: email }).catch(() => []),
+        base44.entities.TimeEntry.filter({ tech_email: email }).catch(() => []),
+      ]);
+      await Promise.all([
+        ...profiles.map(p => base44.entities.MemberProfile.delete(p.id).catch(() => {})),
+        ...userProfiles.map(p => base44.entities.UserProfile.delete(p.id).catch(() => {})),
+        ...timeEntries.map(t => base44.entities.TimeEntry.delete(t.id).catch(() => {})),
+      ]);
+      // Clear user custom data
+      await base44.auth.updateMe({
+        phone: "", secondary_email: "", address: "", city: "", state: "",
+        zip: "", company: "", title: "", preferences: null,
+        ai_memory: "", ai_conversation_history: "", ai_preferences: "",
+      }).catch(() => {});
+    }
+    toast({ title: "Account data deleted" });
     await base44.auth.logout("/");
   };
 
@@ -157,7 +178,35 @@ export default function SettingsView() {
           <div className="space-y-2">
             <div className="flex items-center justify-between py-2 px-2 rounded-lg hover:bg-white/[0.03] border-b border-border/30">
               <span className="text-sm text-muted-foreground">Theme</span>
-              <span className="text-sm text-foreground font-medium">{theme}</span>
+              <div className="flex gap-1.5">
+                {["system", "light", "dark"].map(opt => {
+                  const isActive = opt === "system"
+                    ? !localStorage.getItem("xps-theme")
+                    : localStorage.getItem("xps-theme") === opt;
+                  return (
+                    <button
+                      key={opt}
+                      onClick={() => {
+                        if (opt === "system") {
+                          localStorage.removeItem("xps-theme");
+                          const sys = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+                          document.documentElement.classList.remove("light", "dark");
+                          document.documentElement.classList.add(sys);
+                        } else {
+                          localStorage.setItem("xps-theme", opt);
+                          document.documentElement.classList.remove("light", "dark");
+                          document.documentElement.classList.add(opt);
+                        }
+                      }}
+                      className={`px-2.5 py-1 rounded-md text-xs font-medium transition-all capitalize ${
+                        isActive ? "bg-primary/15 text-primary" : "text-muted-foreground hover:text-foreground hover:bg-white/5"
+                      }`}
+                    >
+                      {opt}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
             <div className="flex items-center justify-between py-2 px-2 rounded-lg hover:bg-white/[0.03]">
               <span className="text-sm text-muted-foreground">Compact mode</span>

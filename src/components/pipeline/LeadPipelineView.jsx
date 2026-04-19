@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { base44 } from "@/api/base44Client";
 import { Users, Mail, Phone, Plus, RefreshCcw, Brain, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -6,6 +6,7 @@ import { DataPageHeader, DataSearchBar, FilterPills, StatusBadge, ScoreBadge, Da
 import AddLeadModal from "./AddLeadModal";
 import LeadInsightModal from "./LeadInsightModal";
 import LeadRecommendModal from "./LeadRecommendModal";
+import LeadDetailPanel from "./LeadDetailPanel";
 import LeadFilterBar from "./LeadFilterBar";
 import { useIsMobile } from "@/hooks/use-mobile";
 import MobileLeadCard from "../mobile/MobileLeadCard";
@@ -44,9 +45,37 @@ export default function LeadPipelineView({ forcedTab }) {
   const [stageFilter, setStageFilter] = useState("All");
   const [scoreFilter, setScoreFilter] = useState("All");
   const [adding, setAdding] = useState(false);
-  const [selected, setSelected] = useState(null);
+  const [selectedId, setSelectedId] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("leadId") || null;
+  });
   const [insightLead, setInsightLead] = useState(null);
   const [recommendLead, setRecommendLead] = useState(null);
+
+  // Sync selected lead ID with URL for hardware back button support
+  const setSelected = useCallback((lead) => {
+    const id = lead?.id || null;
+    setSelectedId(id);
+    const url = new URL(window.location.href);
+    if (id) {
+      url.searchParams.set("leadId", id);
+    } else {
+      url.searchParams.delete("leadId");
+    }
+    window.history.pushState({}, "", url.toString());
+  }, []);
+
+  // Listen for popstate (hardware back button)
+  useEffect(() => {
+    const handler = () => {
+      const params = new URLSearchParams(window.location.search);
+      setSelectedId(params.get("leadId") || null);
+    };
+    window.addEventListener("popstate", handler);
+    return () => window.removeEventListener("popstate", handler);
+  }, []);
+
+  const selected = selectedId ? leads.find(l => l.id === selectedId) || null : null;
   const [advFilters, setAdvFilters] = useState({ stateFilter: "All", specialtyFilter: "All", verticalFilter: "All", bidStageFilter: "All" });
   const [sortBy, setSortBy] = useState("date_desc");
 
@@ -136,7 +165,7 @@ export default function LeadPipelineView({ forcedTab }) {
               bidStageColors={BID_STAGE_COLORS}
               onInsight={setInsightLead}
               onRecommend={setRecommendLead}
-              onClick={() => setSelected(selected?.id === lead.id ? null : lead)}
+              onClick={() => setSelected(selectedId === lead.id ? null : lead)}
             />
           ))}
         </div>
@@ -160,7 +189,7 @@ export default function LeadPipelineView({ forcedTab }) {
               </thead>
               <tbody className="divide-y divide-border">
                 {filtered.map(lead => (
-                  <tr key={lead.id} className="hover:bg-card/40 transition-colors cursor-pointer" onClick={() => setSelected(selected?.id === lead.id ? null : lead)}>
+                  <tr key={lead.id} className="hover:bg-card/40 transition-colors cursor-pointer" onClick={() => setSelected(selectedId === lead.id ? null : lead)}>
                     <td className="px-4 py-3">
                       <div className="font-medium text-foreground">{lead.company}</div>
                       <div className="text-xs text-muted-foreground">{lead.contact_name}</div>
@@ -200,6 +229,24 @@ export default function LeadPipelineView({ forcedTab }) {
                 ))}
               </tbody>
             </table>
+          </div>
+        </div>
+      )}
+
+      {/* Lead detail side panel / overlay */}
+      {selected && (
+        <div className="fixed inset-0 z-50 flex justify-end">
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setSelected(null)} />
+          <div className="relative h-full w-full max-w-md">
+            <LeadDetailPanel
+              lead={selected}
+              onClose={() => setSelected(null)}
+              onDelete={async (id) => {
+                await base44.entities.Lead.delete(id);
+                setSelected(null);
+                load();
+              }}
+            />
           </div>
         </div>
       )}

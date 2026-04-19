@@ -12,12 +12,18 @@ import MobileBottomBar from "../components/mobile/MobileBottomBar";
 import MobileToolHeader from "../components/mobile/MobileToolHeader";
 import AnimatedView from "../components/mobile/AnimatedView";
 import { DEFAULT_TOOLS } from "../components/dashboard/dashboardDefaults";
+import useSystemTheme from "../hooks/useSystemTheme";
 
 export default function Home() {
   const [activeView, setActiveView] = useState(null); // null = show dashboard hub
   const [chatWidth, setChatWidth] = useState(() => parseInt(localStorage.getItem("xps-chat-width")) || 340);
   const [chatOpen, setChatOpen] = useState(true);
-  const [theme, setTheme] = useState(() => localStorage.getItem("xps-theme") || "dark");
+  const [theme, setTheme] = useState(() => {
+    const stored = localStorage.getItem("xps-theme");
+    if (stored) return stored;
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  });
+  useSystemTheme();
   const [showPrivacy, setShowPrivacy] = useState(false);
   const [mobileTab, setMobileTab] = useState("home"); // home, chat, tools, settings
   const tabViewMemory = useRef({}); // remembers activeView per tab

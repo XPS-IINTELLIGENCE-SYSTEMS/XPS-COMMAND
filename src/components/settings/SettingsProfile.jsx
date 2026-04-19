@@ -55,14 +55,14 @@ export default function SettingsProfile() {
   if (!user) return null;
 
   const fields = [
-    { key: "phone", label: "Phone Number", icon: Phone, placeholder: "+1 (555) 000-0000" },
-    { key: "secondary_email", label: "Additional Email", icon: Mail, placeholder: "backup@email.com" },
-    { key: "company", label: "Company", icon: User, placeholder: "Company name" },
-    { key: "title", label: "Job Title", icon: User, placeholder: "Your role" },
-    { key: "address", label: "Street Address", icon: MapPin, placeholder: "123 Main St" },
-    { key: "city", label: "City", icon: MapPin, placeholder: "City" },
-    { key: "state", label: "State", icon: MapPin, placeholder: "State" },
-    { key: "zip", label: "ZIP Code", icon: MapPin, placeholder: "ZIP" },
+    { key: "phone", label: "Phone Number", icon: Phone, placeholder: "+1 (555) 000-0000", type: "tel", inputMode: "tel", autoComplete: "tel" },
+    { key: "secondary_email", label: "Additional Email", icon: Mail, placeholder: "backup@email.com", type: "email", inputMode: "email", autoComplete: "email" },
+    { key: "company", label: "Company", icon: User, placeholder: "Company name", autoComplete: "organization" },
+    { key: "title", label: "Job Title", icon: User, placeholder: "Your role", autoComplete: "organization-title" },
+    { key: "address", label: "Street Address", icon: MapPin, placeholder: "123 Main St", autoComplete: "street-address" },
+    { key: "city", label: "City", icon: MapPin, placeholder: "City", autoComplete: "address-level2" },
+    { key: "state", label: "State", icon: MapPin, placeholder: "State", autoComplete: "address-level1" },
+    { key: "zip", label: "ZIP Code", icon: MapPin, placeholder: "ZIP", inputMode: "numeric", autoComplete: "postal-code" },
   ];
 
   return (
@@ -116,6 +116,9 @@ export default function SettingsProfile() {
                     onChange={(e) => setForm(prev => ({ ...prev, [f.key]: e.target.value }))}
                     placeholder={f.placeholder}
                     className="h-7 w-40 text-xs bg-transparent"
+                    type={f.type || "text"}
+                    inputMode={f.inputMode}
+                    autoComplete={f.autoComplete}
                   />
                   {form[f.key] && (
                     <button onClick={() => handleDelete(f.key)} className="p-1 rounded hover:bg-white/10">

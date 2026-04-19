@@ -17,7 +17,7 @@ export default function LeadDetailPanel({ lead, onClose, onDelete, onChatCommand
   };
 
   return (
-    <div className="w-80 md:w-96 h-full glass-panel overflow-y-auto border-l border-white/[0.06] flex-shrink-0">
+    <div className="w-full h-full glass-panel overflow-y-auto border-l border-white/[0.06] flex-shrink-0 bg-background">
       <div className="p-4 space-y-4">
         {/* Header */}
         <div className="flex items-start justify-between">

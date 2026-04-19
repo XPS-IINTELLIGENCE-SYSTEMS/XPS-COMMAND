@@ -140,6 +140,7 @@ export default function Onboarding() {
         onChange={(e) => setName(e.target.value)}
         className="h-12 text-base"
         autoFocus
+        autoComplete="name"
       />
     </div>,
 

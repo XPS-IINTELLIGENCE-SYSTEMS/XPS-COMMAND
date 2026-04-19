@@ -73,6 +73,9 @@ export default function ResearchBrowser({ onComplete }) {
               placeholder="Enter keywords, company name, or paste a URL..."
               className="w-full pl-10 pr-10 py-3 bg-card border border-border rounded-2xl text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/30"
               disabled={searching}
+              inputMode="search"
+              enterKeyHint="search"
+              autoComplete="off"
             />
             <button
               type="button"

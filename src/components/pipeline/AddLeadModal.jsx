@@ -32,21 +32,21 @@ export default function AddLeadModal({ onClose, defaultType = "XPress" }) {
       <div className="absolute inset-0 bg-black/50" />
       <div className="relative glass-panel rounded-xl p-5 w-[440px] max-h-[80vh] overflow-y-auto space-y-3 shadow-2xl" onClick={e => e.stopPropagation()}>
         <h3 className="text-sm font-bold text-foreground mb-2">Add New Lead</h3>
-        <Input placeholder="Company name *" value={form.company} onChange={e => set("company", e.target.value)} className="h-9 text-sm" />
-        <Input placeholder="Contact name" value={form.contact_name} onChange={e => set("contact_name", e.target.value)} className="h-9 text-sm" />
+        <Input placeholder="Company name *" value={form.company} onChange={e => set("company", e.target.value)} className="h-9 text-sm" autoComplete="organization" />
+        <Input placeholder="Contact name" value={form.contact_name} onChange={e => set("contact_name", e.target.value)} className="h-9 text-sm" autoComplete="name" />
         <div className="grid grid-cols-2 gap-2">
-          <Input placeholder="Email" value={form.email} onChange={e => set("email", e.target.value)} className="h-9 text-sm" />
-          <Input placeholder="Phone" value={form.phone} onChange={e => set("phone", e.target.value)} className="h-9 text-sm" />
+          <Input placeholder="Email" value={form.email} onChange={e => set("email", e.target.value)} className="h-9 text-sm" type="email" inputMode="email" autoComplete="email" />
+          <Input placeholder="Phone" value={form.phone} onChange={e => set("phone", e.target.value)} className="h-9 text-sm" type="tel" inputMode="tel" autoComplete="tel" />
         </div>
-        <Input placeholder="Website" value={form.website} onChange={e => set("website", e.target.value)} className="h-9 text-sm" />
+        <Input placeholder="Website" value={form.website} onChange={e => set("website", e.target.value)} className="h-9 text-sm" type="url" inputMode="url" autoComplete="url" />
         <div className="grid grid-cols-3 gap-2">
-          <Input placeholder="City" value={form.city} onChange={e => set("city", e.target.value)} className="h-9 text-sm" />
-          <Input placeholder="State" value={form.state} onChange={e => set("state", e.target.value)} className="h-9 text-sm" />
-          <Input placeholder="ZIP" value={form.zip} onChange={e => set("zip", e.target.value)} className="h-9 text-sm" />
+          <Input placeholder="City" value={form.city} onChange={e => set("city", e.target.value)} className="h-9 text-sm" autoComplete="address-level2" />
+          <Input placeholder="State" value={form.state} onChange={e => set("state", e.target.value)} className="h-9 text-sm" autoComplete="address-level1" />
+          <Input placeholder="ZIP" value={form.zip} onChange={e => set("zip", e.target.value)} className="h-9 text-sm" inputMode="numeric" autoComplete="postal-code" />
         </div>
         <div className="grid grid-cols-2 gap-2">
-          <Input type="number" placeholder="Employees" value={form.employee_count || ""} onChange={e => set("employee_count", Number(e.target.value))} className="h-9 text-sm" />
-          <Input type="number" placeholder="Est. value ($)" value={form.estimated_value || ""} onChange={e => set("estimated_value", Number(e.target.value))} className="h-9 text-sm" />
+          <Input type="number" inputMode="numeric" placeholder="Employees" value={form.employee_count || ""} onChange={e => set("employee_count", Number(e.target.value))} className="h-9 text-sm" />
+          <Input type="number" inputMode="decimal" placeholder="Est. value ($)" value={form.estimated_value || ""} onChange={e => set("estimated_value", Number(e.target.value))} className="h-9 text-sm" />
         </div>
         <Input placeholder="Existing floor material" value={form.existing_material} onChange={e => set("existing_material", e.target.value)} className="h-9 text-sm" />
         <Input placeholder="Equipment used" value={form.equipment_used} onChange={e => set("equipment_used", e.target.value)} className="h-9 text-sm" />

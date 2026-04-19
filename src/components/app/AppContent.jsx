@@ -10,6 +10,8 @@ import KnowledgeUploadView from "../knowledge/KnowledgeUploadView";
 import AdminControlView from "../admin/AdminControlView";
 import CompetitiveIntelCenter from "../owner/CompetitiveIntelCenter";
 import CompetitorComparisonView from "../competitor/CompetitorComparisonView";
+import AgentKnowledgeUpload from "../dashboard/AgentKnowledgeUpload";
+import AgentSkillsLibrary from "../dashboard/AgentSkillsLibrary";
 import ConnectorHub from "../settings/ConnectorHub";
 import SettingsView from "../dashboard/SettingsView";
 import ScraperSchedulerView from "../scheduler/ScraperSchedulerView";
@@ -42,6 +44,8 @@ export default function AppContent({ activeView, onChatCommand, onNavigate }) {
     case "admin": return <AdminControlView />;
     case "competition": return <CompetitiveIntelCenter />;
     case "competitor_comparison": return <CompetitorComparisonView />;
+    case "agent_knowledge": return <AgentKnowledgeUpload />;
+    case "agent_skills": return <AgentSkillsLibrary onRunSkill={(cmd) => { /* handled by parent */ }} />;
     case "connectors": return <ConnectorHub />;
     case "settings": return <SettingsView />;
     case "scheduler": return <ScraperSchedulerView />;

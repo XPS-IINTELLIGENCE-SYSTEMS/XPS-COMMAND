@@ -3,6 +3,7 @@ import { Send, Plus, Loader2, Sparkles, Globe, Pencil, Database, Code, Search, G
 import AgentSwitcher, { AGENTS } from "./chat/AgentSwitcher";
 import QuickActionButtons from "./chat/QuickActionButtons";
 import SubAgentChat from "./chat/SubAgentChat";
+import ChatAttachmentButton from "./chat/ChatAttachmentButton";
 import { Button } from "@/components/ui/button";
 import { base44 } from "@/api/base44Client";
 import ReactMarkdown from "react-markdown";
@@ -298,7 +299,17 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
 
       {/* Input */}
       <div className={`${mobile ? 'p-2 pb-8' : 'p-3'} border-t border-border ${activeAgentId !== "main" && !mobile ? "hidden" : ""}`}>
-        <div className="flex gap-2">
+        <div className="flex gap-1.5 items-center">
+          <ChatAttachmentButton
+            mobile={mobile}
+            onRouteComplete={(route, fileName, summary) => {
+              const routeMsg = `📎 Uploaded "${fileName}" → auto-routed to ${route}. ${summary}`;
+              if (conversation && !loading) {
+                setLoading(true);
+                base44.agents.addMessage(conversation, { role: "user", content: routeMsg });
+              }
+            }}
+          />
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}

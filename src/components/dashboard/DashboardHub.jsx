@@ -4,7 +4,7 @@ import {
   Users, Briefcase, Building2, Search, Mail, FileText, BarChart3,
   BookOpen, Swords, Link2, Shield, Settings, Bot, Loader2,
   TrendingUp, DollarSign, Target, Send, Clock, GitBranch,
-  Upload, Database, Sprout, Sliders, Share2, Globe
+  Upload, Database, Sprout, Sliders, Share2, Globe, BookOpen
 } from "lucide-react";
 import HexPatternBanner from "../shared/HexPatternBanner";
 
@@ -31,6 +31,8 @@ const TOOL_BUTTONS = [
   { id: "workflows", label: "Workflows", desc: "Drag & drop automation builder", icon: GitBranch, color: "#f43f5e" },
   { id: "admin", label: "Admin Control", desc: "Users, keys & promo codes", icon: Shield, color: "#a855f7" },
   { id: "settings", label: "Settings", desc: "Account & preferences", icon: Settings, color: "#64748b" },
+  { id: "agent_knowledge", label: "Agent Knowledge", desc: "Upload docs & URLs to agents", icon: Upload, color: "#10b981" },
+  { id: "agent_skills", label: "Skills Library", desc: "All agent capabilities", icon: Bot, color: "#8b5cf6" },
   { id: "ai_assistant", label: "AI Assistant", desc: "Chat-driven commands", icon: Bot, color: "#d4af37" },
 ];
 

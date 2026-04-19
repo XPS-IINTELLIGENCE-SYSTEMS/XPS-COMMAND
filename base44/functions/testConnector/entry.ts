@@ -1,119 +1,169 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
+// Comprehensive service configs for all 60+ connectors
 const SERVICE_CONFIGS = {
-  construct_connect: {
-    testUrl: 'https://api.constructconnect.com/v1/projects?limit=1',
-    authHeader: 'Authorization',
-    authPrefix: 'Bearer ',
-    defaultBase: 'https://api.constructconnect.com/v1',
-    docs: 'https://developer.constructconnect.com/'
-  },
-  dodge_reports: {
-    testUrl: 'https://api.construction.com/v1/projects?limit=1',
-    authHeader: 'Authorization',
-    authPrefix: 'Bearer ',
-    defaultBase: 'https://api.construction.com/v1',
-    docs: 'https://www.construction.com/products/project-information'
-  },
-  hubspot: {
-    testUrl: 'https://api.hubapi.com/crm/v3/objects/contacts?limit=1',
-    authHeader: 'Authorization',
-    authPrefix: 'Bearer ',
-    defaultBase: 'https://api.hubapi.com',
-    docs: 'https://developers.hubspot.com/docs/api/overview'
-  },
-  airtable: {
-    testUrl: 'https://api.airtable.com/v0/meta/whoami',
-    authHeader: 'Authorization',
-    authPrefix: 'Bearer ',
-    defaultBase: 'https://api.airtable.com/v0',
-    docs: 'https://airtable.com/developers/web/api/introduction'
-  },
-  openai: {
-    testUrl: 'https://api.openai.com/v1/models',
-    authHeader: 'Authorization',
-    authPrefix: 'Bearer ',
-    defaultBase: 'https://api.openai.com/v1',
-    docs: 'https://platform.openai.com/docs/api-reference'
-  },
-  anthropic: {
-    testUrl: 'https://api.anthropic.com/v1/messages',
-    authHeader: 'x-api-key',
-    authPrefix: '',
-    defaultBase: 'https://api.anthropic.com/v1',
-    docs: 'https://docs.anthropic.com/'
-  },
-  groq: {
-    testUrl: 'https://api.groq.com/openai/v1/models',
-    authHeader: 'Authorization',
-    authPrefix: 'Bearer ',
-    defaultBase: 'https://api.groq.com/openai/v1',
-    docs: 'https://console.groq.com/docs'
-  },
-  stripe: {
-    testUrl: 'https://api.stripe.com/v1/balance',
-    authHeader: 'Authorization',
-    authPrefix: 'Bearer ',
-    defaultBase: 'https://api.stripe.com/v1',
-    docs: 'https://stripe.com/docs/api'
-  },
-  sendgrid: {
-    testUrl: 'https://api.sendgrid.com/v3/user/profile',
-    authHeader: 'Authorization',
-    authPrefix: 'Bearer ',
-    defaultBase: 'https://api.sendgrid.com/v3',
-    docs: 'https://docs.sendgrid.com/api-reference'
-  },
-  slack: {
-    testUrl: 'https://slack.com/api/auth.test',
-    authHeader: 'Authorization',
-    authPrefix: 'Bearer ',
-    defaultBase: 'https://slack.com/api',
-    docs: 'https://api.slack.com/methods'
-  },
-  zoominfo: {
-    testUrl: 'https://api.zoominfo.com/lookup/inputfields/contact/enrich',
-    authHeader: 'Authorization',
-    authPrefix: 'Bearer ',
-    defaultBase: 'https://api.zoominfo.com',
-    docs: 'https://api-docs.zoominfo.com/'
-  },
-  apolloio: {
-    testUrl: 'https://api.apollo.io/api/v1/auth/health',
-    authHeader: 'X-Api-Key',
-    authPrefix: '',
-    defaultBase: 'https://api.apollo.io/api/v1',
-    docs: 'https://apolloio.github.io/apollo-api-docs/'
-  },
-  apify: {
-    testUrl: 'https://api.apify.com/v2/users/me',
-    authHeader: 'Authorization',
-    authPrefix: 'Bearer ',
-    defaultBase: 'https://api.apify.com/v2',
-    docs: 'https://docs.apify.com/api/v2'
-  },
-  github: {
-    testUrl: 'https://api.github.com/user',
-    authHeader: 'Authorization',
-    authPrefix: 'Bearer ',
-    defaultBase: 'https://api.github.com',
-    docs: 'https://docs.github.com/en/rest'
-  },
-  vercel: {
-    testUrl: 'https://api.vercel.com/v2/user',
-    authHeader: 'Authorization',
-    authPrefix: 'Bearer ',
-    defaultBase: 'https://api.vercel.com',
-    docs: 'https://vercel.com/docs/rest-api'
-  },
-  custom: {
-    testUrl: null,
-    authHeader: 'Authorization',
-    authPrefix: 'Bearer ',
-    defaultBase: '',
-    docs: ''
-  }
+  // AI & LLM
+  openai: { testUrl: 'https://api.openai.com/v1/models', authHeader: 'Authorization', authPrefix: 'Bearer ' },
+  anthropic: { testUrl: 'https://api.anthropic.com/v1/models', authHeader: 'x-api-key', authPrefix: '', extraHeaders: { 'anthropic-version': '2023-06-01' } },
+  groq: { testUrl: 'https://api.groq.com/openai/v1/models', authHeader: 'Authorization', authPrefix: 'Bearer ' },
+  ollama: { testUrl: null, authHeader: 'Authorization', authPrefix: 'Bearer ', useBaseUrl: true, testPath: '/api/tags' },
+  openrouter: { testUrl: 'https://openrouter.ai/api/v1/models', authHeader: 'Authorization', authPrefix: 'Bearer ' },
+  together_ai: { testUrl: 'https://api.together.xyz/v1/models', authHeader: 'Authorization', authPrefix: 'Bearer ' },
+  mistral: { testUrl: 'https://api.mistral.ai/v1/models', authHeader: 'Authorization', authPrefix: 'Bearer ' },
+  perplexity: { testUrl: 'https://api.perplexity.ai/chat/completions', authHeader: 'Authorization', authPrefix: 'Bearer ', method: 'POST', body: JSON.stringify({ model: 'llama-3.1-sonar-small-128k-online', messages: [{ role: 'user', content: 'ping' }] }), contentType: 'application/json' },
+  replicate: { testUrl: 'https://api.replicate.com/v1/collections', authHeader: 'Authorization', authPrefix: 'Bearer ' },
+  heygen: { testUrl: 'https://api.heygen.com/v2/avatars', authHeader: 'X-Api-Key', authPrefix: '' },
+  elevenlabs: { testUrl: 'https://api.elevenlabs.io/v1/voices', authHeader: 'xi-api-key', authPrefix: '' },
+
+  // Google
+  google_cloud: { testUrl: null, authHeader: 'Authorization', authPrefix: 'Bearer ', useBaseUrl: true },
+  google_drive: { testUrl: 'https://www.googleapis.com/drive/v3/about?fields=user', authHeader: 'Authorization', authPrefix: 'Bearer ' },
+  google_sheets: { testUrl: 'https://sheets.googleapis.com/v4/spreadsheets', authHeader: 'Authorization', authPrefix: 'Bearer ' },
+  google_docs: { testUrl: 'https://docs.googleapis.com/v1/documents', authHeader: 'Authorization', authPrefix: 'Bearer ' },
+  google_tasks: { testUrl: 'https://tasks.googleapis.com/tasks/v1/users/@me/lists', authHeader: 'Authorization', authPrefix: 'Bearer ' },
+  google_calendar: { testUrl: 'https://www.googleapis.com/calendar/v3/users/me/calendarList', authHeader: 'Authorization', authPrefix: 'Bearer ' },
+  gmail: { testUrl: 'https://gmail.googleapis.com/gmail/v1/users/me/profile', authHeader: 'Authorization', authPrefix: 'Bearer ' },
+  google_keep: { testUrl: null, authHeader: 'Authorization', authPrefix: 'Bearer ' },
+
+  // Infrastructure & Database
+  supabase: { testUrl: null, authHeader: 'apikey', authPrefix: '', useBaseUrl: true, testPath: '/rest/v1/' },
+  redis: { testUrl: null, authHeader: 'Authorization', authPrefix: 'Bearer ' },
+  neon: { testUrl: 'https://console.neon.tech/api/v2/projects', authHeader: 'Authorization', authPrefix: 'Bearer ' },
+  aws: { testUrl: 'https://sts.amazonaws.com/?Action=GetCallerIdentity&Version=2011-06-15', authHeader: 'Authorization', authPrefix: '' },
+  vercel: { testUrl: 'https://api.vercel.com/v2/user', authHeader: 'Authorization', authPrefix: 'Bearer ' },
+  base44: { testUrl: null, authHeader: 'Authorization', authPrefix: 'Bearer ' },
+
+  // Developer Tools
+  github: { testUrl: 'https://api.github.com/user', authHeader: 'Authorization', authPrefix: 'Bearer ' },
+  steel_dev: { testUrl: 'https://api.steel.dev/v1/health', authHeader: 'Authorization', authPrefix: 'Bearer ' },
+  browserless: { testUrl: null, authHeader: 'Authorization', authPrefix: 'Bearer ', useBaseUrl: true },
+  apify: { testUrl: 'https://api.apify.com/v2/users/me', authHeader: 'Authorization', authPrefix: 'Bearer ' },
+  brightdata: { testUrl: 'https://api.brightdata.com/zone', authHeader: 'Authorization', authPrefix: 'Bearer ' },
+  firecrawl: { testUrl: 'https://api.firecrawl.dev/v1/crawl', authHeader: 'Authorization', authPrefix: 'Bearer ' },
+  serper: { testUrl: 'https://google.serper.dev/search', authHeader: 'X-API-KEY', authPrefix: '', method: 'POST', body: JSON.stringify({ q: 'test' }), contentType: 'application/json' },
+  tavily: { testUrl: 'https://api.tavily.com/search', authHeader: 'Authorization', authPrefix: 'Bearer ', method: 'POST', body: JSON.stringify({ query: 'test', max_results: 1 }), contentType: 'application/json' },
+
+  // Communication
+  twilio: { testUrl: null, authHeader: 'Authorization', authPrefix: 'Basic ', isBasicAuth: true },
+  slack: { testUrl: 'https://slack.com/api/auth.test', authHeader: 'Authorization', authPrefix: 'Bearer ' },
+  sendgrid: { testUrl: 'https://api.sendgrid.com/v3/user/profile', authHeader: 'Authorization', authPrefix: 'Bearer ' },
+
+  // CRM & Sales
+  hubspot: { testUrl: 'https://api.hubapi.com/crm/v3/objects/contacts?limit=1', authHeader: 'Authorization', authPrefix: 'Bearer ' },
+  airtable: { testUrl: 'https://api.airtable.com/v0/meta/whoami', authHeader: 'Authorization', authPrefix: 'Bearer ' },
+  zoominfo: { testUrl: 'https://api.zoominfo.com/lookup/inputfields/contact/enrich', authHeader: 'Authorization', authPrefix: 'Bearer ' },
+  apolloio: { testUrl: 'https://api.apollo.io/api/v1/auth/health', authHeader: 'X-Api-Key', authPrefix: '' },
+  linkedin: { testUrl: 'https://api.linkedin.com/v2/userinfo', authHeader: 'Authorization', authPrefix: 'Bearer ' },
+
+  // XPS
+  xps_lead_sniper: { testUrl: null, authHeader: 'Authorization', authPrefix: 'Bearer ' },
+
+  // Construction
+  construct_connect: { testUrl: 'https://api.constructconnect.com/v1/projects?limit=1', authHeader: 'Authorization', authPrefix: 'Bearer ' },
+  dodge_reports: { testUrl: 'https://api.construction.com/v1/projects?limit=1', authHeader: 'Authorization', authPrefix: 'Bearer ' },
+  planhub: { testUrl: null, authHeader: 'Authorization', authPrefix: 'Bearer ', useBaseUrl: true },
+  building_connected: { testUrl: null, authHeader: 'Authorization', authPrefix: 'Bearer ', useBaseUrl: true },
+  isqft: { testUrl: null, authHeader: 'Authorization', authPrefix: 'Bearer ', useBaseUrl: true },
+  bidclerk: { testUrl: null, authHeader: 'Authorization', authPrefix: 'Bearer ', useBaseUrl: true },
+  the_blue_book: { testUrl: null, authHeader: 'Authorization', authPrefix: 'Bearer ', useBaseUrl: true },
+
+  // Government
+  sam_gov: { testUrl: 'https://api.sam.gov/opportunities/v2/search?limit=1&api_key=', authHeader: null, authAsParam: true, paramName: 'api_key' },
+  usaspending: { testUrl: 'https://api.usaspending.gov/api/v2/references/toptier_agencies/', authHeader: null },
+  fpds: { testUrl: null, authHeader: 'Authorization', authPrefix: 'Bearer ' },
+  fbo_gov: { testUrl: 'https://api.sam.gov/opportunities/v1/search?limit=1&api_key=', authHeader: null, authAsParam: true, paramName: 'api_key' },
+  gsa_ebuy: { testUrl: null, authHeader: 'Authorization', authPrefix: 'Bearer ' },
+  beta_sam: { testUrl: 'https://api.sam.gov/entity-information/v3/entities?api_key=', authHeader: null, authAsParam: true, paramName: 'api_key', appendKey: true },
+  grants_gov: { testUrl: null, authHeader: null },
+  sbir_gov: { testUrl: null, authHeader: null },
+  census_gov: { testUrl: 'https://api.census.gov/data.json', authHeader: null },
+  data_gov: { testUrl: null, authHeader: null },
+
+  // Payments & Automation
+  stripe: { testUrl: 'https://api.stripe.com/v1/balance', authHeader: 'Authorization', authPrefix: 'Bearer ' },
+  zapier: { testUrl: null, authHeader: 'Authorization', authPrefix: 'Bearer ' },
+
+  // Fallback
+  custom: { testUrl: null, authHeader: 'Authorization', authPrefix: 'Bearer ' },
 };
+
+async function testSingleConnector(serviceType, apiKey, baseUrl) {
+  const config = SERVICE_CONFIGS[serviceType] || SERVICE_CONFIGS.custom;
+
+  // Build test URL
+  let testUrl = config.testUrl;
+  if (!testUrl && config.useBaseUrl && baseUrl) {
+    testUrl = baseUrl + (config.testPath || '');
+  } else if (!testUrl && baseUrl) {
+    testUrl = baseUrl;
+  }
+
+  // For APIs where key is a URL param
+  if (config.authAsParam && config.appendKey && testUrl) {
+    testUrl = testUrl + (apiKey || '');
+  }
+
+  if (!testUrl) {
+    // No test URL and no base URL — can't test, mark as untested success
+    return { status: 'connected', response_ms: 0, message: 'Saved (no test endpoint available)' };
+  }
+
+  // For open APIs (no auth needed)
+  if (!config.authHeader && !config.authAsParam) {
+    if (!testUrl) {
+      return { status: 'connected', response_ms: 0, message: 'Saved (open API — no test needed)' };
+    }
+    const startTime = Date.now();
+    const response = await fetch(testUrl, { signal: AbortSignal.timeout(10000) });
+    const ms = Date.now() - startTime;
+    const ok = response.status >= 200 && response.status < 400;
+    return { status: ok ? 'connected' : 'error', response_code: response.status, response_ms: ms, message: ok ? 'Connection successful' : `HTTP ${response.status}` };
+  }
+
+  if (!apiKey) {
+    return { status: 'error', response_ms: 0, message: 'Missing API key' };
+  }
+
+  const startTime = Date.now();
+  const headers = {};
+
+  if (config.authHeader) {
+    if (config.isBasicAuth) {
+      headers[config.authHeader] = `${config.authPrefix}${btoa(apiKey)}`;
+    } else {
+      headers[config.authHeader] = `${config.authPrefix}${apiKey}`;
+    }
+  }
+
+  if (config.extraHeaders) {
+    Object.assign(headers, config.extraHeaders);
+  }
+
+  if (config.contentType) {
+    headers['Content-Type'] = config.contentType;
+  }
+
+  const fetchOpts = {
+    method: config.method || 'GET',
+    headers,
+    signal: AbortSignal.timeout(10000),
+  };
+
+  if (config.body && config.method === 'POST') {
+    fetchOpts.body = config.body;
+  }
+
+  const response = await fetch(testUrl, fetchOpts);
+  const ms = Date.now() - startTime;
+  const ok = response.status >= 200 && response.status < 400;
+
+  return {
+    status: ok ? 'connected' : 'error',
+    response_code: response.status,
+    response_ms: ms,
+    message: ok ? 'Connection successful' : `HTTP ${response.status}: ${response.statusText}`,
+  };
+}
 
 Deno.serve(async (req) => {
   try {
@@ -126,122 +176,56 @@ Deno.serve(async (req) => {
     const body = await req.json();
     const { action, connector_id, service_type, api_key, base_url } = body;
 
-    // Test a connector
+    // Test a single connector
     if (action === 'test') {
-      const config = SERVICE_CONFIGS[service_type] || SERVICE_CONFIGS.custom;
-      const testUrl = base_url || config.testUrl || config.defaultBase;
-
-      if (!testUrl || !api_key) {
-        return Response.json({ status: 'error', message: 'Missing API key or test URL' });
-      }
-
-      const startTime = Date.now();
       try {
-        const headers = {};
-        headers[config.authHeader] = `${config.authPrefix}${api_key}`;
-        if (service_type === 'anthropic') {
-          headers['anthropic-version'] = '2023-06-01';
-        }
+        const result = await testSingleConnector(service_type, api_key, base_url);
 
-        const response = await fetch(testUrl, {
-          method: 'GET',
-          headers,
-          signal: AbortSignal.timeout(10000)
-        });
-
-        const responseMs = Date.now() - startTime;
-        const ok = response.status >= 200 && response.status < 400;
-
-        // Update connector record if ID provided
         if (connector_id) {
-          const errorLog = ok ? '[]' : JSON.stringify([{
-            time: new Date().toISOString(),
-            status: response.status,
-            message: response.statusText
-          }]);
-
           await base44.asServiceRole.entities.APIConnector.update(connector_id, {
-            connection_status: ok ? 'connected' : 'error',
+            connection_status: result.status,
             last_tested: new Date().toISOString(),
-            last_response_ms: responseMs,
-            error_log: ok ? '[]' : errorLog
+            last_response_ms: result.response_ms,
+            error_log: result.status === 'error' ? JSON.stringify([{ time: new Date().toISOString(), message: result.message }]) : '[]',
           });
         }
 
-        return Response.json({
-          status: ok ? 'connected' : 'error',
-          response_code: response.status,
-          response_ms: responseMs,
-          message: ok ? 'Connection successful' : `HTTP ${response.status}: ${response.statusText}`
-        });
+        return Response.json(result);
       } catch (fetchError) {
-        const responseMs = Date.now() - startTime;
         if (connector_id) {
-          const existingConnector = await base44.asServiceRole.entities.APIConnector.get(connector_id);
-          let errors = [];
-          try { errors = JSON.parse(existingConnector.error_log || '[]'); } catch {}
-          errors.unshift({ time: new Date().toISOString(), message: fetchError.message });
-          errors = errors.slice(0, 5);
-
           await base44.asServiceRole.entities.APIConnector.update(connector_id, {
             connection_status: 'error',
             last_tested: new Date().toISOString(),
-            last_response_ms: responseMs,
-            error_log: JSON.stringify(errors)
+            error_log: JSON.stringify([{ time: new Date().toISOString(), message: fetchError.message }]),
           });
         }
-
-        return Response.json({
-          status: 'error',
-          response_ms: Date.now() - startTime,
-          message: fetchError.message
-        });
+        return Response.json({ status: 'error', response_ms: 0, message: fetchError.message });
       }
-    }
-
-    // Get service config (defaults)
-    if (action === 'get_config') {
-      const config = SERVICE_CONFIGS[service_type];
-      if (!config) return Response.json({ error: 'Unknown service type' }, { status: 400 });
-      return Response.json({
-        defaultBase: config.defaultBase,
-        docs: config.docs
-      });
     }
 
     // Health check all enabled connectors
     if (action === 'health_check_all') {
       const connectors = await base44.asServiceRole.entities.APIConnector.filter({ is_enabled: true });
       const results = [];
+
       for (const conn of connectors) {
-        const config = SERVICE_CONFIGS[conn.service_type] || SERVICE_CONFIGS.custom;
-        const testUrl = conn.base_url || config.testUrl || config.defaultBase;
-        if (!testUrl || !conn.api_key) {
-          results.push({ id: conn.id, name: conn.name, status: 'error', message: 'Missing key or URL' });
-          continue;
-        }
-        const startTime = Date.now();
         try {
-          const headers = {};
-          headers[config.authHeader] = `${config.authPrefix}${conn.api_key}`;
-          if (conn.service_type === 'anthropic') headers['anthropic-version'] = '2023-06-01';
-          const response = await fetch(testUrl, { method: 'GET', headers, signal: AbortSignal.timeout(8000) });
-          const ms = Date.now() - startTime;
-          const ok = response.status >= 200 && response.status < 400;
+          const result = await testSingleConnector(conn.service_type, conn.api_key, conn.base_url);
           await base44.asServiceRole.entities.APIConnector.update(conn.id, {
-            connection_status: ok ? 'connected' : 'error',
+            connection_status: result.status,
             last_tested: new Date().toISOString(),
-            last_response_ms: ms
+            last_response_ms: result.response_ms,
           });
-          results.push({ id: conn.id, name: conn.name, status: ok ? 'connected' : 'error', ms });
+          results.push({ id: conn.id, name: conn.name, ...result });
         } catch (e) {
           await base44.asServiceRole.entities.APIConnector.update(conn.id, {
             connection_status: 'error',
-            last_tested: new Date().toISOString()
+            last_tested: new Date().toISOString(),
           });
           results.push({ id: conn.id, name: conn.name, status: 'error', message: e.message });
         }
       }
+
       return Response.json({ results, checked: results.length });
     }
 

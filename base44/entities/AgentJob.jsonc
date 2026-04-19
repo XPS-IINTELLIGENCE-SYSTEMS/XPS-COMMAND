@@ -5,9 +5,15 @@
     "agent_type": {
       "type": "string",
       "enum": [
+        "Coordinator",
+        "Browser",
         "Research",
-        "Outreach",
         "Scraper",
+        "Writer",
+        "Analyst",
+        "Coder",
+        "Scheduler",
+        "Outreach",
         "Proposal",
         "Call",
         "Content",
@@ -25,22 +31,45 @@
       "type": "string",
       "description": "What the agent needs to do"
     },
+    "goal": {
+      "type": "string",
+      "description": "High-level user goal this job is part of"
+    },
     "status": {
       "type": "string",
       "enum": [
         "queued",
+        "planning",
         "running",
+        "retrying",
         "complete",
         "failed",
         "paused",
         "cancelled"
       ],
-      "default": "queued",
-      "description": "Current job status"
+      "default": "queued"
     },
     "priority": {
       "type": "number",
       "description": "Priority 1-10 (10=highest)"
+    },
+    "step_current": {
+      "type": "number",
+      "default": 0,
+      "description": "Current execution step"
+    },
+    "step_total": {
+      "type": "number",
+      "default": 0,
+      "description": "Total planned steps"
+    },
+    "retry_count": {
+      "type": "number",
+      "default": 0
+    },
+    "max_retries": {
+      "type": "number",
+      "default": 3
     },
     "started_at": {
       "type": "string",
@@ -55,8 +84,7 @@
       "description": "Output or result JSON"
     },
     "error": {
-      "type": "string",
-      "description": "Error message if failed"
+      "type": "string"
     },
     "trigger_source": {
       "type": "string",
@@ -65,25 +93,32 @@
         "schedule",
         "agent_handoff",
         "webhook",
-        "system"
+        "system",
+        "goal"
       ],
       "default": "manual"
     },
     "parent_job_id": {
       "type": "string",
-      "description": "Parent job ID if this is a sub-agent task"
+      "description": "Parent job ID if this is a sub-task"
     },
     "output_handed_to": {
-      "type": "string",
-      "description": "Agent type that received this job's output"
+      "type": "string"
     },
     "execution_log": {
       "type": "string",
-      "description": "Step-by-step execution log"
+      "description": "JSON array of step-by-step log entries"
     },
     "memory_context": {
+      "type": "string"
+    },
+    "tool_calls": {
       "type": "string",
-      "description": "Context carried from previous sessions"
+      "description": "JSON array of tools called by this job"
+    },
+    "live_output": {
+      "type": "string",
+      "description": "Current streaming output for live display"
     }
   },
   "required": [

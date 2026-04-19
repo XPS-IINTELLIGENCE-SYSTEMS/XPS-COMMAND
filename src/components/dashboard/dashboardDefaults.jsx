@@ -97,6 +97,7 @@ export const DEFAULT_TOOLS = [
   { id: "job_site_map", label: "Job Site Map", desc: "Live map, routing & time tracking", iconName: "MapPin", color: "#0ea5e9" },
   { id: "auto_proposal", label: "AI Bid Writer", desc: "Auto-generate bids from job data", iconName: "Sparkles", color: "#8b5cf6" },
   { id: "client_portal", label: "Client Portal", desc: "Client photos, approvals & e-sign", iconName: "Building2", color: "#14b8a6" },
+  { id: "agent_command", label: "Agent Command", desc: "Autonomous multi-agent engine", iconName: "Sparkles", color: "#d4af37" },
 
   // 32–35: System
   { id: "admin", label: "Admin Control", desc: "Users, keys & promo codes", iconName: "Shield", color: "#a855f7" },

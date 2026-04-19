@@ -34,6 +34,7 @@ import FieldTechEmbed from "../fieldtech/FieldTechEmbed";
 import JobSiteMap from "../jobmap/JobSiteMap";
 import AutoProposalGenerator from "../proposals/AutoProposalGenerator";
 import ClientPortalView from "../clientportal/ClientPortalView";
+import AgentCommandCenterView from "../commandcenter/AgentCommandCenter";
 
 export default function AppContent({ activeView, onChatCommand, onNavigate }) {
   switch (activeView) {
@@ -76,6 +77,7 @@ export default function AppContent({ activeView, onChatCommand, onNavigate }) {
     case "job_site_map": return <JobSiteMap />;
     case "auto_proposal": return <AutoProposalGenerator />;
     case "client_portal": return <ClientPortalView />;
+    case "agent_command": return <AgentCommandCenterView />;
     default: return <div className="text-center py-20 text-muted-foreground">View not found</div>;
   }
 }

@@ -99,7 +99,7 @@ export default function WorkflowCreatorView() {
           <h3 className="text-sm font-bold text-foreground">Quick Start Templates</h3>
           <span className="text-xs text-muted-foreground">— click to create</span>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
           {WORKFLOW_TEMPLATES.map((tpl, i) => {
             const Icon = tpl.icon;
             return (

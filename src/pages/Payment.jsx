@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import PageHexGlow from "../components/PageHexGlow";
-import LandingNav from "../components/landing/LandingNav";
+import GlobalNav from "../components/navigation/GlobalNav";
 import { Check, Zap, Shield, Cpu, Loader2 } from "lucide-react";
 
 const plans = [
@@ -91,7 +91,7 @@ export default function Payment() {
     <div className="hex-bg min-h-screen bg-background text-foreground relative">
       <PageHexGlow />
       <div className="relative z-[1]">
-        <LandingNav />
+        <GlobalNav />
 
         {/* Hero */}
         <div className="text-center px-6 pt-16 md:pt-24 pb-12">

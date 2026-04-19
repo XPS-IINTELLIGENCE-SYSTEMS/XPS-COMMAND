@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { Database, Search, Filter, ArrowLeft, Loader2, Star, Eye, Archive, Trash2 } from "lucide-react";
+import { Database, Search, Filter, Loader2, Star, Eye, Archive, Trash2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import PageHexGlow from "../components/PageHexGlow";
+import GlobalNav from "../components/navigation/GlobalNav";
 
 const CATEGORIES = ["All", "Company", "Job/Project", "Social Media", "Competitor", "Market Intel", "Contact", "Other"];
 const PRIORITIES = ["All", "Critical", "High", "Medium", "Low"];
@@ -66,18 +67,8 @@ export default function DataBank() {
   return (
     <div className="min-h-screen bg-background hex-bg relative">
       <PageHexGlow />
-      {/* Header */}
-      <div className="relative z-[1] border-b border-border px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Link to="/dashboard" className="text-muted-foreground hover:text-foreground"><ArrowLeft className="w-5 h-5" /></Link>
-          <div>
-            <h1 className="text-xl font-extrabold text-foreground">Data Bank</h1>
-            <p className="text-[11px] text-muted-foreground">All scraped intelligence — filtered, scored, prioritized</p>
-          </div>
-        </div>
-        <div className="flex gap-2">
-          <Link to="/lead-engine"><Button variant="outline" size="sm">Lead Engine</Button></Link>
-        </div>
+      <div className="relative z-[1]">
+        <GlobalNav />
       </div>
 
       <div className="relative z-[1] max-w-6xl mx-auto px-6 py-6">

@@ -1,6 +1,6 @@
 import { ShieldCheck, Cpu, BarChart3, Sparkles, Lock, Radar, Database, Building2 } from "lucide-react";
 import { Link } from "react-router-dom";
-import LandingNav from "../components/landing/LandingNav";
+import GlobalNav from "../components/navigation/GlobalNav";
 import PageHexGlow from "../components/PageHexGlow";
 
 const features = [
@@ -19,7 +19,7 @@ export default function Platform() {
     <div className="hex-bg min-h-screen bg-background text-foreground relative">
       <PageHexGlow />
       <div className="relative z-[1]">
-      <LandingNav />
+      <GlobalNav />
 
       <div className="flex flex-col items-center text-center px-6 pt-16 md:pt-28 pb-12">
         <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full border border-primary/30 bg-primary/5 mb-10 shimmer-card">

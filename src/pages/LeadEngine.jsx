@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Zap, Loader2, Building2, Briefcase, Globe2, Play, AlertCircle, ChevronDown, ChevronUp, ArrowLeft } from "lucide-react";
+import { Zap, Loader2, Building2, Briefcase, Globe2, Play, AlertCircle, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { base44 } from "@/api/base44Client";
 import { Link } from "react-router-dom";
 import LeadEngineResults from "../components/leadengine/LeadEngineResults";
 import PageHexGlow from "../components/PageHexGlow";
+import GlobalNav from "../components/navigation/GlobalNav";
 
 const MODES = [
   { id: "companies", label: "Companies", icon: Building2, desc: "Businesses by industry & location" },
@@ -74,19 +75,8 @@ export default function LeadEngine() {
   return (
     <div className="min-h-screen bg-background hex-bg relative">
       <PageHexGlow />
-      {/* Header */}
-      <div className="relative z-[1] border-b border-border px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Link to="/dashboard" className="text-muted-foreground hover:text-foreground transition-colors"><ArrowLeft className="w-5 h-5" /></Link>
-          <div>
-            <h1 className="text-xl font-extrabold text-foreground">Lead Engine</h1>
-            <p className="text-[11px] text-muted-foreground">AI-Powered Scraper — Companies · Jobs · Social · Oracle</p>
-          </div>
-        </div>
-        <div className="flex gap-2">
-          <Link to="/data-bank"><Button variant="outline" size="sm">Data Bank</Button></Link>
-          <Link to="/admin-control"><Button variant="outline" size="sm">Admin</Button></Link>
-        </div>
+      <div className="relative z-[1]">
+        <GlobalNav />
       </div>
 
       <div className="relative z-[1] max-w-5xl mx-auto px-6 py-8">

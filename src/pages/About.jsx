@@ -1,6 +1,6 @@
 import { Crown, Rocket, Users, GraduationCap, ArrowRight, Globe, Gem, ShieldCheck } from "lucide-react";
 import { Link } from "react-router-dom";
-import LandingNav from "../components/landing/LandingNav";
+import GlobalNav from "../components/navigation/GlobalNav";
 import PageHexGlow from "../components/PageHexGlow";
 
 const values = [
@@ -30,7 +30,7 @@ export default function About() {
     <div className="hex-bg min-h-screen bg-background text-foreground relative">
       <PageHexGlow />
       <div className="relative z-[1]">
-      <LandingNav />
+      <GlobalNav />
 
       <div className="flex flex-col items-center text-center px-6 pt-16 md:pt-28 pb-12">
         <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold leading-none max-w-5xl transition-all duration-500 hover:scale-105" style={{ fontFamily: "'Montserrat', sans-serif" }}>

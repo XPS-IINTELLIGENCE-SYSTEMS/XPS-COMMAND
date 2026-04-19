@@ -1,17 +1,17 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { X, ArrowLeft, Sun, Moon, MessageSquare, User, LogOut, Settings } from "lucide-react";
+import { X, Sun, Moon, MessageSquare } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import ChatPanel from "../components/ChatPanel";
 import DashboardHub from "../components/dashboard/DashboardHub";
 import AppContent from "../components/app/AppContent";
 import PageHexGlow from "../components/PageHexGlow";
+import GlobalNav from "../components/navigation/GlobalNav";
 
 export default function Home() {
   const [activeView, setActiveView] = useState(null); // null = show dashboard hub
   const [chatWidth, setChatWidth] = useState(() => parseInt(localStorage.getItem("xps-chat-width")) || 340);
   const [chatOpen, setChatOpen] = useState(true);
   const [theme, setTheme] = useState(() => localStorage.getItem("xps-theme") || "dark");
-  const [menuOpen, setMenuOpen] = useState(false);
   const chatRef = useRef(null);
   const resizing = useRef(false);
 
@@ -58,61 +58,31 @@ export default function Home() {
 
       {/* Main content area */}
       <div className="flex-1 flex flex-col overflow-hidden min-w-0">
-        {/* Top bar */}
-        <header className="h-12 border-b border-border bg-card/80 backdrop-blur-md flex items-center px-4 gap-3 flex-shrink-0">
-          {/* Back button when viewing a tool */}
+        {/* Global top nav with hamburger, home, back */}
+        <GlobalNav />
+
+        {/* Secondary bar: theme toggle + chat toggle */}
+        <div className="h-10 flex items-center justify-end px-4 gap-2 flex-shrink-0 border-b border-white/[0.06]"
+          style={{ background: "rgba(0,0,0,0.3)" }}
+        >
           {activeView && (
             <button
               onClick={() => setActiveView(null)}
-              className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mr-2"
+              className="mr-auto flex items-center gap-1.5 text-[13px] text-white/50 hover:text-white transition-colors"
             >
-              <ArrowLeft className="w-4 h-4" />
-              <span className="hidden sm:inline">Dashboard</span>
+              ← Back to Dashboard
             </button>
           )}
-
-          {/* Brand */}
-          <div className="flex items-center gap-2">
-            <img src="https://media.base44.com/images/public/69db3269c791af3f48cfaee9/583965fcb_IMAGEWITHWHITEOUTLINE.jpg" alt="XPS" className="w-6 h-6 object-contain" />
-            {!activeView && (
-              <span className="text-sm font-extrabold metallic-gold tracking-wider hidden sm:inline">XPS INTELLIGENCE</span>
-            )}
-          </div>
-
-          <div className="flex-1" />
-
-          {/* Actions */}
-          <button onClick={() => setTheme(theme === "dark" ? "light" : "dark")} className="p-1.5 rounded-lg hover:bg-secondary text-muted-foreground">
+          <button onClick={() => setTheme(theme === "dark" ? "light" : "dark")} className="p-1.5 rounded-lg hover:bg-white/10 text-white/50">
             {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </button>
           <button
             onClick={() => setChatOpen(!chatOpen)}
-            className={`p-1.5 rounded-lg transition-colors lg:hidden ${chatOpen ? "bg-primary/10 text-primary" : "hover:bg-secondary text-muted-foreground"}`}
+            className={`p-1.5 rounded-lg transition-colors lg:hidden ${chatOpen ? "bg-primary/10 text-primary" : "hover:bg-white/10 text-white/50"}`}
           >
             <MessageSquare className="w-4 h-4" />
           </button>
-
-          {/* Account */}
-          <div className="relative">
-            <button onClick={() => setMenuOpen(!menuOpen)} className="w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center text-xs font-bold text-primary">
-              XP
-            </button>
-            {menuOpen && (
-              <>
-                <div className="fixed inset-0 z-40" onClick={() => setMenuOpen(false)} />
-                <div className="absolute right-0 top-full mt-2 w-44 rounded-xl border border-border bg-card shadow-xl z-50 py-1">
-                  <button onClick={() => { setMenuOpen(false); setActiveView("settings"); }} className="flex items-center gap-2 w-full px-3 py-2 text-sm hover:bg-secondary/60">
-                    <Settings className="w-3.5 h-3.5 text-muted-foreground" /> Settings
-                  </button>
-                  <div className="border-t border-border my-1" />
-                  <button onClick={() => base44.auth.logout()} className="flex items-center gap-2 w-full px-3 py-2 text-sm text-destructive hover:bg-secondary/60">
-                    <LogOut className="w-3.5 h-3.5" /> Sign Out
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
-        </header>
+        </div>
 
         {/* Content: Dashboard Hub or Tool View */}
         <main className="flex-1 overflow-y-auto">

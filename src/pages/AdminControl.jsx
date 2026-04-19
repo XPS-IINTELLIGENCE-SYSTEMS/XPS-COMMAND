@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { Shield, ArrowLeft, Loader2, Users, Database, Zap, BarChart3, RefreshCw, Trash2, AlertCircle } from "lucide-react";
+import { Shield, Loader2, Users, Database, Zap, BarChart3, RefreshCw, Trash2, AlertCircle } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import PageHexGlow from "../components/PageHexGlow";
+import GlobalNav from "../components/navigation/GlobalNav";
 
 export default function AdminControl() {
   const [stats, setStats] = useState(null);
@@ -59,15 +60,8 @@ export default function AdminControl() {
   return (
     <div className="min-h-screen bg-background hex-bg relative">
       <PageHexGlow />
-      <div className="relative z-[1] border-b border-border px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Link to="/dashboard" className="text-muted-foreground hover:text-foreground"><ArrowLeft className="w-5 h-5" /></Link>
-          <div>
-            <h1 className="text-xl font-extrabold text-foreground">Admin Control</h1>
-            <p className="text-[11px] text-muted-foreground">System overview & management</p>
-          </div>
-        </div>
-        <Button variant="outline" size="sm" onClick={loadStats}><RefreshCw className="w-3.5 h-3.5 mr-1.5" /> Refresh</Button>
+      <div className="relative z-[1]">
+        <GlobalNav />
       </div>
 
       <div className="relative z-[1] max-w-6xl mx-auto px-6 py-8">

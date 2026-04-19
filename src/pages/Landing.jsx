@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { ArrowRight, ShieldCheck, Download } from "lucide-react";
 import { Link } from "react-router-dom";
-import LandingNav from "../components/landing/LandingNav";
+import GlobalNav from "../components/navigation/GlobalNav";
 import PageHexGlow from "../components/PageHexGlow";
 import FloatingDownloadBtn from "../components/landing/FloatingDownloadBtn";
 import { base44 } from "@/api/base44Client";
@@ -23,7 +23,7 @@ export default function Landing() {
     <div className="hex-bg min-h-screen bg-background text-foreground relative">
       <PageHexGlow />
       <div className="relative z-[1]">
-      <LandingNav />
+      <GlobalNav />
 
       {/* Floating Download Button - mobile only */}
       <FloatingDownloadBtn />

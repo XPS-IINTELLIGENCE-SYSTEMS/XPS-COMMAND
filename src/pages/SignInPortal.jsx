@@ -3,6 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { Link } from "react-router-dom";
 import PageHexGlow from "../components/PageHexGlow";
 import { Loader2 } from "lucide-react";
+import GlobalNav from "../components/navigation/GlobalNav";
 
 const stats = [
   { value: "60+", label: "LOCATIONS" },
@@ -25,7 +26,9 @@ export default function SignInPortal() {
     <div className="hex-bg min-h-screen bg-background text-foreground relative">
       <PageHexGlow />
 
-      <div className="relative z-[1] min-h-screen flex flex-col md:flex-row">
+      <div className="relative z-[1] min-h-screen flex flex-col">
+        <GlobalNav />
+        <div className="flex-1 flex flex-col md:flex-row">
         {/* Left panel — branding */}
         <div className="flex-1 flex flex-col items-center justify-center px-6 py-12 md:py-0">
           <img
@@ -84,6 +87,7 @@ export default function SignInPortal() {
               </Link>
             </p>
           </div>
+        </div>
         </div>
       </div>
     </div>

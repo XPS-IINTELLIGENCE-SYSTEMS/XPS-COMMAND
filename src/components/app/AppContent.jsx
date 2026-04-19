@@ -69,7 +69,7 @@ export default function AppContent({ activeView, onChatCommand, onNavigate }) {
     case "agent_fleet": return <AgentFleetView />;
     case "tool_creator": return <ToolCreatorView onSave={(tool) => { /* Tool saved — handled by dashboard */ }} onBack={() => onNavigate?.("settings")} />;
     case "system_health": return <SystemHealthView />;
-    case "blueprint_takeoff": return <BlueprintTakeoffView />;
+    case "blueprint_takeoff": return <BlueprintTakeoffView onNavigateToProposal={() => onNavigate?.("auto_proposal")} />;
     case "dynamic_pricing": return <DynamicPricingView />;
     case "proposal_generator": return <ProposalGeneratorView />;
     case "field_tech": return <FieldTechEmbed />;

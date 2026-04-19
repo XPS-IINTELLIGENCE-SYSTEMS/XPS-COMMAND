@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { GitBranch, Plus, Trash2, Play, RefreshCcw, Copy, Clock, Pause, Sparkles } from "lucide-react";
+import { GitBranch, Plus, Trash2, Play, RefreshCcw, Copy, Clock, Pause, Sparkles, LayoutDashboard, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DataPageHeader, DataLoading, StatusBadge, EmptyState } from "../shared/DataPageLayout";
 import WorkflowBuilder from "./WorkflowBuilder";
 import WORKFLOW_TEMPLATES from "./WorkflowTemplates";
+import DashboardWorkflowRecommendation from "./DashboardWorkflowRecommendation";
 
 const STATUS_COLORS = {
   Draft: "bg-secondary text-muted-foreground",
@@ -98,6 +99,9 @@ export default function WorkflowCreatorView() {
           </Button>
         </div>
       </div>
+
+      {/* AI Dashboard Workflow Recommendation */}
+      <DashboardWorkflowRecommendation onCreateFromTemplate={createFromTemplate} />
 
       {/* Pre-made Templates */}
       <div className="mb-8">

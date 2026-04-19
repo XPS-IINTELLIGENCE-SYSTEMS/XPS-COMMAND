@@ -26,6 +26,8 @@ export default function DashboardHub({ onOpenTool }) {
   const [starredIds, setStarredIds] = useState([]);
   const [allOrder, setAllOrder] = useState(DEFAULT_TOOLS.map(t => t.id));
   const [editingCard, setEditingCard] = useState(null);
+  const [showNumbers, setShowNumbers] = useState(true);
+  const [customNumbers, setCustomNumbers] = useState({}); // { toolId: "custom label" }
 
   useEffect(() => { loadData(); }, []);
 
@@ -47,6 +49,8 @@ export default function DashboardHub({ onOpenTool }) {
         if (cfg.order) setAllOrder(cfg.order);
         if (cfg.greeting !== undefined) setGreeting(cfg.greeting);
         if (cfg.subtitle) setSubtitle(cfg.subtitle);
+        if (cfg.showNumbers !== undefined) setShowNumbers(cfg.showNumbers);
+        if (cfg.customNumbers) setCustomNumbers(cfg.customNumbers);
         if (cfg.customizations) {
           setTools(DEFAULT_TOOLS.map(t => {
             const custom = cfg.customizations[t.id];
@@ -64,6 +68,8 @@ export default function DashboardHub({ onOpenTool }) {
     const currentOrder = overrides.order || allOrder;
     const currentGreeting = overrides.greeting !== undefined ? overrides.greeting : greeting;
     const currentSubtitle = overrides.subtitle !== undefined ? overrides.subtitle : subtitle;
+    const currentShowNumbers = overrides.showNumbers !== undefined ? overrides.showNumbers : showNumbers;
+    const currentCustomNumbers = overrides.customNumbers || customNumbers;
 
     const customizations = {};
     currentTools.forEach(t => {
@@ -72,9 +78,9 @@ export default function DashboardHub({ onOpenTool }) {
         customizations[t.id] = { label: t.label, desc: t.desc, iconName: t.iconName, color: t.color };
       }
     });
-    const cfg = { starred: currentStarred, order: currentOrder, customizations, greeting: currentGreeting, subtitle: currentSubtitle };
+    const cfg = { starred: currentStarred, order: currentOrder, customizations, greeting: currentGreeting, subtitle: currentSubtitle, showNumbers: currentShowNumbers, customNumbers: currentCustomNumbers };
     await base44.auth.updateMe({ dashboard_config: JSON.stringify(cfg) }).catch(() => {});
-  }, [tools, starredIds, allOrder, greeting, subtitle]);
+  }, [tools, starredIds, allOrder, greeting, subtitle, showNumbers, customNumbers]);
 
   const toggleStar = (id) => {
     const newStarred = starredIds.includes(id)
@@ -88,6 +94,28 @@ export default function DashboardHub({ onOpenTool }) {
     const newTools = tools.map(t => t.id === updatedCard.id ? updatedCard : t);
     setTools(newTools);
     saveConfig({ tools: newTools });
+  };
+
+  const handleToggleNumbers = (val) => {
+    setShowNumbers(val);
+    saveConfig({ showNumbers: val });
+  };
+
+  const handleSetCustomNumber = (toolId, val) => {
+    const updated = { ...customNumbers };
+    if (val === null) {
+      delete updated[toolId];
+    } else {
+      updated[toolId] = val;
+    }
+    setCustomNumbers(updated);
+    saveConfig({ customNumbers: updated });
+  };
+
+  const getDisplayNumber = (toolId, autoIndex) => {
+    if (!showNumbers) return null;
+    if (customNumbers[toolId] != null) return customNumbers[toolId];
+    return autoIndex + 1;
   };
 
   const saveGreeting = () => {
@@ -243,7 +271,7 @@ export default function DashboardHub({ onOpenTool }) {
                           <DashboardToolCard
                             tool={tool}
                             starred
-                            index={index}
+                            displayNumber={getDisplayNumber(tool.id, index)}
                             onOpen={onOpenTool}
                             onToggleStar={toggleStar}
                             onEdit={setEditingCard}
@@ -283,7 +311,7 @@ export default function DashboardHub({ onOpenTool }) {
                             <DashboardToolCard
                               tool={tool}
                               starred={false}
-                              index={globalIndex}
+                              displayNumber={getDisplayNumber(tool.id, globalIndex)}
                               onOpen={onOpenTool}
                               onToggleStar={toggleStar}
                               onEdit={setEditingCard}
@@ -307,6 +335,10 @@ export default function DashboardHub({ onOpenTool }) {
           card={editingCard}
           onSave={handleEditSave}
           onClose={() => setEditingCard(null)}
+          showNumbers={showNumbers}
+          customNumber={customNumbers[editingCard.id] ?? ""}
+          onToggleNumbers={handleToggleNumbers}
+          onSetCustomNumber={handleSetCustomNumber}
         />
       )}
     </div>

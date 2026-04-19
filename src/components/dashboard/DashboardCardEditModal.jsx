@@ -2,16 +2,21 @@ import { useState } from "react";
 import { X, Check } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 import { ICON_OPTIONS, COLOR_OPTIONS, ICON_MAP } from "./dashboardDefaults";
 import { cn } from "@/lib/utils";
 
-export default function DashboardCardEditModal({ card, onSave, onClose }) {
+export default function DashboardCardEditModal({ card, onSave, onClose, showNumbers, customNumber, onToggleNumbers, onSetCustomNumber }) {
   const [label, setLabel] = useState(card.label);
   const [desc, setDesc] = useState(card.desc);
   const [iconName, setIconName] = useState(card.iconName);
   const [color, setColor] = useState(card.color);
+  const [numberVal, setNumberVal] = useState(customNumber ?? "");
 
   const handleSave = () => {
+    if (onSetCustomNumber) {
+      onSetCustomNumber(card.id, numberVal === "" ? null : numberVal);
+    }
     onSave({ ...card, label, desc, iconName, color });
     onClose();
   };
@@ -96,6 +101,26 @@ export default function DashboardCardEditModal({ card, onSave, onClose }) {
                 </button>
               ))}
             </div>
+          </div>
+
+          {/* Number Badge Settings */}
+          <div className="space-y-3 pt-2 border-t border-border">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-semibold text-muted-foreground">Show Numbers on Cards</label>
+              <Switch checked={showNumbers} onCheckedChange={onToggleNumbers} />
+            </div>
+            {showNumbers && (
+              <div>
+                <label className="text-xs font-semibold text-muted-foreground mb-1.5 block">Custom Number for This Card</label>
+                <Input
+                  value={numberVal}
+                  onChange={e => setNumberVal(e.target.value)}
+                  placeholder="Auto (leave blank for auto)"
+                  className="h-9 text-sm"
+                />
+                <p className="text-[10px] text-muted-foreground mt-1">Leave blank for auto-numbering, or enter a custom value.</p>
+              </div>
+            )}
           </div>
         </div>
 

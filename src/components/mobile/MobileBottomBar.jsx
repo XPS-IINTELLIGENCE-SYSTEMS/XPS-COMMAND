@@ -1,4 +1,5 @@
-import { Home, MessageSquare, Search, Grid3X3, Settings } from "lucide-react";
+import { useRef, useCallback } from "react";
+import { Home, MessageSquare, Grid3X3, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const TABS = [
@@ -9,6 +10,15 @@ const TABS = [
 ];
 
 export default function MobileBottomBar({ activeTab, onTabChange }) {
+  // Remember the last activeView for each tab so switching back restores it
+  const tabMemory = useRef({});
+
+  const handleTab = useCallback((id) => {
+    // Store current tab's state before switching
+    tabMemory.current[activeTab] = true;
+    onTabChange(id, tabMemory.current);
+  }, [activeTab, onTabChange]);
+
   return (
     <div
       className="lg:hidden fixed bottom-0 left-0 right-0 z-50 safe-bottom"
@@ -25,7 +35,7 @@ export default function MobileBottomBar({ activeTab, onTabChange }) {
           return (
             <button
               key={id}
-              onClick={() => onTabChange(id)}
+              onClick={() => handleTab(id)}
               className={cn(
                 "flex flex-col items-center justify-center gap-0.5 flex-1 h-full transition-colors",
                 active ? "text-primary" : "text-white/40"

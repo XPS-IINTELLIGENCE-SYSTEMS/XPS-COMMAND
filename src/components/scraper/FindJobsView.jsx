@@ -4,6 +4,9 @@ import { Briefcase, MapPin, Star, Mail, Phone, Loader2, Search } from "lucide-re
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { DataPageHeader, DataSearchBar, FilterPills, StatusBadge, DataLoading, EmptyState } from "../shared/DataPageLayout";
+import { useIsMobile } from "@/hooks/use-mobile";
+import MobileJobCard from "../mobile/MobileJobCard";
+import PullToRefresh from "../shared/PullToRefresh";
 
 const PHASES = ["All", "permit_filed", "design", "pre_bid", "bidding", "under_construction", "complete"];
 const PHASE_COLORS = {
@@ -48,9 +51,19 @@ export default function FindJobsView() {
     return true;
   });
 
+  const isMobile = useIsMobile();
+
+  const reload = async () => {
+    setLoading(true);
+    const data = await base44.entities.CommercialJob.list("-created_date", 200);
+    setJobs(data || []);
+    setLoading(false);
+  };
+
   if (loading) return <DataLoading />;
 
   return (
+    <PullToRefresh onRefresh={reload}>
     <div>
       <div className="flex items-center justify-between mb-4">
         <DataPageHeader title="Find Jobs" subtitle="Commercial flooring projects & construction" count={filtered.length} />
@@ -65,6 +78,12 @@ export default function FindJobsView() {
 
       {filtered.length === 0 ? (
         <EmptyState icon={Briefcase} message="No jobs found. Try running the scraper." />
+      ) : isMobile ? (
+        <div className="space-y-2">
+          {filtered.map(job => (
+            <MobileJobCard key={job.id} job={job} phaseColors={PHASE_COLORS} />
+          ))}
+        </div>
       ) : (
         <div className="rounded-xl border border-border overflow-hidden">
           <div className="overflow-x-auto">
@@ -101,5 +120,6 @@ export default function FindJobsView() {
         </div>
       )}
     </div>
+    </PullToRefresh>
   );
 }

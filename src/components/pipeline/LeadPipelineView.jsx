@@ -7,6 +7,9 @@ import AddLeadModal from "./AddLeadModal";
 import LeadInsightModal from "./LeadInsightModal";
 import LeadRecommendModal from "./LeadRecommendModal";
 import LeadFilterBar from "./LeadFilterBar";
+import { useIsMobile } from "@/hooks/use-mobile";
+import MobileLeadCard from "../mobile/MobileLeadCard";
+import PullToRefresh from "../shared/PullToRefresh";
 
 const STAGES = ["All", "Incoming", "Validated", "Qualified", "Prioritized", "Contacted", "Proposal", "Negotiation", "Won", "Lost"];
 const SCORE_FILTERS = ["All", "Hot", "Warm", "Cold"];
@@ -97,9 +100,12 @@ export default function LeadPipelineView({ forcedTab }) {
     }
   });
 
+  const isMobile = useIsMobile();
+
   if (loading) return <DataLoading />;
 
   return (
+    <PullToRefresh onRefresh={load}>
     <div>
       <div className="flex items-center justify-between mb-4">
         <DataPageHeader title="Leads" subtitle={`${forcedTab || "All"} pipeline`} count={filtered.length} />
@@ -120,6 +126,20 @@ export default function LeadPipelineView({ forcedTab }) {
 
       {filtered.length === 0 ? (
         <EmptyState icon={Users} message="No leads match your filters" />
+      ) : isMobile ? (
+        <div className="space-y-2">
+          {filtered.map(lead => (
+            <MobileLeadCard
+              key={lead.id}
+              lead={lead}
+              stageColors={STAGE_COLORS}
+              bidStageColors={BID_STAGE_COLORS}
+              onInsight={setInsightLead}
+              onRecommend={setRecommendLead}
+              onClick={() => setSelected(selected?.id === lead.id ? null : lead)}
+            />
+          ))}
+        </div>
       ) : (
         <div className="rounded-xl border border-border overflow-hidden">
           <div className="overflow-x-auto">
@@ -188,5 +208,6 @@ export default function LeadPipelineView({ forcedTab }) {
       {insightLead && <LeadInsightModal lead={insightLead} onClose={() => setInsightLead(null)} onUpdate={load} />}
       {recommendLead && <LeadRecommendModal lead={recommendLead} onClose={() => setRecommendLead(null)} />}
     </div>
+    </PullToRefresh>
   );
 }

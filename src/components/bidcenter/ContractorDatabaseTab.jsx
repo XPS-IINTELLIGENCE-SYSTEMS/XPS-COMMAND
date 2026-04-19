@@ -4,6 +4,9 @@ import { Users, Search, Plus, RefreshCcw, Send, Loader2, Mail, Phone } from "luc
 import { Button } from "@/components/ui/button";
 import { DataSearchBar, StatusBadge, DataLoading, EmptyState } from "../shared/DataPageLayout";
 import { toast } from "@/components/ui/use-toast";
+import { useIsMobile } from "@/hooks/use-mobile";
+import MobileContractorCard from "../mobile/MobileContractorCard";
+import PullToRefresh from "../shared/PullToRefresh";
 
 const REL_COLORS = {
   New: "bg-blue-500/10 text-blue-400",
@@ -75,9 +78,12 @@ export default function ContractorDatabaseTab() {
     return true;
   });
 
+  const isMobile = useIsMobile();
+
   if (loading) return <DataLoading />;
 
   return (
+    <PullToRefresh onRefresh={load}>
     <div>
       <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
         <div>
@@ -133,7 +139,19 @@ export default function ContractorDatabaseTab() {
         ))}
       </div>
 
-      {filtered.length === 0 ? <EmptyState icon={Users} message="No contractors found" /> : (
+      {filtered.length === 0 ? <EmptyState icon={Users} message="No contractors found" /> : isMobile ? (
+        <div className="space-y-2">
+          {filtered.map(c => (
+            <MobileContractorCard
+              key={c.id}
+              contractor={c}
+              relColors={REL_COLORS}
+              onSendIntro={sendIntro}
+              sending={sending[c.id]}
+            />
+          ))}
+        </div>
+      ) : (
         <div className="rounded-xl border border-border overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
@@ -176,5 +194,6 @@ export default function ContractorDatabaseTab() {
         </div>
       )}
     </div>
+    </PullToRefresh>
   );
 }

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { X, Sun, Moon, MessageSquare } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import { AnimatePresence } from "framer-motion";
 import ChatPanel from "../components/ChatPanel";
 import DashboardHub from "../components/dashboard/DashboardHub";
 import AppContent from "../components/app/AppContent";
@@ -9,6 +10,7 @@ import GlobalNav from "../components/navigation/GlobalNav";
 import PrivacyDisclaimer from "../components/admin/PrivacyDisclaimer";
 import MobileBottomBar from "../components/mobile/MobileBottomBar";
 import MobileToolHeader from "../components/mobile/MobileToolHeader";
+import AnimatedView from "../components/mobile/AnimatedView";
 import { DEFAULT_TOOLS } from "../components/dashboard/dashboardDefaults";
 
 export default function Home() {
@@ -18,6 +20,7 @@ export default function Home() {
   const [theme, setTheme] = useState(() => localStorage.getItem("xps-theme") || "dark");
   const [showPrivacy, setShowPrivacy] = useState(false);
   const [mobileTab, setMobileTab] = useState("home"); // home, chat, tools, settings
+  const tabViewMemory = useRef({}); // remembers activeView per tab
   const chatRef = useRef(null);
   const resizing = useRef(false);
 
@@ -46,21 +49,26 @@ export default function Home() {
     localStorage.setItem("xps-theme", theme);
   }, [theme]);
 
-  // Mobile tab handler
+  // Mobile tab handler — preserves activeView state per tab
   const handleMobileTab = (tab) => {
+    // Save current tab's view before leaving
+    tabViewMemory.current[mobileTab] = activeView;
+
     if (tab === "chat") {
       setChatOpen(true);
       setMobileTab("chat");
     } else if (tab === "home") {
       setChatOpen(false);
-      setActiveView(null);
+      // Restore previously saved view for home tab (or null for dashboard)
+      setActiveView(tabViewMemory.current["home"] ?? null);
       setMobileTab("home");
     } else if (tab === "tools") {
       setChatOpen(false);
+      setActiveView(tabViewMemory.current["tools"] ?? null);
       setMobileTab("tools");
     } else if (tab === "settings") {
       setChatOpen(false);
-      setActiveView("settings");
+      setActiveView(tabViewMemory.current["settings"] ?? "settings");
       setMobileTab("settings");
     }
   };
@@ -163,15 +171,21 @@ export default function Home() {
           />
         )}
 
-        {/* Content: Dashboard Hub or Tool View */}
+        {/* Content: Dashboard Hub or Tool View with slide animation */}
         <main className="flex-1 overflow-y-auto pb-16 lg:pb-0">
-          {activeView === null ? (
-            <DashboardHub onOpenTool={handleOpenTool} />
-          ) : (
-            <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
-              <AppContent activeView={activeView} onChatCommand={() => {}} onNavigate={handleOpenTool} />
-            </div>
-          )}
+          <AnimatePresence mode="wait">
+            {activeView === null ? (
+              <AnimatedView viewKey="dashboard">
+                <DashboardHub onOpenTool={handleOpenTool} />
+              </AnimatedView>
+            ) : (
+              <AnimatedView viewKey={activeView}>
+                <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
+                  <AppContent activeView={activeView} onChatCommand={() => {}} onNavigate={handleOpenTool} />
+                </div>
+              </AnimatedView>
+            )}
+          </AnimatePresence>
         </main>
       </div>
 

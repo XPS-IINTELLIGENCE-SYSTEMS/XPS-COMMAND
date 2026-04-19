@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Shield, Loader2, Users, Database, Zap, BarChart3, RefreshCw } from "lucide-react";
+import { Loader2, Users, Database, Zap, BarChart3, RefreshCw } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import PageHexGlow from "../components/PageHexGlow";

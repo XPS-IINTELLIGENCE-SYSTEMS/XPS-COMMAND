@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Zap, Loader2, Building2, Briefcase, Globe2, Play, AlertCircle, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { base44 } from "@/api/base44Client";
-import { Link } from "react-router-dom";
 import LeadEngineResults from "../components/leadengine/LeadEngineResults";
 import PageHexGlow from "../components/PageHexGlow";
 import GlobalNav from "../components/navigation/GlobalNav";

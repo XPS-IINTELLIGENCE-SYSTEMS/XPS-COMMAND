@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
-import { Database, Search, Filter, Loader2, Star, Eye, Archive, Trash2 } from "lucide-react";
+import { Search, Loader2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
 import PageHexGlow from "../components/PageHexGlow";
 import GlobalNav from "../components/navigation/GlobalNav";
 

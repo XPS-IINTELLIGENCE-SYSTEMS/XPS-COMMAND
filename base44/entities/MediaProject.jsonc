@@ -1,0 +1,69 @@
+{
+  "name": "MediaProject",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Project/folder name"
+    },
+    "description": {
+      "type": "string"
+    },
+    "project_type": {
+      "type": "string",
+      "enum": [
+        "Branding Package",
+        "Social Campaign",
+        "Video Project",
+        "Business Cards",
+        "Logo & Icons",
+        "Marketing Kit",
+        "Website Mockup",
+        "Custom"
+      ],
+      "default": "Branding Package"
+    },
+    "client_name": {
+      "type": "string",
+      "description": "Client this project is for"
+    },
+    "assets": {
+      "type": "string",
+      "description": "JSON array of asset objects: [{type, url, name, category, metadata}]"
+    },
+    "brand_colors": {
+      "type": "string",
+      "description": "JSON array of hex colors for this project"
+    },
+    "brand_fonts": {
+      "type": "string",
+      "description": "Comma-separated font names"
+    },
+    "brand_guidelines": {
+      "type": "string",
+      "description": "AI-generated brand guidelines text"
+    },
+    "marketing_strategy": {
+      "type": "string",
+      "description": "AI-generated marketing strategy"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Draft",
+        "In Progress",
+        "Review",
+        "Complete",
+        "Archived"
+      ],
+      "default": "Draft"
+    },
+    "tags": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "project_type"
+  ]
+}

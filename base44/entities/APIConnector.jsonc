@@ -4,50 +4,90 @@
   "properties": {
     "name": {
       "type": "string",
-      "description": "Display name (e.g. ConstructConnect, HubSpot)"
+      "description": "Display name"
     },
     "service_type": {
       "type": "string",
       "enum": [
-        "construct_connect",
-        "dodge_reports",
-        "hubspot",
-        "airtable",
+        "github",
+        "supabase",
+        "anthropic",
+        "twilio",
+        "heygen",
+        "google_cloud",
         "google_drive",
         "google_sheets",
-        "google_calendar",
-        "twilio",
-        "elevenlabs",
+        "google_docs",
+        "google_keep",
+        "google_tasks",
+        "hubspot",
+        "airtable",
+        "gmail",
         "openai",
-        "anthropic",
-        "groq",
-        "vercel",
-        "github",
+        "base44",
+        "redis",
+        "neon",
+        "xps_lead_sniper",
+        "construct_connect",
+        "dodge_reports",
+        "planhub",
+        "building_connected",
+        "isqft",
+        "bidclerk",
+        "the_blue_book",
+        "sam_gov",
+        "usaspending",
+        "fpds",
+        "fbo_gov",
+        "gsa_ebuy",
+        "beta_sam",
+        "grants_gov",
+        "sbir_gov",
+        "census_gov",
+        "data_gov",
+        "steel_dev",
+        "browserless",
+        "aws",
         "slack",
-        "stripe",
+        "groq",
+        "ollama",
+        "openrouter",
+        "vercel",
         "sendgrid",
-        "mailgun",
+        "stripe",
+        "zapier",
         "apify",
         "brightdata",
         "zoominfo",
         "apolloio",
-        "supabase",
-        "heygen",
+        "linkedin",
+        "google_calendar",
+        "elevenlabs",
+        "replicate",
+        "together_ai",
+        "mistral",
+        "perplexity",
+        "serper",
+        "tavily",
+        "firecrawl",
         "custom"
       ],
       "description": "Service identifier"
     },
     "api_key": {
       "type": "string",
-      "description": "Encrypted API key or token"
+      "description": "API key or token"
+    },
+    "secondary_key": {
+      "type": "string",
+      "description": "Secondary key (e.g. Auth Token, Secret Key)"
     },
     "base_url": {
       "type": "string",
-      "description": "API base URL endpoint"
+      "description": "API base URL"
     },
     "webhook_url": {
-      "type": "string",
-      "description": "Auto-generated webhook URL if applicable"
+      "type": "string"
     },
     "is_enabled": {
       "type": "boolean",
@@ -68,33 +108,50 @@
       "format": "date-time"
     },
     "last_response_ms": {
-      "type": "number",
-      "description": "Last test response time in milliseconds"
+      "type": "number"
     },
     "error_log": {
-      "type": "string",
-      "description": "JSON array of last 5 errors"
+      "type": "string"
     },
     "docs_url": {
-      "type": "string",
-      "description": "Link to service documentation"
+      "type": "string"
     },
     "notes": {
       "type": "string"
     },
     "monthly_calls": {
       "type": "number",
-      "default": 0,
-      "description": "API calls this month"
+      "default": 0
     },
     "monthly_cost_estimate": {
       "type": "number",
-      "default": 0,
-      "description": "Estimated cost this month in dollars"
+      "default": 0
     }
   },
   "required": [
     "name",
     "service_type"
-  ]
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
 }

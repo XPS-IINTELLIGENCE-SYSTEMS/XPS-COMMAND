@@ -37,43 +37,43 @@ export default function WorkflowNodeConfigPanel({ node, onUpdate, onClose }) {
   };
 
   return (
-    <div className="w-72 border-l border-border bg-card flex flex-col overflow-hidden flex-shrink-0">
+    <div className="w-80 border-l border-border bg-card flex flex-col overflow-hidden flex-shrink-0">
       <div className="flex items-center justify-between px-4 py-3 border-b border-border">
-        <h3 className="text-xs font-semibold text-foreground">Configure Step</h3>
-        <button onClick={onClose} className="p-1 rounded hover:bg-secondary">
-          <X className="w-3.5 h-3.5 text-muted-foreground" />
+        <h3 className="text-sm font-bold text-foreground">Configure Step</h3>
+        <button onClick={onClose} className="p-1.5 rounded-md hover:bg-secondary">
+          <X className="w-4 h-4 text-muted-foreground" />
         </button>
       </div>
 
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {/* Type info */}
         <div className="p-3 rounded-lg bg-secondary/50 border border-border">
-          <div className="text-[10px] text-muted-foreground mb-0.5">Type</div>
-          <div className="text-xs font-semibold text-foreground">{def.label || node.type}</div>
-          <div className="text-[10px] text-muted-foreground mt-0.5">{def.desc}</div>
-          {def.fn && <div className="text-[9px] text-primary mt-1 font-mono">fn: {def.fn}</div>}
+          <div className="text-[11px] text-muted-foreground mb-0.5">Type</div>
+          <div className="text-sm font-bold text-foreground">{def.label || node.type}</div>
+          <div className="text-xs text-muted-foreground mt-0.5">{def.desc}</div>
+          {def.fn && <div className="text-[11px] text-primary mt-1.5 font-mono">fn: {def.fn}</div>}
         </div>
 
         {/* Custom label */}
         <div>
-          <label className="text-[10px] text-muted-foreground mb-1 block">Custom Label</label>
+          <label className="text-xs text-muted-foreground mb-1.5 block font-medium">Custom Label</label>
           <Input
             value={node.label || ""}
             onChange={(e) => onUpdate({ label: e.target.value })}
             placeholder={def.label}
-            className="h-8 text-xs"
+            className="h-9 text-sm"
           />
         </div>
 
         {/* Agent assignment */}
         <div>
-          <label className="text-[10px] text-muted-foreground mb-1 flex items-center gap-1">
-            <Bot className="w-3 h-3" /> Assign Agent
+          <label className="text-xs text-muted-foreground mb-1.5 flex items-center gap-1.5 font-medium">
+            <Bot className="w-3.5 h-3.5" /> Assign Agent
           </label>
           <select
             value={node.agent || ""}
             onChange={(e) => onUpdate({ agent: e.target.value })}
-            className="w-full h-8 text-xs bg-secondary border border-border rounded-md px-2 text-foreground"
+            className="w-full h-9 text-sm bg-secondary border border-border rounded-md px-2.5 text-foreground"
           >
             <option value="">Auto (System Default)</option>
             {AGENT_REGISTRY.map(a => (
@@ -85,16 +85,16 @@ export default function WorkflowNodeConfigPanel({ node, onUpdate, onClose }) {
         {/* Dynamic parameters */}
         {params.length > 0 && (
           <div>
-            <label className="text-[10px] text-muted-foreground mb-2 block font-semibold uppercase tracking-wider">Parameters</label>
-            <div className="space-y-2">
+            <label className="text-xs text-muted-foreground mb-2 block font-bold uppercase tracking-wider">Parameters</label>
+            <div className="space-y-3">
               {params.map(p => (
                 <div key={p}>
-                  <label className="text-[10px] text-muted-foreground mb-0.5 block capitalize">{p.replace(/_/g, " ")}</label>
+                  <label className="text-xs text-muted-foreground mb-1 block capitalize font-medium">{p.replace(/_/g, " ")}</label>
                   <Input
                     value={node.config?.[p] || ""}
                     onChange={(e) => onUpdate({ config: { ...node.config, [p]: e.target.value } })}
                     placeholder={`Enter ${p.replace(/_/g, " ")}`}
-                    className="h-7 text-[11px]"
+                    className="h-8 text-xs"
                   />
                 </div>
               ))}
@@ -104,11 +104,11 @@ export default function WorkflowNodeConfigPanel({ node, onUpdate, onClose }) {
 
         {/* Error handling */}
         <div>
-          <label className="text-[10px] text-muted-foreground mb-1 block">On Error</label>
+          <label className="text-xs text-muted-foreground mb-1.5 block font-medium">On Error</label>
           <select
             value={node.on_error || "continue"}
             onChange={(e) => onUpdate({ on_error: e.target.value })}
-            className="w-full h-8 text-xs bg-secondary border border-border rounded-md px-2 text-foreground"
+            className="w-full h-9 text-sm bg-secondary border border-border rounded-md px-2.5 text-foreground"
           >
             <option value="continue">Continue to next step</option>
             <option value="stop">Stop workflow</option>
@@ -119,12 +119,12 @@ export default function WorkflowNodeConfigPanel({ node, onUpdate, onClose }) {
 
         {/* AI recommendation */}
         {rec && (
-          <div className="p-2.5 rounded-lg bg-primary/5 border border-primary/20">
-            <div className="flex items-center gap-1 mb-1">
-              <Sparkles className="w-3 h-3 text-primary" />
-              <span className="text-[8px] font-semibold text-primary uppercase">Recommendation</span>
+          <div className="p-3 rounded-lg bg-primary/5 border border-primary/20">
+            <div className="flex items-center gap-1.5 mb-1">
+              <Sparkles className="w-3.5 h-3.5 text-primary" />
+              <span className="text-[10px] font-bold text-primary uppercase">Recommendation</span>
             </div>
-            <p className="text-[10px] text-foreground/70 leading-relaxed">{rec}</p>
+            <p className="text-xs text-foreground/70 leading-relaxed">{rec}</p>
           </div>
         )}
 
@@ -134,25 +134,25 @@ export default function WorkflowNodeConfigPanel({ node, onUpdate, onClose }) {
           size="sm"
           onClick={askAI}
           disabled={aiLoading}
-          className="w-full text-[10px] gap-1.5"
+          className="w-full text-xs gap-1.5"
         >
-          <Sparkles className="w-3 h-3" />
+          <Sparkles className="w-3.5 h-3.5" />
           {aiLoading ? "Thinking..." : "AI Suggest Config"}
         </Button>
 
         {aiSuggestion && (
-          <div className="p-2.5 rounded-lg bg-green-500/5 border border-green-500/20">
-            <p className="text-[10px] text-foreground/80 mb-2">{aiSuggestion.explanation}</p>
+          <div className="p-3 rounded-lg bg-green-500/5 border border-green-500/20">
+            <p className="text-xs text-foreground/80 mb-2">{aiSuggestion.explanation}</p>
             {aiSuggestion.suggested_config && (
               <div className="space-y-1 mb-2">
                 {Object.entries(aiSuggestion.suggested_config).map(([k, v]) => (
-                  <div key={k} className="text-[9px] font-mono text-muted-foreground">
+                  <div key={k} className="text-[11px] font-mono text-muted-foreground">
                     <span className="text-foreground">{k}:</span> {String(v)}
                   </div>
                 ))}
               </div>
             )}
-            <Button size="sm" onClick={applyAISuggestion} className="w-full h-6 text-[9px]">
+            <Button size="sm" onClick={applyAISuggestion} className="w-full h-7 text-xs">
               Apply Suggestion
             </Button>
           </div>

@@ -77,23 +77,23 @@ export default function WorkflowToolbar({
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Workflow Name"
-          className="h-8 text-sm font-semibold max-w-xs bg-transparent border-none shadow-none focus-visible:ring-0 px-1"
+          className="h-9 text-base font-bold max-w-xs bg-transparent border-none shadow-none focus-visible:ring-0 px-1"
         />
 
         <div className="flex-1" />
 
-        <Button variant="outline" size="sm" onClick={aiOptimize} disabled={aiOptimizing} className="gap-1.5 h-7 text-[10px]">
-          <Sparkles className="w-3 h-3" /> {aiOptimizing ? "Analyzing..." : "AI Optimize"}
+        <Button variant="outline" size="sm" onClick={aiOptimize} disabled={aiOptimizing} className="gap-1.5 h-8 text-xs">
+          <Sparkles className="w-3.5 h-3.5" /> {aiOptimizing ? "Analyzing..." : "AI Optimize"}
         </Button>
-        <Button variant="outline" size="sm" onClick={onSave} disabled={saving} className="gap-1.5 h-7 text-[10px]">
-          {saving ? <Loader2 className="w-3 h-3 animate-spin" /> : <Save className="w-3 h-3" />} Save
+        <Button variant="outline" size="sm" onClick={onSave} disabled={saving} className="gap-1.5 h-8 text-xs">
+          {saving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />} Save
         </Button>
         <Button
           size="sm"
           onClick={() => { setStatus(status === "Active" ? "Paused" : "Active"); }}
-          className={`gap-1.5 h-7 text-[10px] ${status === "Active" ? "bg-green-600 hover:bg-green-700" : ""}`}
+          className={`gap-1.5 h-8 text-xs ${status === "Active" ? "bg-green-600 hover:bg-green-700" : ""}`}
         >
-          {status === "Active" ? <><Pause className="w-3 h-3" /> Active</> : <><Play className="w-3 h-3" /> Activate</>}
+          {status === "Active" ? <><Pause className="w-3.5 h-3.5" /> Active</> : <><Play className="w-3.5 h-3.5" /> Activate</>}
         </Button>
 
         <div className="relative">
@@ -104,17 +104,17 @@ export default function WorkflowToolbar({
             <>
               <div className="fixed inset-0 z-40" onClick={() => setShowMore(false)} />
               <div className="absolute right-0 top-full mt-1 w-48 rounded-xl border border-border bg-card shadow-xl z-50 py-1">
-                <button onClick={() => { exportWorkflow(); setShowMore(false); }} className="flex items-center gap-2 w-full px-3 py-2 text-[11px] hover:bg-secondary/60">
-                  <Download className="w-3 h-3 text-muted-foreground" /> Export Workflow
+                <button onClick={() => { exportWorkflow(); setShowMore(false); }} className="flex items-center gap-2 w-full px-3 py-2.5 text-xs hover:bg-secondary/60">
+                  <Download className="w-3.5 h-3.5 text-muted-foreground" /> Export Workflow
                 </button>
-                <button onClick={() => { importWorkflow(); setShowMore(false); }} className="flex items-center gap-2 w-full px-3 py-2 text-[11px] hover:bg-secondary/60">
-                  <Upload className="w-3 h-3 text-muted-foreground" /> Import Workflow
+                <button onClick={() => { importWorkflow(); setShowMore(false); }} className="flex items-center gap-2 w-full px-3 py-2.5 text-xs hover:bg-secondary/60">
+                  <Upload className="w-3.5 h-3.5 text-muted-foreground" /> Import Workflow
                 </button>
-                <button onClick={() => { navigator.clipboard.writeText(JSON.stringify({ name, description, trigger, nodes })); setShowMore(false); }} className="flex items-center gap-2 w-full px-3 py-2 text-[11px] hover:bg-secondary/60">
-                  <Copy className="w-3 h-3 text-muted-foreground" /> Copy as JSON
+                <button onClick={() => { navigator.clipboard.writeText(JSON.stringify({ name, description, trigger, nodes })); setShowMore(false); }} className="flex items-center gap-2 w-full px-3 py-2.5 text-xs hover:bg-secondary/60">
+                  <Copy className="w-3.5 h-3.5 text-muted-foreground" /> Copy as JSON
                 </button>
-                <button onClick={() => { navigator.clipboard.writeText(`${window.location.origin}/workflows/${name.replace(/\s+/g, "-").toLowerCase()}`); setShowMore(false); }} className="flex items-center gap-2 w-full px-3 py-2 text-[11px] hover:bg-secondary/60">
-                  <Share2 className="w-3 h-3 text-muted-foreground" /> Share Link
+                <button onClick={() => { navigator.clipboard.writeText(`${window.location.origin}/workflows/${name.replace(/\s+/g, "-").toLowerCase()}`); setShowMore(false); }} className="flex items-center gap-2 w-full px-3 py-2.5 text-xs hover:bg-secondary/60">
+                  <Share2 className="w-3.5 h-3.5 text-muted-foreground" /> Share Link
                 </button>
               </div>
             </>
@@ -128,12 +128,12 @@ export default function WorkflowToolbar({
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Describe what this workflow does..."
-          className="h-7 text-[11px] bg-transparent border-none shadow-none focus-visible:ring-0 px-1 flex-1"
+          className="h-8 text-xs bg-transparent border-none shadow-none focus-visible:ring-0 px-1 flex-1"
         />
         <div className="flex items-center gap-2">
-          <Clock className="w-3 h-3 text-muted-foreground" />
+          <Clock className="w-3.5 h-3.5 text-muted-foreground" />
           <Select value={trigger} onValueChange={setTrigger}>
-            <SelectTrigger className="h-7 text-[10px] w-40 bg-secondary/50 border-border">
+            <SelectTrigger className="h-8 text-xs w-44 bg-secondary/50 border-border">
               <SelectValue placeholder="Trigger" />
             </SelectTrigger>
             <SelectContent>
@@ -142,10 +142,10 @@ export default function WorkflowToolbar({
           </Select>
         </div>
         <div className="flex items-center gap-1.5">
-          <div className={`w-2 h-2 rounded-full ${status === "Active" ? "bg-green-400" : status === "Paused" ? "bg-yellow-400" : "bg-secondary"}`} />
-          <span className="text-[10px] text-muted-foreground">{status}</span>
+          <div className={`w-2.5 h-2.5 rounded-full ${status === "Active" ? "bg-green-400" : status === "Paused" ? "bg-yellow-400" : "bg-secondary"}`} />
+          <span className="text-xs text-muted-foreground">{status}</span>
         </div>
-        <span className="text-[10px] text-muted-foreground">{nodes.length} steps</span>
+        <span className="text-xs text-muted-foreground">{nodes.length} steps</span>
       </div>
     </div>
   );

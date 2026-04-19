@@ -48,13 +48,12 @@ export default function DashboardToolCard({ tool, starred, onOpen, onToggleStar,
         </button>
       </div>
 
-      {/* Star + number (top-right, hidden on hover for action buttons) */}
-      <div className="absolute top-2 right-2 flex flex-col items-center gap-0.5 group-hover:hidden">
-        {starred && <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />}
-        {displayNumber != null && (
-          <span className="text-[12px] font-bold text-white">{displayNumber}</span>
-        )}
-      </div>
+      {/* Star indicator (top-right, hidden on hover for action buttons) */}
+      {starred && (
+        <div className="absolute top-2 right-2 group-hover:hidden">
+          <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+        </div>
+      )}
 
       <div
         className="w-10 h-10 rounded-lg flex items-center justify-center mb-3 mt-1 transition-colors"

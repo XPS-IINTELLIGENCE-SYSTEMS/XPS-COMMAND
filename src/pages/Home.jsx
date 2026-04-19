@@ -1,22 +1,15 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Sun, Moon, MessageSquare, X } from "lucide-react";
-import AppTopNav from "../components/app/AppTopNav";
+import { X, MessageSquare } from "lucide-react";
+import AppSidebar from "../components/app/AppSidebar";
+import AppHeaderBar from "../components/app/AppHeaderBar";
 import AppContent from "../components/app/AppContent";
 import ChatPanel from "../components/ChatPanel";
 
-const NAV_TABS = [
-  { id: "command", label: "Dashboard" },
-  { id: "xpress_leads", label: "Prospects" },
-  { id: "find_work", label: "AI Find" },
-  { id: "get_work", label: "Email" },
-  { id: "knowledge", label: "Knowledge" },
-  { id: "settings", label: "Account" },
-];
-
 export default function Home() {
   const [activeView, setActiveView] = useState("command");
-  const [chatOpen, setChatOpen] = useState(false);
-  const [chatWidth, setChatWidth] = useState(() => parseInt(localStorage.getItem("xps-chat-width")) || 360);
+  const [chatOpen, setChatOpen] = useState(true);
+  const [chatWidth, setChatWidth] = useState(() => parseInt(localStorage.getItem("xps-chat-width")) || 340);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [theme, setTheme] = useState(() => localStorage.getItem("xps-theme") || "dark");
   const chatRef = useRef(null);
   const resizing = useRef(false);
@@ -24,9 +17,11 @@ export default function Home() {
   const handleMouseDown = useCallback((e) => {
     e.preventDefault();
     resizing.current = true;
+    const startX = e.clientX;
+    const startWidth = chatWidth;
     const onMouseMove = (e) => {
       if (!resizing.current) return;
-      const newWidth = Math.max(280, Math.min(600, e.clientX));
+      const newWidth = Math.max(260, Math.min(520, startWidth + (e.clientX - startX)));
       setChatWidth(newWidth);
     };
     const onMouseUp = () => {
@@ -53,21 +48,17 @@ export default function Home() {
   };
 
   return (
-    <div className="h-screen bg-background flex flex-col overflow-hidden">
-      {/* Top Navigation */}
-      <AppTopNav
-        tabs={NAV_TABS}
+    <div className="h-screen bg-background flex overflow-hidden">
+      {/* Sidebar — far left */}
+      <AppSidebar
         activeView={activeView}
         onViewChange={setActiveView}
-        theme={theme}
-        onThemeToggle={() => setTheme(theme === "dark" ? "light" : "dark")}
-        chatOpen={chatOpen}
-        onChatToggle={() => setChatOpen(!chatOpen)}
+        collapsed={sidebarCollapsed}
+        onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
       />
 
-      {/* Desktop: chat left + content right */}
-      <div className="flex-1 flex overflow-hidden">
-        {/* Desktop Chat Panel — left side, resizable */}
+      {/* Chat Panel — left of content, right of sidebar (desktop) */}
+      {chatOpen && (
         <div className="hidden lg:flex flex-shrink-0 border-r border-border flex-col relative" style={{ width: chatWidth }}>
           <ChatPanel ref={chatRef} chatWidth={chatWidth} />
           {/* Resize handle */}
@@ -78,8 +69,19 @@ export default function Home() {
             <div className="absolute top-1/2 -translate-y-1/2 right-0 w-1 h-8 rounded-full bg-border group-hover:bg-primary/50 transition-colors" />
           </div>
         </div>
+      )}
 
-        {/* Main Content */}
+      {/* Main area — header + content */}
+      <div className="flex-1 flex flex-col overflow-hidden min-w-0">
+        <AppHeaderBar
+          activeView={activeView}
+          theme={theme}
+          onThemeToggle={() => setTheme(theme === "dark" ? "light" : "dark")}
+          chatOpen={chatOpen}
+          onChatToggle={() => setChatOpen(!chatOpen)}
+          onViewChange={setActiveView}
+        />
+
         <main className="flex-1 overflow-y-auto pb-20 md:pb-4">
           <AppContent
             activeView={activeView}
@@ -92,7 +94,13 @@ export default function Home() {
       {/* Mobile Bottom Nav */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-card/95 backdrop-blur-md safe-bottom">
         <div className="flex">
-          {NAV_TABS.slice(0, 5).map(tab => (
+          {[
+            { id: "command", label: "Home" },
+            { id: "xpress_leads", label: "Leads" },
+            { id: "find_jobs", label: "Jobs" },
+            { id: "find_companies", label: "Co." },
+            { id: "settings", label: "More" },
+          ].map(tab => (
             <button
               key={tab.id}
               onClick={() => setActiveView(tab.id)}

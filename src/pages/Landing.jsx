@@ -72,6 +72,13 @@ export default function Landing() {
             </div>
           ))}
         </div>
+
+        {/* Footer links */}
+        <div className="flex items-center justify-center gap-6 mt-16 pb-12 text-sm text-white/40">
+          <Link to="/privacy" className="hover:text-white/70 transition-colors">Privacy Policy</Link>
+          <span>·</span>
+          <Link to="/terms" className="hover:text-white/70 transition-colors">Terms of Service</Link>
+        </div>
       </div>
       </div>
     </div>

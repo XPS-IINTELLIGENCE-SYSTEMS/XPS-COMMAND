@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { GitBranch, Plus, Trash2, Play, RefreshCcw, Copy, Clock, Pause, Sparkles, Zap } from "lucide-react";
+import { GitBranch, Plus, Trash2, Play, RefreshCcw, Copy, Clock, Pause, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DataPageHeader, DataLoading, StatusBadge, EmptyState } from "../shared/DataPageLayout";
 import WorkflowBuilder from "./WorkflowBuilder";
@@ -13,6 +13,14 @@ const STATUS_COLORS = {
   Completed: "bg-blue-500/10 text-blue-400",
   Failed: "bg-red-500/10 text-red-400",
   default: "bg-secondary text-muted-foreground",
+};
+
+const glassStyle = {
+  background: "rgba(0, 0, 0, 0.45)",
+  backdropFilter: "blur(20px)",
+  WebkitBackdropFilter: "blur(20px)",
+  border: "1px solid rgba(255, 255, 255, 0.08)",
+  boxShadow: "0 4px 24px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05)",
 };
 
 export default function WorkflowCreatorView() {
@@ -67,7 +75,6 @@ export default function WorkflowCreatorView() {
     load();
   };
 
-  // If editing or creating → show builder
   if (editing || creating) {
     return (
       <WorkflowBuilder
@@ -96,8 +103,8 @@ export default function WorkflowCreatorView() {
       <div className="mb-8">
         <div className="flex items-center gap-2 mb-3">
           <Sparkles className="w-4 h-4 text-primary" />
-          <h3 className="text-sm font-bold text-foreground">Quick Start Templates</h3>
-          <span className="text-xs text-muted-foreground">— click to create</span>
+          <h3 className="text-[15px] font-bold text-white">Quick Start Templates</h3>
+          <span className="text-[13px] text-white/40">— click to create</span>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
           {WORKFLOW_TEMPLATES.map((tpl, i) => {
@@ -106,20 +113,33 @@ export default function WorkflowCreatorView() {
               <button
                 key={i}
                 onClick={() => createFromTemplate(tpl)}
-                className="rounded-xl border border-dashed border-border bg-card/50 p-4 text-left hover:border-primary/40 hover:bg-card/80 hover:shadow-lg hover:shadow-primary/5 transition-all group"
+                className="rounded-xl p-4 text-left transition-all group relative"
+                style={glassStyle}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = "rgba(212, 175, 55, 0.25)";
+                  e.currentTarget.style.boxShadow = "0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.08)";
+                  e.currentTarget.style.boxShadow = "0 4px 24px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05)";
+                }}
               >
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${tpl.color}15` }}>
+                {/* Number badge */}
+                <div className="absolute top-2.5 left-2.5 w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-bold metallic-gold-bg text-black">
+                  {i + 1}
+                </div>
+                <div className="flex items-center gap-2 mb-2 mt-3">
+                  <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${tpl.color}18` }}>
                     <Icon className="w-5 h-5" style={{ color: tpl.color }} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-xs font-bold text-foreground truncate">{tpl.name}</div>
-                    <div className="text-[10px] text-muted-foreground flex items-center gap-1">
+                    <div className="text-[13px] font-bold metallic-gold truncate">{tpl.name}</div>
+                    <div className="text-[11px] text-white/40 flex items-center gap-1">
                       <Clock className="w-3 h-3" /> {tpl.trigger} · {tpl.steps.length} steps
                     </div>
                   </div>
                 </div>
-                <p className="text-[11px] text-muted-foreground leading-relaxed line-clamp-3">{tpl.description}</p>
+                <p className="text-[12px] text-white/30 leading-relaxed line-clamp-3">{tpl.description}</p>
               </button>
             );
           })}
@@ -131,39 +151,50 @@ export default function WorkflowCreatorView() {
         <EmptyState icon={GitBranch} message="No workflows yet. Use a template above or create from scratch." />
       ) : (
         <>
-          <h3 className="text-sm font-bold text-foreground mb-3">Your Workflows</h3>
+          <h3 className="text-[15px] font-bold text-white mb-3">Your Workflows</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-            {workflows.map(wf => {
+            {workflows.map((wf, i) => {
               let stepCount = 0;
               try { stepCount = JSON.parse(wf.steps || "[]").length; } catch {}
               return (
                 <div
                   key={wf.id}
                   onClick={() => setEditing(wf)}
-                  className="group rounded-xl border border-border bg-card/80 p-4 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all cursor-pointer"
+                  className="group rounded-xl p-4 transition-all cursor-pointer relative"
+                  style={glassStyle}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = "rgba(212, 175, 55, 0.25)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.08)";
+                  }}
                 >
-                  <div className="flex items-start justify-between mb-3">
+                  <div className="absolute top-2.5 left-2.5 w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-bold metallic-gold-bg text-black">
+                    {i + 1}
+                  </div>
+
+                  <div className="flex items-start justify-between mb-3 mt-3">
                     <div className="flex-1 min-w-0">
-                      <div className="text-sm font-bold text-foreground truncate">{wf.name}</div>
-                      <div className="text-xs text-muted-foreground truncate mt-0.5">{wf.description || "No description"}</div>
+                      <div className="text-[15px] font-bold metallic-gold truncate">{wf.name}</div>
+                      <div className="text-[13px] text-white truncate mt-0.5">{wf.description || "No description"}</div>
                     </div>
                     <StatusBadge status={wf.status} colorMap={STATUS_COLORS} />
                   </div>
 
-                  <div className="flex items-center gap-4 text-xs text-muted-foreground mb-3">
+                  <div className="flex items-center gap-4 text-[12px] text-white/40 mb-3">
                     <span className="flex items-center gap-1"><GitBranch className="w-3.5 h-3.5" /> {stepCount} steps</span>
                     <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> {wf.trigger || "Manual"}</span>
                     <span className="flex items-center gap-1"><Play className="w-3.5 h-3.5" /> {wf.run_count || 0} runs</span>
                   </div>
 
                   <div className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity" onClick={e => e.stopPropagation()}>
-                    <button onClick={(e) => toggleStatus(e, wf)} className="p-1.5 rounded-md hover:bg-secondary text-muted-foreground hover:text-foreground" title={wf.status === "Active" ? "Pause" : "Activate"}>
+                    <button onClick={(e) => toggleStatus(e, wf)} className="p-1.5 rounded-md hover:bg-white/10 text-white/40 hover:text-white" title={wf.status === "Active" ? "Pause" : "Activate"}>
                       {wf.status === "Active" ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
                     </button>
-                    <button onClick={(e) => duplicateWorkflow(e, wf)} className="p-1.5 rounded-md hover:bg-secondary text-muted-foreground hover:text-foreground" title="Duplicate">
+                    <button onClick={(e) => duplicateWorkflow(e, wf)} className="p-1.5 rounded-md hover:bg-white/10 text-white/40 hover:text-white" title="Duplicate">
                       <Copy className="w-3.5 h-3.5" />
                     </button>
-                    <button onClick={(e) => deleteWorkflow(e, wf.id)} className="p-1.5 rounded-md hover:bg-secondary text-muted-foreground hover:text-red-400" title="Delete">
+                    <button onClick={(e) => deleteWorkflow(e, wf.id)} className="p-1.5 rounded-md hover:bg-white/10 text-white/40 hover:text-red-400" title="Delete">
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>

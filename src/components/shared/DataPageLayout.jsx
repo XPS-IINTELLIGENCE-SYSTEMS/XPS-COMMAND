@@ -3,8 +3,8 @@ import { Search, Loader2 } from "lucide-react";
 export function DataPageHeader({ title, subtitle, count }) {
   return (
     <div className="mb-6">
-      <h1 className="text-2xl font-bold text-foreground">{title}</h1>
-      {subtitle && <p className="text-sm text-muted-foreground mt-1">{subtitle}{count != null ? ` · ${count} records` : ""}</p>}
+      <h1 className="text-[26px] font-bold metallic-gold">{title}</h1>
+      {subtitle && <p className="text-[15px] text-white/40 mt-1">{subtitle}{count != null ? ` · ${count} records` : ""}</p>}
     </div>
   );
 }

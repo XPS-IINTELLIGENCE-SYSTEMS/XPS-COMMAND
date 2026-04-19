@@ -40,33 +40,44 @@ export const COLOR_OPTIONS = [
   "#10b981", "#e11d48", "#7c3aed", "#059669", "#ea580c",
 ];
 
-// Default tool card definitions
+// Default tool card definitions — ordered by logical user workflow (most important first)
 export const DEFAULT_TOOLS = [
+  // 1–5: Core lead engine
   { id: "xpress_leads", label: "Leads", desc: "Lead intelligence & pipeline", iconName: "Users", color: "#d4af37" },
-  { id: "crm", label: "CRM", desc: "Contacts & deals", iconName: "Target", color: "#6366f1" },
-  { id: "data_bank", label: "Data Bank", desc: "All leads — import, export, share", iconName: "Database", color: "#06b6d4" },
-  { id: "find_jobs", label: "Find Jobs", desc: "Commercial project discovery", iconName: "Briefcase", color: "#22c55e" },
   { id: "find_companies", label: "Find Companies", desc: "AI company scraper", iconName: "Building2", color: "#f59e0b" },
-  { id: "scrape_social", label: "Scrape Social", desc: "Social media intelligence", iconName: "Share2", color: "#ec4899" },
-  { id: "scrape_trends", label: "Scrape Trends", desc: "Trends, consensus, economics", iconName: "Globe", color: "#8b5cf6" },
-  { id: "research", label: "Research Lab", desc: "Deep web research", iconName: "Search", color: "#8b5cf6" },
+  { id: "find_jobs", label: "Find Jobs", desc: "Commercial project discovery", iconName: "Briefcase", color: "#22c55e" },
+  { id: "data_bank", label: "Data Bank", desc: "All leads — import, export, share", iconName: "Database", color: "#06b6d4" },
+  { id: "crm", label: "CRM", desc: "Contacts & deals", iconName: "Target", color: "#6366f1" },
+
+  // 6–10: Outreach & revenue
   { id: "get_work", label: "Outreach", desc: "Email & SMS campaigns", iconName: "Send", color: "#ec4899" },
   { id: "win_work", label: "Proposals", desc: "AI proposal engine", iconName: "FileText", color: "#14b8a6" },
-  { id: "analytics", label: "Analytics", desc: "Performance & pipeline", iconName: "BarChart3", color: "#f97316" },
+  { id: "bid_center", label: "Bid Center", desc: "Gov & commercial bidding system", iconName: "Briefcase", color: "#ef4444" },
+  { id: "workflows", label: "Workflows", desc: "Drag & drop automation builder", iconName: "GitBranch", color: "#f43f5e" },
+  { id: "scheduler", label: "Scheduler", desc: "Schedule automated scraping", iconName: "Clock", color: "#0ea5e9" },
+
+  // 11–15: Research & intelligence
+  { id: "research", label: "Research Lab", desc: "Deep web research", iconName: "Search", color: "#8b5cf6" },
   { id: "knowledge", label: "Knowledge Base", desc: "Company & industry intel", iconName: "BookOpen", color: "#06b6d4" },
   { id: "knowledge_upload", label: "Upload Knowledge", desc: "Feed intel into the system", iconName: "Upload", color: "#10b981" },
-  { id: "seeds_sources", label: "Seeds & Sources", desc: "Lead sources & seed lists", iconName: "Sprout", color: "#84cc16" },
   { id: "competition", label: "Competition", desc: "Competitor monitoring", iconName: "Swords", color: "#ef4444" },
   { id: "competitor_comparison", label: "Compare vs.", desc: "Head-to-head price & product analysis", iconName: "Swords", color: "#f43f5e" },
-  { id: "algorithm", label: "Algorithm Tuning", desc: "Fine-tune scoring & AI", iconName: "Sliders", color: "#f59e0b" },
+
+  // 16–20: Content & data sources
   { id: "media_hub", label: "Media Hub", desc: "Video, images, branding, social, AI voice", iconName: "Share2", color: "#ec4899" },
-  { id: "bid_center", label: "Bid Center", desc: "Gov & commercial bidding system", iconName: "Briefcase", color: "#ef4444" },
+  { id: "scrape_social", label: "Scrape Social", desc: "Social media intelligence", iconName: "Share2", color: "#ec4899" },
+  { id: "scrape_trends", label: "Scrape Trends", desc: "Trends, consensus, economics", iconName: "Globe", color: "#8b5cf6" },
+  { id: "seeds_sources", label: "Seeds & Sources", desc: "Lead sources & seed lists", iconName: "Sprout", color: "#84cc16" },
+  { id: "analytics", label: "Analytics", desc: "Performance & pipeline", iconName: "BarChart3", color: "#f97316" },
+
+  // 21–25: AI, agents & admin
+  { id: "ai_assistant", label: "AI Assistant", desc: "Chat-driven commands", iconName: "Bot", color: "#d4af37" },
+  { id: "agent_skills", label: "Skills Library", desc: "All agent capabilities", iconName: "Bot", color: "#8b5cf6" },
+  { id: "agent_knowledge", label: "Agent Knowledge", desc: "Upload docs & URLs to agents", iconName: "Upload", color: "#10b981" },
+  { id: "algorithm", label: "Algorithm Tuning", desc: "Fine-tune scoring & AI", iconName: "Sliders", color: "#f59e0b" },
   { id: "connectors", label: "Connectors", desc: "Integrations & APIs", iconName: "Link2", color: "#84cc16" },
-  { id: "scheduler", label: "Scheduler", desc: "Schedule automated scraping", iconName: "Clock", color: "#0ea5e9" },
-  { id: "workflows", label: "Workflows", desc: "Drag & drop automation builder", iconName: "GitBranch", color: "#f43f5e" },
+
+  // 26–27: System
   { id: "admin", label: "Admin Control", desc: "Users, keys & promo codes", iconName: "Shield", color: "#a855f7" },
   { id: "settings", label: "Settings", desc: "Account & preferences", iconName: "Settings", color: "#64748b" },
-  { id: "agent_knowledge", label: "Agent Knowledge", desc: "Upload docs & URLs to agents", iconName: "Upload", color: "#10b981" },
-  { id: "agent_skills", label: "Skills Library", desc: "All agent capabilities", iconName: "Bot", color: "#8b5cf6" },
-  { id: "ai_assistant", label: "AI Assistant", desc: "Chat-driven commands", iconName: "Bot", color: "#d4af37" },
 ];

@@ -123,6 +123,7 @@
 
   body {
     @apply bg-background text-foreground font-inter;
+    font-size: 16px;
     overscroll-behavior: none;
     -webkit-overflow-scrolling: touch;
   }

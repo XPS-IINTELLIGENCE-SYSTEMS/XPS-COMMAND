@@ -196,10 +196,10 @@ export default function DashboardHub({ onOpenTool }) {
             </div>
           ) : (
             <div className="relative">
-              <h1 className="text-3xl font-extrabold text-foreground tracking-tight">
+              <h1 className="text-[32px] font-extrabold metallic-gold tracking-tight">
                 {displayGreeting}
               </h1>
-              <p className="text-sm text-muted-foreground mt-1">{subtitle}</p>
+              <p className="text-[15px] text-white mt-1">{subtitle}</p>
               <button
                 onClick={startEditGreeting}
                 className="absolute -right-1 top-0 p-1.5 rounded-lg hover:bg-secondary opacity-0 group-hover/greet:opacity-100 transition-opacity"
@@ -216,8 +216,8 @@ export default function DashboardHub({ onOpenTool }) {
           <div className="mb-8">
             <div className="flex items-center gap-2 mb-3">
               <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-              <h2 className="text-sm font-bold text-foreground">Favorites</h2>
-              <span className="text-xs text-muted-foreground">
+              <h2 className="text-[15px] font-bold text-white">Favorites</h2>
+              <span className="text-[13px] text-white/40">
                 {favTools.length === 0 ? "— star cards or drag them here" : `${favTools.length} pinned`}
               </span>
             </div>
@@ -243,6 +243,7 @@ export default function DashboardHub({ onOpenTool }) {
                           <DashboardToolCard
                             tool={tool}
                             starred
+                            index={index}
                             onOpen={onOpenTool}
                             onToggleStar={toggleStar}
                             onEdit={setEditingCard}
@@ -260,7 +261,7 @@ export default function DashboardHub({ onOpenTool }) {
 
           {/* All Tools Grid */}
           <div>
-            <h2 className="text-sm font-bold text-foreground mb-3">All Tools</h2>
+            <h2 className="text-[15px] font-bold text-white mb-3">All Tools</h2>
             <Droppable droppableId="all" direction="horizontal">
               {(provided, snapshot) => (
                 <div
@@ -273,6 +274,8 @@ export default function DashboardHub({ onOpenTool }) {
                   {gridIds.map((id, index) => {
                     const tool = toolMap[id];
                     if (!tool) return null;
+                    // Global numbering: favorites count + grid index
+                    const globalIndex = favTools.length + index;
                     return (
                       <Draggable key={tool.id} draggableId={`all-${tool.id}`} index={index}>
                         {(prov) => (
@@ -280,6 +283,7 @@ export default function DashboardHub({ onOpenTool }) {
                             <DashboardToolCard
                               tool={tool}
                               starred={false}
+                              index={globalIndex}
                               onOpen={onOpenTool}
                               onToggleStar={toggleStar}
                               onEdit={setEditingCard}

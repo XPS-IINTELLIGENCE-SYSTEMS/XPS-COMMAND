@@ -5,8 +5,6 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
-import SmartRedirect from './components/SmartRedirect';
-
 // Public pages (SaaS marketing site)
 import Landing from './pages/Landing';
 import Platform from './pages/Platform';
@@ -19,9 +17,7 @@ import SignInPortal from './pages/SignInPortal';
 // Authenticated pages
 import Onboarding from './pages/Onboarding';
 import Home from './pages/Home';
-import AdminDashboard from './pages/AdminDashboard';
-import ManagerDashboard from './pages/ManagerDashboard';
-import OwnerDashboard from './pages/OwnerDashboard';
+
 import LeadEngine from './pages/LeadEngine';
 import DataBank from './pages/DataBank';
 import AdminControl from './pages/AdminControl';
@@ -56,6 +52,7 @@ const UnauthenticatedApp = () => (
     <Route path="/admin-dashboard" element={<Navigate to="/signin" replace />} />
     <Route path="/manager-dashboard" element={<Navigate to="/signin" replace />} />
     <Route path="/owner-dashboard" element={<Navigate to="/signin" replace />} />
+    
     <Route path="/lead-engine" element={<Navigate to="/signin" replace />} />
     <Route path="/data-bank" element={<Navigate to="/signin" replace />} />
     <Route path="/admin-control" element={<Navigate to="/signin" replace />} />
@@ -69,11 +66,11 @@ const UnauthenticatedApp = () => (
  */
 const AuthenticatedApp = () => (
   <Routes>
-    {/* "/" → Smart redirect to correct dashboard for authenticated users */}
-    <Route path="/" element={<SmartRedirect />} />
+    {/* "/" → Dashboard for authenticated users */}
+    <Route path="/" element={<Navigate to="/dashboard" replace />} />
     
-    {/* Smart redirect — also accessible directly */}
-    <Route path="/redirect" element={<SmartRedirect />} />
+    {/* Any redirect goes to dashboard */}
+    <Route path="/redirect" element={<Navigate to="/dashboard" replace />} />
     
     {/* Sign-in page redirects to dashboard since already logged in */}
     <Route path="/signin" element={<Navigate to="/dashboard" replace />} />
@@ -87,9 +84,9 @@ const AuthenticatedApp = () => (
     
     {/* Dashboards by role */}
     <Route path="/dashboard" element={<Home />} />
-    <Route path="/admin-dashboard" element={<AdminDashboard />} />
-    <Route path="/manager-dashboard" element={<ManagerDashboard />} />
-    <Route path="/owner-dashboard" element={<OwnerDashboard />} />
+    <Route path="/admin-dashboard" element={<Navigate to="/dashboard" replace />} />
+    <Route path="/manager-dashboard" element={<Navigate to="/dashboard" replace />} />
+    <Route path="/owner-dashboard" element={<Navigate to="/dashboard" replace />} />
     <Route path="/lead-engine" element={<LeadEngine />} />
     <Route path="/data-bank" element={<DataBank />} />
     <Route path="/admin-control" element={<AdminControl />} />

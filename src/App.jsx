@@ -18,6 +18,7 @@ import SignInPortal from './pages/SignInPortal';
 // Authenticated pages
 import Onboarding from './pages/Onboarding';
 import Home from './pages/Home';
+import AccountSettings from './pages/AccountSettings';
 
 import LeadEngine from './pages/LeadEngine';
 import DataBank from './pages/DataBank';
@@ -57,6 +58,7 @@ const UnauthenticatedApp = () => (
     <Route path="/lead-engine" element={<Navigate to="/signin" replace />} />
     <Route path="/data-bank" element={<Navigate to="/signin" replace />} />
     <Route path="/admin-control" element={<Navigate to="/signin" replace />} />
+    <Route path="/account-settings" element={<Navigate to="/signin" replace />} />
     <Route path="*" element={<Navigate to="/" replace />} />
   </Routes>
 );
@@ -91,6 +93,7 @@ const AuthenticatedApp = () => (
     <Route path="/lead-engine" element={<LeadEngine />} />
     <Route path="/data-bank" element={<DataBank />} />
     <Route path="/admin-control" element={<AdminControl />} />
+    <Route path="/account-settings" element={<AccountSettings />} />
     
     {/* Catch-all */}
     <Route path="*" element={<PageNotFound />} />

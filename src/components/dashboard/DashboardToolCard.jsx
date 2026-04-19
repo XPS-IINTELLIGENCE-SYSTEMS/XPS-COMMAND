@@ -7,20 +7,24 @@ export default function DashboardToolCard({ tool, starred, onOpen, onToggleStar,
 
   return (
     <div
-      className="group rounded-xl p-4 text-left transition-all duration-200 cursor-pointer relative"
+      className="group rounded-xl p-4 text-left cursor-pointer relative"
       style={{
         background: "rgba(0, 0, 0, 0.45)",
         backdropFilter: "blur(20px)",
         WebkitBackdropFilter: "blur(20px)",
         border: "1px solid rgba(255, 255, 255, 0.08)",
         boxShadow: "0 4px 24px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05)",
+        transition: "transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease",
       }}
       onClick={() => onOpen(tool.id)}
       onMouseEnter={(e) => {
-        e.currentTarget.style.borderColor = "rgba(212, 175, 55, 0.25)";
-        e.currentTarget.style.boxShadow = "0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08)";
+        e.currentTarget.style.transform = "translateY(-6px) scale(1.03)";
+        e.currentTarget.style.borderImage = "linear-gradient(135deg, #b8860b, #d4af37, #f5e6a3, #c0c0c0, #d4af37, #b8860b) 1";
+        e.currentTarget.style.boxShadow = "0 12px 40px rgba(212,175,55,0.15), 0 4px 16px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)";
       }}
       onMouseLeave={(e) => {
+        e.currentTarget.style.transform = "translateY(0) scale(1)";
+        e.currentTarget.style.borderImage = "none";
         e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.08)";
         e.currentTarget.style.boxShadow = "0 4px 24px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05)";
       }}
@@ -65,7 +69,7 @@ export default function DashboardToolCard({ tool, starred, onOpen, onToggleStar,
         <Icon className="w-5 h-5 transition-colors" style={{ color: tool.color }} />
       </div>
       <div className="text-[15px] font-bold metallic-gold truncate">{tool.label}</div>
-      <div className="text-[13px] text-white/40 mt-0.5 leading-tight">{tool.desc}</div>
+      <div className="text-[13px] text-white mt-0.5 leading-tight">{tool.desc}</div>
     </div>
   );
 }

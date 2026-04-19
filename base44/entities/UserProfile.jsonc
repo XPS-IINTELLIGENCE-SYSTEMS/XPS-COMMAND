@@ -12,6 +12,34 @@
     "title": {
       "type": "string"
     },
+    "address": {
+      "type": "string",
+      "description": "User street address"
+    },
+    "city": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "zip": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "alternate_email": {
+      "type": "string",
+      "description": "Secondary email"
+    },
+    "company_name": {
+      "type": "string",
+      "description": "User's company name"
+    },
+    "company_location": {
+      "type": "string",
+      "description": "Company headquarters location"
+    },
     "preferred_tools": {
       "type": "string"
     },
@@ -42,6 +70,82 @@
     "ai_persona_name": {
       "type": "string",
       "description": "Custom AI assistant name"
+    },
+    "agent_personalization": {
+      "type": "string",
+      "description": "JSON \u2014 agent personality, tone, focus areas"
+    },
+    "notification_method": {
+      "type": "string",
+      "enum": [
+        "Email",
+        "SMS",
+        "Both",
+        "None"
+      ],
+      "default": "Email",
+      "description": "How the agent delivers notifications"
+    },
+    "lead_delivery": {
+      "type": "string",
+      "enum": [
+        "Email",
+        "SMS",
+        "Dashboard Only",
+        "Email + SMS",
+        "All Channels"
+      ],
+      "default": "Dashboard Only",
+      "description": "How leads are delivered to the user"
+    },
+    "email_connector_enabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether email connector is active"
+    },
+    "push_notifications": {
+      "type": "boolean",
+      "default": true
+    },
+    "sms_notifications": {
+      "type": "boolean",
+      "default": false
+    },
+    "email_notifications": {
+      "type": "boolean",
+      "default": true
+    },
+    "auto_follow_up": {
+      "type": "boolean",
+      "default": false,
+      "description": "Auto follow-up on leads"
+    },
+    "auto_proposal": {
+      "type": "boolean",
+      "default": false,
+      "description": "Auto-generate proposals"
+    },
+    "compact_mode": {
+      "type": "boolean",
+      "default": false
+    },
+    "default_vertical": {
+      "type": "string",
+      "description": "Default vertical filter for leads"
+    },
+    "default_state": {
+      "type": "string",
+      "description": "Default state for scraping"
+    },
+    "scrape_frequency": {
+      "type": "string",
+      "enum": [
+        "Manual",
+        "Daily",
+        "Weekly",
+        "Bi-Weekly"
+      ],
+      "default": "Manual"
     },
     "total_ai_interactions": {
       "type": "number",

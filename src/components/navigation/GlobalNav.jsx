@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { Menu, X, Home, ArrowLeft } from "lucide-react";
+import { Menu, X, Home, ArrowLeft, UserCircle } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 const NAV_LINKS = [
@@ -17,6 +17,7 @@ const AUTH_LINKS = [
   { to: "/lead-engine", label: "Lead Engine" },
   { to: "/data-bank", label: "Data Bank" },
   { to: "/admin-control", label: "Admin Control" },
+  { to: "/account-settings", label: "Account Settings" },
 ];
 
 export default function GlobalNav() {
@@ -73,13 +74,24 @@ export default function GlobalNav() {
         <span className="text-[15px] font-extrabold metallic-gold tracking-wider hidden sm:inline">XPS INTELLIGENCE</span>
       </Link>
 
-      {/* Right: Hamburger */}
-      <button
-        onClick={() => setOpen(!open)}
-        className="p-2 rounded-lg hover:bg-white/10 transition-colors text-white/60 hover:text-white"
-      >
-        {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-      </button>
+      {/* Right: User avatar + Hamburger */}
+      <div className="flex items-center gap-1">
+        {isAuthed && (
+          <Link
+            to="/account-settings"
+            className="p-1.5 rounded-lg hover:bg-white/10 transition-colors text-white/60 hover:text-white"
+            title="Account Settings"
+          >
+            <UserCircle className="w-6 h-6" />
+          </Link>
+        )}
+        <button
+          onClick={() => setOpen(!open)}
+          className="p-2 rounded-lg hover:bg-white/10 transition-colors text-white/60 hover:text-white"
+        >
+          {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+        </button>
+      </div>
 
       {/* Dropdown menu */}
       {open && (

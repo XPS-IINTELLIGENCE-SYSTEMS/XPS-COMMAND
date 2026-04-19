@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
-import { Shield, Loader2, Users, Database, Zap, BarChart3, RefreshCw, Trash2, AlertCircle } from "lucide-react";
+import { Shield, Loader2, Users, Database, Zap, BarChart3, RefreshCw } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
 import PageHexGlow from "../components/PageHexGlow";
 import GlobalNav from "../components/navigation/GlobalNav";
 
@@ -65,6 +64,15 @@ export default function AdminControl() {
       </div>
 
       <div className="relative z-[1] max-w-6xl mx-auto px-6 py-8">
+        {/* Page title + refresh */}
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h1 className="text-xl font-extrabold text-white">Admin Control</h1>
+            <p className="text-[11px] text-white/50">System overview & management</p>
+          </div>
+          <Button variant="outline" size="sm" onClick={loadStats}><RefreshCw className="w-3.5 h-3.5 mr-1.5" /> Refresh</Button>
+        </div>
+
         {/* System Stats */}
         <h2 className="text-xs font-extrabold uppercase tracking-[0.2em] text-muted-foreground mb-4">System Stats</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 mb-10">

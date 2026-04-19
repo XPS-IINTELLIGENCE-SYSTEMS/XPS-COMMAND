@@ -217,7 +217,7 @@ export default function DashboardHub({ onOpenTool }) {
             <div className="flex items-center gap-2 mb-3">
               <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
               <h2 className="text-[15px] font-bold text-white">Favorites</h2>
-              <span className="text-[13px] text-white/40">
+              <span className="text-[13px] text-white/60">
                 {favTools.length === 0 ? "— star cards or drag them here" : `${favTools.length} pinned`}
               </span>
             </div>
@@ -231,7 +231,7 @@ export default function DashboardHub({ onOpenTool }) {
                   }`}
                 >
                   {favTools.length === 0 && !snapshot.isDraggingOver && (
-                    <div className="col-span-full flex items-center justify-center py-6 text-xs text-muted-foreground">
+                    <div className="col-span-full flex items-center justify-center py-6 text-xs text-white/50">
                       <Star className="w-3.5 h-3.5 mr-1.5 text-muted-foreground/50" />
                       Click the ★ on any card below or drag cards here to pin your favorites
                     </div>

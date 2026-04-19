@@ -9,6 +9,7 @@ import KnowledgeView from "../knowledge/KnowledgeView";
 import KnowledgeUploadView from "../knowledge/KnowledgeUploadView";
 import AdminControlView from "../admin/AdminControlView";
 import CompetitiveIntelCenter from "../owner/CompetitiveIntelCenter";
+import CompetitorComparisonView from "../competitor/CompetitorComparisonView";
 import ConnectorHub from "../settings/ConnectorHub";
 import SettingsView from "../dashboard/SettingsView";
 import ScraperSchedulerView from "../scheduler/ScraperSchedulerView";
@@ -40,6 +41,7 @@ export default function AppContent({ activeView, onChatCommand, onNavigate }) {
     case "algorithm": return <AlgorithmTuningView />;
     case "admin": return <AdminControlView />;
     case "competition": return <CompetitiveIntelCenter />;
+    case "competitor_comparison": return <CompetitorComparisonView />;
     case "connectors": return <ConnectorHub />;
     case "settings": return <SettingsView />;
     case "scheduler": return <ScraperSchedulerView />;

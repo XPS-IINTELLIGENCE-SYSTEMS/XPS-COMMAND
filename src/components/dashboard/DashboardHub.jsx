@@ -24,6 +24,7 @@ const TOOL_BUTTONS = [
   { id: "knowledge_upload", label: "Upload Knowledge", desc: "Feed intel into the system", icon: Upload, color: "#10b981" },
   { id: "seeds_sources", label: "Seeds & Sources", desc: "Lead sources & seed lists", icon: Sprout, color: "#84cc16" },
   { id: "competition", label: "Competition", desc: "Competitor monitoring", icon: Swords, color: "#ef4444" },
+  { id: "competitor_comparison", label: "Compare vs.", desc: "Head-to-head price & product analysis", icon: Swords, color: "#f43f5e" },
   { id: "algorithm", label: "Algorithm Tuning", desc: "Fine-tune scoring & AI", icon: Sliders, color: "#f59e0b" },
   { id: "connectors", label: "Connectors", desc: "Integrations & APIs", icon: Link2, color: "#84cc16" },
   { id: "scheduler", label: "Scheduler", desc: "Schedule automated scraping", icon: Clock, color: "#0ea5e9" },

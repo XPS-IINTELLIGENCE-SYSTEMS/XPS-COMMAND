@@ -39,6 +39,10 @@
     "title": {
       "type": "string",
       "description": "Job title"
+    },
+    "dashboard_config": {
+      "type": "string",
+      "description": "JSON string of dashboard layout preferences (starred cards, order, customizations)"
     }
   },
   "required": [

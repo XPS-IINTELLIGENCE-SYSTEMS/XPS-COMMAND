@@ -24,6 +24,7 @@ import LeadEngine from './pages/LeadEngine';
 import DataBank from './pages/DataBank';
 import AdminControl from './pages/AdminControl';
 import FieldTech from './pages/FieldTech';
+import ClientPortal from './pages/ClientPortal';
 
 /**
  * PUBLIC ROUTES — visible to everyone (SaaS marketing + auth entry points)
@@ -61,6 +62,7 @@ const UnauthenticatedApp = () => (
     <Route path="/admin-control" element={<Navigate to="/signin" replace />} />
     <Route path="/account-settings" element={<Navigate to="/signin" replace />} />
     <Route path="/field-tech" element={<Navigate to="/signin" replace />} />
+    <Route path="/client-portal" element={<Navigate to="/signin" replace />} />
     <Route path="*" element={<Navigate to="/" replace />} />
   </Routes>
 );
@@ -97,6 +99,7 @@ const AuthenticatedApp = () => (
     <Route path="/admin-control" element={<AdminControl />} />
     <Route path="/account-settings" element={<AccountSettings />} />
     <Route path="/field-tech" element={<FieldTech />} />
+    <Route path="/client-portal" element={<ClientPortal />} />
     
     {/* Catch-all */}
     <Route path="*" element={<PageNotFound />} />

@@ -31,6 +31,9 @@ import BlueprintTakeoffView from "../takeoff/BlueprintTakeoffView";
 import DynamicPricingView from "../pricing/DynamicPricingView";
 import ProposalGeneratorView from "../proposals/ProposalGeneratorView";
 import FieldTechEmbed from "../fieldtech/FieldTechEmbed";
+import JobSiteMap from "../jobmap/JobSiteMap";
+import AutoProposalGenerator from "../proposals/AutoProposalGenerator";
+import ClientPortalView from "../clientportal/ClientPortalView";
 
 export default function AppContent({ activeView, onChatCommand, onNavigate }) {
   switch (activeView) {
@@ -70,6 +73,9 @@ export default function AppContent({ activeView, onChatCommand, onNavigate }) {
     case "dynamic_pricing": return <DynamicPricingView />;
     case "proposal_generator": return <ProposalGeneratorView />;
     case "field_tech": return <FieldTechEmbed />;
+    case "job_site_map": return <JobSiteMap />;
+    case "auto_proposal": return <AutoProposalGenerator />;
+    case "client_portal": return <ClientPortalView />;
     default: return <div className="text-center py-20 text-muted-foreground">View not found</div>;
   }
 }

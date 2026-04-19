@@ -1,0 +1,59 @@
+{
+  "name": "TimeEntry",
+  "type": "object",
+  "properties": {
+    "job_id": {
+      "type": "string",
+      "description": "CommercialJob ID"
+    },
+    "job_name": {
+      "type": "string"
+    },
+    "tech_email": {
+      "type": "string",
+      "description": "Technician email"
+    },
+    "tech_name": {
+      "type": "string"
+    },
+    "check_in_time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "check_out_time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "check_in_lat": {
+      "type": "number"
+    },
+    "check_in_lng": {
+      "type": "number"
+    },
+    "check_out_lat": {
+      "type": "number"
+    },
+    "check_out_lng": {
+      "type": "number"
+    },
+    "duration_minutes": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "checked_in",
+        "checked_out"
+      ],
+      "default": "checked_in"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "job_id",
+    "tech_email",
+    "status"
+  ]
+}

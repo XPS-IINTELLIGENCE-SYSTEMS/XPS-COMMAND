@@ -3,7 +3,7 @@ import {
   BookOpen, Swords, Link2, Shield, Settings, Bot,
   Target, Send, Clock, GitBranch,
   Upload, Database, Sprout, Sliders, Share2, Globe,
-  Sparkles, Brain, TrendingUp, Heart, Wrench
+  Sparkles, Brain, TrendingUp, Heart, Wrench, MapPin
 } from "lucide-react";
 
 // Master list of all available icons for the icon picker
@@ -35,6 +35,7 @@ export const ICON_OPTIONS = [
   { name: "TrendingUp", icon: TrendingUp },
   { name: "Heart", icon: Heart },
   { name: "Wrench", icon: Wrench },
+  { name: "MapPin", icon: MapPin },
 ];
 
 export const ICON_MAP = Object.fromEntries(ICON_OPTIONS.map(i => [i.name, i.icon]));
@@ -93,6 +94,9 @@ export const DEFAULT_TOOLS = [
   { id: "proposal_generator", label: "Proposal Generator", desc: "Auto-generate PDF proposals from job data", iconName: "FileText", color: "#14b8a6" },
 
   { id: "field_tech", label: "Field Tech", desc: "Work orders, photos & punch lists", iconName: "Wrench", color: "#f97316" },
+  { id: "job_site_map", label: "Job Site Map", desc: "Live map, routing & time tracking", iconName: "MapPin", color: "#0ea5e9" },
+  { id: "auto_proposal", label: "AI Bid Writer", desc: "Auto-generate bids from job data", iconName: "Sparkles", color: "#8b5cf6" },
+  { id: "client_portal", label: "Client Portal", desc: "Client photos, approvals & e-sign", iconName: "Building2", color: "#14b8a6" },
 
   // 32–35: System
   { id: "admin", label: "Admin Control", desc: "Users, keys & promo codes", iconName: "Shield", color: "#a855f7" },

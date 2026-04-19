@@ -1,0 +1,51 @@
+{
+  "name": "ChangeOrder",
+  "type": "object",
+  "properties": {
+    "job_id": {
+      "type": "string",
+      "description": "CommercialJob ID"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "pending",
+        "approved",
+        "rejected"
+      ],
+      "default": "draft"
+    },
+    "submitted_by": {
+      "type": "string"
+    },
+    "approved_by": {
+      "type": "string"
+    },
+    "signature_data": {
+      "type": "string",
+      "description": "Base64 signature image data URL"
+    },
+    "signed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "job_id",
+    "title",
+    "status"
+  ]
+}

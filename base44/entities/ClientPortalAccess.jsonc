@@ -1,0 +1,37 @@
+{
+  "name": "ClientPortalAccess",
+  "type": "object",
+  "properties": {
+    "client_email": {
+      "type": "string",
+      "description": "Property manager email"
+    },
+    "client_name": {
+      "type": "string"
+    },
+    "company": {
+      "type": "string"
+    },
+    "job_ids": {
+      "type": "string",
+      "description": "JSON array of CommercialJob IDs they can view"
+    },
+    "access_level": {
+      "type": "string",
+      "enum": [
+        "view_only",
+        "approve",
+        "full"
+      ],
+      "default": "approve"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "client_email",
+    "client_name"
+  ]
+}

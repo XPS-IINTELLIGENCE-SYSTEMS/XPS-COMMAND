@@ -135,8 +135,8 @@ export default function TermsOfService() {
             <h2 className="text-lg font-bold text-foreground">15. Contact Us</h2>
             <p>For questions about these Terms of Service, please contact us at:</p>
             <p className="font-semibold text-foreground">Xtreme Polishing Systems<br />
-            Email: legal@xtremepolishingsystems.com<br />
-            Website: xtremepolishingsystems.com</p>
+            Email: legal@xpsintelligence.com<br />
+            Website: xpsintelligence.com</p>
           </section>
         </div>
       </div>

@@ -124,8 +124,8 @@ export default function PrivacyPolicy() {
             <h2 className="text-lg font-bold text-foreground">11. Contact Us</h2>
             <p>If you have questions about this Privacy Policy, please contact us at:</p>
             <p className="font-semibold text-foreground">Xtreme Polishing Systems<br />
-            Email: privacy@xtremepolishingsystems.com<br />
-            Website: xtremepolishingsystems.com</p>
+            Email: privacy@xpsintelligence.com<br />
+            Website: xpsintelligence.com</p>
           </section>
         </div>
       </div>

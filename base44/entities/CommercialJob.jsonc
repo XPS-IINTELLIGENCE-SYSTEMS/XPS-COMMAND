@@ -70,9 +70,24 @@
         "education",
         "government",
         "mixed_use",
+        "military",
+        "airport",
+        "parking_garage",
         "other"
       ],
       "default": "other"
+    },
+    "sector": {
+      "type": "string",
+      "enum": [
+        "Government Federal",
+        "Government State",
+        "Government Municipal",
+        "Commercial Private",
+        "Commercial Public",
+        "Institutional"
+      ],
+      "default": "Commercial Private"
     },
     "total_sqft": {
       "type": "number"
@@ -83,14 +98,18 @@
     "project_phase": {
       "type": "string",
       "enum": [
+        "discovered",
         "permit_filed",
         "design",
         "pre_bid",
         "bidding",
+        "bid_submitted",
+        "awarded",
         "under_construction",
-        "complete"
+        "complete",
+        "lost"
       ],
-      "default": "permit_filed"
+      "default": "discovered"
     },
     "construction_start_date": {
       "type": "string",
@@ -119,6 +138,18 @@
     "flooring_system_recommendation": {
       "type": "string"
     },
+    "takeoff_data": {
+      "type": "string",
+      "description": "JSON \u2014 full AI takeoff breakdown"
+    },
+    "takeoff_complete": {
+      "type": "boolean",
+      "default": false
+    },
+    "competitive_pricing": {
+      "type": "string",
+      "description": "JSON \u2014 competitor pricing intelligence"
+    },
     "urgency_score": {
       "type": "number",
       "description": "0-100"
@@ -143,21 +174,63 @@
         "takeoff_complete",
         "bid_generated",
         "sent",
+        "follow_up_1",
+        "follow_up_2",
+        "follow_up_3",
         "won",
         "lost",
         "no_response"
       ],
       "default": "not_started"
     },
+    "bid_document_id": {
+      "type": "string"
+    },
+    "contractor_id": {
+      "type": "string",
+      "description": "Linked Contractor ID"
+    },
+    "operation_id": {
+      "type": "string",
+      "description": "Linked JobOperation ID"
+    },
     "source_url": {
       "type": "string"
+    },
+    "source_type": {
+      "type": "string",
+      "enum": [
+        "SAM.gov",
+        "BidNet",
+        "Dodge",
+        "ConstructConnect",
+        "PlanHub",
+        "BuildingConnected",
+        "Permit DB",
+        "Manual",
+        "Scraper",
+        "Other"
+      ],
+      "default": "Other"
     },
     "discovery_date": {
       "type": "string",
       "format": "date-time"
     },
+    "bid_due_date": {
+      "type": "string",
+      "format": "date"
+    },
     "ai_insight": {
       "type": "string"
+    },
+    "follow_up_count": {
+      "type": "number",
+      "default": 0
+    },
+    "last_follow_up": {
+      "type": "string",
+      "format": "date-time"
     },
     "notes": {
       "type": "string"

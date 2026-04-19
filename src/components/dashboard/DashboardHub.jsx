@@ -26,6 +26,7 @@ const TOOL_BUTTONS = [
   { id: "competition", label: "Competition", desc: "Competitor monitoring", icon: Swords, color: "#ef4444" },
   { id: "competitor_comparison", label: "Compare vs.", desc: "Head-to-head price & product analysis", icon: Swords, color: "#f43f5e" },
   { id: "algorithm", label: "Algorithm Tuning", desc: "Fine-tune scoring & AI", icon: Sliders, color: "#f59e0b" },
+  { id: "bid_center", label: "Bid Center", desc: "Gov & commercial bidding system", icon: Briefcase, color: "#ef4444" },
   { id: "connectors", label: "Connectors", desc: "Integrations & APIs", icon: Link2, color: "#84cc16" },
   { id: "scheduler", label: "Scheduler", desc: "Schedule automated scraping", icon: Clock, color: "#0ea5e9" },
   { id: "workflows", label: "Workflows", desc: "Drag & drop automation builder", icon: GitBranch, color: "#f43f5e" },

@@ -13,6 +13,7 @@ import CompetitorComparisonView from "../competitor/CompetitorComparisonView";
 import AgentKnowledgeUpload from "../dashboard/AgentKnowledgeUpload";
 import AgentSkillsLibrary from "../dashboard/AgentSkillsLibrary";
 import ConnectorHub from "../settings/ConnectorHub";
+import BidCommandCenter from "../bidcenter/BidCommandCenter";
 import SettingsView from "../dashboard/SettingsView";
 import ScraperSchedulerView from "../scheduler/ScraperSchedulerView";
 import WorkflowCreatorView from "../workflow/WorkflowCreatorView";
@@ -46,6 +47,7 @@ export default function AppContent({ activeView, onChatCommand, onNavigate }) {
     case "competitor_comparison": return <CompetitorComparisonView />;
     case "agent_knowledge": return <AgentKnowledgeUpload />;
     case "agent_skills": return <AgentSkillsLibrary onRunSkill={(cmd) => { /* handled by parent */ }} />;
+    case "bid_center": return <BidCommandCenter />;
     case "connectors": return <ConnectorHub />;
     case "settings": return <SettingsView />;
     case "scheduler": return <ScraperSchedulerView />;

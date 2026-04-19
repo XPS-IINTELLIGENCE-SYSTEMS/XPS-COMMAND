@@ -1,0 +1,117 @@
+{
+  "name": "Contractor",
+  "type": "object",
+  "properties": {
+    "company_name": {
+      "type": "string",
+      "description": "Contractor company name"
+    },
+    "contact_name": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string",
+      "description": "Contact person title"
+    },
+    "email": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "website": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "zip": {
+      "type": "string"
+    },
+    "contractor_type": {
+      "type": "string",
+      "enum": [
+        "General Contractor",
+        "Flooring Sub",
+        "Concrete Sub",
+        "Owner/Developer",
+        "Property Manager",
+        "Government Agency",
+        "Architect",
+        "Other"
+      ],
+      "default": "General Contractor"
+    },
+    "specialty": {
+      "type": "string",
+      "description": "Primary specialty"
+    },
+    "employee_count": {
+      "type": "number"
+    },
+    "annual_revenue": {
+      "type": "number"
+    },
+    "license_number": {
+      "type": "string"
+    },
+    "bonded": {
+      "type": "boolean",
+      "default": false
+    },
+    "insured": {
+      "type": "boolean",
+      "default": false
+    },
+    "intro_sent": {
+      "type": "boolean",
+      "default": false,
+      "description": "Has intro package been sent"
+    },
+    "intro_sent_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "relationship_status": {
+      "type": "string",
+      "enum": [
+        "New",
+        "Intro Sent",
+        "Responded",
+        "Active Partner",
+        "Past Partner",
+        "Declined"
+      ],
+      "default": "New"
+    },
+    "projects_bid": {
+      "type": "number",
+      "default": 0
+    },
+    "projects_won": {
+      "type": "number",
+      "default": 0
+    },
+    "source": {
+      "type": "string",
+      "description": "How this contractor was found"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "score": {
+      "type": "number",
+      "description": "AI relationship score 0-100"
+    }
+  },
+  "required": [
+    "company_name",
+    "state"
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "name": "MemberProfile",
+  "type": "object",
+  "properties": {
+    "email": {
+      "type": "string",
+      "description": "User email (links to User entity)"
+    },
+    "name": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "user_type": {
+      "type": "string",
+      "enum": [
+        "admin",
+        "company",
+        "saas"
+      ],
+      "default": "saas"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "suspended",
+        "trial",
+        "expired"
+      ],
+      "default": "active"
+    },
+    "package": {
+      "type": "string",
+      "enum": [
+        "free",
+        "starter",
+        "professional",
+        "enterprise",
+        "custom"
+      ],
+      "default": "free"
+    },
+    "allowed_tools": {
+      "type": "string",
+      "description": "JSON array of tool IDs. Empty string or '[]' = package defaults."
+    },
+    "access_code_used": {
+      "type": "string",
+      "description": "The access code they redeemed"
+    },
+    "trial_start": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "trial_end": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "privacy_accepted": {
+      "type": "boolean",
+      "default": false
+    },
+    "data_sharing_consent": {
+      "type": "boolean",
+      "default": false
+    },
+    "tool_usage": {
+      "type": "string",
+      "description": "JSON tracking tool usage counts for trial limits"
+    },
+    "can_download": {
+      "type": "boolean",
+      "default": false
+    },
+    "can_export": {
+      "type": "boolean",
+      "default": false
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "email",
+    "user_type",
+    "status"
+  ]
+}

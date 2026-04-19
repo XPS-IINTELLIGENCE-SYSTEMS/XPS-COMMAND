@@ -1,0 +1,101 @@
+{
+  "name": "AccessCode",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "string",
+      "description": "The unique access code"
+    },
+    "user_type": {
+      "type": "string",
+      "enum": [
+        "company",
+        "saas"
+      ],
+      "default": "saas",
+      "description": "Company (internal XPS) or SaaS (external customer)"
+    },
+    "assigned_email": {
+      "type": "string",
+      "description": "Email this code is assigned to (optional)"
+    },
+    "assigned_name": {
+      "type": "string",
+      "description": "Name of person this code is for"
+    },
+    "allowed_tools": {
+      "type": "string",
+      "description": "JSON array of tool IDs they can access. Empty = all tools."
+    },
+    "access_level": {
+      "type": "string",
+      "enum": [
+        "full",
+        "limited",
+        "trial"
+      ],
+      "default": "trial"
+    },
+    "package": {
+      "type": "string",
+      "enum": [
+        "free",
+        "starter",
+        "professional",
+        "enterprise",
+        "custom"
+      ],
+      "default": "free"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the code/access expires (null = never)"
+    },
+    "duration_days": {
+      "type": "number",
+      "description": "Number of days access is valid from first use"
+    },
+    "max_uses": {
+      "type": "number",
+      "default": 1,
+      "description": "How many times this code can be used"
+    },
+    "used_count": {
+      "type": "number",
+      "default": 0
+    },
+    "used_by": {
+      "type": "string",
+      "description": "Email of user who redeemed"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "used",
+        "expired",
+        "revoked"
+      ],
+      "default": "active"
+    },
+    "privacy_accepted": {
+      "type": "boolean",
+      "default": false,
+      "description": "User accepted data sharing agreement"
+    },
+    "data_sharing_consent": {
+      "type": "boolean",
+      "default": false,
+      "description": "User consented to data use for model training"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "code",
+    "user_type",
+    "status"
+  ]
+}

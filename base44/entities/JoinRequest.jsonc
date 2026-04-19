@@ -1,0 +1,55 @@
+{
+  "name": "JoinRequest",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Requester's full name"
+    },
+    "email": {
+      "type": "string",
+      "description": "Requester's email"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Requester's phone"
+    },
+    "company": {
+      "type": "string",
+      "description": "Company name"
+    },
+    "message": {
+      "type": "string",
+      "description": "Why they want to join"
+    },
+    "requested_type": {
+      "type": "string",
+      "enum": [
+        "company",
+        "saas"
+      ],
+      "default": "saas"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "denied"
+      ],
+      "default": "pending"
+    },
+    "reviewed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "email",
+    "status"
+  ]
+}

@@ -6,12 +6,14 @@ import DashboardHub from "../components/dashboard/DashboardHub";
 import AppContent from "../components/app/AppContent";
 import PageHexGlow from "../components/PageHexGlow";
 import GlobalNav from "../components/navigation/GlobalNav";
+import PrivacyDisclaimer from "../components/admin/PrivacyDisclaimer";
 
 export default function Home() {
   const [activeView, setActiveView] = useState(null); // null = show dashboard hub
   const [chatWidth, setChatWidth] = useState(() => parseInt(localStorage.getItem("xps-chat-width")) || 340);
   const [chatOpen, setChatOpen] = useState(true);
   const [theme, setTheme] = useState(() => localStorage.getItem("xps-theme") || "dark");
+  const [showPrivacy, setShowPrivacy] = useState(false);
   const chatRef = useRef(null);
   const resizing = useRef(false);
 
@@ -40,9 +42,50 @@ export default function Home() {
     localStorage.setItem("xps-theme", theme);
   }, [theme]);
 
+  // Check if user has accepted privacy policy
+  useEffect(() => {
+    const checkPrivacy = async () => {
+      const me = await base44.auth.me().catch(() => null);
+      if (!me) return;
+      const profiles = await base44.entities.MemberProfile.filter({ email: me.email }).catch(() => []);
+      if (profiles.length === 0 || !profiles[0].privacy_accepted) {
+        setShowPrivacy(true);
+      }
+    };
+    checkPrivacy();
+  }, []);
+
+  const handlePrivacyAccept = async (privacyAccepted, dataConsent) => {
+    const me = await base44.auth.me().catch(() => null);
+    if (!me) return;
+    const profiles = await base44.entities.MemberProfile.filter({ email: me.email }).catch(() => []);
+    if (profiles.length > 0) {
+      await base44.entities.MemberProfile.update(profiles[0].id, {
+        privacy_accepted: privacyAccepted,
+        data_sharing_consent: dataConsent,
+        can_download: dataConsent,
+        can_export: dataConsent,
+      });
+    } else {
+      await base44.entities.MemberProfile.create({
+        email: me.email,
+        name: me.full_name || "",
+        user_type: "saas",
+        status: "active",
+        package: "free",
+        privacy_accepted: privacyAccepted,
+        data_sharing_consent: dataConsent,
+        can_download: dataConsent,
+        can_export: dataConsent,
+      });
+    }
+    setShowPrivacy(false);
+  };
+
   return (
     <div className="h-screen bg-background flex overflow-hidden hex-bg">
       <PageHexGlow />
+      {showPrivacy && <PrivacyDisclaimer onAccept={handlePrivacyAccept} />}
       {/* Chat Panel — left side (desktop) */}
       {chatOpen && (
         <div className="hidden lg:flex flex-shrink-0 border-r border-border flex-col relative" style={{ width: chatWidth }}>

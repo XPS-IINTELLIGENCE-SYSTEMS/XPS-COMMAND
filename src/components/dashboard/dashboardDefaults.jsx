@@ -92,7 +92,9 @@ export const DEFAULT_TOOLS = [
   { id: "dynamic_pricing", label: "Dynamic Pricing", desc: "AI bid pricing based on market & costs", iconName: "TrendingUp", color: "#22c55e" },
   { id: "proposal_generator", label: "Proposal Generator", desc: "Auto-generate PDF proposals from job data", iconName: "FileText", color: "#14b8a6" },
 
-  // 31–34: System
+  { id: "field_tech", label: "Field Tech", desc: "Work orders, photos & punch lists", iconName: "Wrench", color: "#f97316" },
+
+  // 32–35: System
   { id: "admin", label: "Admin Control", desc: "Users, keys & promo codes", iconName: "Shield", color: "#a855f7" },
   { id: "tool_creator", label: "Tool Creator", desc: "Build unlimited custom tools with AI", iconName: "Wrench", color: "#f43f5e" },
   { id: "system_health", label: "System Health", desc: "Auto-diagnose, heal & optimize", iconName: "Heart", color: "#22c55e" },

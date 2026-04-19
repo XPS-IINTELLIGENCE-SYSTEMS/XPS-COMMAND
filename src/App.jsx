@@ -4,6 +4,7 @@ import { queryClientInstance } from '@/lib/query-client'
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
+import SiteSettingsProvider from '@/components/SiteSettingsProvider';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 // Public pages (SaaS marketing site)
 import Landing from './pages/Landing';
@@ -112,7 +113,11 @@ const AppRouter = () => {
   }
 
   if (isAuthenticated) {
-    return <AuthenticatedApp />;
+    return (
+      <SiteSettingsProvider>
+        <AuthenticatedApp />
+      </SiteSettingsProvider>
+    );
   }
 
   return <UnauthenticatedApp />;

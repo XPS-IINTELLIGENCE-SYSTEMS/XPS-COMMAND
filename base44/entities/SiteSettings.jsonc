@@ -1,0 +1,43 @@
+{
+  "name": "SiteSettings",
+  "type": "object",
+  "properties": {
+    "setting_key": {
+      "type": "string",
+      "description": "Unique setting identifier (e.g., 'theme', 'primary_color', 'font_family')"
+    },
+    "setting_value": {
+      "type": "string",
+      "description": "The value of the setting"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "theme",
+        "colors",
+        "fonts",
+        "layout",
+        "navigation",
+        "features",
+        "branding",
+        "custom"
+      ],
+      "default": "theme",
+      "description": "Category of setting"
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable description of what this setting controls"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether this setting is currently active"
+    }
+  },
+  "required": [
+    "setting_key",
+    "setting_value",
+    "category"
+  ]
+}

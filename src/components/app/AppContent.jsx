@@ -29,6 +29,7 @@ import ToolCreatorView from "../dashboard/ToolCreatorView";
 import SystemHealthView from "../dashboard/SystemHealthView";
 import BlueprintTakeoffView from "../takeoff/BlueprintTakeoffView";
 import DynamicPricingView from "../pricing/DynamicPricingView";
+import ProposalGeneratorView from "../proposals/ProposalGeneratorView";
 
 export default function AppContent({ activeView, onChatCommand, onNavigate }) {
   switch (activeView) {
@@ -66,6 +67,7 @@ export default function AppContent({ activeView, onChatCommand, onNavigate }) {
     case "system_health": return <SystemHealthView />;
     case "blueprint_takeoff": return <BlueprintTakeoffView />;
     case "dynamic_pricing": return <DynamicPricingView />;
+    case "proposal_generator": return <ProposalGeneratorView />;
     default: return <div className="text-center py-20 text-muted-foreground">View not found</div>;
   }
 }

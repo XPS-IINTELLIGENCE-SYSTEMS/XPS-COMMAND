@@ -61,24 +61,29 @@ const SCRAPE_TIERS = {
   }
 };
 
+const CATEGORY_MAP = {
+  "product": "Product Info", "pricing": "Pricing", "technical": "Technical Spec",
+  "market": "Market Data", "news": "Industry News", "competitor": "Competitor Intel",
+  "ai": "AI Technology", "government": "Government Regulation", "financial": "Financial Data",
+  "social": "Social Trend", "case_study": "Case Study"
+};
+
+function getCategoryForTier(category, suggestion) {
+  return CATEGORY_MAP[suggestion] || 
+    (category === 'ai_tech' ? 'AI Technology' : 
+     category === 'government' ? 'Government Regulation' :
+     category === 'financial' ? 'Financial Data' :
+     category === 'trends_social' ? 'Social Trend' : 'Industry News');
+}
+
 async function scrapeAndProcess(base44, url, category) {
   const domain = url.replace(/^https?:\/\//, '').replace(/\/.*$/, '');
 
   try {
-    // Step 1 — Ingest: Use LLM with internet to fetch and extract content
     const scrapeResult = await base44.asServiceRole.integrations.Core.InvokeLLM({
-      prompt: `Visit this website and extract the main content: https://${url}
-
-Extract:
-- The page title
-- The main article/content text (remove navigation, ads, boilerplate)
-- Key facts and data points
-- Any pricing information found
-- Any product specifications found
-- Any competitor information found
-
-Return the cleaned content with all important information preserved.`,
+      prompt: `Extract the main content from https://${url}. Return the page title, a cleaned summary of the content (no nav/ads), key facts, and whether it contains pricing, technical specs, or competitor info.`,
       add_context_from_internet: true,
+      model: "gemini_3_flash",
       response_json_schema: {
         type: "object",
         properties: {
@@ -98,41 +103,28 @@ Return the cleaned content with all important information preserved.`,
       }
     });
 
-    // Create RawKnowledge record
+    const contentText = (scrapeResult.cleaned_content || '').substring(0, 30000);
+
     const raw = await base44.asServiceRole.entities.RawKnowledge.create({
       source_url: `https://${url}`,
       source_domain: domain,
       source_category: category,
       scrape_date: new Date().toISOString(),
-      raw_content: (scrapeResult.cleaned_content || '').substring(0, 50000),
-      cleaned_content: (scrapeResult.cleaned_content || '').substring(0, 50000),
+      raw_content: contentText,
+      cleaned_content: contentText,
       content_type: scrapeResult.content_type || 'article',
       processing_status: 'cleaned',
       quality_score: scrapeResult.quality_score || 50,
-      word_count: (scrapeResult.cleaned_content || '').split(/\s+/).length,
+      word_count: contentText.split(/\s+/).length,
       title: scrapeResult.title || domain
     });
 
-    // Create KnowledgeEntry
-    const CATEGORY_MAP = {
-      "product": "Product Info", "pricing": "Pricing", "technical": "Technical Spec",
-      "market": "Market Data", "news": "Industry News", "competitor": "Competitor Intel",
-      "ai": "AI Technology", "government": "Government Regulation", "financial": "Financial Data",
-      "social": "Social Trend", "case_study": "Case Study"
-    };
-
-    const entryCategory = CATEGORY_MAP[scrapeResult.category_suggestion] || 
-      (category === 'ai_tech' ? 'AI Technology' : 
-       category === 'government' ? 'Government Regulation' :
-       category === 'financial' ? 'Financial Data' :
-       category === 'trends_social' ? 'Social Trend' : 'Industry News');
-
     await base44.asServiceRole.entities.KnowledgeEntry.create({
       title: scrapeResult.title || domain,
-      category: entryCategory,
+      category: getCategoryForTier(category, scrapeResult.category_suggestion),
       source_url: `https://${url}`,
       source_domain: domain,
-      content: (scrapeResult.cleaned_content || '').substring(0, 50000),
+      content: contentText,
       summary: scrapeResult.summary || '',
       key_facts: JSON.stringify(scrapeResult.key_facts || []),
       tags: (scrapeResult.tags || []).join(', '),
@@ -147,7 +139,6 @@ Return the cleaned content with all important information preserved.`,
       raw_knowledge_id: raw.id
     });
 
-    // Update raw status
     await base44.asServiceRole.entities.RawKnowledge.update(raw.id, {
       processing_status: 'indexed'
     });
@@ -175,27 +166,76 @@ Return the cleaned content with all important information preserved.`,
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
-    
-    // Support both user-triggered and scheduled automation calls
-    let isAuthed = false;
-    try { const user = await base44.auth.me(); isAuthed = !!user; } catch {}
 
     const body = await req.json().catch(() => ({}));
     const { action, tier, urls, category, url } = body;
 
-    // Scrape a specific tier
+    // Scrape a specific tier — processes all URLs one-by-one with error isolation
     if (action === 'scrape_tier') {
       const tierConfig = SCRAPE_TIERS[tier];
       if (!tierConfig) return Response.json({ error: 'Invalid tier' }, { status: 400 });
 
       const results = [];
       for (const u of tierConfig.urls) {
-        const result = await scrapeAndProcess(base44, u, tier);
-        results.push(result);
+        try {
+          const result = await scrapeAndProcess(base44, u, tier);
+          results.push(result);
+        } catch (e) {
+          console.error(`Tier URL failed: ${u}`, e.message);
+          results.push({ url: u, status: 'failed', error: e.message });
+        }
       }
-
       const succeeded = results.filter(r => r.status === 'success').length;
       return Response.json({ success: true, tier, scraped: results.length, succeeded, results });
+    }
+
+    // Scrape ALL URLs in a tier one-by-one with per-URL error isolation
+    if (action === 'scrape_tier_all') {
+      const tierConfig = SCRAPE_TIERS[tier];
+      if (!tierConfig) return Response.json({ error: 'Invalid tier' }, { status: 400 });
+
+      const results = [];
+      for (const u of tierConfig.urls) {
+        try {
+          const result = await scrapeAndProcess(base44, u, tier);
+          results.push(result);
+        } catch (e) {
+          console.error(`Tier URL failed: ${u}`, e.message);
+          results.push({ url: u, status: 'failed', error: e.message });
+        }
+      }
+      const succeeded = results.filter(r => r.status === 'success').length;
+      return Response.json({ success: true, tier, scraped: results.length, succeeded, results });
+    }
+
+    // Scrape all URLs across ALL tiers matching a frequency — one URL per call
+    if (action === 'scrape_scheduled') {
+      const frequency = body.frequency || 'weekly';
+      const matchingTiers = Object.entries(SCRAPE_TIERS)
+        .filter(([, v]) => v.frequency === frequency);
+
+      // Collect all URLs from matching tiers
+      const allUrls = [];
+      for (const [tierKey, tierConfig] of matchingTiers) {
+        for (const u of tierConfig.urls) {
+          allUrls.push({ url: u, tier: tierKey });
+        }
+      }
+
+      // Process one URL at a time — pick by index
+      const urlIndex = body.url_index || 0;
+      if (urlIndex >= allUrls.length) {
+        return Response.json({ success: true, message: `All ${frequency} URLs processed`, total: allUrls.length });
+      }
+
+      const target = allUrls[urlIndex];
+      const result = await scrapeAndProcess(base44, target.url, target.tier);
+      return Response.json({
+        success: true, result, tier: target.tier,
+        next_index: urlIndex + 1,
+        remaining: allUrls.length - urlIndex - 1,
+        total: allUrls.length
+      });
     }
 
     // Scrape a single URL
@@ -255,8 +295,9 @@ Deno.serve(async (req) => {
       });
     }
 
-    return Response.json({ error: 'Invalid action. Use: scrape_tier, scrape_url, scrape_batch, stats, list_tiers' }, { status: 400 });
+    return Response.json({ error: 'Invalid action. Use: scrape_tier, scrape_tier_all, scrape_url, scrape_batch, scrape_scheduled, stats, list_tiers' }, { status: 400 });
   } catch (error) {
+    console.error('knowledgeScraper error:', error.message);
     return Response.json({ error: error.message }, { status: 500 });
   }
 });

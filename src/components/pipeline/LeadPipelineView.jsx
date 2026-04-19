@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { Users, Mail, Phone, MapPin, Star, MoreHorizontal, Plus, RefreshCcw } from "lucide-react";
+import { Users, Mail, Phone, MapPin, Star, MoreHorizontal, Plus, RefreshCcw, Brain, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DataPageHeader, DataSearchBar, FilterPills, StatusBadge, ScoreBadge, DataLoading, EmptyState } from "../shared/DataPageLayout";
 import AddLeadModal from "./AddLeadModal";
+import LeadInsightModal from "./LeadInsightModal";
+import LeadRecommendModal from "./LeadRecommendModal";
 
 const STAGES = ["All", "Incoming", "Validated", "Qualified", "Prioritized", "Contacted", "Proposal", "Negotiation", "Won", "Lost"];
 const SCORE_FILTERS = ["All", "Hot", "Warm", "Cold"];
@@ -28,6 +30,8 @@ export default function LeadPipelineView({ forcedTab }) {
   const [scoreFilter, setScoreFilter] = useState("All");
   const [adding, setAdding] = useState(false);
   const [selected, setSelected] = useState(null);
+  const [insightLead, setInsightLead] = useState(null);
+  const [recommendLead, setRecommendLead] = useState(null);
 
   const load = async () => {
     setLoading(true);
@@ -116,6 +120,12 @@ export default function LeadPipelineView({ forcedTab }) {
                     <td className="px-4 py-3"><StatusBadge status={lead.stage} colorMap={STAGE_COLORS} /></td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1">
+                        <button onClick={(e) => { e.stopPropagation(); setInsightLead(lead); }} className="p-1.5 rounded hover:bg-primary/10 text-muted-foreground hover:text-primary" title="Deep Insight">
+                          <Brain className="w-3.5 h-3.5" />
+                        </button>
+                        <button onClick={(e) => { e.stopPropagation(); setRecommendLead(lead); }} className="p-1.5 rounded hover:bg-primary/10 text-muted-foreground hover:text-primary" title="Recommendations">
+                          <ShoppingBag className="w-3.5 h-3.5" />
+                        </button>
                         {lead.email && (
                           <button onClick={(e) => { e.stopPropagation(); window.open(`mailto:${lead.email}`); }} className="p-1.5 rounded hover:bg-secondary text-muted-foreground hover:text-foreground">
                             <Mail className="w-3.5 h-3.5" />
@@ -126,9 +136,6 @@ export default function LeadPipelineView({ forcedTab }) {
                             <Phone className="w-3.5 h-3.5" />
                           </button>
                         )}
-                        <button className="p-1.5 rounded hover:bg-secondary text-muted-foreground hover:text-foreground">
-                          <Star className="w-3.5 h-3.5" />
-                        </button>
                       </div>
                     </td>
                   </tr>
@@ -140,6 +147,8 @@ export default function LeadPipelineView({ forcedTab }) {
       )}
 
       {adding && <AddLeadModal onClose={() => setAdding(false)} defaultType={forcedTab || "XPress"} />}
+      {insightLead && <LeadInsightModal lead={insightLead} onClose={() => setInsightLead(null)} onUpdate={load} />}
+      {recommendLead && <LeadRecommendModal lead={recommendLead} onClose={() => setRecommendLead(null)} />}
     </div>
   );
 }

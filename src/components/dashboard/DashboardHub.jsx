@@ -3,20 +3,28 @@ import { base44 } from "@/api/base44Client";
 import {
   Users, Briefcase, Building2, Search, Mail, FileText, BarChart3,
   BookOpen, Swords, Link2, Shield, Settings, Bot, Loader2,
-  TrendingUp, DollarSign, Target, Send, Clock, GitBranch
+  TrendingUp, DollarSign, Target, Send, Clock, GitBranch,
+  Upload, Database, Sprout, Sliders, Share2, Globe
 } from "lucide-react";
+import HexPatternBanner from "../shared/HexPatternBanner";
 
 const TOOL_BUTTONS = [
   { id: "xpress_leads", label: "Leads", desc: "Lead intelligence & pipeline", icon: Users, color: "#d4af37" },
   { id: "crm", label: "CRM", desc: "Contacts & deals", icon: Target, color: "#6366f1" },
+  { id: "data_bank", label: "Data Bank", desc: "All leads — import, export, share", icon: Database, color: "#06b6d4" },
   { id: "find_jobs", label: "Find Jobs", desc: "Commercial project discovery", icon: Briefcase, color: "#22c55e" },
   { id: "find_companies", label: "Find Companies", desc: "AI company scraper", icon: Building2, color: "#f59e0b" },
+  { id: "scrape_social", label: "Scrape Social", desc: "Social media intelligence", icon: Share2, color: "#ec4899" },
+  { id: "scrape_trends", label: "Scrape Trends", desc: "Trends, consensus, economics", icon: Globe, color: "#8b5cf6" },
   { id: "research", label: "Research Lab", desc: "Deep web research", icon: Search, color: "#8b5cf6" },
   { id: "get_work", label: "Outreach", desc: "Email & SMS campaigns", icon: Send, color: "#ec4899" },
   { id: "win_work", label: "Proposals", desc: "AI proposal engine", icon: FileText, color: "#14b8a6" },
   { id: "analytics", label: "Analytics", desc: "Performance & pipeline", icon: BarChart3, color: "#f97316" },
-  { id: "knowledge", label: "Knowledge Base", desc: "Docs, playbooks & SOPs", icon: BookOpen, color: "#06b6d4" },
+  { id: "knowledge", label: "Knowledge Base", desc: "Company & industry intel", icon: BookOpen, color: "#06b6d4" },
+  { id: "knowledge_upload", label: "Upload Knowledge", desc: "Feed intel into the system", icon: Upload, color: "#10b981" },
+  { id: "seeds_sources", label: "Seeds & Sources", desc: "Lead sources & seed lists", icon: Sprout, color: "#84cc16" },
   { id: "competition", label: "Competition", desc: "Competitor monitoring", icon: Swords, color: "#ef4444" },
+  { id: "algorithm", label: "Algorithm Tuning", desc: "Fine-tune scoring & AI", icon: Sliders, color: "#f59e0b" },
   { id: "connectors", label: "Connectors", desc: "Integrations & APIs", icon: Link2, color: "#84cc16" },
   { id: "scheduler", label: "Scheduler", desc: "Schedule automated scraping", icon: Clock, color: "#0ea5e9" },
   { id: "workflows", label: "Workflows", desc: "Drag & drop automation builder", icon: GitBranch, color: "#f43f5e" },
@@ -62,7 +70,9 @@ export default function DashboardHub({ onOpenTool }) {
   })();
 
   return (
-    <div className="max-w-[1100px] mx-auto px-6 py-8">
+    <div className="max-w-[1100px] mx-auto">
+      <HexPatternBanner />
+      <div className="px-6 pb-8 -mt-4">
       {/* Greeting */}
       <div className="mb-8">
         <h1 className="text-3xl font-extrabold text-foreground tracking-tight">
@@ -91,7 +101,7 @@ export default function DashboardHub({ onOpenTool }) {
             <button
               key={tool.id}
               onClick={() => onOpenTool(tool.id)}
-              className="group rounded-xl p-4 text-left transition-all duration-200 bg-card border border-border hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 cursor-pointer"
+              className="group glass-card rounded-xl p-4 text-left transition-all duration-200 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 cursor-pointer"
             >
               <div
                 className="w-9 h-9 rounded-lg flex items-center justify-center mb-3 transition-colors"
@@ -105,13 +115,14 @@ export default function DashboardHub({ onOpenTool }) {
           );
         })}
       </div>
+      </div>
     </div>
   );
 }
 
 function StatCard({ icon: Icon, label, value, change, positive }) {
   return (
-    <div className="rounded-xl p-4 bg-card border border-border">
+    <div className="rounded-xl p-4 glass-card">
       <div className="flex items-center gap-2 mb-2">
         <Icon className="w-4 h-4 text-muted-foreground" />
         <span className="text-xs text-muted-foreground font-medium">{label}</span>

@@ -52,7 +52,7 @@ export default function DashboardToolCard({ tool, starred, onOpen, onToggleStar,
       <div className="absolute top-2 right-2 flex flex-col items-center gap-0.5 group-hover:hidden">
         {starred && <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />}
         {displayNumber != null && (
-          <span className="text-[10px] font-semibold text-white/60">{displayNumber}</span>
+          <span className="text-[12px] font-bold text-white">{displayNumber}</span>
         )}
       </div>
 

@@ -1,6 +1,10 @@
-import { Sun, Moon, MessageSquare } from "lucide-react";
+import { useState } from "react";
+import { Sun, Moon, MessageSquare, User, LogOut, Settings } from "lucide-react";
+import { base44 } from "@/api/base44Client";
 
 export default function AppTopNav({ tabs, activeView, onViewChange, theme, onThemeToggle, chatOpen, onChatToggle }) {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-card/95 backdrop-blur-md">
       <div className="flex items-center justify-between px-4 h-14 max-w-7xl mx-auto">
@@ -48,6 +52,38 @@ export default function AppTopNav({ tabs, activeView, onViewChange, theme, onThe
             <MessageSquare className="w-4 h-4" />
             {!chatOpen && <span className="absolute top-1 right-1 w-2 h-2 metallic-gold-bg rounded-full" />}
           </button>
+
+          {/* Account Menu */}
+          <div className="relative">
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="p-2 rounded-lg hover:bg-secondary transition-colors text-muted-foreground"
+            >
+              <User className="w-4 h-4" />
+            </button>
+            {menuOpen && (
+              <>
+                <div className="fixed inset-0 z-40" onClick={() => setMenuOpen(false)} />
+                <div className="absolute right-0 top-full mt-2 w-48 rounded-xl border border-border bg-card shadow-xl z-50 py-1">
+                  <button
+                    onClick={() => { setMenuOpen(false); onViewChange("settings"); }}
+                    className="flex items-center gap-2 w-full px-4 py-2.5 text-sm text-foreground hover:bg-secondary/60 transition-colors"
+                  >
+                    <Settings className="w-4 h-4 text-muted-foreground" />
+                    Account Settings
+                  </button>
+                  <div className="border-t border-border my-1" />
+                  <button
+                    onClick={() => base44.auth.logout()}
+                    className="flex items-center gap-2 w-full px-4 py-2.5 text-sm text-destructive hover:bg-secondary/60 transition-colors"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    Sign Out
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </header>

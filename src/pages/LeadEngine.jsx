@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { base44 } from "@/api/base44Client";
 import { Link } from "react-router-dom";
 import LeadEngineResults from "../components/leadengine/LeadEngineResults";
+import PageHexGlow from "../components/PageHexGlow";
 
 const MODES = [
   { id: "companies", label: "Companies", icon: Building2, desc: "Businesses by industry & location" },
@@ -71,9 +72,10 @@ export default function LeadEngine() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background hex-bg relative">
+      <PageHexGlow />
       {/* Header */}
-      <div className="border-b border-border px-6 py-4 flex items-center justify-between">
+      <div className="relative z-[1] border-b border-border px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Link to="/dashboard" className="text-muted-foreground hover:text-foreground transition-colors"><ArrowLeft className="w-5 h-5" /></Link>
           <div>
@@ -87,7 +89,7 @@ export default function LeadEngine() {
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-6 py-8">
+      <div className="relative z-[1] max-w-5xl mx-auto px-6 py-8">
         {/* Mode Tabs */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
           {MODES.map(m => {

@@ -3,6 +3,7 @@ import { Database, Search, Filter, ArrowLeft, Loader2, Star, Eye, Archive, Trash
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import PageHexGlow from "../components/PageHexGlow";
 
 const CATEGORIES = ["All", "Company", "Job/Project", "Social Media", "Competitor", "Market Intel", "Contact", "Other"];
 const PRIORITIES = ["All", "Critical", "High", "Medium", "Low"];
@@ -63,9 +64,10 @@ export default function DataBank() {
     .sort((a, b) => sortBy === "score" ? (b.score || 0) - (a.score || 0) : new Date(b.created_date || 0) - new Date(a.created_date || 0));
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background hex-bg relative">
+      <PageHexGlow />
       {/* Header */}
-      <div className="border-b border-border px-6 py-4 flex items-center justify-between">
+      <div className="relative z-[1] border-b border-border px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Link to="/dashboard" className="text-muted-foreground hover:text-foreground"><ArrowLeft className="w-5 h-5" /></Link>
           <div>
@@ -78,7 +80,7 @@ export default function DataBank() {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 py-6">
+      <div className="relative z-[1] max-w-6xl mx-auto px-6 py-6">
         {/* Search + Filters */}
         <div className="flex flex-wrap items-center gap-3 mb-6">
           <div className="relative flex-1 min-w-[200px]">

@@ -3,6 +3,7 @@ import { Shield, ArrowLeft, Loader2, Users, Database, Zap, BarChart3, RefreshCw,
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import PageHexGlow from "../components/PageHexGlow";
 
 export default function AdminControl() {
   const [stats, setStats] = useState(null);
@@ -56,8 +57,9 @@ export default function AdminControl() {
   leads.forEach(l => { const s = l.ingestion_source || "Unknown"; sourceBreakdown[s] = (sourceBreakdown[s] || 0) + 1; });
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="border-b border-border px-6 py-4 flex items-center justify-between">
+    <div className="min-h-screen bg-background hex-bg relative">
+      <PageHexGlow />
+      <div className="relative z-[1] border-b border-border px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Link to="/dashboard" className="text-muted-foreground hover:text-foreground"><ArrowLeft className="w-5 h-5" /></Link>
           <div>
@@ -68,7 +70,7 @@ export default function AdminControl() {
         <Button variant="outline" size="sm" onClick={loadStats}><RefreshCw className="w-3.5 h-3.5 mr-1.5" /> Refresh</Button>
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 py-8">
+      <div className="relative z-[1] max-w-6xl mx-auto px-6 py-8">
         {/* System Stats */}
         <h2 className="text-xs font-extrabold uppercase tracking-[0.2em] text-muted-foreground mb-4">System Stats</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 mb-10">

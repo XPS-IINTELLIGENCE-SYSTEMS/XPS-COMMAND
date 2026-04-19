@@ -4,6 +4,7 @@ import { base44 } from "@/api/base44Client";
 import ChatPanel from "../components/ChatPanel";
 import DashboardHub from "../components/dashboard/DashboardHub";
 import AppContent from "../components/app/AppContent";
+import PageHexGlow from "../components/PageHexGlow";
 
 export default function Home() {
   const [activeView, setActiveView] = useState(null); // null = show dashboard hub
@@ -40,7 +41,8 @@ export default function Home() {
   }, [theme]);
 
   return (
-    <div className="h-screen bg-background flex overflow-hidden">
+    <div className="h-screen bg-background flex overflow-hidden hex-bg">
+      <PageHexGlow />
       {/* Chat Panel — left side (desktop) */}
       {chatOpen && (
         <div className="hidden lg:flex flex-shrink-0 border-r border-border flex-col relative" style={{ width: chatWidth }}>

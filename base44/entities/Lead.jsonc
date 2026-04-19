@@ -35,9 +35,44 @@
         "Industrial",
         "Residential",
         "Government",
+        "Office",
+        "Restaurant",
+        "Kitchen",
         "Other"
       ],
       "description": "Industry vertical"
+    },
+    "specialty": {
+      "type": "string",
+      "enum": [
+        "Epoxy",
+        "Polished Concrete",
+        "Stained Concrete",
+        "Decorative Concrete",
+        "Metallic Epoxy",
+        "Polyaspartic",
+        "Polyurea",
+        "Urethane",
+        "Garage Coating",
+        "Industrial Coating",
+        "Other"
+      ],
+      "description": "Flooring specialty / service type"
+    },
+    "bid_stage": {
+      "type": "string",
+      "enum": [
+        "Not Started",
+        "Planning",
+        "Pre-Bid",
+        "Bid Submitted",
+        "Under Review",
+        "Awarded",
+        "Lost Bid",
+        "No Bid"
+      ],
+      "default": "Not Started",
+      "description": "Current stage of the bid process"
     },
     "location": {
       "type": "string",

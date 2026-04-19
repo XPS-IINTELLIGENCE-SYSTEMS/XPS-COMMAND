@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { Users, Mail, Phone, MapPin, Star, MoreHorizontal, Plus, RefreshCcw, Brain, ShoppingBag } from "lucide-react";
+import { Users, Mail, Phone, Plus, RefreshCcw, Brain, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DataPageHeader, DataSearchBar, FilterPills, StatusBadge, ScoreBadge, DataLoading, EmptyState } from "../shared/DataPageLayout";
 import AddLeadModal from "./AddLeadModal";
 import LeadInsightModal from "./LeadInsightModal";
 import LeadRecommendModal from "./LeadRecommendModal";
+import LeadFilterBar from "./LeadFilterBar";
 
 const STAGES = ["All", "Incoming", "Validated", "Qualified", "Prioritized", "Contacted", "Proposal", "Negotiation", "Won", "Lost"];
 const SCORE_FILTERS = ["All", "Hot", "Warm", "Cold"];
@@ -21,6 +22,17 @@ const STAGE_COLORS = {
   Lost: "bg-red-500/10 text-red-400",
   default: "bg-secondary text-muted-foreground",
 };
+const BID_STAGE_COLORS = {
+  "Not Started": "bg-secondary text-muted-foreground",
+  "Planning": "bg-blue-500/10 text-blue-400",
+  "Pre-Bid": "bg-cyan-500/10 text-cyan-400",
+  "Bid Submitted": "bg-yellow-500/10 text-yellow-400",
+  "Under Review": "bg-purple-500/10 text-purple-400",
+  "Awarded": "bg-emerald-500/10 text-emerald-400",
+  "Lost Bid": "bg-red-500/10 text-red-400",
+  "No Bid": "bg-secondary text-muted-foreground",
+  default: "bg-secondary text-muted-foreground",
+};
 
 export default function LeadPipelineView({ forcedTab }) {
   const [leads, setLeads] = useState([]);
@@ -32,6 +44,8 @@ export default function LeadPipelineView({ forcedTab }) {
   const [selected, setSelected] = useState(null);
   const [insightLead, setInsightLead] = useState(null);
   const [recommendLead, setRecommendLead] = useState(null);
+  const [advFilters, setAdvFilters] = useState({ stateFilter: "All", specialtyFilter: "All", verticalFilter: "All", bidStageFilter: "All" });
+  const [sortBy, setSortBy] = useState("date_desc");
 
   const load = async () => {
     setLoading(true);
@@ -57,6 +71,10 @@ export default function LeadPipelineView({ forcedTab }) {
     if (scoreFilter === "Hot" && (l.score || 0) < 70) return false;
     if (scoreFilter === "Warm" && ((l.score || 0) < 40 || (l.score || 0) >= 70)) return false;
     if (scoreFilter === "Cold" && (l.score || 0) >= 40) return false;
+    if (advFilters.stateFilter !== "All" && (l.state || "") !== advFilters.stateFilter) return false;
+    if (advFilters.specialtyFilter !== "All" && (l.specialty || "") !== advFilters.specialtyFilter) return false;
+    if (advFilters.verticalFilter !== "All" && (l.vertical || "") !== advFilters.verticalFilter) return false;
+    if (advFilters.bidStageFilter !== "All" && (l.bid_stage || "Not Started") !== advFilters.bidStageFilter) return false;
     if (search) {
       const s = search.toLowerCase();
       return (l.company || "").toLowerCase().includes(s) ||
@@ -65,6 +83,18 @@ export default function LeadPipelineView({ forcedTab }) {
         (l.city || "").toLowerCase().includes(s);
     }
     return true;
+  }).sort((a, b) => {
+    switch (sortBy) {
+      case "date_asc": return new Date(a.created_date || 0) - new Date(b.created_date || 0);
+      case "date_desc": return new Date(b.created_date || 0) - new Date(a.created_date || 0);
+      case "value_desc": return (b.estimated_value || 0) - (a.estimated_value || 0);
+      case "value_asc": return (a.estimated_value || 0) - (b.estimated_value || 0);
+      case "priority_desc": return (b.priority || 0) - (a.priority || 0);
+      case "priority_asc": return (a.priority || 0) - (b.priority || 0);
+      case "score_desc": return (b.score || 0) - (a.score || 0);
+      case "score_asc": return (a.score || 0) - (b.score || 0);
+      default: return 0;
+    }
   });
 
   if (loading) return <DataLoading />;
@@ -81,10 +111,12 @@ export default function LeadPipelineView({ forcedTab }) {
 
       <DataSearchBar value={search} onChange={setSearch} placeholder="Search leads..." />
 
-      <div className="flex flex-wrap gap-x-8 gap-y-2 mb-5">
+      <div className="flex flex-wrap gap-x-8 gap-y-2 mb-3">
         <FilterPills label="Status" options={STAGES} active={stageFilter} onChange={setStageFilter} />
         <FilterPills label="Rating" options={SCORE_FILTERS} active={scoreFilter} onChange={setScoreFilter} />
       </div>
+
+      <LeadFilterBar filters={advFilters} onFiltersChange={setAdvFilters} sortBy={sortBy} onSortChange={setSortBy} />
 
       {filtered.length === 0 ? (
         <EmptyState icon={Users} message="No leads match your filters" />
@@ -95,11 +127,14 @@ export default function LeadPipelineView({ forcedTab }) {
               <thead>
                 <tr className="border-b border-border bg-card/50 text-[11px] text-muted-foreground uppercase tracking-wider">
                   <th className="text-left px-4 py-3 font-semibold">Business</th>
-                  <th className="text-left px-4 py-3 font-semibold">Contact</th>
+                  <th className="text-left px-4 py-3 font-semibold hidden sm:table-cell">Contact</th>
                   <th className="text-left px-4 py-3 font-semibold hidden md:table-cell">Industry</th>
+                  <th className="text-left px-4 py-3 font-semibold hidden md:table-cell">Specialty</th>
                   <th className="text-left px-4 py-3 font-semibold hidden lg:table-cell">Location</th>
+                  <th className="text-left px-4 py-3 font-semibold hidden lg:table-cell">Value</th>
                   <th className="text-left px-4 py-3 font-semibold">Rating</th>
                   <th className="text-left px-4 py-3 font-semibold">Status</th>
+                  <th className="text-left px-4 py-3 font-semibold hidden md:table-cell">Bid Stage</th>
                   <th className="text-left px-4 py-3 font-semibold">Actions</th>
                 </tr>
               </thead>
@@ -110,14 +145,17 @@ export default function LeadPipelineView({ forcedTab }) {
                       <div className="font-medium text-foreground">{lead.company}</div>
                       <div className="text-xs text-muted-foreground">{lead.contact_name}</div>
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3 hidden sm:table-cell">
                       <div className="text-xs text-muted-foreground">{lead.email || "—"}</div>
                       <div className="text-xs text-muted-foreground">{lead.phone || ""}</div>
                     </td>
                     <td className="px-4 py-3 hidden md:table-cell text-xs text-muted-foreground">{lead.vertical || "—"}</td>
+                    <td className="px-4 py-3 hidden md:table-cell text-xs text-muted-foreground">{lead.specialty || "—"}</td>
                     <td className="px-4 py-3 hidden lg:table-cell text-xs text-muted-foreground">{lead.city}{lead.state ? `, ${lead.state}` : ""}</td>
+                    <td className="px-4 py-3 hidden lg:table-cell text-xs font-medium text-foreground">{lead.estimated_value ? `$${lead.estimated_value.toLocaleString()}` : "—"}</td>
                     <td className="px-4 py-3"><ScoreBadge score={lead.score} /></td>
                     <td className="px-4 py-3"><StatusBadge status={lead.stage} colorMap={STAGE_COLORS} /></td>
+                    <td className="px-4 py-3 hidden md:table-cell"><StatusBadge status={lead.bid_stage || "Not Started"} colorMap={BID_STAGE_COLORS} /></td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1">
                         <button onClick={(e) => { e.stopPropagation(); setInsightLead(lead); }} className="p-1.5 rounded hover:bg-primary/10 text-muted-foreground hover:text-primary" title="Deep Insight">

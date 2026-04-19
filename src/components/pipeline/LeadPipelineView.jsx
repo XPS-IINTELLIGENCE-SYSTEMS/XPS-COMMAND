@@ -1,55 +1,42 @@
-import { useState, useEffect, useCallback } from "react";
-import { Loader2, Plus, RefreshCcw, Package, Hammer, Search, MapPin, Users, Target, TrendingUp } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { useToast } from "@/components/ui/use-toast";
-import { getIconColor } from "@/lib/iconColors";
-import HScrollRow from "../shared/HScrollRow";
-import HCard from "../shared/HCard";
-import NavIcon from "../shared/NavIcon";
-import LeadDetailPanel from "./LeadDetailPanel";
+import { Users, Mail, Phone, MapPin, Star, MoreHorizontal, Plus, RefreshCcw } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { DataPageHeader, DataSearchBar, FilterPills, StatusBadge, ScoreBadge, DataLoading, EmptyState } from "../shared/DataPageLayout";
 import AddLeadModal from "./AddLeadModal";
-import HubSpotConnector from "../hubspot/HubSpotConnector";
 
-const PIPELINE_TOOLS = {
-  XPress: [
-    { id: "scraper", label: "AI Lead Scraper", Icon: Search },
-    { id: "enricher", label: "AI Contact Enricher", Icon: Users },
-    { id: "scorer", label: "AI Lead Scorer", Icon: TrendingUp },
-    { id: "territory", label: "AI Territory Analyzer", Icon: MapPin },
-    { id: "research", label: "AI Deep Research", Icon: Target },
-  ],
-  Jobs: [
-    { id: "scraper", label: "AI Job Scraper", Icon: Search },
-    { id: "enricher", label: "AI Contact Enricher", Icon: Users },
-    { id: "scorer", label: "AI Lead Scorer", Icon: TrendingUp },
-    { id: "territory", label: "AI Territory Analyzer", Icon: MapPin },
-    { id: "research", label: "AI Deep Research", Icon: Target },
-  ],
+const STAGES = ["All", "Incoming", "Validated", "Qualified", "Prioritized", "Contacted", "Proposal", "Negotiation", "Won", "Lost"];
+const SCORE_FILTERS = ["All", "Hot", "Warm", "Cold"];
+const STAGE_COLORS = {
+  Incoming: "bg-blue-500/10 text-blue-400",
+  Validated: "bg-cyan-500/10 text-cyan-400",
+  Qualified: "bg-green-500/10 text-green-400",
+  Prioritized: "bg-yellow-500/10 text-yellow-400",
+  Contacted: "bg-purple-500/10 text-purple-400",
+  Proposal: "bg-orange-500/10 text-orange-400",
+  Negotiation: "bg-pink-500/10 text-pink-400",
+  Won: "bg-emerald-500/10 text-emerald-400",
+  Lost: "bg-red-500/10 text-red-400",
+  default: "bg-secondary text-muted-foreground",
 };
 
-export default function LeadPipelineView({ onChatCommand, onOpenTool, forcedTab }) {
+export default function LeadPipelineView({ forcedTab }) {
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [selected, setSelected] = useState(null);
+  const [stageFilter, setStageFilter] = useState("All");
+  const [scoreFilter, setScoreFilter] = useState("All");
   const [adding, setAdding] = useState(false);
-  const [activeTab, setActiveTab] = useState(forcedTab || "XPress");
-  const { toast } = useToast();
+  const [selected, setSelected] = useState(null);
 
-  const workflowId = activeTab === "XPress" ? "xpress_leads" : "job_leads";
-  const color = getIconColor(workflowId);
-  const LeadIcon = activeTab === "XPress" ? Package : Hammer;
-
-  const load = useCallback(async () => {
+  const load = async () => {
     setLoading(true);
     const data = await base44.entities.Lead.list("-created_date", 500);
     setLeads(data || []);
     setLoading(false);
-  }, []);
+  };
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { load(); }, []);
 
   useEffect(() => {
     const unsub = base44.entities.Lead.subscribe((event) => {
@@ -60,116 +47,99 @@ export default function LeadPipelineView({ onChatCommand, onOpenTool, forcedTab 
     return unsub;
   }, []);
 
-  const deleteLead = async (id) => {
-    await base44.entities.Lead.delete(id);
-    setSelected(null);
-    toast({ title: "Deleted", description: "Lead removed" });
-  };
+  const filtered = leads.filter(l => {
+    if (forcedTab && (l.lead_type || "XPress") !== forcedTab) return false;
+    if (stageFilter !== "All" && l.stage !== stageFilter) return false;
+    if (scoreFilter === "Hot" && (l.score || 0) < 70) return false;
+    if (scoreFilter === "Warm" && ((l.score || 0) < 40 || (l.score || 0) >= 70)) return false;
+    if (scoreFilter === "Cold" && (l.score || 0) >= 40) return false;
+    if (search) {
+      const s = search.toLowerCase();
+      return (l.company || "").toLowerCase().includes(s) ||
+        (l.contact_name || "").toLowerCase().includes(s) ||
+        (l.email || "").toLowerCase().includes(s) ||
+        (l.city || "").toLowerCase().includes(s);
+    }
+    return true;
+  });
 
-  const byType = leads.filter(l => (l.lead_type || "XPress") === activeTab);
-  const filtered = byType.filter(l =>
-    !search || (l.company || "").toLowerCase().includes(search.toLowerCase()) ||
-    (l.contact_name || "").toLowerCase().includes(search.toLowerCase()) ||
-    (l.city || "").toLowerCase().includes(search.toLowerCase())
-  );
-
-  const incoming = filtered.filter(l => l.pipeline_status === "Incoming" || (!l.pipeline_status && l.stage === "Incoming") || (!l.pipeline_status && l.stage === "New"));
-  const validated = filtered.filter(l => l.pipeline_status === "Validated" || l.stage === "Validated");
-  const prioritized = filtered.filter(l => l.pipeline_status === "Prioritized" || l.stage === "Prioritized");
-  const qualified = filtered.filter(l => l.pipeline_status === "Qualified" || l.stage === "Qualified");
-
-  const tools = PIPELINE_TOOLS[activeTab] || [];
-
-  if (loading) {
-    return <div className="flex items-center justify-center h-full"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>;
-  }
+  if (loading) return <DataLoading />;
 
   return (
-    <div className="h-full flex overflow-hidden">
-      <div className="flex-1 overflow-y-auto">
-        <div className="p-4 md:p-6 space-y-12">
-          {/* Header - Contact page style */}
-          <div className="text-center pt-2 pb-4">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 mb-4">
-              <NavIcon id={workflowId} size="sm" active />
-              <span className="text-xs font-semibold text-white">{activeTab === "XPress" ? "XPRESS · PIPELINE" : "JOBS · PIPELINE"}</span>
-            </div>
-            <h1 className="text-2xl md:text-3xl font-extrabold xps-gold-slow-shimmer" style={{ fontFamily: "'Montserrat', sans-serif" }}>
-              {activeTab === "XPress" ? "XPRESS PIPELINE" : "JOBS PIPELINE"}
-            </h1>
-            <p className="mt-2 text-xs text-white/40">{filtered.length} leads in pipeline</p>
-
-            {/* Action bar */}
-            <div className="flex items-center justify-center gap-2 mt-4 flex-wrap">
-              <Button variant="outline" size="sm" className="text-xs" onClick={load}><RefreshCcw className="w-3.5 h-3.5 mr-1.5" />Refresh</Button>
-              <Button size="sm" className="text-xs" onClick={() => setAdding(true)}><Plus className="w-3.5 h-3.5 mr-1.5" />Add Lead</Button>
-              <HubSpotConnector compact onSyncComplete={load} />
-            </div>
-
-            {/* Search */}
-            <div className="max-w-md mx-auto mt-4">
-              <Input placeholder="Search leads..." value={search} onChange={e => setSearch(e.target.value)} className="h-9 text-sm bg-white/[0.04] border-white/[0.1] rounded-xl" />
-            </div>
-          </div>
-
-          {/* Tools Row */}
-          <HScrollRow title="PIPELINE TOOLS" subtitle="Click to open tool" icon={LeadIcon} count={tools.length}>
-            {tools.map(t => (
-              <HCard key={t.id} title={t.label} icon={t.Icon} iconColor={color} onClick={() => onOpenTool?.(t.id, workflowId)}>
-                <div className="text-[9px] opacity-0 group-hover:opacity-100 transition-opacity mt-1" style={{ color }}>Open tool →</div>
-              </HCard>
-            ))}
-          </HScrollRow>
-
-          {/* Pipeline stages as HScrollRow */}
-          <HScrollRow title="INCOMING" subtitle={activeTab === "XPress" ? "Raw contractor leads from all sources" : "Incoming job/project leads"} icon={LeadIcon} count={incoming.length}>
-            {incoming.slice(0, 20).map(l => (
-              <HCard key={l.id} title={l.company} subtitle={l.contact_name || `${l.city || ""}, ${l.state || ""}`} meta={l.score ? `Score: ${l.score}` : l.source || ""} icon={LeadIcon} iconColor={color} onClick={() => setSelected(l)} />
-            ))}
-            {incoming.length === 0 && <EmptyCard text="No incoming leads" />}
-          </HScrollRow>
-
-          <HScrollRow title="VALIDATED" subtitle="Confirmed real businesses" icon={LeadIcon} count={validated.length}>
-            {validated.slice(0, 20).map(l => (
-              <HCard key={l.id} title={l.company} subtitle={l.contact_name} meta={l.score ? `Score: ${l.score}` : l.email || ""} icon={LeadIcon} iconColor={color} onClick={() => setSelected(l)} />
-            ))}
-            {validated.length === 0 && <EmptyCard text="No validated leads" />}
-          </HScrollRow>
-
-          <HScrollRow title="PRIORITIZED & SCORED" subtitle="AI-scored & ranked" icon={LeadIcon} count={prioritized.length}>
-            {prioritized.slice(0, 20).map(l => (
-              <HCard key={l.id} title={l.company} subtitle={l.contact_name} meta={l.score ? `Score: ${l.score}` : ""} icon={LeadIcon} iconColor={color} onClick={() => setSelected(l)} />
-            ))}
-            {prioritized.length === 0 && <EmptyCard text="No prioritized leads" />}
-          </HScrollRow>
-
-          <HScrollRow title="QUALIFIED" subtitle="Ready for outreach" icon={LeadIcon} count={qualified.length}>
-            {qualified.slice(0, 20).map(l => (
-              <HCard key={l.id} title={l.company} subtitle={l.contact_name} meta={l.estimated_value ? `$${l.estimated_value.toLocaleString()}` : l.email || ""} icon={LeadIcon} iconColor={color} onClick={() => setSelected(l)} />
-            ))}
-            {qualified.length === 0 && <EmptyCard text="No qualified leads" />}
-          </HScrollRow>
+    <div>
+      <div className="flex items-center justify-between mb-4">
+        <DataPageHeader title="Leads" subtitle={`${forcedTab || "All"} pipeline`} count={filtered.length} />
+        <div className="flex gap-2">
+          <Button variant="outline" size="sm" onClick={load}><RefreshCcw className="w-3.5 h-3.5" /></Button>
+          <Button size="sm" onClick={() => setAdding(true)} className="gap-1.5"><Plus className="w-3.5 h-3.5" /> Add Lead</Button>
         </div>
       </div>
 
-      {selected && (
-        <LeadDetailPanel
-          lead={selected}
-          onClose={() => setSelected(null)}
-          onDelete={deleteLead}
-          onChatCommand={onChatCommand}
-        />
+      <DataSearchBar value={search} onChange={setSearch} placeholder="Search leads..." />
+
+      <div className="flex flex-wrap gap-x-8 gap-y-2 mb-5">
+        <FilterPills label="Status" options={STAGES} active={stageFilter} onChange={setStageFilter} />
+        <FilterPills label="Rating" options={SCORE_FILTERS} active={scoreFilter} onChange={setScoreFilter} />
+      </div>
+
+      {filtered.length === 0 ? (
+        <EmptyState icon={Users} message="No leads match your filters" />
+      ) : (
+        <div className="rounded-xl border border-border overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-border bg-card/50 text-[11px] text-muted-foreground uppercase tracking-wider">
+                  <th className="text-left px-4 py-3 font-semibold">Business</th>
+                  <th className="text-left px-4 py-3 font-semibold">Contact</th>
+                  <th className="text-left px-4 py-3 font-semibold hidden md:table-cell">Industry</th>
+                  <th className="text-left px-4 py-3 font-semibold hidden lg:table-cell">Location</th>
+                  <th className="text-left px-4 py-3 font-semibold">Rating</th>
+                  <th className="text-left px-4 py-3 font-semibold">Status</th>
+                  <th className="text-left px-4 py-3 font-semibold">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {filtered.map(lead => (
+                  <tr key={lead.id} className="hover:bg-card/40 transition-colors cursor-pointer" onClick={() => setSelected(selected?.id === lead.id ? null : lead)}>
+                    <td className="px-4 py-3">
+                      <div className="font-medium text-foreground">{lead.company}</div>
+                      <div className="text-xs text-muted-foreground">{lead.contact_name}</div>
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="text-xs text-muted-foreground">{lead.email || "—"}</div>
+                      <div className="text-xs text-muted-foreground">{lead.phone || ""}</div>
+                    </td>
+                    <td className="px-4 py-3 hidden md:table-cell text-xs text-muted-foreground">{lead.vertical || "—"}</td>
+                    <td className="px-4 py-3 hidden lg:table-cell text-xs text-muted-foreground">{lead.city}{lead.state ? `, ${lead.state}` : ""}</td>
+                    <td className="px-4 py-3"><ScoreBadge score={lead.score} /></td>
+                    <td className="px-4 py-3"><StatusBadge status={lead.stage} colorMap={STAGE_COLORS} /></td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-1">
+                        {lead.email && (
+                          <button onClick={(e) => { e.stopPropagation(); window.open(`mailto:${lead.email}`); }} className="p-1.5 rounded hover:bg-secondary text-muted-foreground hover:text-foreground">
+                            <Mail className="w-3.5 h-3.5" />
+                          </button>
+                        )}
+                        {lead.phone && (
+                          <button onClick={(e) => { e.stopPropagation(); window.open(`tel:${lead.phone}`); }} className="p-1.5 rounded hover:bg-secondary text-muted-foreground hover:text-foreground">
+                            <Phone className="w-3.5 h-3.5" />
+                          </button>
+                        )}
+                        <button className="p-1.5 rounded hover:bg-secondary text-muted-foreground hover:text-foreground">
+                          <Star className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       )}
 
-      {adding && <AddLeadModal onClose={() => setAdding(false)} defaultType={activeTab} />}
-    </div>
-  );
-}
-
-function EmptyCard({ text }) {
-  return (
-    <div className="flex-shrink-0 w-[240px] rounded-xl p-4 bg-black/60 border border-white/[0.06] flex items-center justify-center">
-      <span className="text-[11px] text-muted-foreground/50">{text}</span>
+      {adding && <AddLeadModal onClose={() => setAdding(false)} defaultType={forcedTab || "XPress"} />}
     </div>
   );
 }

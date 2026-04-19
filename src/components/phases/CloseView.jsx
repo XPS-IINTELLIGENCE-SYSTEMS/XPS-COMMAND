@@ -1,102 +1,88 @@
 import { useState, useEffect } from "react";
-import { Trophy, FileText, DollarSign, Send, Clock, Swords, PenLine, Stamp, Loader2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import { getIconColor } from "@/lib/iconColors";
-import HScrollRow from "../shared/HScrollRow";
-import HCard from "../shared/HCard";
-import NavIcon from "../shared/NavIcon";
+import { FileText, DollarSign } from "lucide-react";
+import { DataPageHeader, DataSearchBar, FilterPills, StatusBadge, DataLoading, EmptyState } from "../shared/DataPageLayout";
 
-const WORKFLOW_ID = "win_work";
+const STATUSES = ["All", "Draft", "Sent", "Viewed", "Approved", "Rejected", "Expired"];
+const STATUS_COLORS = {
+  Draft: "bg-secondary text-muted-foreground",
+  Sent: "bg-blue-500/10 text-blue-400",
+  Viewed: "bg-cyan-500/10 text-cyan-400",
+  Approved: "bg-emerald-500/10 text-emerald-400",
+  Rejected: "bg-red-500/10 text-red-400",
+  Expired: "bg-yellow-500/10 text-yellow-400",
+  default: "bg-secondary text-muted-foreground",
+};
 
-const CLOSE_TOOLS = [
-  { id: "proposal", label: "AI Proposal Generator", Icon: FileText },
-  { id: "bid", label: "AI Bid Calculator", Icon: DollarSign },
-  { id: "deliver", label: "AI Proposal Delivery", Icon: Send },
-  { id: "followup_proposal", label: "AI Proposal Follow-Up", Icon: Clock },
-  { id: "negotiate", label: "AI Negotiation Coach", Icon: Swords },
-  { id: "revise", label: "AI Quick Revise", Icon: PenLine },
-  { id: "esign", label: "AI E-Sign", Icon: Stamp },
-];
-
-export default function CloseView({ onChatCommand, onOpenTool }) {
+export default function CloseView() {
   const [proposals, setProposals] = useState([]);
   const [loading, setLoading] = useState(true);
-  const color = getIconColor(WORKFLOW_ID);
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
 
   useEffect(() => {
     (async () => {
-      const data = await base44.entities.Proposal.list("-created_date", 100);
+      const data = await base44.entities.Proposal.list("-created_date", 200);
       setProposals(data || []);
       setLoading(false);
     })();
   }, []);
 
-  const drafts = proposals.filter(p => p.status === "Draft");
-  const sent = proposals.filter(p => p.status === "Sent" || p.status === "Viewed");
-  const won = proposals.filter(p => p.status === "Approved");
-  const lost = proposals.filter(p => p.status === "Rejected");
-  const wonValue = won.reduce((s, p) => s + (p.total_value || 0), 0);
+  const filtered = proposals.filter(p => {
+    if (statusFilter !== "All" && p.status !== statusFilter) return false;
+    if (search) {
+      const s = search.toLowerCase();
+      return (p.client_name || "").toLowerCase().includes(s) || (p.title || "").toLowerCase().includes(s) || (p.service_type || "").toLowerCase().includes(s);
+    }
+    return true;
+  });
 
-  if (loading) {
-    return <div className="flex items-center justify-center h-full"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>;
-  }
+  const totalValue = filtered.reduce((s, p) => s + (p.total_value || 0), 0);
+
+  if (loading) return <DataLoading />;
 
   return (
-    <div className="h-full overflow-y-auto">
-      <div className="p-4 md:p-8 space-y-12">
-        <div className="text-center pt-2 pb-4">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 mb-4">
-            <NavIcon id={WORKFLOW_ID} size="sm" active />
-            <span className="text-xs font-semibold text-white">CLOSE · PROPOSALS</span>
+    <div>
+      <DataPageHeader title="Proposals" subtitle={`Deal pipeline · $${totalValue.toLocaleString()} total`} count={filtered.length} />
+      <DataSearchBar value={search} onChange={setSearch} placeholder="Search proposals..." />
+      <FilterPills label="Status" options={STATUSES} active={statusFilter} onChange={setStatusFilter} />
+
+      {filtered.length === 0 ? (
+        <EmptyState icon={FileText} message="No proposals yet" />
+      ) : (
+        <div className="rounded-xl border border-border overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-border bg-card/50 text-[11px] text-muted-foreground uppercase tracking-wider">
+                  <th className="text-left px-4 py-3 font-semibold">Proposal</th>
+                  <th className="text-left px-4 py-3 font-semibold">Client</th>
+                  <th className="text-left px-4 py-3 font-semibold hidden md:table-cell">Service</th>
+                  <th className="text-left px-4 py-3 font-semibold">Value</th>
+                  <th className="text-left px-4 py-3 font-semibold">Status</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {filtered.map(p => (
+                  <tr key={p.id} className="hover:bg-card/40 transition-colors">
+                    <td className="px-4 py-3">
+                      <div className="font-medium text-foreground">{p.title}</div>
+                      <div className="text-xs text-muted-foreground">{p.square_footage ? `${p.square_footage.toLocaleString()} sqft` : ""}</div>
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="text-xs">{p.client_name}</div>
+                      <div className="text-xs text-muted-foreground">{p.client_email || ""}</div>
+                    </td>
+                    <td className="px-4 py-3 hidden md:table-cell text-xs text-muted-foreground">{p.service_type || "—"}</td>
+                    <td className="px-4 py-3 font-semibold">${(p.total_value || 0).toLocaleString()}</td>
+                    <td className="px-4 py-3"><StatusBadge status={p.status} colorMap={STATUS_COLORS} /></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-          <h1 className="text-2xl md:text-3xl font-extrabold xps-gold-slow-shimmer" style={{ fontFamily: "'Montserrat', sans-serif" }}>CLOSE</h1>
-          <p className="mt-2 text-xs text-white/40">Proposals, bids, negotiations — ${wonValue.toLocaleString()} won</p>
         </div>
-
-        <HScrollRow title="CLOSING TOOLS" icon={Trophy} count={CLOSE_TOOLS.length}>
-          {CLOSE_TOOLS.map(t => (
-            <HCard key={t.id} title={t.label} icon={t.Icon} iconColor={color} onClick={() => onOpenTool?.(t.id, WORKFLOW_ID)}>
-              <div className="text-[9px] opacity-0 group-hover:opacity-100 transition-opacity mt-1" style={{ color }}>Open tool →</div>
-            </HCard>
-          ))}
-        </HScrollRow>
-
-        <HScrollRow title="DRAFTS" subtitle="Being prepared" icon={FileText} count={drafts.length}>
-          {drafts.map(p => (
-            <HCard key={p.id} title={p.client_name} subtitle={p.service_type} meta={`$${(p.total_value || 0).toLocaleString()}`} icon={FileText} iconColor={color} onClick={() => onOpenTool?.("proposal", WORKFLOW_ID)} />
-          ))}
-          {drafts.length === 0 && <EmptyCard text="No draft proposals" />}
-        </HScrollRow>
-
-        <HScrollRow title="SENT & PENDING" icon={Send} count={sent.length}>
-          {sent.map(p => (
-            <HCard key={p.id} title={p.client_name} subtitle={`${p.service_type} · ${p.status}`} meta={`$${(p.total_value || 0).toLocaleString()}`} icon={Send} iconColor={color} onClick={() => onOpenTool?.("followup_proposal", WORKFLOW_ID)} />
-          ))}
-          {sent.length === 0 && <EmptyCard text="No pending proposals" />}
-        </HScrollRow>
-
-        <HScrollRow title="WON" icon={Trophy} count={won.length}>
-          {won.map(p => (
-            <HCard key={p.id} title={p.client_name} subtitle={p.service_type} meta={`$${(p.total_value || 0).toLocaleString()}`} icon={Trophy} iconColor={color} />
-          ))}
-          {won.length === 0 && <EmptyCard text="No won deals yet" />}
-        </HScrollRow>
-
-        <HScrollRow title="LOST" count={lost.length}>
-          {lost.map(p => (
-            <HCard key={p.id} title={p.client_name} subtitle={p.service_type} meta={`$${(p.total_value || 0).toLocaleString()}`} icon={FileText} iconColor={color} />
-          ))}
-          {lost.length === 0 && <EmptyCard text="No lost proposals" />}
-        </HScrollRow>
-      </div>
-    </div>
-  );
-}
-
-function EmptyCard({ text }) {
-  return (
-    <div className="flex-shrink-0 w-[240px] rounded-xl p-4 bg-black/60 border border-white/[0.06] flex items-center justify-center">
-      <span className="text-[11px] text-muted-foreground/50">{text}</span>
+      )}
     </div>
   );
 }

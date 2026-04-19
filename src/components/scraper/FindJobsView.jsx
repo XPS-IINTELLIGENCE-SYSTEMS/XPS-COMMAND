@@ -1,97 +1,103 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { Briefcase, Search, MapPin, Building2, Loader2, ExternalLink, Star } from "lucide-react";
+import { Briefcase, MapPin, Star, Mail, Phone, Loader2, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { DataPageHeader, DataSearchBar, FilterPills, StatusBadge, DataLoading, EmptyState } from "../shared/DataPageLayout";
 
-const PROJECT_TYPES = [
-  "All Types", "Warehouse", "Retail", "Restaurant", "Fitness", "Healthcare",
-  "Industrial", "Data Center", "Hotel", "Automotive", "Brewery", "Food Processing", "Office", "Education"
-];
+const PHASES = ["All", "permit_filed", "design", "pre_bid", "bidding", "under_construction", "complete"];
+const PHASE_COLORS = {
+  permit_filed: "bg-blue-500/10 text-blue-400",
+  design: "bg-cyan-500/10 text-cyan-400",
+  pre_bid: "bg-yellow-500/10 text-yellow-400",
+  bidding: "bg-orange-500/10 text-orange-400",
+  under_construction: "bg-green-500/10 text-green-400",
+  complete: "bg-emerald-500/10 text-emerald-400",
+  default: "bg-secondary text-muted-foreground",
+};
 
 export default function FindJobsView() {
-  const [location, setLocation] = useState("");
-  const [projectType, setProjectType] = useState("All Types");
-  const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState([]);
+  const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [phaseFilter, setPhaseFilter] = useState("All");
+  const [scraping, setScraping] = useState(false);
 
-  const handleSearch = async () => {
-    if (!location) return;
-    setLoading(true);
-    const res = await base44.functions.invoke("jobsLeadScraper", { count: 15 });
-    setResults(res.data?.leads || []);
-    setLoading(false);
+  useEffect(() => {
+    (async () => {
+      const data = await base44.entities.CommercialJob.list("-created_date", 200);
+      setJobs(data || []);
+      setLoading(false);
+    })();
+  }, []);
+
+  const runScraper = async () => {
+    setScraping(true);
+    await base44.functions.invoke("jobsLeadScraper", { count: 15 });
+    const data = await base44.entities.CommercialJob.list("-created_date", 200);
+    setJobs(data || []);
+    setScraping(false);
   };
+
+  const filtered = jobs.filter(j => {
+    if (phaseFilter !== "All" && j.project_phase !== phaseFilter) return false;
+    if (search) {
+      const s = search.toLowerCase();
+      return (j.job_name || "").toLowerCase().includes(s) || (j.city || "").toLowerCase().includes(s) || (j.gc_name || "").toLowerCase().includes(s);
+    }
+    return true;
+  });
+
+  if (loading) return <DataLoading />;
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-2xl font-bold">Find Jobs</h1>
-          <p className="text-sm text-muted-foreground">Discover commercial flooring projects and construction opportunities</p>
-        </div>
+      <div className="flex items-center justify-between mb-4">
+        <DataPageHeader title="Find Jobs" subtitle="Commercial flooring projects & construction" count={filtered.length} />
+        <Button size="sm" onClick={runScraper} disabled={scraping} className="gap-1.5">
+          {scraping ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Search className="w-3.5 h-3.5" />}
+          Scrape Jobs
+        </Button>
       </div>
 
-      {/* Search Form */}
-      <div className="glass-card rounded-xl p-5 mb-6">
-        <h3 className="text-sm font-semibold mb-3">New Job Search</h3>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-          <div className="relative">
-            <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input
-              placeholder="City, State or ZIP"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              className="pl-10 bg-secondary/50"
-            />
-          </div>
-          <Select value={projectType} onValueChange={setProjectType}>
-            <SelectTrigger className="bg-secondary/50"><SelectValue /></SelectTrigger>
-            <SelectContent>
-              {PROJECT_TYPES.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}
-            </SelectContent>
-          </Select>
-          <div className="relative">
-            <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input placeholder="Min sqft (optional)" className="pl-10 bg-secondary/50" />
-          </div>
-          <Button onClick={handleSearch} disabled={loading} className="gap-2">
-            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
-            Search Jobs
-          </Button>
-        </div>
-      </div>
+      <DataSearchBar value={search} onChange={setSearch} placeholder="Search jobs, cities, contractors..." />
+      <FilterPills label="Phase" options={PHASES} active={phaseFilter} onChange={setPhaseFilter} />
 
-      {/* Results */}
-      {results.length > 0 && (
-        <div className="glass-card rounded-xl overflow-hidden">
-          <div className="px-5 py-3 border-b border-border">
-            <span className="text-sm font-semibold">{results.length} Jobs Found</span>
+      {filtered.length === 0 ? (
+        <EmptyState icon={Briefcase} message="No jobs found. Try running the scraper." />
+      ) : (
+        <div className="rounded-xl border border-border overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-border bg-card/50 text-[11px] text-muted-foreground uppercase tracking-wider">
+                  <th className="text-left px-4 py-3 font-semibold">Project</th>
+                  <th className="text-left px-4 py-3 font-semibold">Location</th>
+                  <th className="text-left px-4 py-3 font-semibold hidden md:table-cell">Type</th>
+                  <th className="text-left px-4 py-3 font-semibold hidden md:table-cell">Sqft</th>
+                  <th className="text-left px-4 py-3 font-semibold hidden lg:table-cell">Value</th>
+                  <th className="text-left px-4 py-3 font-semibold">Phase</th>
+                  <th className="text-left px-4 py-3 font-semibold">Score</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {filtered.map(job => (
+                  <tr key={job.id} className="hover:bg-card/40 transition-colors">
+                    <td className="px-4 py-3">
+                      <div className="font-medium text-foreground">{job.job_name}</div>
+                      <div className="text-xs text-muted-foreground">{job.gc_name || "—"}</div>
+                    </td>
+                    <td className="px-4 py-3 text-xs text-muted-foreground">{job.city}, {job.state}</td>
+                    <td className="px-4 py-3 hidden md:table-cell text-xs text-muted-foreground capitalize">{(job.project_type || "").replace(/_/g, " ")}</td>
+                    <td className="px-4 py-3 hidden md:table-cell text-xs">{job.total_sqft ? job.total_sqft.toLocaleString() : "—"}</td>
+                    <td className="px-4 py-3 hidden lg:table-cell text-xs font-semibold">{job.project_value ? `$${job.project_value.toLocaleString()}` : "—"}</td>
+                    <td className="px-4 py-3"><StatusBadge status={job.project_phase || "—"} colorMap={PHASE_COLORS} /></td>
+                    <td className="px-4 py-3 text-xs font-bold">{job.lead_score || "—"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-          <div className="divide-y divide-border">
-            {results.map((job, i) => (
-              <div key={i} className="px-5 py-3 flex items-center gap-4 hover:bg-secondary/30 transition-colors">
-                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <Briefcase className="w-4 h-4 text-primary" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="font-medium text-sm truncate">{job.company}</div>
-                  <div className="text-xs text-muted-foreground">{job.buyer_type || "Commercial"} • {job.value ? `$${job.value.toLocaleString()}` : ""}</div>
-                </div>
-                <div className="text-xs text-muted-foreground text-right">
-                  <div>Score: {job.score}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {!loading && results.length === 0 && (
-        <div className="text-center py-16 text-muted-foreground">
-          <Briefcase className="w-12 h-12 mx-auto mb-3 opacity-30" />
-          <p className="text-sm">Enter a location and search to find commercial flooring jobs</p>
         </div>
       )}
     </div>

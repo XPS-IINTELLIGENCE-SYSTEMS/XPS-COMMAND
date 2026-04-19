@@ -1,97 +1,85 @@
 import { useState, useEffect } from "react";
-import { Phone, Mail, Send, MessageSquare, Clock, CalendarCheck, Loader2, Package, Hammer } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import { getIconColor } from "@/lib/iconColors";
-import HScrollRow from "../shared/HScrollRow";
-import HCard from "../shared/HCard";
-import NavIcon from "../shared/NavIcon";
+import { Send, Mail, Clock, ExternalLink } from "lucide-react";
+import { DataPageHeader, DataSearchBar, FilterPills, StatusBadge, DataLoading, EmptyState } from "../shared/DataPageLayout";
 
-const WORKFLOW_ID = "get_work";
+const STATUSES = ["All", "Draft", "Queued", "Sent", "Opened", "Replied", "Failed"];
+const STATUS_COLORS = {
+  Draft: "bg-secondary text-muted-foreground",
+  Queued: "bg-yellow-500/10 text-yellow-400",
+  Sent: "bg-blue-500/10 text-blue-400",
+  Opened: "bg-green-500/10 text-green-400",
+  Replied: "bg-emerald-500/10 text-emerald-400",
+  Failed: "bg-red-500/10 text-red-400",
+  default: "bg-secondary text-muted-foreground",
+};
 
-const CONTACT_TOOLS = [
-  { id: "email", label: "AI Email Writer", Icon: Mail },
-  { id: "send", label: "AI Auto-Send", Icon: Send },
-  { id: "call", label: "AI Call Prep", Icon: Phone },
-  { id: "sms", label: "AI SMS Outreach", Icon: MessageSquare },
-  { id: "followup_contact", label: "AI Follow-Up Engine", Icon: Clock },
-  { id: "scheduler", label: "AI Meeting Scheduler", Icon: CalendarCheck },
-];
-
-export default function ContactView({ onChatCommand, onOpenTool }) {
-  const [leads, setLeads] = useState([]);
+export default function ContactView() {
   const [emails, setEmails] = useState([]);
   const [loading, setLoading] = useState(true);
-  const color = getIconColor(WORKFLOW_ID);
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
 
   useEffect(() => {
     (async () => {
-      const [l, e] = await Promise.all([
-        base44.entities.Lead.list("-score", 200),
-        base44.entities.OutreachEmail.list("-created_date", 50),
-      ]);
-      setLeads(l || []);
-      setEmails(e || []);
+      const data = await base44.entities.OutreachEmail.list("-created_date", 200);
+      setEmails(data || []);
       setLoading(false);
     })();
   }, []);
 
-  const qualified = leads.filter(l => (l.pipeline_status === "Qualified" || l.stage === "Qualified") && l.stage !== "Contacted");
-  const needsFollowup = leads.filter(l => l.stage === "Contacted");
-  const recentEmails = emails.slice(0, 15);
+  const filtered = emails.filter(e => {
+    if (statusFilter !== "All" && e.status !== statusFilter) return false;
+    if (search) {
+      const s = search.toLowerCase();
+      return (e.to_name || "").toLowerCase().includes(s) || (e.to_email || "").toLowerCase().includes(s) || (e.subject || "").toLowerCase().includes(s);
+    }
+    return true;
+  });
 
-  if (loading) {
-    return <div className="flex items-center justify-center h-full"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>;
-  }
+  if (loading) return <DataLoading />;
 
   return (
-    <div className="h-full overflow-y-auto">
-      <div className="p-4 md:p-6 space-y-12">
-        <div className="text-center pt-2 pb-4">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 mb-4">
-            <NavIcon id={WORKFLOW_ID} size="sm" active />
-            <span className="text-xs font-semibold text-white">CONTACT · OUTREACH</span>
+    <div>
+      <DataPageHeader title="Outreach" subtitle="Email campaigns & communications" count={filtered.length} />
+      <DataSearchBar value={search} onChange={setSearch} placeholder="Search emails..." />
+      <FilterPills label="Status" options={STATUSES} active={statusFilter} onChange={setStatusFilter} />
+
+      {filtered.length === 0 ? (
+        <EmptyState icon={Send} message="No outreach emails yet" />
+      ) : (
+        <div className="rounded-xl border border-border overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-border bg-card/50 text-[11px] text-muted-foreground uppercase tracking-wider">
+                  <th className="text-left px-4 py-3 font-semibold">Recipient</th>
+                  <th className="text-left px-4 py-3 font-semibold">Subject</th>
+                  <th className="text-left px-4 py-3 font-semibold hidden md:table-cell">Type</th>
+                  <th className="text-left px-4 py-3 font-semibold">Status</th>
+                  <th className="text-left px-4 py-3 font-semibold hidden md:table-cell">Sent</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {filtered.map(email => (
+                  <tr key={email.id} className="hover:bg-card/40 transition-colors">
+                    <td className="px-4 py-3">
+                      <div className="font-medium text-foreground">{email.to_name || email.to_email}</div>
+                      <div className="text-xs text-muted-foreground">{email.to_email}</div>
+                    </td>
+                    <td className="px-4 py-3 text-xs max-w-xs truncate">{email.subject}</td>
+                    <td className="px-4 py-3 hidden md:table-cell text-xs text-muted-foreground">{email.email_type || "—"}</td>
+                    <td className="px-4 py-3"><StatusBadge status={email.status} colorMap={STATUS_COLORS} /></td>
+                    <td className="px-4 py-3 hidden md:table-cell text-xs text-muted-foreground">
+                      {email.sent_at ? new Date(email.sent_at).toLocaleDateString() : "—"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-          <h1 className="text-2xl md:text-3xl font-extrabold xps-gold-slow-shimmer" style={{ fontFamily: "'Montserrat', sans-serif" }}>CONTACT</h1>
-          <p className="mt-2 text-xs text-white/40">Outreach tools, who needs contacting, and recent activity</p>
         </div>
-
-        <HScrollRow title="OUTREACH TOOLS" subtitle="Click to open tool" icon={Phone} count={CONTACT_TOOLS.length}>
-          {CONTACT_TOOLS.map(t => (
-            <HCard key={t.id} title={t.label} icon={t.Icon} iconColor={color} onClick={() => onOpenTool?.(t.id, WORKFLOW_ID)}>
-              <div className="text-[9px] opacity-0 group-hover:opacity-100 transition-opacity mt-1" style={{ color }}>Open tool →</div>
-            </HCard>
-          ))}
-        </HScrollRow>
-
-        <HScrollRow title="NEEDS FIRST CONTACT" subtitle="Qualified but not yet contacted" icon={Mail} count={qualified.length}>
-          {qualified.slice(0, 15).map(l => (
-            <HCard key={l.id} title={l.company} subtitle={l.contact_name} meta={l.email || l.phone || "No info"} icon={l.lead_type === "XPress" ? Package : Hammer} iconColor={color} onClick={() => onOpenTool?.("email", WORKFLOW_ID)} />
-          ))}
-          {qualified.length === 0 && <EmptyCard text="All qualified leads contacted" />}
-        </HScrollRow>
-
-        <HScrollRow title="NEEDS FOLLOW-UP" subtitle="Contacted but no response" icon={Clock} count={needsFollowup.length}>
-          {needsFollowup.slice(0, 15).map(l => (
-            <HCard key={l.id} title={l.company} subtitle={l.contact_name} meta={l.stage} icon={l.lead_type === "XPress" ? Package : Hammer} iconColor={color} onClick={() => onOpenTool?.("followup_contact", WORKFLOW_ID)} />
-          ))}
-          {needsFollowup.length === 0 && <EmptyCard text="No leads need follow-up" />}
-        </HScrollRow>
-
-        <HScrollRow title="RECENT EMAILS" subtitle="Latest outreach" icon={Send} count={recentEmails.length}>
-          {recentEmails.map(e => (
-            <HCard key={e.id} title={e.to_name || e.to_email} subtitle={e.subject} meta={e.status} icon={Mail} iconColor={color} />
-          ))}
-          {recentEmails.length === 0 && <EmptyCard text="No emails sent yet" />}
-        </HScrollRow>
-      </div>
-    </div>
-  );
-}
-
-function EmptyCard({ text }) {
-  return (
-    <div className="flex-shrink-0 w-[240px] rounded-xl p-4 bg-black/60 border border-white/[0.06] flex items-center justify-center">
-      <span className="text-[11px] text-muted-foreground/50">{text}</span>
+      )}
     </div>
   );
 }

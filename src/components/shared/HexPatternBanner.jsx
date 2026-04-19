@@ -1,6 +1,6 @@
 export default function HexPatternBanner() {
   return (
-    <div className="w-full h-24 md:h-32 overflow-hidden relative flex-shrink-0 pointer-events-none select-none">
+    <div className="w-full h-20 md:h-28 overflow-hidden relative flex-shrink-0 pointer-events-none select-none">
       <svg className="w-full h-full" viewBox="0 0 1200 160" preserveAspectRatio="xMidYMin slice" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <pattern id="hex-solid" x="0" y="0" width="56" height="100" patternUnits="userSpaceOnUse">

@@ -56,7 +56,7 @@ export default function WorkflowCreatorView() {
     load();
   };
 
-  const useTemplate = async (template) => {
+  const createFromTemplate = async (template) => {
     await base44.entities.Workflow.create({
       name: template.name,
       description: template.description,
@@ -105,7 +105,7 @@ export default function WorkflowCreatorView() {
             return (
               <button
                 key={i}
-                onClick={() => useTemplate(tpl)}
+                onClick={() => createFromTemplate(tpl)}
                 className="rounded-xl border border-dashed border-border bg-card/50 p-4 text-left hover:border-primary/40 hover:bg-card/80 hover:shadow-lg hover:shadow-primary/5 transition-all group"
               >
                 <div className="flex items-center gap-2 mb-2">

@@ -10,6 +10,8 @@ import AdminControlView from "../admin/AdminControlView";
 import CompetitiveIntelCenter from "../owner/CompetitiveIntelCenter";
 import ConnectorHub from "../settings/ConnectorHub";
 import SettingsView from "../dashboard/SettingsView";
+import ScraperSchedulerView from "../scheduler/ScraperSchedulerView";
+import WorkflowCreatorView from "../workflow/WorkflowCreatorView";
 
 export default function AppContent({ activeView, onChatCommand, onNavigate }) {
   switch (activeView) {
@@ -28,6 +30,8 @@ export default function AppContent({ activeView, onChatCommand, onNavigate }) {
     case "competition": return <CompetitiveIntelCenter />;
     case "connectors": return <ConnectorHub />;
     case "settings": return <SettingsView />;
+    case "scheduler": return <ScraperSchedulerView />;
+    case "workflows": return <WorkflowCreatorView />;
     default: return <div className="text-center py-20 text-muted-foreground">View not found</div>;
   }
 }

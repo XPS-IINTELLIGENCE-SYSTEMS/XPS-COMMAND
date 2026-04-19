@@ -3,7 +3,7 @@ import { base44 } from "@/api/base44Client";
 import {
   Users, Briefcase, Building2, Search, Mail, FileText, BarChart3,
   BookOpen, Swords, Link2, Shield, Settings, Bot, Loader2,
-  TrendingUp, DollarSign, Target, Send
+  TrendingUp, DollarSign, Target, Send, Clock, GitBranch
 } from "lucide-react";
 
 const TOOL_BUTTONS = [
@@ -18,6 +18,8 @@ const TOOL_BUTTONS = [
   { id: "knowledge", label: "Knowledge Base", desc: "Docs, playbooks & SOPs", icon: BookOpen, color: "#06b6d4" },
   { id: "competition", label: "Competition", desc: "Competitor monitoring", icon: Swords, color: "#ef4444" },
   { id: "connectors", label: "Connectors", desc: "Integrations & APIs", icon: Link2, color: "#84cc16" },
+  { id: "scheduler", label: "Scheduler", desc: "Schedule automated scraping", icon: Clock, color: "#0ea5e9" },
+  { id: "workflows", label: "Workflows", desc: "Drag & drop automation builder", icon: GitBranch, color: "#f43f5e" },
   { id: "admin", label: "Admin Control", desc: "Users, keys & promo codes", icon: Shield, color: "#a855f7" },
   { id: "settings", label: "Settings", desc: "Account & preferences", icon: Settings, color: "#64748b" },
   { id: "ai_assistant", label: "AI Assistant", desc: "Chat-driven commands", icon: Bot, color: "#d4af37" },

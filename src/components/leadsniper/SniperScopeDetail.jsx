@@ -1,12 +1,25 @@
+import { useState } from "react";
 import { X, Calendar, MapPin, Building2, Ruler, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SniperWinningBid from "./SniperWinningBid";
+import SniperAutoTakeoff from "./SniperAutoTakeoff";
+import SniperRFQSender from "./SniperRFQSender";
 
-export default function SniperScopeDetail({ scope, allScopes, onClose }) {
+export default function SniperScopeDetail({ scope: initialScope, allScopes, onClose }) {
+  const [scope, setScope] = useState(initialScope);
   let zones = [];
   try { zones = JSON.parse(scope.extracted_zones || "[]"); } catch {}
   let specials = [];
   try { specials = JSON.parse(scope.special_requirements || "[]"); } catch {}
+
+  // Extract material list from takeoff data if available
+  function getMaterialList(s) {
+    if (!s.takeoff_data) return [];
+    try {
+      const td = JSON.parse(s.takeoff_data);
+      return td.material_summary || [];
+    } catch { return []; }
+  }
 
   return (
     <div className="glass-card rounded-xl p-4 space-y-4 border border-primary/20">
@@ -67,8 +80,14 @@ export default function SniperScopeDetail({ scope, allScopes, onClose }) {
         </div>
       )}
 
+      {/* AI Auto-Takeoff */}
+      <SniperAutoTakeoff scope={scope} onTakeoffComplete={(updated) => setScope(updated)} />
+
       {/* AI Winning Bid Analyzer */}
       <SniperWinningBid scope={scope} allScopes={allScopes} />
+
+      {/* RFQ to Vendors — show material list from winning bid or takeoff */}
+      <SniperRFQSender scope={scope} materialList={getMaterialList(scope)} />
     </div>
   );
 }

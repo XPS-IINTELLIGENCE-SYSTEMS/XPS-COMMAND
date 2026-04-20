@@ -1,0 +1,67 @@
+{
+  "name": "VendorQuote",
+  "type": "object",
+  "properties": {
+    "vendor_id": {
+      "type": "string",
+      "description": "MaterialVendor ID"
+    },
+    "vendor_name": {
+      "type": "string"
+    },
+    "vendor_email": {
+      "type": "string"
+    },
+    "scope_id": {
+      "type": "string",
+      "description": "FloorScope ID"
+    },
+    "scope_name": {
+      "type": "string"
+    },
+    "rfq_sent_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "material_list": {
+      "type": "string",
+      "description": "JSON array of requested materials with quantities"
+    },
+    "quoted_price": {
+      "type": "number"
+    },
+    "quoted_lead_time_days": {
+      "type": "number"
+    },
+    "quote_document_url": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "rfq_sent",
+        "quote_received",
+        "accepted",
+        "rejected",
+        "expired"
+      ],
+      "default": "rfq_sent"
+    },
+    "quote_received_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "line_items": {
+      "type": "string",
+      "description": "JSON array of quoted line items with unit prices"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "vendor_id",
+    "scope_id",
+    "status"
+  ]
+}

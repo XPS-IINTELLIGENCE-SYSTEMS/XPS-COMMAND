@@ -1,0 +1,75 @@
+{
+  "name": "MaterialVendor",
+  "type": "object",
+  "properties": {
+    "company_name": {
+      "type": "string",
+      "description": "Vendor/supplier company name"
+    },
+    "contact_name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "website": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "product_categories": {
+      "type": "string",
+      "description": "JSON array: epoxy, hardener, primer, topcoat, aggregate, diamond_tooling, grinder_rental, moisture_mitigation, cove_base, joint_filler, crack_repair, colorant, metallic_pigment, urethane, polyaspartic, sealer, densifier, dye"
+    },
+    "brands_carried": {
+      "type": "string",
+      "description": "JSON array of brand names"
+    },
+    "pricing_tier": {
+      "type": "string",
+      "enum": [
+        "budget",
+        "mid_range",
+        "premium"
+      ],
+      "default": "mid_range"
+    },
+    "lead_time_days": {
+      "type": "number",
+      "description": "Average lead time in days"
+    },
+    "minimum_order": {
+      "type": "number",
+      "description": "Minimum order amount in dollars"
+    },
+    "payment_terms": {
+      "type": "string",
+      "description": "Net 30, COD, etc."
+    },
+    "rating": {
+      "type": "number",
+      "description": "1-5 rating"
+    },
+    "is_preferred": {
+      "type": "boolean",
+      "default": false
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "company_name",
+    "email"
+  ]
+}

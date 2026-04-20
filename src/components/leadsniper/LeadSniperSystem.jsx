@@ -12,6 +12,7 @@ import SniperCompetitorIntel from "./SniperCompetitorIntel";
 import SniperCampaignManager from "./SniperCampaignManager";
 import SniperGeoMap from "./SniperGeoMap";
 import SniperScopeDetail from "./SniperScopeDetail";
+import SniperVendorPortal from "./SniperVendorPortal";
 import BidPipelineKanban from "../bidpipeline/BidPipelineKanban";
 import GCLeaderboard from "../bidpipeline/GCLeaderboard";
 
@@ -106,6 +107,9 @@ export default function LeadSniperSystem() {
 
       {/* Geographic Intelligence Map */}
       <SniperGeoMap gcs={gcs} scopes={scopes} />
+
+      {/* Vendor Portal */}
+      <SniperVendorPortal />
 
       {/* Competitor Intelligence */}
       <SniperCompetitorIntel gcs={gcs} scopes={scopes} />

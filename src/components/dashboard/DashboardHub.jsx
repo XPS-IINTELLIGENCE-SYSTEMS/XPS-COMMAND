@@ -308,23 +308,21 @@ export default function DashboardHub({ onOpenTool }) {
           )}
         </div>
 
-        {/* Command Center: Calendar + Sidebar + Daily Summary */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 mb-6">
-          {/* Weekly Calendar + Daily Summary stacked */}
-          <div className="lg:col-span-8 space-y-3">
-            <WeeklyCalendarCard
-              automations={automations}
-              expanded={calendarExpanded}
-              onToggleExpand={() => setCalendarExpanded(!calendarExpanded)}
-            />
+        {/* Command Center: Calendar + Daily Summary — full width */}
+        <div className="space-y-3 mb-6">
+          <WeeklyCalendarCard
+            automations={automations}
+            expanded={calendarExpanded}
+            onToggleExpand={() => setCalendarExpanded(!calendarExpanded)}
+          />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
             <DailySummaryCard
               expanded={summaryExpanded}
               onToggleExpand={() => setSummaryExpanded(!summaryExpanded)}
             />
-          </div>
-          {/* Sidebar: categorized automations/tools/workflows */}
-          <div className="lg:col-span-4 hidden lg:block max-h-[280px]">
-            <ScheduledItemsSidebar automations={automations} tools={tools} />
+            <div className="hidden lg:block max-h-[200px]">
+              <ScheduledItemsSidebar automations={automations} tools={tools} />
+            </div>
           </div>
         </div>
 
@@ -338,7 +336,7 @@ export default function DashboardHub({ onOpenTool }) {
                 {favTools.length === 0 ? "— tap ★ to pin" : `${favTools.length} pinned`}
               </span>
             </div>
-            <Droppable droppableId="favorites" direction="horizontal">
+            <Droppable droppableId="favorites">
               {(provided, snapshot) => (
                 <div
                   ref={provided.innerRef}
@@ -388,7 +386,7 @@ export default function DashboardHub({ onOpenTool }) {
                 <Settings2 className="w-3.5 h-3.5" /> Manage Tools
               </button>
             </div>
-            <Droppable droppableId="all" direction="horizontal">
+            <Droppable droppableId="all">
               {(provided, snapshot) => (
                 <div
                   ref={provided.innerRef}

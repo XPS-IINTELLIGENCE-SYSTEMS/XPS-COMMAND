@@ -67,39 +67,41 @@ export default function WeeklyCalendarCard({ automations, expanded, onToggleExpa
     return (
       <button
         onClick={onToggleExpand}
-        className="w-full glass-card rounded-xl p-3 text-left hover:border-primary/20 transition-all"
+        className="w-full glass-card rounded-xl p-4 text-left hover:border-primary/20 transition-all"
       >
-        <div className="flex items-center gap-2 mb-2">
+        <div className="flex items-center gap-2 mb-3">
           <Calendar className="w-4 h-4 metallic-gold-icon" />
-          <span className="text-xs font-bold metallic-gold">This Week</span>
+          <span className="text-xs font-bold metallic-gold">Weekly Schedule</span>
           <span className="text-[10px] text-muted-foreground ml-auto">
-            {format(days[0], "MMM d")} – {format(days[6], "MMM d")}
+            {format(days[0], "MMM d")} – {format(days[6], "MMM d, yyyy")}
           </span>
         </div>
-        <div className="grid grid-cols-7 gap-1">
+        <div className="grid grid-cols-7 gap-2">
           {days.map((date, i) => {
             const count = dayEvents[i].length;
             const today = isToday(date);
             return (
-              <div key={i} className="text-center">
-                <div className={`text-[9px] font-medium ${today ? "text-primary" : "text-muted-foreground"}`}>
+              <div key={i} className="text-center py-1">
+                <div className={`text-[10px] font-medium mb-1 ${today ? "text-primary" : "text-muted-foreground"}`}>
                   {DAY_NAMES[i]}
                 </div>
-                <div className={`text-[11px] font-bold mt-0.5 w-7 h-7 rounded-full flex items-center justify-center mx-auto ${
+                <div className={`text-sm font-bold w-8 h-8 rounded-full flex items-center justify-center mx-auto ${
                   today ? "metallic-gold-bg text-background" : "text-foreground"
                 }`}>
                   {format(date, "d")}
                 </div>
-                {count > 0 && (
-                  <div className="flex justify-center mt-0.5 gap-0.5">
+                {count > 0 ? (
+                  <div className="flex justify-center mt-1 gap-0.5">
                     {count <= 3 ? (
                       dayEvents[i].slice(0, 3).map((e, j) => (
-                        <div key={j} className="w-1 h-1 rounded-full" style={{ backgroundColor: e.color }} />
+                        <div key={j} className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: e.color }} />
                       ))
                     ) : (
-                      <span className="text-[8px] text-primary font-bold">{count}</span>
+                      <span className="text-[9px] text-primary font-bold">{count}</span>
                     )}
                   </div>
+                ) : (
+                  <div className="mt-1 h-1.5" />
                 )}
               </div>
             );

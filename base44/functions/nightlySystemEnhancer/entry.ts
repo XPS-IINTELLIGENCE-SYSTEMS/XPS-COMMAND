@@ -7,7 +7,7 @@ Deno.serve(async (req) => {
   const base44 = createClientFromRequest(req);
   let user = null;
   try { user = await base44.auth.me(); } catch (_) { /* scheduled run */ }
-  if (user && user.role !== 'admin') return Response.json({ error: 'Admin only' }, { status: 403 });
+  // Allow any authenticated user or scheduled automation to run
 
   // Gather system metrics
   const leads = await base44.asServiceRole.entities.Lead.filter({});

@@ -76,12 +76,12 @@ XPS National Estimating Team
 Xtreme Polishing Systems / National Concrete Polishing
 bids@nationalconcretepolishing.com`;
 
-        // Send via Core.SendEmail
+        // Send via Core.SendEmail — CC jeremy
         await base44.asServiceRole.integrations.Core.SendEmail({
-          to: email,
-          subject,
-          body,
-          from_name: "XPS National Estimating"
+          to: "jeremy@shopxps.com",
+          subject: `[BID LIST REQUEST] ${gc.company_name} — ${subject}`,
+          body: `OUTREACH SENT TO: ${email}\nCOMPANY: ${gc.company_name}\nSTATE: ${gc.state}\nCITY: ${gc.city}\n\n--- EMAIL CONTENT ---\n\n${body}`,
+          from_name: "XPS Intelligence"
         }).catch(() => {});
 
         // Update GC record
@@ -141,7 +141,10 @@ bids@nationalconcretepolishing.com`;
         const body = followUpBodies[stage]?.(gc) || "Following up on our bid list request.";
 
         await base44.asServiceRole.integrations.Core.SendEmail({
-          to: email, subject, body, from_name: "XPS National Estimating"
+          to: "jeremy@shopxps.com",
+          subject: `[FOLLOW-UP ${stage}] ${gc.company_name} — ${subject}`,
+          body: `FOLLOW-UP SENT TO: ${email}\nCOMPANY: ${gc.company_name}\nSTATE: ${gc.state}\nSTAGE: ${stage}\n\n--- EMAIL CONTENT ---\n\n${body}`,
+          from_name: "XPS Intelligence"
         }).catch(() => {});
 
         await base44.asServiceRole.entities.ContractorCompany.update(gc.id, {

@@ -2,7 +2,6 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 const PRIORITY_STATES = ["FL", "TX", "CA", "AZ", "OH", "IL", "GA", "NC", "NV", "CO"];
 const ALL_STATES = ["AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"];
-
 const STATE_NAMES = {
   FL:"Florida",TX:"Texas",CA:"California",AZ:"Arizona",OH:"Ohio",IL:"Illinois",GA:"Georgia",
   NC:"North Carolina",NV:"Nevada",CO:"Colorado",NY:"New York",PA:"Pennsylvania",VA:"Virginia",
@@ -17,14 +16,11 @@ const STATE_NAMES = {
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
-    const user = await base44.auth.me();
-    if (user?.role !== 'admin') {
-      return Response.json({ error: 'Forbidden: Admin access required' }, { status: 403 });
-    }
 
-    const { states, count_per_state, tier } = await req.json().catch(() => ({}));
-    const targetStates = states || PRIORITY_STATES.slice(0, 5);
-    const maxPerState = count_per_state || 20;
+    // Pick 3 random states each run to build out the database over time
+    const shuffled = [...ALL_STATES].sort(() => Math.random() - 0.5);
+    const targetStates = shuffled.slice(0, 3);
+    const maxPerState = 15;
 
     let totalCreated = 0;
     let totalSkipped = 0;
@@ -34,9 +30,8 @@ Deno.serve(async (req) => {
       const stateName = STATE_NAMES[stateCode] || stateCode;
 
       try {
-        // Use Base44 InvokeLLM with internet search to find real GCs
         const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
-          prompt: `Find the top ${maxPerState} real general contractor companies in ${stateName} (${stateCode}) that do commercial construction. I need their real company names, headquarters city, phone numbers, websites, estimated employee count, estimated annual revenue, and the types of projects they do (warehouse, retail, restaurant, healthcare, industrial, education, government, hotel, mixed_use, commercial, fitness, automotive). Only include REAL companies that actually exist. No made-up data.`,
+          prompt: `Find the top ${maxPerState} real general contractor companies in ${stateName} (${stateCode}) that do commercial construction. Include real company names, headquarters city, phone numbers, email addresses, websites, estimated employee count, estimated annual revenue, and the types of projects they build (warehouse, retail, restaurant, healthcare, industrial, education, government, hotel, mixed_use, commercial, fitness, automotive). Only REAL companies.`,
           add_context_from_internet: true,
           response_json_schema: {
             type: "object",
@@ -63,26 +58,15 @@ Deno.serve(async (req) => {
         });
 
         let companies = result?.companies || [];
+        companies = companies.filter(c => c.company_name && c.company_name.length > 2);
 
-        // Filter out junk
-        companies = companies.filter(c =>
-          c.company_name &&
-          c.company_name.length > 2 &&
-          !c.company_name.toLowerCase().includes("example") &&
-          !c.company_name.toLowerCase().includes("test")
-        );
-
-        // Check for duplicates
         const existing = await base44.asServiceRole.entities.ContractorCompany.filter(
           { state: stateCode }, "-created_date", 500
         ).catch(() => []);
         const existingNames = new Set(existing.map(e => e.company_name?.toLowerCase()));
 
         for (const company of companies) {
-          if (existingNames.has(company.company_name?.toLowerCase())) {
-            totalSkipped++;
-            continue;
-          }
+          if (existingNames.has(company.company_name?.toLowerCase())) { totalSkipped++; continue; }
 
           await base44.asServiceRole.entities.ContractorCompany.create({
             company_name: company.company_name,
@@ -99,7 +83,7 @@ Deno.serve(async (req) => {
             relationship_strength: "cold",
             discovered_date: new Date().toISOString(),
             last_updated: new Date().toISOString(),
-            source_url: `base44_llm:${stateName} commercial contractors`,
+            source_url: `scheduled:${stateName}`,
           });
           totalCreated++;
           existingNames.add(company.company_name.toLowerCase());
@@ -109,31 +93,26 @@ Deno.serve(async (req) => {
       }
     }
 
-    // Log the run
+    // Log and notify
     await base44.asServiceRole.entities.OvernightRunLog.create({
       run_date: new Date().toISOString().split("T")[0],
-      target_market: `GC Database: ${targetStates.join(", ")}`,
+      target_market: `Scheduled GC Scrape: ${targetStates.join(", ")}`,
       completion_status: errors.length === 0 ? "complete" : "partial",
       leads_created: totalCreated,
       errors_count: errors.length,
-      executive_summary: `GC Database Builder: Created ${totalCreated} new records, skipped ${totalSkipped} duplicates across ${targetStates.length} states. ${errors.length} errors.`,
+      executive_summary: `Scheduled scrape: ${totalCreated} new GCs from ${targetStates.join(", ")}. Skipped ${totalSkipped} dupes. ${errors.length} errors.`,
     }).catch(() => {});
 
-    // Notify jeremy
-    await base44.asServiceRole.integrations.Core.SendEmail({
-      to: "jeremy@shopxps.com",
-      subject: `GC Database Builder Complete — ${totalCreated} New GCs Added`,
-      body: `GC Database Builder finished.\n\nStates scraped: ${targetStates.join(", ")}\nNew GCs created: ${totalCreated}\nDuplicates skipped: ${totalSkipped}\nErrors: ${errors.length}\n\n${errors.length > 0 ? "Errors:\n" + errors.join("\n") : "No errors."}\n\nLogin to see the full database: https://app.base44.com`,
-      from_name: "XPS Intelligence"
-    }).catch(() => {});
+    if (totalCreated > 0) {
+      await base44.asServiceRole.integrations.Core.SendEmail({
+        to: "jeremy@shopxps.com",
+        subject: `[AUTO] GC Scraper — ${totalCreated} New GCs Added (${targetStates.join(", ")})`,
+        body: `Automated GC scraper completed.\n\nStates: ${targetStates.join(", ")}\nNew GCs: ${totalCreated}\nSkipped dupes: ${totalSkipped}\nErrors: ${errors.length}\n\nLogin to review: https://app.base44.com`,
+        from_name: "XPS Intelligence"
+      }).catch(() => {});
+    }
 
-    return Response.json({
-      success: true,
-      created: totalCreated,
-      skipped: totalSkipped,
-      states_scraped: targetStates,
-      errors,
-    });
+    return Response.json({ success: true, created: totalCreated, skipped: totalSkipped, states: targetStates, errors });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
   }

@@ -6,8 +6,7 @@ Deno.serve(async (req) => {
     const user = await base44.auth.me();
     if (!user) return Response.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const { action, scope_id, file_url } = await req.json().catch(() => ({}));
-    const GROQ_KEY = Deno.env.get("GROQ_API_KEY");
+    const { action, scope_id } = await req.json().catch(() => ({}));
 
     if (action === "process_scope") {
       if (!scope_id) return Response.json({ error: "scope_id required" }, { status: 400 });
@@ -16,8 +15,6 @@ Deno.serve(async (req) => {
       if (!scope.length) return Response.json({ error: "Scope not found" }, { status: 404 });
       const s = scope[0];
 
-      // If there's a document, extract data from it
-      let extractedText = s.notes || "";
       if (s.raw_scope_document) {
         const extraction = await base44.asServiceRole.integrations.Core.ExtractDataFromUploadedFile({
           file_url: s.raw_scope_document,
@@ -57,13 +54,12 @@ Deno.serve(async (req) => {
 
       let zones = [];
       try { zones = JSON.parse(s.extracted_zones || "[]"); } catch {}
-
       if (zones.length === 0) {
         return Response.json({ error: "No zones extracted yet. Run process_scope first." }, { status: 400 });
       }
 
-      // AI calculates takeoff for each zone
-      const prompt = `You are an expert flooring estimator for XPS (Xtreme Polishing Systems). Calculate a detailed takeoff for this project.
+      const takeoff = await base44.asServiceRole.integrations.Core.InvokeLLM({
+        prompt: `You are an expert flooring estimator for XPS (Xtreme Polishing Systems). Calculate a detailed takeoff for this project.
 
 Project: ${s.project_name}
 Location: ${s.project_city}, ${s.project_state}
@@ -85,37 +81,17 @@ For EACH zone calculate:
 - Labor: $2-5/sqft depending on system complexity
 - Equipment: $0.25-0.75/sqft
 
-Then calculate totals: material, labor, equipment, mobilization (based on distance), overhead at 15%, profit at 12%.
-
-Return ONLY valid JSON:
-{
-  "zones": [{"name":"...","sqft":0,"system":"...","material_cost":0,"labor_cost":0,"equipment_cost":0,"subtotal":0}],
-  "totals": {"material":0,"labor":0,"equipment":0,"mobilization":0,"overhead":0,"profit":0,"total":0,"price_per_sqft":0,"gross_margin_pct":0}
-}`;
-
-      const groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-        method: "POST",
-        headers: { "Authorization": `Bearer ${GROQ_KEY}`, "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "llama-3.3-70b-versatile",
-          messages: [{ role: "user", content: prompt }],
-          temperature: 0.1,
-          max_tokens: 4000,
-        }),
+Then calculate totals: material, labor, equipment, mobilization (based on distance), overhead at 15%, profit at 12%.`,
+        response_json_schema: {
+          type: "object",
+          properties: {
+            zones: { type: "array", items: { type: "object", properties: { name: { type: "string" }, sqft: { type: "number" }, system: { type: "string" }, material_cost: { type: "number" }, labor_cost: { type: "number" }, equipment_cost: { type: "number" }, subtotal: { type: "number" } } } },
+            totals: { type: "object", properties: { material: { type: "number" }, labor: { type: "number" }, equipment: { type: "number" }, mobilization: { type: "number" }, overhead: { type: "number" }, profit: { type: "number" }, total: { type: "number" }, price_per_sqft: { type: "number" }, gross_margin_pct: { type: "number" } } }
+          }
+        }
       });
 
-      const groqData = await groqRes.json();
-      const content = groqData.choices?.[0]?.message?.content || "";
-      
-      let takeoff;
-      try {
-        const match = content.match(/\{[\s\S]*\}/);
-        takeoff = JSON.parse(match[0]);
-      } catch {
-        return Response.json({ error: "Failed to parse takeoff", raw: content }, { status: 500 });
-      }
-
-      const totals = takeoff.totals || {};
+      const totals = takeoff?.totals || {};
       await base44.asServiceRole.entities.FloorScope.update(s.id, {
         takeoff_data: JSON.stringify(takeoff),
         takeoff_status: "complete",

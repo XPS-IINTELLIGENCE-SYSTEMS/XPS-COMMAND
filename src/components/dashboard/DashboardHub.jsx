@@ -6,6 +6,9 @@ import HexPatternBanner from "../shared/HexPatternBanner";
 import DashboardToolCard from "./DashboardToolCard";
 import DashboardCardEditModal from "./DashboardCardEditModal";
 import ToolCardManager from "./ToolCardManager";
+import WeeklyCalendarCard from "./WeeklyCalendarCard";
+import DailySummaryCard from "./DailySummaryCard";
+import ScheduledItemsSidebar from "./ScheduledItemsSidebar";
 import { DEFAULT_TOOLS } from "./dashboardDefaults";
 
 const DEFAULT_GREETING = "";
@@ -32,6 +35,9 @@ export default function DashboardHub({ onOpenTool }) {
   const [customNumbers, setCustomNumbers] = useState({}); // { toolId: "custom label" }
   const [hiddenIds, setHiddenIds] = useState([]); // IDs of hidden/deleted default tools
   const [customTools, setCustomTools] = useState([]); // user-created custom tools
+  const [automations, setAutomations] = useState([]);
+  const [calendarExpanded, setCalendarExpanded] = useState(false);
+  const [summaryExpanded, setSummaryExpanded] = useState(false);
 
   useEffect(() => { loadData(); }, []);
 
@@ -68,6 +74,15 @@ export default function DashboardHub({ onOpenTool }) {
         }
       } catch {}
     }
+    // Load automations
+    try {
+      const res = await base44.functions.invoke("getAutomations", {});
+      setAutomations(res?.data?.automations || []);
+    } catch {
+      // If no backend function, use hardcoded automation info
+      setAutomations([]);
+    }
+
     setLoading(false);
   };
 
@@ -293,8 +308,28 @@ export default function DashboardHub({ onOpenTool }) {
           )}
         </div>
 
+        {/* Command Center: Calendar + Sidebar + Daily Summary */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 mb-6">
+          {/* Weekly Calendar + Daily Summary stacked */}
+          <div className="lg:col-span-8 space-y-3">
+            <WeeklyCalendarCard
+              automations={automations}
+              expanded={calendarExpanded}
+              onToggleExpand={() => setCalendarExpanded(!calendarExpanded)}
+            />
+            <DailySummaryCard
+              expanded={summaryExpanded}
+              onToggleExpand={() => setSummaryExpanded(!summaryExpanded)}
+            />
+          </div>
+          {/* Sidebar: categorized automations/tools/workflows */}
+          <div className="lg:col-span-4 hidden lg:block max-h-[280px]">
+            <ScheduledItemsSidebar automations={automations} tools={tools} />
+          </div>
+        </div>
+
         <DragDropContext onDragEnd={onDragEnd}>
-          {/* Favorites Section — replaces old stat cards */}
+          {/* Favorites Section */}
           <div className="mb-6 sm:mb-8">
             <div className="flex items-center gap-2 mb-2 sm:mb-3">
               <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />

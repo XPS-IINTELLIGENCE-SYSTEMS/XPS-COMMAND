@@ -9,28 +9,46 @@
         "NCP",
         "XPS Xpress",
         "CPU",
+        "Epoxy Network",
+        "XPS Intelligence",
+        "XPS Location",
         "Industry",
         "GitHub",
         "Custom"
       ],
       "default": "Custom",
-      "description": "Which company or source this intel belongs to"
+      "description": "Which XPS brand or source this intel belongs to"
     },
     "category": {
       "type": "string",
       "enum": [
-        "social_media",
         "website",
-        "news",
-        "review",
-        "product",
         "pricing",
-        "legal",
-        "patent",
+        "product",
+        "social_media",
+        "youtube",
+        "video",
+        "image",
+        "branding",
+        "keywords",
+        "seo",
+        "review",
+        "news",
         "job_posting",
         "financial",
-        "github_repo",
+        "legal",
+        "patent",
+        "location",
+        "team",
+        "training",
+        "certification",
+        "event",
+        "case_study",
+        "testimonial",
         "industry_data",
+        "market_trend",
+        "technology",
+        "github_repo",
         "template",
         "agent_skill",
         "custom"
@@ -64,13 +82,15 @@
       "type": "string",
       "enum": [
         "scraper",
+        "crawler",
+        "llm_research",
         "manual",
         "api",
         "social",
         "github",
         "rss",
         "webhook",
-        "llm"
+        "browserless"
       ],
       "default": "manual"
     },
@@ -92,6 +112,36 @@
     "is_indexed": {
       "type": "boolean",
       "default": false
+    },
+    "data_freshness": {
+      "type": "string",
+      "enum": [
+        "live",
+        "recent",
+        "stale",
+        "archived"
+      ],
+      "default": "recent"
+    },
+    "location_name": {
+      "type": "string",
+      "description": "XPS franchise location name if applicable"
+    },
+    "location_state": {
+      "type": "string",
+      "description": "State abbreviation for location-specific intel"
+    },
+    "pricing_data": {
+      "type": "string",
+      "description": "JSON structured pricing information"
+    },
+    "keyword_data": {
+      "type": "string",
+      "description": "JSON array of keywords, phrases, SEO terms extracted"
+    },
+    "engagement_metrics": {
+      "type": "string",
+      "description": "JSON social engagement data \u2014 likes, shares, views, followers"
     },
     "metadata": {
       "type": "string",

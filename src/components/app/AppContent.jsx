@@ -53,6 +53,7 @@ import AutoEnhanceView from "../enhance/AutoEnhanceView";
 import SystemIndexView from "../systemindex/SystemIndexView";
 import AdminCommandCenter from "../systemindex/AdminCommandCenter";
 import ComplianceCheckerView from "../compliance/ComplianceCheckerView";
+import IntelCoreView from "../intelcore/IntelCoreView";
 
 export default function AppContent({ activeView, onChatCommand, onNavigate }) {
   switch (activeView) {
@@ -114,6 +115,7 @@ export default function AppContent({ activeView, onChatCommand, onNavigate }) {
     case "system_index": return <SystemIndexView />;
     case "system_instructions": return <AdminCommandCenter />;
     case "compliance_checker": return <ComplianceCheckerView />;
+    case "xps_intel_core": return <IntelCoreView />;
     default: return <div className="text-center py-20 text-muted-foreground">View not found</div>;
   }
 }

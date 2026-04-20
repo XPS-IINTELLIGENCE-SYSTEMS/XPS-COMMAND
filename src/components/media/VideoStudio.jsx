@@ -4,6 +4,7 @@ import { Video, Loader2, Film, Play, Clock, Sparkles, Copy, Download, Save, Penc
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
+import VideoSceneVisualizer from "./VideoSceneVisualizer";
 
 const VIDEO_TYPES = ["Promotional", "Tutorial", "Before/After", "Product Demo", "Testimonial", "Ad Spot", "Social Reel", "Training", "YouTube Long-Form"];
 const PLATFORMS = ["YouTube", "Instagram Reels", "TikTok", "Facebook", "LinkedIn", "YouTube Shorts"];
@@ -261,6 +262,11 @@ Return the full updated script in the same format.`,
                   )}
 
                   <p className="text-[10px] text-primary">{s.hashtags}</p>
+
+                  {/* Scene visualizer */}
+                  {s.scenes?.length > 0 && (
+                    <VideoSceneVisualizer scenes={s.scenes} title={s.title} />
+                  )}
 
                   {/* Thumbnail generator */}
                   <Button size="sm" variant="outline" onClick={(e) => { e.stopPropagation(); generateThumbnails(s.thumbnail_concept); }}

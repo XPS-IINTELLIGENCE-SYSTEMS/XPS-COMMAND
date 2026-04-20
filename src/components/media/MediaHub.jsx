@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Image, Video, Bot, Share2, Mic, Palette, CreditCard, FolderOpen, TrendingUp, Globe, Sparkles } from "lucide-react";
+import { Image, Video, Share2, Mic, Palette, CreditCard, FolderOpen, TrendingUp, Globe, Sparkles, Package } from "lucide-react";
 import BusinessCardCreator from "./BusinessCardCreator";
 import BrandingStudio from "./BrandingStudio";
 import VideoStudio from "./VideoStudio";
@@ -8,10 +8,14 @@ import SocialFactory from "./SocialFactory";
 import ContentScraper from "./ContentScraper";
 import ProjectFolders from "./ProjectFolders";
 import MarketingStrategy from "./MarketingStrategy";
+import AIImageStudio from "./AIImageStudio";
+import BrandPackageGenerator from "./BrandPackageGenerator";
 
 const TABS = [
-  { id: "cards", label: "Business Cards", icon: CreditCard },
+  { id: "images", label: "AI Images", icon: Image },
+  { id: "brand_package", label: "Brand Package", icon: Package },
   { id: "branding", label: "Branding Studio", icon: Palette },
+  { id: "cards", label: "Business Cards", icon: CreditCard },
   { id: "video", label: "Video Studio", icon: Video },
   { id: "voiceover", label: "Voice & Script", icon: Mic },
   { id: "social", label: "Social Factory", icon: Share2 },
@@ -21,7 +25,7 @@ const TABS = [
 ];
 
 export default function MediaHub() {
-  const [tab, setTab] = useState("cards");
+  const [tab, setTab] = useState("images");
 
   return (
     <div className="space-y-4">
@@ -32,7 +36,7 @@ export default function MediaHub() {
         </div>
         <div>
           <h1 className="text-xl font-extrabold text-foreground">Media & Creative Hub</h1>
-          <p className="text-xs text-muted-foreground">AI-powered branding, video, content creation & marketing automation</p>
+          <p className="text-xs text-muted-foreground">Real AI image generation, full branding packages, video storyboards & content creation</p>
         </div>
       </div>
 
@@ -54,8 +58,10 @@ export default function MediaHub() {
       </div>
 
       {/* Content */}
-      {tab === "cards" && <BusinessCardCreator />}
+      {tab === "images" && <AIImageStudio />}
+      {tab === "brand_package" && <BrandPackageGenerator />}
       {tab === "branding" && <BrandingStudio />}
+      {tab === "cards" && <BusinessCardCreator />}
       {tab === "video" && <VideoStudio />}
       {tab === "voiceover" && <VoiceoverStudio />}
       {tab === "social" && <SocialFactory />}

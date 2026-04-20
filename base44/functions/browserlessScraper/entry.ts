@@ -105,6 +105,22 @@ ${allScrapedText.map(s => `--- ${s.url} ---\n${s.text}`).join('\n\n')}`;
     return Response.json({ error: "AI extraction failed to produce valid JSON", raw: rawContent.slice(0, 300) }, { status: 500 });
   }
 
+  // ── Phone validation filter: reject leads with fake 555 numbers ──
+  const originalCount = leads.length;
+  leads = leads.filter(l => {
+    if (!l.phone) return true; // no phone is fine, just incomplete
+    const digits = l.phone.replace(/\D/g, '');
+    // Reject if 555-01xx through 555-99xx (fictional range)
+    if (/555\d{4}$/.test(digits) || /^1?\d{3}555\d{4}$/.test(digits)) {
+      console.log(`Filtered fake lead: ${l.company} — phone ${l.phone}`);
+      return false;
+    }
+    // Reject obviously invalid short numbers
+    if (digits.length < 10) return false;
+    return true;
+  });
+  console.log(`Phone filter: ${originalCount} → ${leads.length} leads (removed ${originalCount - leads.length} fake)`);
+
   // Step 4: Write leads to Supabase directly
   const supabaseLeads = leads.map(l => ({
     company: l.company || "Unknown",
@@ -165,25 +181,27 @@ ${allScrapedText.map(s => `--- ${s.url} ---\n${s.text}`).join('\n\n')}`;
     }
   }
 
-  // Step 5: Also mirror to Base44 Lead entity for UI display
-  for (const lead of leads.slice(0, count)) {
-    try {
-      await base44.asServiceRole.entities.Lead.create({
-        company: lead.company || "Unknown",
-        contact_name: lead.contact_name || "Unknown",
-        stage: "Incoming",
-        pipeline_status: "Incoming",
-        email: lead.email || "",
-        phone: lead.phone || "",
-        website: lead.website || "",
-        location: lead.location || location || "",
-        vertical: lead.vertical || "Other",
-        ingestion_source: "Scraper",
-        source: `Browserless scrape`,
-        ai_insight: `Auto-scraped on ${new Date().toISOString().split('T')[0]}`
-      });
-    } catch (e) {
-      console.error("Base44 lead create failed:", e.message);
+  // Step 5: Mirror to Base44 Lead entity ONLY if Supabase succeeded (avoid duplicates)
+  if (supabaseResult.fallback !== "base44") {
+    for (const lead of leads.slice(0, count)) {
+      try {
+        await base44.asServiceRole.entities.Lead.create({
+          company: lead.company || "Unknown",
+          contact_name: lead.contact_name || "Unknown",
+          stage: "Incoming",
+          pipeline_status: "Incoming",
+          email: lead.email || "",
+          phone: lead.phone || "",
+          website: lead.website || "",
+          location: lead.location || location || "",
+          vertical: lead.vertical || "Other",
+          ingestion_source: "Scraper",
+          source: `Browserless scrape`,
+          ai_insight: `Auto-scraped on ${new Date().toISOString().split('T')[0]}`
+        });
+      } catch (e) {
+        console.error("Base44 lead create failed:", e.message);
+      }
     }
   }
 

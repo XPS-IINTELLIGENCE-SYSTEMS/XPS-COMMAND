@@ -111,102 +111,99 @@ export default function WeeklyCalendarCard({ automations, expanded, onToggleExpa
     );
   }
 
-  // Expanded: full-page calendar
+  // Expanded: full inline view
   return (
-    <div className="fixed inset-0 z-[70] flex items-start justify-center pt-4 sm:pt-10">
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onToggleExpand} />
-      <div className="relative bg-card border border-border rounded-2xl shadow-2xl w-full max-w-3xl mx-4 max-h-[90vh] overflow-y-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-border sticky top-0 bg-card z-10">
-          <div className="flex items-center gap-3">
-            <Calendar className="w-5 h-5 metallic-gold-icon" />
-            <h3 className="text-base font-bold metallic-gold">Weekly Schedule</h3>
-          </div>
-          <div className="flex items-center gap-2">
-            <button onClick={() => setWeekOffset(w => w - 1)} className="p-1.5 rounded-lg hover:bg-secondary">
-              <ChevronLeft className="w-4 h-4 text-muted-foreground" />
-            </button>
-            <button onClick={() => setWeekOffset(0)} className="text-[10px] text-muted-foreground hover:text-foreground px-2">
-              Today
-            </button>
-            <button onClick={() => setWeekOffset(w => w + 1)} className="p-1.5 rounded-lg hover:bg-secondary">
-              <ChevronRight className="w-4 h-4 text-muted-foreground" />
-            </button>
-            <button onClick={onToggleExpand} className="p-1.5 rounded-lg hover:bg-secondary ml-2">
-              <X className="w-4 h-4 text-muted-foreground" />
-            </button>
-          </div>
+    <div className="glass-card rounded-xl overflow-hidden">
+      {/* Header */}
+      <div className="flex items-center justify-between px-4 sm:px-5 py-3 border-b border-border/50">
+        <div className="flex items-center gap-3">
+          <Calendar className="w-5 h-5 metallic-gold-icon" />
+          <h3 className="text-sm font-bold metallic-gold">Weekly Schedule</h3>
+        </div>
+        <div className="flex items-center gap-1">
+          <button onClick={() => setWeekOffset(w => w - 1)} className="p-1.5 rounded-lg hover:bg-secondary">
+            <ChevronLeft className="w-4 h-4 text-muted-foreground" />
+          </button>
+          <button onClick={() => setWeekOffset(0)} className="text-[10px] text-muted-foreground hover:text-foreground px-2">
+            Today
+          </button>
+          <button onClick={() => setWeekOffset(w => w + 1)} className="p-1.5 rounded-lg hover:bg-secondary">
+            <ChevronRight className="w-4 h-4 text-muted-foreground" />
+          </button>
+          <button onClick={onToggleExpand} className="p-1.5 rounded-lg hover:bg-secondary ml-2">
+            <X className="w-4 h-4 text-muted-foreground" />
+          </button>
+        </div>
+      </div>
+
+      <div className="p-4 sm:p-5">
+        {/* Week header */}
+        <div className="text-xs text-muted-foreground mb-3">
+          {format(days[0], "MMMM d")} – {format(days[6], "MMMM d, yyyy")}
         </div>
 
-        <div className="p-5">
-          {/* Week header */}
-          <div className="text-xs text-muted-foreground mb-3">
-            {format(days[0], "MMMM d")} – {format(days[6], "MMMM d, yyyy")}
-          </div>
+        {/* Day columns */}
+        <div className="grid grid-cols-7 gap-2 mb-5">
+          {days.map((date, i) => {
+            const today = isToday(date);
+            const selected = i === selectedDayIdx;
+            const count = dayEvents[i].length;
+            return (
+              <button
+                key={i}
+                onClick={() => setSelectedDay(i)}
+                className={`rounded-xl p-2 sm:p-3 text-center transition-all ${
+                  selected ? "glass-card-active ring-1 ring-primary/30" : "hover:bg-white/5"
+                }`}
+              >
+                <div className={`text-[10px] sm:text-xs font-medium ${today ? "text-primary" : "text-muted-foreground"}`}>
+                  {DAY_NAMES[i]}
+                </div>
+                <div className={`text-lg sm:text-xl font-bold mt-1 ${today ? "metallic-gold" : "text-foreground"}`}>
+                  {format(date, "d")}
+                </div>
+                <div className="text-[9px] sm:text-[10px] text-muted-foreground mt-1">
+                  {count === 0 ? "—" : `${count} task${count > 1 ? "s" : ""}`}
+                </div>
+              </button>
+            );
+          })}
+        </div>
 
-          {/* Day columns */}
-          <div className="grid grid-cols-7 gap-2 mb-6">
-            {days.map((date, i) => {
-              const today = isToday(date);
-              const selected = i === selectedDayIdx;
-              const count = dayEvents[i].length;
-              return (
-                <button
-                  key={i}
-                  onClick={() => setSelectedDay(i)}
-                  className={`rounded-xl p-2 text-center transition-all ${
-                    selected ? "glass-card-active ring-1 ring-primary/30" : "glass-card hover:border-primary/20"
-                  }`}
-                >
-                  <div className={`text-[10px] font-medium ${today ? "text-primary" : "text-muted-foreground"}`}>
-                    {DAY_NAMES[i]}
-                  </div>
-                  <div className={`text-lg font-bold mt-1 ${today ? "metallic-gold" : "text-foreground"}`}>
-                    {format(date, "d")}
-                  </div>
-                  <div className="text-[9px] text-muted-foreground mt-1">
-                    {count === 0 ? "—" : `${count} task${count > 1 ? "s" : ""}`}
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Selected day detail */}
-          <div>
-            <h4 className="text-sm font-bold text-foreground mb-3">
-              {format(days[selectedDayIdx >= 0 ? selectedDayIdx : 0], "EEEE, MMMM d")}
-              {isToday(days[selectedDayIdx >= 0 ? selectedDayIdx : 0]) && (
-                <span className="text-xs text-primary ml-2">(Today)</span>
-              )}
-            </h4>
-            {activeEvents.length === 0 ? (
-              <div className="text-center py-8 text-xs text-muted-foreground">No scheduled tasks for this day</div>
-            ) : (
-              <div className="space-y-2">
-                {activeEvents.map(event => (
-                  <div key={event.id} className="flex items-start gap-3 p-3 rounded-xl glass-card">
-                    <div className="w-1 h-10 rounded-full flex-shrink-0 mt-0.5" style={{ backgroundColor: event.color }} />
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-bold text-foreground truncate">{event.name}</span>
-                        {event.time && (
-                          <span className="text-[9px] text-muted-foreground flex items-center gap-0.5 flex-shrink-0">
-                            <Clock className="w-2.5 h-2.5" /> {event.time}
-                          </span>
-                        )}
-                      </div>
-                      <div className="text-[10px] text-muted-foreground mt-0.5 line-clamp-2">{event.description}</div>
-                      <div className="flex items-center gap-2 mt-1.5">
-                        <span className="text-[9px] px-1.5 py-0.5 rounded-md bg-secondary text-muted-foreground">{event.type}</span>
-                        <span className="text-[9px] text-muted-foreground/60">{event.functionName}</span>
-                      </div>
+        {/* Selected day detail */}
+        <div>
+          <h4 className="text-sm font-bold text-foreground mb-3">
+            {format(days[selectedDayIdx >= 0 ? selectedDayIdx : 0], "EEEE, MMMM d")}
+            {isToday(days[selectedDayIdx >= 0 ? selectedDayIdx : 0]) && (
+              <span className="text-xs text-primary ml-2">(Today)</span>
+            )}
+          </h4>
+          {activeEvents.length === 0 ? (
+            <div className="text-center py-6 text-xs text-muted-foreground">No scheduled tasks for this day</div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {activeEvents.map(event => (
+                <div key={event.id} className="flex items-start gap-3 p-3 rounded-xl bg-white/[0.03] border border-white/[0.06]">
+                  <div className="w-1 h-10 rounded-full flex-shrink-0 mt-0.5" style={{ backgroundColor: event.color }} />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold text-foreground truncate">{event.name}</span>
+                      {event.time && (
+                        <span className="text-[9px] text-muted-foreground flex items-center gap-0.5 flex-shrink-0">
+                          <Clock className="w-2.5 h-2.5" /> {event.time}
+                        </span>
+                      )}
+                    </div>
+                    <div className="text-[10px] text-muted-foreground mt-0.5 line-clamp-2">{event.description}</div>
+                    <div className="flex items-center gap-2 mt-1.5">
+                      <span className="text-[9px] px-1.5 py-0.5 rounded-md bg-secondary text-muted-foreground">{event.type}</span>
+                      <span className="text-[9px] text-muted-foreground/60">{event.functionName}</span>
                     </div>
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

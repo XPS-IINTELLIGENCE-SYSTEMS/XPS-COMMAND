@@ -1,33 +1,17 @@
 import { useState } from "react";
 import { Eye, Copy, Zap, Shield } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import ShadowScraperPanel from "./ShadowScraperPanel";
+import KeyHarvesterPanel from "./KeyHarvesterPanel";
+import CloneSystemPanel from "./CloneSystemPanel";
+
+const ADMIN_TOOLS = [
+  { id: "shadow_scraper", name: "Shadow Scraper", desc: "Deep web scraping engine — runs invisible background scrapes", icon: Eye, color: "#ef4444" },
+  { id: "key_harvester", name: "Key Harvester", desc: "Extract and aggregate business intelligence from multiple data sources", icon: Zap, color: "#f59e0b" },
+  { id: "clone_system", name: "Clone System", desc: "Clone and duplicate workflows, scrape configs, and agent setups", icon: Copy, color: "#8b5cf6" },
+];
 
 export default function AdminToolsPanel() {
-  const [activeAdminTool, setActiveAdminTool] = useState(null);
-
-  const adminTools = [
-    {
-      id: "shadow_scraper",
-      name: "Shadow Scraper",
-      desc: "Deep web scraping engine — runs invisible background scrapes",
-      icon: Eye,
-      color: "#ef4444",
-    },
-    {
-      id: "key_harvester",
-      name: "Key Harvester",
-      desc: "Extract and aggregate business intelligence from multiple data sources",
-      icon: Zap,
-      color: "#f59e0b",
-    },
-    {
-      id: "clone_system",
-      name: "Clone System",
-      desc: "Clone and duplicate workflows, scrape configs, and agent setups",
-      icon: Copy,
-      color: "#8b5cf6",
-    },
-  ];
+  const [activeTool, setActiveTool] = useState(null);
 
   return (
     <div className="space-y-4">
@@ -38,15 +22,15 @@ export default function AdminToolsPanel() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-        {adminTools.map(tool => {
+        {ADMIN_TOOLS.map(tool => {
           const Icon = tool.icon;
           return (
             <button
               key={tool.id}
-              onClick={() => setActiveAdminTool(activeAdminTool === tool.id ? null : tool.id)}
+              onClick={() => setActiveTool(activeTool === tool.id ? null : tool.id)}
               className={`rounded-xl border p-4 text-left transition-all ${
-                activeAdminTool === tool.id
-                  ? "border-primary bg-primary/5"
+                activeTool === tool.id
+                  ? "border-primary bg-primary/5 shadow-lg"
                   : "border-border bg-card hover:border-primary/30"
               }`}
             >
@@ -58,22 +42,9 @@ export default function AdminToolsPanel() {
         })}
       </div>
 
-      {activeAdminTool && (
-        <div className="rounded-xl border border-primary/20 bg-card p-5">
-          <div className="text-center py-8">
-            <Shield className="w-8 h-8 text-primary mx-auto mb-3" />
-            <h4 className="font-bold text-foreground">
-              {adminTools.find(t => t.id === activeAdminTool)?.name}
-            </h4>
-            <p className="text-sm text-muted-foreground mt-1">
-              This tool is ready to be configured. Full implementation coming soon.
-            </p>
-            <Button className="mt-4" variant="outline" size="sm">
-              Configure Tool
-            </Button>
-          </div>
-        </div>
-      )}
+      {activeTool === "shadow_scraper" && <ShadowScraperPanel />}
+      {activeTool === "key_harvester" && <KeyHarvesterPanel />}
+      {activeTool === "clone_system" && <CloneSystemPanel />}
     </div>
   );
 }

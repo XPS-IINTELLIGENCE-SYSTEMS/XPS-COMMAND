@@ -111,6 +111,9 @@ export const DEFAULT_TOOLS = [
   { id: "system_health", label: "System Health", desc: "Auto-diagnose, heal & optimize", iconName: "Heart", color: "#22c55e" },
   { id: "settings", label: "Settings", desc: "Account & preferences", iconName: "Settings", color: "#64748b" },
 
+  // Master Pipeline
+  { id: "master_pipeline", label: "Master Pipeline", desc: "Full XPS contractor acquisition workflow — 8 phases, 24 stages", iconName: "GitBranch", color: "#d4af37" },
+
   // GC Bid Pipeline
   { id: "gc_bid_pipeline", label: "GC Bid Pipeline", desc: "National GC database, bid list campaigns & scope tracking", iconName: "Building2", color: "#d4af37" },
   { id: "lead_sniper", label: "Lead Sniper", desc: "Full automated GC discovery → outreach → bid pipeline system", iconName: "Crosshair", color: "#d4af37" },

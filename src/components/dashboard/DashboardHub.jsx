@@ -6,7 +6,8 @@ import HexPatternBanner from "../shared/HexPatternBanner";
 import DashboardToolCard from "./DashboardToolCard";
 import DashboardCardEditModal from "./DashboardCardEditModal";
 import ToolCardManager from "./ToolCardManager";
-import WeeklyCalendarCard from "./WeeklyCalendarCard";
+import CalendarCard from "./CalendarCard";
+import PipelineBanner from "./PipelineBanner";
 import DailySummaryCard from "./DailySummaryCard";
 import ScheduledItemsSidebar from "./ScheduledItemsSidebar";
 import DashboardSection from "./DashboardSection";
@@ -21,7 +22,8 @@ const DEFAULT_SUBTITLE = "Here's your sales intelligence briefing for today.";
 
 const DEFAULT_SECTIONS = [
   { id: "sec_greeting", type: "greeting", title: "Greeting", size: "full", collapsed: false },
-  { id: "sec_calendar", type: "calendar", title: "Weekly Calendar", size: "full", collapsed: false },
+  { id: "sec_pipeline", type: "pipeline", title: "Pipeline", size: "full", collapsed: false },
+  { id: "sec_calendar", type: "calendar", title: "Calendar", size: "full", collapsed: false },
   { id: "sec_summary", type: "summary", title: "Daily Summary", size: "half", collapsed: false },
   { id: "sec_sidebar", type: "sidebar", title: "Scheduled Items", size: "half", collapsed: false },
   { id: "sec_activity", type: "activity", title: "Activity Stream", size: "full", collapsed: false },
@@ -308,8 +310,11 @@ export default function DashboardHub({ onOpenTool }) {
           </div>
         );
 
+      case "pipeline":
+        return <PipelineBanner onOpenFull={() => onOpenTool?.("master_pipeline")} />;
+
       case "calendar":
-        return <WeeklyCalendarCard automations={automations} expanded={calendarExpanded} onToggleExpand={() => setCalendarExpanded(!calendarExpanded)} />;
+        return <CalendarCard automations={automations} expanded={calendarExpanded} onToggleExpand={() => setCalendarExpanded(!calendarExpanded)} />;
 
       case "summary":
         return <DailySummaryCard expanded={summaryExpanded} onToggleExpand={() => setSummaryExpanded(!summaryExpanded)} />;

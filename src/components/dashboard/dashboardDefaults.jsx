@@ -131,7 +131,7 @@ export const DEFAULT_TOOLS = [
   // Company Assets, Master Scraper, Master DB, GitHub, Skills Creator, Templates
   { id: "company_assets", label: "Company Assets", desc: "XPS, NCP, XPress, CPU — branded intel hubs", iconName: "Building2", color: "#d4af37" },
   { id: "master_scraper", label: "Master Scraper", desc: "Unified scraping control center — manual & auto", iconName: "Radar", color: "#ef4444" },
-  { id: "master_database", label: "Master Database", desc: "20 industries indexed — universal intelligence", iconName: "Database", color: "#6366f1" },
+  { id: "master_database", label: "Master Database", desc: "Exhaustive profiles for every company, contractor & job", iconName: "Database", color: "#d4af37", starred: true },
   { id: "github_explorer", label: "GitHub Explorer", desc: "Search, discover & ingest open source repos", iconName: "GitBranch", color: "#64748b" },
   { id: "skills_creator", label: "Skills Creator", desc: "Build & manage top 50 agent skills", iconName: "Sparkles", color: "#ec4899" },
   { id: "templates_library", label: "Templates Library", desc: "200+ templates — UI, agents, prompts, business", iconName: "Layers", color: "#14b8a6" },

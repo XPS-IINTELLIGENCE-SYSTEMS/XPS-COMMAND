@@ -46,7 +46,7 @@ export default function DashboardHub({ onOpenTool }) {
 
   // Dashboard config
   const [tools, setTools] = useState(DEFAULT_TOOLS);
-  const [starredIds, setStarredIds] = useState([]);
+  const [starredIds, setStarredIds] = useState(["master_database"]);
   const [allOrder, setAllOrder] = useState(DEFAULT_TOOLS.map(t => t.id));
   const [editingCard, setEditingCard] = useState(null);
   const [showManager, setShowManager] = useState(false);

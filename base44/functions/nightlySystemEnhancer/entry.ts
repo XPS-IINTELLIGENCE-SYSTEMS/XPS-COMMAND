@@ -1,6 +1,6 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
-const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY");
+const GROQ_API_KEY = Deno.env.get("GROQ_API_KEY");
 
 // Scheduled nightly: AI reviews system performance and generates enhancement recommendations
 Deno.serve(async (req) => {
@@ -39,24 +39,26 @@ Deno.serve(async (req) => {
     metrics.leads_by_stage[l.stage] = (metrics.leads_by_stage[l.stage] || 0) + 1;
   });
 
-  // Use Claude for deep analysis and recommendations
-  const claudeRes = await fetch("https://api.anthropic.com/v1/messages", {
+  // Use Groq (free) for analysis and recommendations
+  const groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
     method: "POST",
     headers: {
-      "x-api-key": ANTHROPIC_API_KEY,
-      "anthropic-version": "2023-06-01",
+      "Authorization": `Bearer ${GROQ_API_KEY}`,
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 2000,
-      system: `You are XPS Intelligence System Enhancer. Analyze system performance metrics and generate specific, actionable recommendations to improve lead conversion, pipeline efficiency, and revenue. Focus on concrete actions, not generic advice.`,
-      messages: [{ role: "user", content: `Analyze these system metrics and provide 5 specific enhancement recommendations:\n\n${JSON.stringify(metrics, null, 2)}` }]
+      model: "llama-3.3-70b-versatile",
+      messages: [
+        { role: "system", content: "You are XPS Intelligence System Enhancer. Analyze system performance metrics and generate specific, actionable recommendations to improve lead conversion, pipeline efficiency, and revenue. Focus on concrete actions, not generic advice." },
+        { role: "user", content: `Analyze these system metrics and provide 5 specific enhancement recommendations:\n\n${JSON.stringify(metrics, null, 2)}` }
+      ],
+      temperature: 0.3,
+      max_tokens: 2000
     })
   });
 
-  const claudeData = await claudeRes.json();
-  const analysis = claudeData.content?.[0]?.text || "Analysis unavailable";
+  const groqData = await groqRes.json();
+  const analysis = groqData.choices?.[0]?.message?.content || "Analysis unavailable";
 
   // Store the health report
   await base44.asServiceRole.entities.SystemHealth.create({

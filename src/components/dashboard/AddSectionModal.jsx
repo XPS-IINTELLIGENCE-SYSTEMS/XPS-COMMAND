@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { X, Plus, Calendar, FileText, Star, LayoutGrid, Clock, Bot, BarChart3, Wrench, MessageSquare, List } from "lucide-react";
+import { X, Plus, Calendar, FileText, Star, LayoutGrid, Clock, Bot, BarChart3, Wrench, MessageSquare, List, Activity } from "lucide-react";
 
 const SECTION_TEMPLATES = [
   { type: "calendar", label: "Weekly Calendar", desc: "Automation schedule overview", icon: Calendar, color: "#d4af37" },
   { type: "summary", label: "Daily Summary", desc: "Today's KPIs and activity", icon: FileText, color: "#22c55e" },
+  { type: "activity", label: "Activity Stream", desc: "Real-time AI agent actions & approvals", icon: Activity, color: "#8b5cf6" },
   { type: "favorites", label: "Favorites Grid", desc: "Pinned tool cards", icon: Star, color: "#f59e0b" },
   { type: "tools", label: "All Tools Grid", desc: "Full tool card grid", icon: LayoutGrid, color: "#6366f1" },
   { type: "sidebar", label: "Scheduled Items", desc: "Automations & items sidebar", icon: Clock, color: "#06b6d4" },

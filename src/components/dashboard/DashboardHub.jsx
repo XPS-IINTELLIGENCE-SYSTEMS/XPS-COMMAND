@@ -13,6 +13,7 @@ import DashboardSection from "./DashboardSection";
 import AddSectionModal from "./AddSectionModal";
 import NotesWidget from "./NotesWidget";
 import QuickLinksWidget from "./QuickLinksWidget";
+import ActivityStream from "./ActivityStream";
 import { DEFAULT_TOOLS } from "./dashboardDefaults";
 
 const DEFAULT_GREETING = "";
@@ -23,6 +24,7 @@ const DEFAULT_SECTIONS = [
   { id: "sec_calendar", type: "calendar", title: "Weekly Calendar", size: "full", collapsed: false },
   { id: "sec_summary", type: "summary", title: "Daily Summary", size: "half", collapsed: false },
   { id: "sec_sidebar", type: "sidebar", title: "Scheduled Items", size: "half", collapsed: false },
+  { id: "sec_activity", type: "activity", title: "Activity Stream", size: "full", collapsed: false },
   { id: "sec_favorites", type: "favorites", title: "Favorites", size: "full", collapsed: false },
   { id: "sec_tools", type: "tools", title: "All Tools", size: "full", collapsed: false },
 ];
@@ -149,7 +151,7 @@ export default function DashboardHub({ onOpenTool }) {
 
   const addSection = (type) => {
     const id = `sec_${type}_${Date.now()}`;
-    const titles = { calendar: "Weekly Calendar", summary: "Daily Summary", favorites: "Favorites", tools: "All Tools", sidebar: "Scheduled Items", notes: "Quick Notes", quicklinks: "Quick Links" };
+    const titles = { calendar: "Weekly Calendar", summary: "Daily Summary", favorites: "Favorites", tools: "All Tools", sidebar: "Scheduled Items", notes: "Quick Notes", quicklinks: "Quick Links", activity: "Activity Stream" };
     const newSec = { id, type, title: titles[type] || type, size: ["calendar", "favorites", "tools"].includes(type) ? "full" : "half", collapsed: false };
     const updated = [...sections, newSec];
     setSections(updated);
@@ -387,6 +389,9 @@ export default function DashboardHub({ onOpenTool }) {
 
       case "quicklinks":
         return <QuickLinksWidget links={widgetData[section.id]?.links || []} onChange={(val) => updateWidgetData(section.id, { ...widgetData[section.id], links: val })} />;
+
+      case "activity":
+        return <ActivityStream />;
 
       default:
         return <div className="text-xs text-muted-foreground p-4 text-center">Unknown section</div>;

@@ -1,0 +1,60 @@
+{
+  "name": "AgentActivity",
+  "type": "object",
+  "properties": {
+    "agent_name": {
+      "type": "string",
+      "description": "Name of the AI agent that performed the action"
+    },
+    "action": {
+      "type": "string",
+      "description": "Description of the action performed"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "success",
+        "pending",
+        "approval_required",
+        "failed"
+      ],
+      "default": "pending",
+      "description": "Current status of the action"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "outreach",
+        "proposal",
+        "research",
+        "scraping",
+        "analysis",
+        "scheduling",
+        "bidding",
+        "system"
+      ],
+      "default": "system"
+    },
+    "related_entity_type": {
+      "type": "string",
+      "description": "Entity type this action relates to (e.g. Lead, FloorScope)"
+    },
+    "related_entity_id": {
+      "type": "string",
+      "description": "ID of the related entity"
+    },
+    "details": {
+      "type": "string",
+      "description": "JSON string with detailed information about the action"
+    },
+    "resolved_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "agent_name",
+    "action",
+    "status"
+  ]
+}

@@ -5,8 +5,9 @@ const GROQ_API_KEY = Deno.env.get("GROQ_API_KEY");
 // Scheduled nightly: AI reviews system performance and generates enhancement recommendations
 Deno.serve(async (req) => {
   const base44 = createClientFromRequest(req);
-  const user = await base44.auth.me();
-  if (user?.role !== 'admin') return Response.json({ error: 'Admin only' }, { status: 403 });
+  let user = null;
+  try { user = await base44.auth.me(); } catch (_) { /* scheduled run */ }
+  if (user && user.role !== 'admin') return Response.json({ error: 'Admin only' }, { status: 403 });
 
   // Gather system metrics
   const leads = await base44.asServiceRole.entities.Lead.filter({});
@@ -60,7 +61,7 @@ Deno.serve(async (req) => {
   const groqData = await groqRes.json();
   const analysis = groqData.choices?.[0]?.message?.content || "Analysis unavailable";
 
-  // Store the health report
+  // Store the health report + overnight log
   await base44.asServiceRole.entities.SystemHealth.create({
     run_type: "enhance",
     status: "complete",
@@ -76,6 +77,16 @@ Deno.serve(async (req) => {
       `Found ${metrics.stale_leads} stale leads needing attention`,
       `${metrics.emails_queued} emails still queued for delivery`
     ])
+  });
+  
+  await base44.asServiceRole.entities.OvernightRunLog.create({
+    run_date: new Date().toISOString().split('T')[0],
+    target_market: "System Analysis",
+    completion_status: "complete",
+    executive_summary: `Nightly: ${metrics.total_leads} leads (${metrics.hot_leads} hot), ${metrics.total_contractors} GCs, ${metrics.bids_sent} bids`,
+    leads_created: 0,
+    emails_sent: 0,
+    start_time: new Date().toISOString()
   });
 
   // Send summary to admin via SMS

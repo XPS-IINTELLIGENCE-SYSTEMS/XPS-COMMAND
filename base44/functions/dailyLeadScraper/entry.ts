@@ -6,8 +6,10 @@ const GROQ_API_KEY = Deno.env.get("GROQ_API_KEY");
 // Scheduled daily: scrapes commercial + government leads across target markets
 Deno.serve(async (req) => {
   const base44 = createClientFromRequest(req);
-  const user = await base44.auth.me();
-  if (user?.role !== 'admin') return Response.json({ error: 'Admin only' }, { status: 403 });
+  let user = null;
+  try { user = await base44.auth.me(); } catch (_) { /* scheduled run */ }
+  // Allow scheduled automations (no user context) or admin users
+  if (user && user.role !== 'admin') return Response.json({ error: 'Admin only' }, { status: 403 });
 
   const TARGET_MARKETS = [
     { state: "FL", cities: ["Tampa", "Orlando", "Miami", "Jacksonville"] },
@@ -25,6 +27,9 @@ Deno.serve(async (req) => {
 
   const results = { scraped: 0, leads_created: 0, errors: [] };
 
+  if (!BROWSERLESS_API_KEY) return Response.json({ error: "BROWSERLESS_API_KEY not set", results }, { status: 500 });
+  if (!GROQ_API_KEY) return Response.json({ error: "GROQ_API_KEY not set", results }, { status: 500 });
+
   // Pick 2 random markets + 1 search type per run to stay within rate limits
   const shuffledMarkets = TARGET_MARKETS.sort(() => Math.random() - 0.5).slice(0, 2);
   const searchType = SEARCH_TYPES[Math.floor(Math.random() * SEARCH_TYPES.length)];
@@ -35,13 +40,19 @@ Deno.serve(async (req) => {
     const url = `https://www.google.com/search?q=${query}&num=20`;
 
     try {
+      console.log(`Scraping: ${city}, ${market.state} — ${searchType.type}`);
       const browserRes = await fetch(`https://chrome.browserless.io/content?token=${BROWSERLESS_API_KEY}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url, waitFor: 3000, gotoOptions: { waitUntil: "networkidle2", timeout: 15000 } })
       });
 
-      if (!browserRes.ok) { results.errors.push(`Browserless failed for ${city}`); continue; }
+      if (!browserRes.ok) {
+        const errText = await browserRes.text().catch(() => "unknown");
+        console.error(`Browserless ${browserRes.status}: ${errText.slice(0, 200)}`);
+        results.errors.push(`Browserless ${browserRes.status} for ${city}`);
+        continue;
+      }
 
       const html = await browserRes.text();
       const text = html.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
@@ -101,11 +112,14 @@ Deno.serve(async (req) => {
 
   // Log the run
   await base44.asServiceRole.entities.OvernightRunLog.create({
-    run_type: "daily_scrape",
-    status: results.errors.length === 0 ? "success" : "partial",
-    results_summary: JSON.stringify(results),
-    started_at: new Date().toISOString(),
-    completed_at: new Date().toISOString()
+    run_date: new Date().toISOString().split('T')[0],
+    target_market: shuffledMarkets.map(m => m.state).join(", "),
+    completion_status: results.errors.length === 0 ? "complete" : "partial",
+    executive_summary: `Lead Scraper: ${results.leads_created} leads from ${results.scraped} pages`,
+    leads_created: results.leads_created,
+    errors_count: results.errors.length,
+    error_log: results.errors.length ? results.errors.join("; ") : null,
+    start_time: new Date().toISOString()
   });
 
   return Response.json({ success: true, ...results });

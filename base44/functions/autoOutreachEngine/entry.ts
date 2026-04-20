@@ -8,8 +8,9 @@ const GROQ_API_KEY = Deno.env.get("GROQ_API_KEY");
 // Scheduled daily: auto-messages new leads via SMS, follows up on stale bids
 Deno.serve(async (req) => {
   const base44 = createClientFromRequest(req);
-  const user = await base44.auth.me();
-  if (user?.role !== 'admin') return Response.json({ error: 'Admin only' }, { status: 403 });
+  let user = null;
+  try { user = await base44.auth.me(); } catch (_) { /* scheduled run */ }
+  if (user && user.role !== 'admin') return Response.json({ error: 'Admin only' }, { status: 403 });
 
   const results = { sms_sent: 0, follow_ups: 0, emails_queued: 0, errors: [] };
 
@@ -118,11 +119,13 @@ Deno.serve(async (req) => {
   }
 
   await base44.asServiceRole.entities.OvernightRunLog.create({
-    run_type: "auto_outreach",
-    status: "success",
-    results_summary: JSON.stringify(results),
-    started_at: new Date().toISOString(),
-    completed_at: new Date().toISOString()
+    run_date: new Date().toISOString().split('T')[0],
+    target_market: "Auto Outreach",
+    completion_status: results.errors.length === 0 ? "complete" : "partial",
+    executive_summary: `Outreach: ${results.sms_sent} SMS, ${results.follow_ups} follow-ups, ${results.emails_queued} emails`,
+    emails_sent: results.emails_queued,
+    errors_count: results.errors.length,
+    start_time: new Date().toISOString()
   });
 
   return Response.json({ success: true, ...results });

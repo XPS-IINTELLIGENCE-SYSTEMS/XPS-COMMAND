@@ -6,8 +6,9 @@ const GROQ_API_KEY = Deno.env.get("GROQ_API_KEY");
 // Scheduled daily: builds database of top GCs across America for bidder list outreach
 Deno.serve(async (req) => {
   const base44 = createClientFromRequest(req);
-  const user = await base44.auth.me();
-  if (user?.role !== 'admin') return Response.json({ error: 'Admin only' }, { status: 403 });
+  let user = null;
+  try { user = await base44.auth.me(); } catch (_) { /* scheduled run */ }
+  if (user && user.role !== 'admin') return Response.json({ error: 'Admin only' }, { status: 403 });
 
   const GC_TARGETS = [
     "top general contractors Florida commercial construction",
@@ -24,14 +25,22 @@ Deno.serve(async (req) => {
 
   const results = { contractors_found: 0, created: 0, errors: [] };
 
+  if (!BROWSERLESS_API_KEY) return Response.json({ error: "BROWSERLESS_API_KEY not set", results }, { status: 500 });
+  if (!GROQ_API_KEY) return Response.json({ error: "GROQ_API_KEY not set", results }, { status: 500 });
+
   try {
+    console.log(`Scraping GCs: ${query}`);
     const browserRes = await fetch(`https://chrome.browserless.io/content?token=${BROWSERLESS_API_KEY}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ url, waitFor: 3000, gotoOptions: { waitUntil: "networkidle2", timeout: 15000 } })
     });
 
-    if (!browserRes.ok) return Response.json({ error: "Scrape failed" }, { status: 500 });
+    if (!browserRes.ok) {
+      const errText = await browserRes.text().catch(() => "unknown");
+      console.error(`Browserless ${browserRes.status}: ${errText.slice(0, 200)}`);
+      return Response.json({ error: `Browserless ${browserRes.status}`, details: errText.slice(0, 200) }, { status: 500 });
+    }
 
     const html = await browserRes.text();
     const text = html.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
@@ -91,11 +100,13 @@ Deno.serve(async (req) => {
   }
 
   await base44.asServiceRole.entities.OvernightRunLog.create({
-    run_type: "contractor_db_build",
-    status: "success",
-    results_summary: JSON.stringify(results),
-    started_at: new Date().toISOString(),
-    completed_at: new Date().toISOString()
+    run_date: new Date().toISOString().split('T')[0],
+    target_market: "National GC Search",
+    completion_status: results.errors.length === 0 ? "complete" : "partial",
+    executive_summary: `Contractor DB: Found ${results.contractors_found}, created ${results.created} new`,
+    leads_created: results.created,
+    errors_count: results.errors.length,
+    start_time: new Date().toISOString()
   });
 
   return Response.json({ success: true, ...results });

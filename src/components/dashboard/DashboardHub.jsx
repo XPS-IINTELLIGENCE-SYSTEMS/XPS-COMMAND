@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
 import { base44 } from "@/api/base44Client";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import { Loader2, Star, Pencil, Check, X } from "lucide-react";
+import { Loader2, Star, Pencil, Check, X, Settings2 } from "lucide-react";
 import HexPatternBanner from "../shared/HexPatternBanner";
 import DashboardToolCard from "./DashboardToolCard";
 import DashboardCardEditModal from "./DashboardCardEditModal";
+import ToolCardManager from "./ToolCardManager";
 import { DEFAULT_TOOLS } from "./dashboardDefaults";
 
 const DEFAULT_GREETING = "";
@@ -26,8 +27,11 @@ export default function DashboardHub({ onOpenTool }) {
   const [starredIds, setStarredIds] = useState([]);
   const [allOrder, setAllOrder] = useState(DEFAULT_TOOLS.map(t => t.id));
   const [editingCard, setEditingCard] = useState(null);
+  const [showManager, setShowManager] = useState(false);
   const [showNumbers, setShowNumbers] = useState(true);
   const [customNumbers, setCustomNumbers] = useState({}); // { toolId: "custom label" }
+  const [hiddenIds, setHiddenIds] = useState([]); // IDs of hidden/deleted default tools
+  const [customTools, setCustomTools] = useState([]); // user-created custom tools
 
   useEffect(() => { loadData(); }, []);
 
@@ -51,11 +55,16 @@ export default function DashboardHub({ onOpenTool }) {
         if (cfg.subtitle) setSubtitle(cfg.subtitle);
         if (cfg.showNumbers !== undefined) setShowNumbers(cfg.showNumbers);
         if (cfg.customNumbers) setCustomNumbers(cfg.customNumbers);
+        if (cfg.hiddenIds) setHiddenIds(cfg.hiddenIds);
+        if (cfg.customTools) setCustomTools(cfg.customTools);
         if (cfg.customizations) {
-          setTools(DEFAULT_TOOLS.map(t => {
+          const base = DEFAULT_TOOLS.filter(t => !(cfg.hiddenIds || []).includes(t.id)).map(t => {
             const custom = cfg.customizations[t.id];
             return custom ? { ...t, ...custom } : t;
-          }));
+          });
+          setTools([...base, ...(cfg.customTools || [])]);
+        } else {
+          setTools([...DEFAULT_TOOLS.filter(t => !(cfg.hiddenIds || []).includes(t.id)), ...(cfg.customTools || [])]);
         }
       } catch {}
     }
@@ -78,9 +87,11 @@ export default function DashboardHub({ onOpenTool }) {
         customizations[t.id] = { label: t.label, desc: t.desc, iconName: t.iconName, color: t.color };
       }
     });
-    const cfg = { starred: currentStarred, order: currentOrder, customizations, greeting: currentGreeting, subtitle: currentSubtitle, showNumbers: currentShowNumbers, customNumbers: currentCustomNumbers };
+    const currentHidden = overrides.hiddenIds || hiddenIds;
+    const currentCustomTools = overrides.customTools || customTools;
+    const cfg = { starred: currentStarred, order: currentOrder, customizations, greeting: currentGreeting, subtitle: currentSubtitle, showNumbers: currentShowNumbers, customNumbers: currentCustomNumbers, hiddenIds: currentHidden, customTools: currentCustomTools };
     await base44.auth.updateMe({ dashboard_config: JSON.stringify(cfg) }).catch(() => {});
-  }, [tools, starredIds, allOrder, greeting, subtitle, showNumbers, customNumbers]);
+  }, [tools, starredIds, allOrder, greeting, subtitle, showNumbers, customNumbers, hiddenIds, customTools]);
 
   const toggleStar = (id) => {
     const newStarred = starredIds.includes(id)
@@ -93,7 +104,49 @@ export default function DashboardHub({ onOpenTool }) {
   const handleEditSave = (updatedCard) => {
     const newTools = tools.map(t => t.id === updatedCard.id ? updatedCard : t);
     setTools(newTools);
-    saveConfig({ tools: newTools });
+    // Also update customTools if it's a custom tool
+    const newCustomTools = customTools.map(t => t.id === updatedCard.id ? updatedCard : t);
+    setCustomTools(newCustomTools);
+    saveConfig({ tools: newTools, customTools: newCustomTools });
+  };
+
+  const handleAddTool = (newTool) => {
+    const newTools = [...tools, newTool];
+    const newCustomTools = [...customTools, newTool];
+    const newOrder = [...allOrder, newTool.id];
+    setTools(newTools);
+    setCustomTools(newCustomTools);
+    setAllOrder(newOrder);
+    saveConfig({ tools: newTools, customTools: newCustomTools, order: newOrder });
+  };
+
+  const handleDeleteTool = (toolId) => {
+    const isCustomTool = toolId.startsWith("custom_");
+    if (isCustomTool) {
+      // Fully remove custom tools
+      const newTools = tools.filter(t => t.id !== toolId);
+      const newCustomTools = customTools.filter(t => t.id !== toolId);
+      const newStarred = starredIds.filter(id => id !== toolId);
+      const newOrder = allOrder.filter(id => id !== toolId);
+      setTools(newTools);
+      setCustomTools(newCustomTools);
+      setStarredIds(newStarred);
+      setAllOrder(newOrder);
+      saveConfig({ tools: newTools, customTools: newCustomTools, starred: newStarred, order: newOrder });
+    } else {
+      // Hide default tools
+      const newHidden = [...hiddenIds, toolId];
+      const newTools = tools.filter(t => t.id !== toolId);
+      const newStarred = starredIds.filter(id => id !== toolId);
+      setHiddenIds(newHidden);
+      setTools(newTools);
+      setStarredIds(newStarred);
+      saveConfig({ tools: newTools, hiddenIds: newHidden, starred: newStarred });
+    }
+  };
+
+  const handleManagerEdit = (updatedTool) => {
+    handleEditSave(updatedTool);
   };
 
   const handleToggleNumbers = (val) => {
@@ -291,7 +344,15 @@ export default function DashboardHub({ onOpenTool }) {
 
           {/* All Tools Grid */}
           <div>
-            <h2 className="text-[15px] font-bold text-white mb-3">All Tools</h2>
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-[15px] font-bold text-white">All Tools</h2>
+              <button
+                onClick={() => setShowManager(true)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg glass-card text-[11px] font-medium text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <Settings2 className="w-3.5 h-3.5" /> Manage Tools
+              </button>
+            </div>
             <Droppable droppableId="all" direction="horizontal">
               {(provided, snapshot) => (
                 <div
@@ -331,6 +392,16 @@ export default function DashboardHub({ onOpenTool }) {
           </div>
         </DragDropContext>
       </div>
+
+      {showManager && (
+        <ToolCardManager
+          tools={tools}
+          onAddTool={handleAddTool}
+          onDeleteTool={handleDeleteTool}
+          onEditTool={handleManagerEdit}
+          onClose={() => setShowManager(false)}
+        />
+      )}
 
       {editingCard && (
         <DashboardCardEditModal

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback, forwardRef, useImperativeHandle } from "react";
-import { Send, Plus, Loader2, Sparkles, Globe, Pencil, Database, Code, Search, GitBranch, TrendingUp, CheckCircle2, AlertCircle, Clock, ChevronDown } from "lucide-react";
+import { Send, Plus, Loader2, Sparkles, Globe, Pencil, Database, Code, Search, GitBranch, TrendingUp, CheckCircle2, AlertCircle, Clock, ChevronDown, MessageCircle } from "lucide-react";
 import AgentSwitcher, { AGENTS } from "./chat/AgentSwitcher";
 import QuickActionButtons from "./chat/QuickActionButtons";
 import ChatSmartSuggestions from "./chat/ChatSmartSuggestions";
@@ -368,6 +368,14 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
                 }
               }, 100);
             }} />
+            <a
+              href={base44.agents.getWhatsAppConnectURL('xps_assistant')}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-1.5 mt-1.5 py-1.5 rounded-lg bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#25D366] text-[10px] font-medium transition-colors"
+            >
+              <MessageCircle className="w-3 h-3" /> Chat on WhatsApp
+            </a>
           </>
         )}
       </div>

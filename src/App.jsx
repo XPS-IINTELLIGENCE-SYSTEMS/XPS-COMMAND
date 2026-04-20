@@ -6,7 +6,8 @@ import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import SiteSettingsProvider from '@/components/SiteSettingsProvider';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
-// Public pages (SaaS marketing site)
+
+// Public pages
 import Landing from './pages/Landing';
 import Platform from './pages/Platform';
 import Solutions from './pages/Solutions';
@@ -21,17 +22,13 @@ import TermsOfService from './pages/TermsOfService';
 import Onboarding from './pages/Onboarding';
 import Home from './pages/Home';
 import AccountSettings from './pages/AccountSettings';
-
 import LeadEngine from './pages/LeadEngine';
 import DataBank from './pages/DataBank';
 import AdminControl from './pages/AdminControl';
 import FieldTech from './pages/FieldTech';
 import ClientPortal from './pages/ClientPortal';
 
-/**
- * PUBLIC ROUTES — visible to everyone (SaaS marketing + auth entry points)
- * These are the same whether logged in or not.
- */
+/** Shared public marketing routes */
 const PublicRoutes = () => (
   <>
     <Route path="/platform" element={<Platform />} />
@@ -44,23 +41,15 @@ const PublicRoutes = () => (
   </>
 );
 
-/**
- * UNAUTHENTICATED — visitor browsing the SaaS site
- * Flow: Landing → explore pages → Payment (pick plan) → Auth → Onboarding → Dashboard
- *   OR: Landing → Sign In → Auth → Dashboard
- */
+/** Visitor (not logged in) */
 const UnauthenticatedApp = () => (
   <Routes>
     <Route path="/" element={<Landing />} />
     <Route path="/signin" element={<SignInPortal />} />
     {PublicRoutes()}
-    {/* Any unknown route → landing page */}
-    <Route path="/onboarding" element={<Navigate to="/signin" replace />} />
+    {/* Protected routes redirect to sign-in */}
     <Route path="/dashboard" element={<Navigate to="/signin" replace />} />
-    <Route path="/admin-dashboard" element={<Navigate to="/signin" replace />} />
-    <Route path="/manager-dashboard" element={<Navigate to="/signin" replace />} />
-    <Route path="/owner-dashboard" element={<Navigate to="/signin" replace />} />
-    
+    <Route path="/onboarding" element={<Navigate to="/signin" replace />} />
     <Route path="/lead-engine" element={<Navigate to="/signin" replace />} />
     <Route path="/data-bank" element={<Navigate to="/signin" replace />} />
     <Route path="/admin-control" element={<Navigate to="/signin" replace />} />
@@ -71,39 +60,27 @@ const UnauthenticatedApp = () => (
   </Routes>
 );
 
-/**
- * AUTHENTICATED — logged-in user (company employee or SaaS customer)
- * Flow: SmartRedirect determines where to go based on profile/role
- */
+/** Logged-in user (admin invited them) */
 const AuthenticatedApp = () => (
   <Routes>
-    {/* "/" → Dashboard for authenticated users */}
     <Route path="/" element={<Navigate to="/dashboard" replace />} />
-    
-    {/* All redirect paths funnel to dashboard */}
-    <Route path="/redirect" element={<Navigate to="/dashboard" replace />} />
     <Route path="/signin" element={<Navigate to="/dashboard" replace />} />
-    
-    {/* Public pages still accessible when logged in (SaaS site) */}
+    <Route path="/redirect" element={<Navigate to="/dashboard" replace />} />
+
+    {/* Public pages still accessible */}
     {PublicRoutes()}
     <Route path="/landing" element={<Landing />} />
-    
-    {/* Onboarding — for new users who haven't set up profile */}
+
+    {/* App pages */}
     <Route path="/onboarding" element={<Onboarding />} />
-    
-    {/* Dashboards by role */}
     <Route path="/dashboard" element={<Home />} />
-    <Route path="/admin-dashboard" element={<Navigate to="/dashboard" replace />} />
-    <Route path="/manager-dashboard" element={<Navigate to="/dashboard" replace />} />
-    <Route path="/owner-dashboard" element={<Navigate to="/dashboard" replace />} />
     <Route path="/lead-engine" element={<LeadEngine />} />
     <Route path="/data-bank" element={<DataBank />} />
     <Route path="/admin-control" element={<AdminControl />} />
     <Route path="/account-settings" element={<AccountSettings />} />
     <Route path="/field-tech" element={<FieldTech />} />
     <Route path="/client-portal" element={<ClientPortal />} />
-    
-    {/* Catch-all */}
+
     <Route path="*" element={<PageNotFound />} />
   </Routes>
 );
@@ -111,18 +88,21 @@ const AuthenticatedApp = () => (
 const AppRouter = () => {
   const { isLoadingAuth, authError, isAuthenticated } = useAuth();
 
+  // Loading spinner
   if (isLoadingAuth) {
     return (
       <div className="fixed inset-0 flex items-center justify-center" style={{ backgroundColor: 'hsl(240, 10%, 4%)' }}>
-        <div className="w-6 h-6 border-2 border-white/10 border-t-primary rounded-full animate-spin"></div>
+        <div className="w-6 h-6 border-2 border-white/10 border-t-primary rounded-full animate-spin" />
       </div>
     );
   }
 
+  // User has a session but is NOT registered in this app
   if (authError?.type === 'user_not_registered') {
     return <UserNotRegisteredError />;
   }
 
+  // Fully authenticated and registered
   if (isAuthenticated) {
     return (
       <SiteSettingsProvider>
@@ -131,6 +111,7 @@ const AppRouter = () => {
     );
   }
 
+  // Not authenticated
   return <UnauthenticatedApp />;
 };
 
@@ -144,7 +125,7 @@ function App() {
         <Toaster />
       </QueryClientProvider>
     </AuthProvider>
-  )
+  );
 }
 
-export default App
+export default App;

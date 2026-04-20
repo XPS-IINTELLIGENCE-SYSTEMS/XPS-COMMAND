@@ -14,58 +14,53 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const checkAuth = async () => {
-    try {
-      setIsLoading(true);
-      setAuthError(null);
+    setIsLoading(true);
+    setAuthError(null);
 
-      // Simple approach: try to get the current user
-      // If it works → authenticated. If it fails → not authenticated.
+    try {
       const authed = await base44.auth.isAuthenticated();
-      
-      if (authed) {
-        const currentUser = await base44.auth.me();
-        setUser(currentUser);
-        setIsAuthenticated(true);
-      } else {
+      if (!authed) {
         setIsAuthenticated(false);
+        setIsLoading(false);
+        return;
       }
+
+      const currentUser = await base44.auth.me();
+      setUser(currentUser);
+      setIsAuthenticated(true);
     } catch (error) {
-      console.error('Auth check failed:', error);
+      console.error('Auth check error:', error);
       setIsAuthenticated(false);
-      
-      if (error.status === 403 && error.data?.extra_data?.reason === 'user_not_registered') {
-        setAuthError({ type: 'user_not_registered', message: 'User not registered for this app' });
+
+      // Base44 returns 403 with user_not_registered when the user
+      // has a valid session but hasn't been invited/registered to this app
+      if (error?.status === 403 && error?.data?.extra_data?.reason === 'user_not_registered') {
+        setAuthError({ type: 'user_not_registered' });
       }
-      // For auth_required or other errors, we just show unauthenticated state
     } finally {
       setIsLoading(false);
     }
   };
 
-  const logout = (shouldRedirect = true) => {
+  const logout = () => {
     setUser(null);
     setIsAuthenticated(false);
-    if (shouldRedirect) {
-      base44.auth.logout(window.location.origin);
-    } else {
-      base44.auth.logout();
-    }
+    base44.auth.logout(window.location.origin);
   };
 
-  const navigateToLogin = () => {
-    base44.auth.redirectToLogin(window.location.href);
+  const login = () => {
+    base44.auth.redirectToLogin('/dashboard');
   };
 
   return (
-    <AuthContext.Provider value={{ 
-      user, 
-      isAuthenticated, 
+    <AuthContext.Provider value={{
+      user,
+      isAuthenticated,
       isLoadingAuth: isLoading,
-      isLoadingPublicSettings: false,
       authError,
       logout,
-      navigateToLogin,
-      checkAppState: checkAuth
+      login,
+      refreshAuth: checkAuth,
     }}>
       {children}
     </AuthContext.Provider>
@@ -74,8 +69,6 @@ export const AuthProvider = ({ children }) => {
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
+  if (!context) throw new Error('useAuth must be used within AuthProvider');
   return context;
 };

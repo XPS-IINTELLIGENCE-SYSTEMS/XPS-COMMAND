@@ -54,7 +54,6 @@ export default function Onboarding() {
   const [aiMode, setAiMode] = useState("");
   const [industry, setIndustry] = useState("");
   const [customIndustry, setCustomIndustry] = useState("");
-  const [email, setEmail] = useState("");
   const [saving, setSaving] = useState(false);
   const [authChecked, setAuthChecked] = useState(false);
   const navigate = useNavigate();
@@ -66,7 +65,6 @@ export default function Onboarding() {
       try {
         const user = await base44.auth.me();
         if (!cancelled && user.full_name) setName(user.full_name);
-        if (!cancelled && user.email) setEmail(user.email);
         // Check if already onboarded — redirect to dashboard
         const profiles = await base44.entities.UserProfile.filter({ user_email: user.email });
         if (profiles.length > 0) {

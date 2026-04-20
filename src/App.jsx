@@ -80,10 +80,8 @@ const AuthenticatedApp = () => (
     {/* "/" → Dashboard for authenticated users */}
     <Route path="/" element={<Navigate to="/dashboard" replace />} />
     
-    {/* Any redirect goes to dashboard */}
+    {/* All redirect paths funnel to dashboard */}
     <Route path="/redirect" element={<Navigate to="/dashboard" replace />} />
-    
-    {/* Sign-in page redirects to dashboard since already logged in */}
     <Route path="/signin" element={<Navigate to="/dashboard" replace />} />
     
     {/* Public pages still accessible when logged in (SaaS site) */}

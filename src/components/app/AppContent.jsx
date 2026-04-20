@@ -41,6 +41,7 @@ import ProjectStatusReportView from "../reports/ProjectStatusReportView";
 import BidPipelineDashboard from "../bidpipeline/BidPipelineDashboard";
 import LeadSniperSystem from "../leadsniper/LeadSniperSystem";
 import MasterPipelineView from "../pipeline/MasterPipelineView";
+import ApprovalQueueView from "../approvals/ApprovalQueueView";
 
 export default function AppContent({ activeView, onChatCommand, onNavigate }) {
   switch (activeView) {
@@ -90,6 +91,7 @@ export default function AppContent({ activeView, onChatCommand, onNavigate }) {
     case "outreach_automation": return <OutreachAutomationView />;
     case "sentiment_analyst": return <SentimentAnalystView />;
     case "status_reports": return <ProjectStatusReportView />;
+    case "approval_queue": return <ApprovalQueueView />;
     default: return <div className="text-center py-20 text-muted-foreground">View not found</div>;
   }
 }

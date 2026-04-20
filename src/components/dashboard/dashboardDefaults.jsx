@@ -111,6 +111,9 @@ export const DEFAULT_TOOLS = [
   { id: "system_health", label: "System Health", desc: "Auto-diagnose, heal & optimize", iconName: "Heart", color: "#22c55e" },
   { id: "settings", label: "Settings", desc: "Account & preferences", iconName: "Settings", color: "#64748b" },
 
+  // Human Approval Queue
+  { id: "approval_queue", label: "Approval Queue", desc: "Review & approve AI agent actions before execution", iconName: "Shield", color: "#f59e0b" },
+
   // Master Pipeline
   { id: "master_pipeline", label: "Master Pipeline", desc: "Full XPS contractor acquisition workflow — 8 phases, 24 stages", iconName: "GitBranch", color: "#d4af37" },
 

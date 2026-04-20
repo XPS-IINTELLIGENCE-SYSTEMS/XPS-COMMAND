@@ -38,9 +38,11 @@ import AgentCommandCenterView from "../commandcenter/AgentCommandCenter";
 import OutreachAutomationView from "../outreach/OutreachAutomationView";
 import SentimentAnalystView from "../sentiment/SentimentAnalystView";
 import ProjectStatusReportView from "../reports/ProjectStatusReportView";
+import BidPipelineDashboard from "../bidpipeline/BidPipelineDashboard";
 
 export default function AppContent({ activeView, onChatCommand, onNavigate }) {
   switch (activeView) {
+    case "gc_bid_pipeline": return <BidPipelineDashboard />;
     case "xpress_leads": return <LeadPipelineView forcedTab="XPress" />;
     case "job_leads": return <LeadPipelineView forcedTab="Jobs" />;
     case "crm": return <CRMView />;

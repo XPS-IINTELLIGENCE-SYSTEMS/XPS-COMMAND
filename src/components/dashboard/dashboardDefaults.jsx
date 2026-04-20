@@ -109,4 +109,7 @@ export const DEFAULT_TOOLS = [
   { id: "tool_creator", label: "Tool Creator", desc: "Build unlimited custom tools with AI", iconName: "Wrench", color: "#f43f5e" },
   { id: "system_health", label: "System Health", desc: "Auto-diagnose, heal & optimize", iconName: "Heart", color: "#22c55e" },
   { id: "settings", label: "Settings", desc: "Account & preferences", iconName: "Settings", color: "#64748b" },
+
+  // GC Bid Pipeline
+  { id: "gc_bid_pipeline", label: "GC Bid Pipeline", desc: "National GC database, bid list campaigns & scope tracking", iconName: "Building2", color: "#d4af37" },
 ];

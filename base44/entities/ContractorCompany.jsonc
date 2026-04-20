@@ -1,0 +1,168 @@
+{
+  "name": "ContractorCompany",
+  "type": "object",
+  "properties": {
+    "company_name": {
+      "type": "string",
+      "description": "General contractor company name"
+    },
+    "website": {
+      "type": "string"
+    },
+    "headquarters_address": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "zip": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "preconstruction_contact_name": {
+      "type": "string"
+    },
+    "preconstruction_email": {
+      "type": "string"
+    },
+    "preconstruction_phone": {
+      "type": "string"
+    },
+    "estimator_name": {
+      "type": "string"
+    },
+    "estimator_email": {
+      "type": "string"
+    },
+    "estimator_phone": {
+      "type": "string"
+    },
+    "project_manager_name": {
+      "type": "string"
+    },
+    "project_manager_email": {
+      "type": "string"
+    },
+    "annual_revenue_estimate": {
+      "type": "number"
+    },
+    "employee_count": {
+      "type": "number"
+    },
+    "project_types": {
+      "type": "string",
+      "description": "JSON array of project types"
+    },
+    "states_they_build_in": {
+      "type": "string",
+      "description": "JSON array of state abbreviations"
+    },
+    "average_project_size_sqft": {
+      "type": "number"
+    },
+    "average_project_value": {
+      "type": "number"
+    },
+    "bidding_platform": {
+      "type": "string",
+      "enum": [
+        "BuildingConnected",
+        "Procore",
+        "iSqFt",
+        "email_only",
+        "multiple",
+        "unknown"
+      ],
+      "default": "unknown"
+    },
+    "bidding_platform_profile_url": {
+      "type": "string"
+    },
+    "bid_list_status": {
+      "type": "string",
+      "enum": [
+        "not_contacted",
+        "contacted",
+        "pending",
+        "approved",
+        "active",
+        "rejected",
+        "cold"
+      ],
+      "default": "not_contacted"
+    },
+    "bid_list_request_sent_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "bid_list_approved_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "scopes_received_count": {
+      "type": "number",
+      "default": 0
+    },
+    "bids_submitted_count": {
+      "type": "number",
+      "default": 0
+    },
+    "jobs_won_count": {
+      "type": "number",
+      "default": 0
+    },
+    "total_revenue_generated": {
+      "type": "number",
+      "default": 0
+    },
+    "relationship_strength": {
+      "type": "string",
+      "enum": [
+        "cold",
+        "warm",
+        "active",
+        "preferred"
+      ],
+      "default": "cold"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "source_url": {
+      "type": "string"
+    },
+    "discovered_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "follow_up_stage": {
+      "type": "number",
+      "default": 0,
+      "description": "0=none, 1=day3, 2=day10, 3=day21, 4=day45"
+    },
+    "last_follow_up_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "re_engage_date": {
+      "type": "string",
+      "format": "date"
+    }
+  },
+  "required": [
+    "company_name",
+    "state"
+  ]
+}

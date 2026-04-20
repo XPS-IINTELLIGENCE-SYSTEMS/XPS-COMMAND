@@ -1,0 +1,178 @@
+{
+  "name": "FloorScope",
+  "type": "object",
+  "properties": {
+    "gc_company_id": {
+      "type": "string",
+      "description": "Linked ContractorCompany ID"
+    },
+    "gc_company_name": {
+      "type": "string"
+    },
+    "gc_contact_name": {
+      "type": "string"
+    },
+    "gc_contact_email": {
+      "type": "string"
+    },
+    "project_name": {
+      "type": "string"
+    },
+    "project_address": {
+      "type": "string"
+    },
+    "project_city": {
+      "type": "string"
+    },
+    "project_state": {
+      "type": "string"
+    },
+    "project_type": {
+      "type": "string",
+      "enum": [
+        "warehouse",
+        "retail",
+        "restaurant",
+        "fitness",
+        "healthcare",
+        "industrial",
+        "hotel",
+        "automotive",
+        "education",
+        "government",
+        "data_center",
+        "mixed_use",
+        "other"
+      ],
+      "default": "other"
+    },
+    "scope_received_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "bid_due_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "bid_due_time": {
+      "type": "string"
+    },
+    "urgency_score": {
+      "type": "number",
+      "description": "0-100 based on bid deadline proximity"
+    },
+    "raw_scope_document": {
+      "type": "string",
+      "description": "File URL of uploaded scope PDF"
+    },
+    "extracted_zones": {
+      "type": "string",
+      "description": "JSON array of zones with name, sqft, system_type"
+    },
+    "total_flooring_sqft": {
+      "type": "number"
+    },
+    "special_requirements": {
+      "type": "string",
+      "description": "JSON array: moisture mitigation, ESD, cove base, etc."
+    },
+    "specified_system": {
+      "type": "string"
+    },
+    "recommended_xps_system": {
+      "type": "string"
+    },
+    "takeoff_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "in_progress",
+        "complete",
+        "reviewed"
+      ],
+      "default": "pending"
+    },
+    "takeoff_data": {
+      "type": "string",
+      "description": "JSON \u2014 full AI takeoff breakdown"
+    },
+    "material_cost": {
+      "type": "number"
+    },
+    "labor_cost": {
+      "type": "number"
+    },
+    "equipment_cost": {
+      "type": "number"
+    },
+    "mobilization_cost": {
+      "type": "number"
+    },
+    "overhead_profit": {
+      "type": "number"
+    },
+    "total_bid_price": {
+      "type": "number"
+    },
+    "price_per_sqft": {
+      "type": "number"
+    },
+    "gross_margin_pct": {
+      "type": "number"
+    },
+    "bid_status": {
+      "type": "string",
+      "enum": [
+        "not_started",
+        "takeoff_complete",
+        "in_progress",
+        "submitted",
+        "under_review",
+        "revision_requested",
+        "won",
+        "lost",
+        "no_response"
+      ],
+      "default": "not_started"
+    },
+    "bid_document_url": {
+      "type": "string"
+    },
+    "submitted_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "outcome_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "contract_value": {
+      "type": "number"
+    },
+    "performance_fee_rate": {
+      "type": "number"
+    },
+    "performance_fee_amount": {
+      "type": "number"
+    },
+    "follow_up_stage": {
+      "type": "number",
+      "default": 0
+    },
+    "last_follow_up_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "loss_reason": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "project_name",
+    "gc_company_name",
+    "bid_status"
+  ]
+}

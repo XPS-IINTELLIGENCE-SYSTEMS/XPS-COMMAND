@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ArrowRight, ShieldCheck, Download } from "lucide-react";
+import { ArrowRight, ShieldCheck, Download, MessageCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import GlobalNav from "../components/navigation/GlobalNav";
 import PageHexGlow from "../components/PageHexGlow";
@@ -61,6 +61,14 @@ export default function Landing() {
               Sign In
             </Link>
           )}
+          <a
+            href={base44.agents.getWhatsAppConnectURL('xps_assistant')}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-6 py-3 md:px-8 md:py-4 rounded-full bg-[#25D366] text-white text-sm md:text-base font-semibold hover:bg-[#1da851] transition-all duration-300 hover:scale-105"
+          >
+            <MessageCircle className="w-5 h-5" /> Chat on WhatsApp
+          </a>
         </div>
 
         {/* Stats */}

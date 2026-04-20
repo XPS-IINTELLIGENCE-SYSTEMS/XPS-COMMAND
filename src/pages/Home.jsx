@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { X, Sun, Moon, MessageSquare } from "lucide-react";
+import { X, Sun, Moon, MessageSquare, Search } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { AnimatePresence } from "framer-motion";
 import ChatPanel from "../components/ChatPanel";
@@ -11,6 +11,7 @@ import PrivacyDisclaimer from "../components/admin/PrivacyDisclaimer";
 import MobileBottomBar from "../components/mobile/MobileBottomBar";
 import MobileToolHeader from "../components/mobile/MobileToolHeader";
 import AnimatedView from "../components/mobile/AnimatedView";
+import GlobalSearchModal from "../components/search/GlobalSearchModal";
 import { DEFAULT_TOOLS } from "../components/dashboard/dashboardDefaults";
 import useSystemTheme from "../hooks/useSystemTheme";
 
@@ -26,6 +27,7 @@ export default function Home() {
   useSystemTheme();
   const [showPrivacy, setShowPrivacy] = useState(false);
   const [mobileTab, setMobileTab] = useState("home"); // home, chat, tools, settings
+  const [showSearch, setShowSearch] = useState(false);
   const tabViewMemory = useRef({}); // remembers activeView per tab
   const chatRef = useRef(null);
   const resizing = useRef(false);
@@ -54,6 +56,19 @@ export default function Home() {
     document.documentElement.classList.add(theme);
     localStorage.setItem("xps-theme", theme);
   }, [theme]);
+
+  // Global keyboard shortcut: Cmd+K / Ctrl+K for search
+  useEffect(() => {
+    const handler = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        setShowSearch(prev => !prev);
+      }
+      if (e.key === "Escape" && showSearch) setShowSearch(false);
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [showSearch]);
 
   // Mobile tab handler — preserves activeView state per tab
   const handleMobileTab = (tab) => {
@@ -134,6 +149,7 @@ export default function Home() {
     <div className="h-screen bg-background flex overflow-hidden hex-bg">
       <PageHexGlow />
       {showPrivacy && <PrivacyDisclaimer onAccept={handlePrivacyAccept} />}
+      {showSearch && <GlobalSearchModal onClose={() => setShowSearch(false)} onNavigate={handleOpenTool} />}
       {/* Chat Panel — left side (desktop) */}
       {chatOpen && (
         <div className="hidden lg:flex flex-shrink-0 border-r border-border flex-col relative" style={{ width: chatWidth }}>
@@ -164,6 +180,9 @@ export default function Home() {
               ← Back to Dashboard
             </button>
           )}
+          <button onClick={() => setShowSearch(true)} className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg hover:bg-white/10 text-white/40 text-[11px]">
+            <Search className="w-3.5 h-3.5" /> <span className="hidden xl:inline">Search</span> <kbd className="hidden xl:inline ml-1 px-1 py-0.5 rounded bg-white/10 text-[9px]">⌘K</kbd>
+          </button>
           <button onClick={() => setTheme(theme === "dark" ? "light" : "dark")} className="p-1.5 rounded-lg hover:bg-white/10 text-white/50">
             {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </button>

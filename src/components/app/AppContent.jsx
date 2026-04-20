@@ -48,6 +48,8 @@ import MasterDatabaseView from "../database/MasterDatabaseView";
 import GitHubExplorerView from "../github/GitHubExplorerView";
 import AgentSkillsCreatorView from "../agents/AgentSkillsCreatorView";
 import TemplatesLibraryView from "../templates/TemplatesLibraryView";
+import PageManagerView from "../layouteditor/PageManagerView";
+import AutoEnhanceView from "../enhance/AutoEnhanceView";
 
 export default function AppContent({ activeView, onChatCommand, onNavigate }) {
   switch (activeView) {
@@ -104,6 +106,8 @@ export default function AppContent({ activeView, onChatCommand, onNavigate }) {
     case "github_explorer": return <GitHubExplorerView />;
     case "skills_creator": return <AgentSkillsCreatorView />;
     case "templates_library": return <TemplatesLibraryView />;
+    case "page_builder": return <PageManagerView />;
+    case "auto_enhance": return <AutoEnhanceView />;
     default: return <div className="text-center py-20 text-muted-foreground">View not found</div>;
   }
 }

@@ -4,7 +4,7 @@ import {
   Target, Send, Clock, GitBranch,
   Upload, Database, Sprout, Sliders, Share2, Globe,
   Sparkles, Brain, TrendingUp, Heart, Wrench, MapPin, Crosshair,
-  Layers, Radar
+  Layers, Radar, Layout, Zap
 } from "lucide-react";
 
 // Master list of all available icons for the icon picker
@@ -40,6 +40,8 @@ export const ICON_OPTIONS = [
   { name: "Crosshair", icon: Crosshair },
   { name: "Layers", icon: Layers },
   { name: "Radar", icon: Radar },
+  { name: "Layout", icon: Layout },
+  { name: "Zap", icon: Zap },
 ];
 
 export const ICON_MAP = Object.fromEntries(ICON_OPTIONS.map(i => [i.name, i.icon]));
@@ -131,4 +133,8 @@ export const DEFAULT_TOOLS = [
   { id: "github_explorer", label: "GitHub Explorer", desc: "Search, discover & ingest open source repos", iconName: "GitBranch", color: "#64748b" },
   { id: "skills_creator", label: "Skills Creator", desc: "Build & manage top 50 agent skills", iconName: "Sparkles", color: "#ec4899" },
   { id: "templates_library", label: "Templates Library", desc: "200+ templates — UI, agents, prompts, business", iconName: "Layers", color: "#14b8a6" },
+
+  // Visual Page Builder & Auto-Enhancement
+  { id: "page_builder", label: "Page Builder", desc: "Create custom pages with drag & drop widgets", iconName: "Layout", color: "#6366f1" },
+  { id: "auto_enhance", label: "Auto-Enhance", desc: "AI tool analysis, self-reflection & upgrade engine", iconName: "Zap", color: "#d4af37" },
 ];

@@ -50,6 +50,9 @@ import AgentSkillsCreatorView from "../agents/AgentSkillsCreatorView";
 import TemplatesLibraryView from "../templates/TemplatesLibraryView";
 import PageManagerView from "../layouteditor/PageManagerView";
 import AutoEnhanceView from "../enhance/AutoEnhanceView";
+import SystemIndexView from "../systemindex/SystemIndexView";
+import AdminCommandCenter from "../systemindex/AdminCommandCenter";
+import ComplianceCheckerView from "../compliance/ComplianceCheckerView";
 
 export default function AppContent({ activeView, onChatCommand, onNavigate }) {
   switch (activeView) {
@@ -108,6 +111,9 @@ export default function AppContent({ activeView, onChatCommand, onNavigate }) {
     case "templates_library": return <TemplatesLibraryView />;
     case "page_builder": return <PageManagerView />;
     case "auto_enhance": return <AutoEnhanceView />;
+    case "system_index": return <SystemIndexView />;
+    case "system_instructions": return <AdminCommandCenter />;
+    case "compliance_checker": return <ComplianceCheckerView />;
     default: return <div className="text-center py-20 text-muted-foreground">View not found</div>;
   }
 }

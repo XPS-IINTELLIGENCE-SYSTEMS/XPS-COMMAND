@@ -4,7 +4,7 @@ import {
   Target, Send, Clock, GitBranch,
   Upload, Database, Sprout, Sliders, Share2, Globe,
   Sparkles, Brain, TrendingUp, Heart, Wrench, MapPin, Crosshair,
-  Layers, Radar, Layout, Zap
+  Layers, Radar, Layout, Zap, Terminal
 } from "lucide-react";
 
 // Master list of all available icons for the icon picker
@@ -42,6 +42,8 @@ export const ICON_OPTIONS = [
   { name: "Radar", icon: Radar },
   { name: "Layout", icon: Layout },
   { name: "Zap", icon: Zap },
+  { name: "Terminal", icon: Terminal },
+
 ];
 
 export const ICON_MAP = Object.fromEntries(ICON_OPTIONS.map(i => [i.name, i.icon]));
@@ -137,4 +139,9 @@ export const DEFAULT_TOOLS = [
   // Visual Page Builder & Auto-Enhancement
   { id: "page_builder", label: "Page Builder", desc: "Create custom pages with drag & drop widgets", iconName: "Layout", color: "#6366f1" },
   { id: "auto_enhance", label: "Auto-Enhance", desc: "AI tool analysis, self-reflection & upgrade engine", iconName: "Zap", color: "#d4af37" },
+
+  // System Index, Instructions & Compliance
+  { id: "system_index", label: "System Index", desc: "Master catalog of all tools, agents & capabilities", iconName: "BookOpen", color: "#6366f1" },
+  { id: "system_instructions", label: "System Instructions", desc: "Set rules, directives & commands for agents", iconName: "Terminal", color: "#d4af37" },
+  { id: "compliance_checker", label: "Compliance Checker", desc: "Cross-reference bid requirements with proposals", iconName: "Shield", color: "#f59e0b" },
 ];

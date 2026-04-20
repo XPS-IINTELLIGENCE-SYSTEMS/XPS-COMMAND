@@ -343,31 +343,13 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
         {!mobile && (
           <>
             <div className="flex items-center gap-2 mt-2">
-              <div className="flex items-center gap-1 text-[9px] text-muted-foreground">
-                <Globe className="w-2.5 h-2.5 metallic-silver-icon" /> Web
-              </div>
-              <div className="flex items-center gap-1 text-[9px] text-muted-foreground">
-                <Database className="w-2.5 h-2.5 metallic-silver-icon" /> CRM
-              </div>
-              <div className="flex items-center gap-1 text-[9px] text-muted-foreground">
-                <Code className="w-2.5 h-2.5 metallic-silver-icon" /> UI
-              </div>
-              <div className="ml-auto">
-                <button onClick={() => spawnSubAgent()} className="shimmer-card flex items-center gap-1 text-[9px] text-muted-foreground hover:text-foreground transition-colors px-2 py-1 rounded-md">
-                  <GitBranch className="w-2.5 h-2.5 metallic-silver-icon shimmer-icon" /> Add Helper
-                </button>
-              </div>
+              <button onClick={() => spawnSubAgent()} className="shimmer-card flex items-center gap-1 text-[9px] text-muted-foreground hover:text-foreground transition-colors px-2 py-1 rounded-md">
+                <GitBranch className="w-2.5 h-2.5 metallic-silver-icon shimmer-icon" /> Add Helper
+              </button>
+              <button onClick={handleNewChat} className="shimmer-card flex items-center gap-1 text-[9px] text-muted-foreground hover:text-foreground transition-colors px-2 py-1 rounded-md">
+                <Plus className="w-2.5 h-2.5 metallic-silver-icon shimmer-icon" /> New Chat
+              </button>
             </div>
-            <QuickActionButtons onSend={(cmd) => {
-              setInput(cmd);
-              setTimeout(() => {
-                if (conversation && !loading) {
-                  setInput('');
-                  setLoading(true);
-                  base44.agents.addMessage(conversation, { role: 'user', content: cmd });
-                }
-              }, 100);
-            }} />
             <a
               href={base44.agents.getWhatsAppConnectURL('xps_assistant')}
               target="_blank"

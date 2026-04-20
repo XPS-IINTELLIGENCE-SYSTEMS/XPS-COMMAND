@@ -3,7 +3,8 @@ import {
   BookOpen, Swords, Link2, Shield, Settings, Bot,
   Target, Send, Clock, GitBranch,
   Upload, Database, Sprout, Sliders, Share2, Globe,
-  Sparkles, Brain, TrendingUp, Heart, Wrench, MapPin, Crosshair
+  Sparkles, Brain, TrendingUp, Heart, Wrench, MapPin, Crosshair,
+  Layers, Radar
 } from "lucide-react";
 
 // Master list of all available icons for the icon picker
@@ -37,6 +38,8 @@ export const ICON_OPTIONS = [
   { name: "Wrench", icon: Wrench },
   { name: "MapPin", icon: MapPin },
   { name: "Crosshair", icon: Crosshair },
+  { name: "Layers", icon: Layers },
+  { name: "Radar", icon: Radar },
 ];
 
 export const ICON_MAP = Object.fromEntries(ICON_OPTIONS.map(i => [i.name, i.icon]));
@@ -120,4 +123,12 @@ export const DEFAULT_TOOLS = [
   // GC Bid Pipeline
   { id: "gc_bid_pipeline", label: "GC Bid Pipeline", desc: "National GC database, bid list campaigns & scope tracking", iconName: "Building2", color: "#d4af37" },
   { id: "lead_sniper", label: "Lead Sniper", desc: "Full automated GC discovery → outreach → bid pipeline system", iconName: "Crosshair", color: "#d4af37" },
+
+  // Company Assets, Master Scraper, Master DB, GitHub, Skills Creator, Templates
+  { id: "company_assets", label: "Company Assets", desc: "XPS, NCP, XPress, CPU — branded intel hubs", iconName: "Building2", color: "#d4af37" },
+  { id: "master_scraper", label: "Master Scraper", desc: "Unified scraping control center — manual & auto", iconName: "Radar", color: "#ef4444" },
+  { id: "master_database", label: "Master Database", desc: "20 industries indexed — universal intelligence", iconName: "Database", color: "#6366f1" },
+  { id: "github_explorer", label: "GitHub Explorer", desc: "Search, discover & ingest open source repos", iconName: "GitBranch", color: "#64748b" },
+  { id: "skills_creator", label: "Skills Creator", desc: "Build & manage top 50 agent skills", iconName: "Sparkles", color: "#ec4899" },
+  { id: "templates_library", label: "Templates Library", desc: "200+ templates — UI, agents, prompts, business", iconName: "Layers", color: "#14b8a6" },
 ];

@@ -1,0 +1,105 @@
+{
+  "name": "IntelRecord",
+  "type": "object",
+  "properties": {
+    "source_company": {
+      "type": "string",
+      "enum": [
+        "XPS",
+        "NCP",
+        "XPS Xpress",
+        "CPU",
+        "Industry",
+        "GitHub",
+        "Custom"
+      ],
+      "default": "Custom",
+      "description": "Which company or source this intel belongs to"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "social_media",
+        "website",
+        "news",
+        "review",
+        "product",
+        "pricing",
+        "legal",
+        "patent",
+        "job_posting",
+        "financial",
+        "github_repo",
+        "industry_data",
+        "template",
+        "agent_skill",
+        "custom"
+      ],
+      "default": "custom"
+    },
+    "industry": {
+      "type": "string",
+      "description": "Industry vertical this data belongs to"
+    },
+    "sub_industry": {
+      "type": "string",
+      "description": "Sub-industry or niche"
+    },
+    "title": {
+      "type": "string",
+      "description": "Short title or headline"
+    },
+    "content": {
+      "type": "string",
+      "description": "Full scraped/ingested content text"
+    },
+    "summary": {
+      "type": "string",
+      "description": "AI-generated summary"
+    },
+    "source_url": {
+      "type": "string"
+    },
+    "source_type": {
+      "type": "string",
+      "enum": [
+        "scraper",
+        "manual",
+        "api",
+        "social",
+        "github",
+        "rss",
+        "webhook",
+        "llm"
+      ],
+      "default": "manual"
+    },
+    "tags": {
+      "type": "string",
+      "description": "Comma-separated tags for indexing"
+    },
+    "confidence_score": {
+      "type": "number",
+      "description": "0-100 confidence in data accuracy"
+    },
+    "scraped_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "scraper_job_id": {
+      "type": "string"
+    },
+    "is_indexed": {
+      "type": "boolean",
+      "default": false
+    },
+    "metadata": {
+      "type": "string",
+      "description": "JSON blob of extra structured data"
+    }
+  },
+  "required": [
+    "title",
+    "category"
+  ]
+}

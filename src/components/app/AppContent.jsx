@@ -42,6 +42,12 @@ import BidPipelineDashboard from "../bidpipeline/BidPipelineDashboard";
 import LeadSniperSystem from "../leadsniper/LeadSniperSystem";
 import MasterPipelineView from "../pipeline/MasterPipelineView";
 import ApprovalQueueView from "../approvals/ApprovalQueueView";
+import CompanyAssetsView from "../companies/CompanyAssetsView";
+import MasterScraperView from "../scraper/MasterScraperView";
+import MasterDatabaseView from "../database/MasterDatabaseView";
+import GitHubExplorerView from "../github/GitHubExplorerView";
+import AgentSkillsCreatorView from "../agents/AgentSkillsCreatorView";
+import TemplatesLibraryView from "../templates/TemplatesLibraryView";
 
 export default function AppContent({ activeView, onChatCommand, onNavigate }) {
   switch (activeView) {
@@ -92,6 +98,12 @@ export default function AppContent({ activeView, onChatCommand, onNavigate }) {
     case "sentiment_analyst": return <SentimentAnalystView />;
     case "status_reports": return <ProjectStatusReportView />;
     case "approval_queue": return <ApprovalQueueView />;
+    case "company_assets": return <CompanyAssetsView />;
+    case "master_scraper": return <MasterScraperView />;
+    case "master_database": return <MasterDatabaseView />;
+    case "github_explorer": return <GitHubExplorerView />;
+    case "skills_creator": return <AgentSkillsCreatorView />;
+    case "templates_library": return <TemplatesLibraryView />;
     default: return <div className="text-center py-20 text-muted-foreground">View not found</div>;
   }
 }

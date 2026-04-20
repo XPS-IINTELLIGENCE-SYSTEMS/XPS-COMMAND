@@ -3,7 +3,7 @@ import {
   BookOpen, Swords, Link2, Shield, Settings, Bot,
   Target, Send, Clock, GitBranch,
   Upload, Database, Sprout, Sliders, Share2, Globe,
-  Sparkles, Brain, TrendingUp, Heart, Wrench, MapPin
+  Sparkles, Brain, TrendingUp, Heart, Wrench, MapPin, Crosshair
 } from "lucide-react";
 
 // Master list of all available icons for the icon picker
@@ -36,6 +36,7 @@ export const ICON_OPTIONS = [
   { name: "Heart", icon: Heart },
   { name: "Wrench", icon: Wrench },
   { name: "MapPin", icon: MapPin },
+  { name: "Crosshair", icon: Crosshair },
 ];
 
 export const ICON_MAP = Object.fromEntries(ICON_OPTIONS.map(i => [i.name, i.icon]));
@@ -112,4 +113,5 @@ export const DEFAULT_TOOLS = [
 
   // GC Bid Pipeline
   { id: "gc_bid_pipeline", label: "GC Bid Pipeline", desc: "National GC database, bid list campaigns & scope tracking", iconName: "Building2", color: "#d4af37" },
+  { id: "lead_sniper", label: "Lead Sniper", desc: "Full automated GC discovery → outreach → bid pipeline system", iconName: "Crosshair", color: "#d4af37" },
 ];

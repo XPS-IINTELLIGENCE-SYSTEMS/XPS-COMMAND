@@ -39,10 +39,12 @@ import OutreachAutomationView from "../outreach/OutreachAutomationView";
 import SentimentAnalystView from "../sentiment/SentimentAnalystView";
 import ProjectStatusReportView from "../reports/ProjectStatusReportView";
 import BidPipelineDashboard from "../bidpipeline/BidPipelineDashboard";
+import LeadSniperSystem from "../leadsniper/LeadSniperSystem";
 
 export default function AppContent({ activeView, onChatCommand, onNavigate }) {
   switch (activeView) {
     case "gc_bid_pipeline": return <BidPipelineDashboard />;
+    case "lead_sniper": return <LeadSniperSystem />;
     case "xpress_leads": return <LeadPipelineView forcedTab="XPress" />;
     case "job_leads": return <LeadPipelineView forcedTab="Jobs" />;
     case "crm": return <CRMView />;

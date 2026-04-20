@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback, forwardRef, useImperativeHandle } from "react";
-import { Send, Plus, Loader2, Sparkles, Globe, Pencil, Database, Code, Search, GitBranch, TrendingUp, CheckCircle2, AlertCircle, Clock, ChevronDown, MessageCircle } from "lucide-react";
+import { Send, Plus, Loader2, Sparkles, Globe, Pencil, Database, Code, Search, GitBranch, TrendingUp, CheckCircle2, AlertCircle, Clock, ChevronDown, MessageCircle, Brain, FileText, Zap, BarChart3, Phone, Wrench, MapPin, ChevronUp } from "lucide-react";
 import AgentSwitcher, { AGENTS } from "./chat/AgentSwitcher";
 import QuickActionButtons from "./chat/QuickActionButtons";
 import ChatSmartSuggestions from "./chat/ChatSmartSuggestions";
@@ -203,10 +203,14 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
 
   const agentQuickActions = {
     xps_assistant: [
-      { label: "Find me 25 leads in Tampa, FL", icon: Search },
-      { label: "Generate a proposal for my top lead", icon: Pencil },
-      { label: "Show my pipeline status", icon: Database },
-      { label: "Research a company", icon: Globe },
+      { label: "🔍 Scrape 25 leads in Tampa", icon: Search, cat: "leads" },
+      { label: "📊 Pipeline status", icon: BarChart3, cat: "analytics" },
+      { label: "🧠 Analyze bid for 10k sqft", icon: Brain, cat: "bidding" },
+      { label: "📱 WhatsApp my top lead", icon: MessageCircle, cat: "outreach" },
+      { label: "💬 SMS follow-up stale leads", icon: Phone, cat: "outreach" },
+      { label: "📋 Generate proposal", icon: FileText, cat: "bidding" },
+      { label: "🏗️ Find commercial jobs in FL", icon: MapPin, cat: "leads" },
+      { label: "⚡ Run system health check", icon: Zap, cat: "system" },
     ],
     seo_marketing: [
       { label: "Write a blog post", icon: Pencil },
@@ -215,16 +219,16 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
       { label: "Build keyword strategy", icon: TrendingUp },
     ],
     lead_gen: [
-      { label: "Find leads in Phoenix, AZ", icon: Search },
-      { label: "Analyze Tampa territory", icon: Globe },
-      { label: "Enrich my top leads", icon: Database },
-      { label: "Score all new leads", icon: TrendingUp },
+      { label: "🔍 Browserless: Find 25 leads", icon: Search },
+      { label: "📊 Score all new leads", icon: TrendingUp },
+      { label: "🏗️ Find GCs in Arizona", icon: MapPin },
+      { label: "⚡ Bulk pipeline FL, OH, AZ", icon: Zap },
     ],
     sales_director: [
-      { label: "Create a proposal", icon: Pencil },
-      { label: "Draft a follow-up email", icon: Search },
-      { label: "Show deals in negotiation", icon: Database },
-      { label: "Close strategy for top lead", icon: TrendingUp },
+      { label: "📋 Create a proposal", icon: FileText },
+      { label: "📧 Draft follow-up email", icon: Send },
+      { label: "📱 WhatsApp a lead", icon: MessageCircle },
+      { label: "🧠 Close strategy for top lead", icon: Brain },
     ],
   };
   const quickActions = agentQuickActions[currentAgentName] || agentQuickActions.xps_assistant;
@@ -342,7 +346,13 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
         </div>
         {!mobile && (
           <>
-            <div className="flex items-center gap-2 mt-2">
+            <QuickActionButtons onSend={(cmd) => {
+              if (conversation && !loading) {
+                setLoading(true);
+                base44.agents.addMessage(conversation, { role: "user", content: cmd });
+              }
+            }} />
+            <div className="flex items-center gap-2 mt-1">
               <button onClick={() => spawnSubAgent()} className="shimmer-card flex items-center gap-1 text-[9px] text-muted-foreground hover:text-foreground transition-colors px-2 py-1 rounded-md">
                 <GitBranch className="w-2.5 h-2.5 metallic-silver-icon shimmer-icon" /> Add Helper
               </button>

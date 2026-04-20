@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Menu, X, Home, ArrowLeft, UserCircle } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
-const NAV_LINKS = [
+const PUBLIC_LINKS = [
   { to: "/", label: "Home" },
   { to: "/platform", label: "Platform" },
   { to: "/solutions", label: "Solutions" },
@@ -16,6 +16,8 @@ const AUTH_LINKS = [
   { to: "/dashboard", label: "Dashboard" },
   { to: "/lead-engine", label: "Lead Engine" },
   { to: "/data-bank", label: "Data Bank" },
+  { to: "/field-tech", label: "Field Tech" },
+  { to: "/client-portal", label: "Client Portal" },
   { to: "/admin-control", label: "Admin Control" },
   { to: "/account-settings", label: "Account Settings" },
 ];
@@ -128,29 +130,28 @@ export default function GlobalNav() {
               )}
             </div>
 
-            {/* Public nav links */}
-            <div className="px-4">
-              <div className="text-[10px] font-bold text-white/30 uppercase tracking-widest mb-1 px-1">Navigation</div>
-              {NAV_LINKS.map(link => (
-                <Link
-                  key={link.to}
-                  to={link.to}
-                  className={`block py-2 px-1 text-[14px] font-medium transition-colors rounded-md ${
-                    location.pathname === link.to
-                      ? "text-white bg-white/5"
-                      : "text-white/60 hover:text-white hover:bg-white/5"
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-
-            {/* Auth-only links */}
-            {isAuthed && (
-              <div className="px-4 mt-2 pt-2 border-t border-white/[0.08]">
+            {/* Links — show app links for authed users, public links for visitors */}
+            {isAuthed ? (
+              <div className="px-4">
                 <div className="text-[10px] font-bold text-white/30 uppercase tracking-widest mb-1 px-1">App</div>
                 {AUTH_LINKS.map(link => (
+                  <Link
+                    key={link.to}
+                    to={link.to}
+                    className={`block py-2 px-1 text-[14px] font-medium transition-colors rounded-md ${
+                      location.pathname === link.to
+                        ? "text-white bg-white/5"
+                        : "text-white/60 hover:text-white hover:bg-white/5"
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <div className="px-4">
+                <div className="text-[10px] font-bold text-white/30 uppercase tracking-widest mb-1 px-1">Navigation</div>
+                {PUBLIC_LINKS.map(link => (
                   <Link
                     key={link.to}
                     to={link.to}

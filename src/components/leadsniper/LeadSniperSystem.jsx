@@ -9,6 +9,9 @@ import SniperOutreachLog from "./SniperOutreachLog";
 import SniperForecasting from "./SniperForecasting";
 import SniperBidUpload from "./SniperBidUpload";
 import SniperCompetitorIntel from "./SniperCompetitorIntel";
+import SniperCampaignManager from "./SniperCampaignManager";
+import SniperGeoMap from "./SniperGeoMap";
+import SniperScopeDetail from "./SniperScopeDetail";
 import BidPipelineKanban from "../bidpipeline/BidPipelineKanban";
 import GCLeaderboard from "../bidpipeline/GCLeaderboard";
 
@@ -17,6 +20,7 @@ export default function LeadSniperSystem() {
   const [gcs, setGcs] = useState([]);
   const [scopes, setScopes] = useState([]);
   const [metrics, setMetrics] = useState({});
+  const [selectedScope, setSelectedScope] = useState(null);
 
   const loadData = async () => {
     setLoading(true);
@@ -81,16 +85,27 @@ export default function LeadSniperSystem() {
         <SniperOutreachLog />
       </div>
 
+      {/* Email Campaign Manager */}
+      <SniperCampaignManager gcs={gcs} onRefresh={loadData} />
+
       {/* Revenue Forecasting */}
       <SniperForecasting gcs={gcs} scopes={scopes} />
 
       {/* Bid Pipeline Kanban */}
       {scopes.length > 0 && (
         <div className="glass-card rounded-xl p-4">
-          <h2 className="text-xs font-bold metallic-gold mb-3">Bid Pipeline</h2>
-          <BidPipelineKanban scopes={scopes} />
+          <h2 className="text-xs font-bold metallic-gold mb-3">Bid Pipeline — click a scope for AI bid analysis</h2>
+          <BidPipelineKanban scopes={scopes} onScopeClick={setSelectedScope} />
         </div>
       )}
+
+      {/* Scope Detail with Winning Bid Analyzer */}
+      {selectedScope && (
+        <SniperScopeDetail scope={selectedScope} allScopes={scopes} onClose={() => setSelectedScope(null)} />
+      )}
+
+      {/* Geographic Intelligence Map */}
+      <SniperGeoMap gcs={gcs} scopes={scopes} />
 
       {/* Competitor Intelligence */}
       <SniperCompetitorIntel gcs={gcs} scopes={scopes} />

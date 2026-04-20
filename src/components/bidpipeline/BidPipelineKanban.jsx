@@ -9,7 +9,7 @@ const COLUMNS = [
   { id: "lost", label: "Lost", icon: XCircle, color: "#ef4444" },
 ];
 
-export default function BidPipelineKanban({ scopes }) {
+export default function BidPipelineKanban({ scopes, onScopeClick }) {
   const grouped = {};
   COLUMNS.forEach(c => { grouped[c.id] = []; });
   scopes.forEach(s => {
@@ -34,7 +34,7 @@ export default function BidPipelineKanban({ scopes }) {
               <div className="rounded-lg border border-dashed border-border/40 p-4 text-center text-[10px] text-muted-foreground">Empty</div>
             )}
             {grouped[col.id].map(scope => (
-              <div key={scope.id} className="glass-card rounded-lg p-3">
+              <div key={scope.id} className="glass-card rounded-lg p-3 cursor-pointer hover:border-primary/30 transition-colors" onClick={() => onScopeClick?.(scope)}>
                 <div className="text-[11px] font-bold text-foreground truncate">{scope.project_name}</div>
                 <div className="text-[10px] text-muted-foreground">{scope.gc_company_name}</div>
                 <div className="text-[10px] text-muted-foreground">{scope.project_city}, {scope.project_state}</div>

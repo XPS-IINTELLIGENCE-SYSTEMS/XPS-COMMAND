@@ -47,15 +47,36 @@
       "type": "string",
       "description": "Associated lead ID"
     },
+    "gc_id": {
+      "type": "string",
+      "description": "Associated ContractorCompany ID"
+    },
+    "campaign_stage": {
+      "type": "number",
+      "default": 0,
+      "description": "0=initial, 1=follow-up day 3, 2=day 7, 3=day 14, 4=day 30"
+    },
+    "campaign_id": {
+      "type": "string",
+      "description": "Campaign batch identifier"
+    },
     "send_at": {
       "type": "string",
       "format": "date-time",
-      "description": "Scheduled send time (if scheduled)"
+      "description": "Scheduled send time"
     },
     "sent_at": {
       "type": "string",
       "format": "date-time",
       "description": "Actual send time"
+    },
+    "opened_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "replied_at": {
+      "type": "string",
+      "format": "date-time"
     },
     "notes": {
       "type": "string",

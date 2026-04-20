@@ -1,0 +1,76 @@
+{
+  "name": "FlooringCompetitor",
+  "type": "object",
+  "properties": {
+    "company_name": {
+      "type": "string",
+      "description": "Competitor company name"
+    },
+    "website": {
+      "type": "string"
+    },
+    "headquarters_city": {
+      "type": "string"
+    },
+    "headquarters_state": {
+      "type": "string"
+    },
+    "states_active": {
+      "type": "string",
+      "description": "JSON array of state abbreviations where they operate"
+    },
+    "estimated_annual_revenue": {
+      "type": "number",
+      "description": "Estimated annual revenue in dollars"
+    },
+    "employee_count": {
+      "type": "number"
+    },
+    "specialties": {
+      "type": "string",
+      "description": "JSON array: epoxy, polished_concrete, urethane, polyaspartic, stained, decorative, metallic, coatings, grinding"
+    },
+    "project_focus": {
+      "type": "string",
+      "description": "JSON array of project types: warehouse, retail, restaurant, healthcare, industrial, etc."
+    },
+    "pricing_tier": {
+      "type": "string",
+      "enum": [
+        "budget",
+        "mid_range",
+        "premium",
+        "enterprise"
+      ],
+      "default": "mid_range"
+    },
+    "threat_level": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "default": "medium"
+    },
+    "strengths": {
+      "type": "string",
+      "description": "Key competitive strengths"
+    },
+    "weaknesses": {
+      "type": "string",
+      "description": "Known weaknesses or gaps"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "company_name"
+  ]
+}

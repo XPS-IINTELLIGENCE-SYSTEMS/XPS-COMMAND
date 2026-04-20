@@ -6,6 +6,9 @@ import SniperWorkflow from "./SniperWorkflow";
 import SniperControls from "./SniperControls";
 import SniperDatabase from "./SniperDatabase";
 import SniperOutreachLog from "./SniperOutreachLog";
+import SniperForecasting from "./SniperForecasting";
+import SniperBidUpload from "./SniperBidUpload";
+import SniperCompetitorIntel from "./SniperCompetitorIntel";
 import BidPipelineKanban from "../bidpipeline/BidPipelineKanban";
 import GCLeaderboard from "../bidpipeline/GCLeaderboard";
 
@@ -69,11 +72,17 @@ export default function LeadSniperSystem() {
       {/* Workflow visualization */}
       <SniperWorkflow />
 
+      {/* Upload Bid Invitation */}
+      <SniperBidUpload onScopeCreated={loadData} />
+
       {/* Controls + Outreach Log side by side */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <SniperControls onRefresh={loadData} />
         <SniperOutreachLog />
       </div>
+
+      {/* Revenue Forecasting */}
+      <SniperForecasting gcs={gcs} scopes={scopes} />
 
       {/* Bid Pipeline Kanban */}
       {scopes.length > 0 && (
@@ -82,6 +91,9 @@ export default function LeadSniperSystem() {
           <BidPipelineKanban scopes={scopes} />
         </div>
       )}
+
+      {/* Competitor Intelligence */}
+      <SniperCompetitorIntel gcs={gcs} scopes={scopes} />
 
       {/* Leaderboard */}
       <GCLeaderboard gcs={gcs} scopes={scopes} />

@@ -71,7 +71,7 @@ export default function Dashboard3DHero({ onOpenTool }) {
   return (
     <div className="relative rounded-2xl overflow-hidden mb-4">
       {/* 3D Three.js canvas */}
-      <HexScene3D height={380} />
+      <HexScene3D height={440} />
 
       {/* HTML overlays */}
       <HeroMetrics data={metrics} />

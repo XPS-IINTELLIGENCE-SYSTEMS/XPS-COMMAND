@@ -90,7 +90,14 @@ export default function DashboardHub({ onOpenTool }) {
         if (cfg.customNumbers) setCustomNumbers(cfg.customNumbers);
         if (cfg.hiddenIds) setHiddenIds(cfg.hiddenIds);
         if (cfg.customTools) setCustomTools(cfg.customTools);
-        if (cfg.sections) setSections(cfg.sections);
+        if (cfg.sections) {
+          // Auto-inject 3D hero if missing from saved config
+          const has3d = cfg.sections.some(s => s.type === "3dhero");
+          if (!has3d) {
+            cfg.sections.unshift({ id: "sec_3dhero", type: "3dhero", title: "Command Center", size: "full", collapsed: false });
+          }
+          setSections(cfg.sections);
+        }
         if (cfg.widgetData) setWidgetData(cfg.widgetData);
         if (cfg.customizations) {
           const base = DEFAULT_TOOLS.filter(t => !(cfg.hiddenIds || []).includes(t.id)).map(t => {

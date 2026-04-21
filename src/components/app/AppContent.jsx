@@ -64,6 +64,7 @@ import CryptoSimulationView from "../crypto/CryptoSimulationView";
 import OrchestratorDashboard from "../orchestrator/OrchestratorDashboard";
 import HeyGenAvatarStudio from "../heygen/HeyGenAvatarStudio";
 import FocusDashboard from "../focus/FocusDashboard";
+import UsageEstimatorView from "../dashboard/UsageEstimatorView";
 
 export default function AppContent({ activeView, onChatCommand, onNavigate }) {
   switch (activeView) {
@@ -136,6 +137,7 @@ export default function AppContent({ activeView, onChatCommand, onNavigate }) {
     case "orchestrator": return <OrchestratorDashboard />;
     case "heygen_studio": return <HeyGenAvatarStudio />;
     case "focus_dashboard": return <FocusDashboard onOpenTool={onNavigate} />;
+    case "usage_estimator": return <UsageEstimatorView />;
     case "ui_builder": return null; // Opens as standalone page at /ui-builder
     case "agent_zero": return null; // Opens as standalone page at /agent-zero
     default: return <div className="text-center py-20 text-muted-foreground">View not found</div>;

@@ -231,10 +231,10 @@ export default function WorkspaceBrowser({ onClose }) {
 
       {/* Viewport */}
       <div
-        className="flex-1 overflow-y-auto rounded-b-xl"
+        className="flex-1 overflow-hidden rounded-b-xl flex flex-col"
         style={{
-          minHeight: fullscreen ? "calc(100vh - 82px)" : 440,
-          maxHeight: fullscreen ? "calc(100vh - 82px)" : 600,
+          minHeight: fullscreen ? "calc(100vh - 82px)" : 500,
+          maxHeight: fullscreen ? "calc(100vh - 82px)" : 700,
           backgroundColor: view === "home" ? "#202124" : "#ffffff",
         }}
       >
@@ -245,20 +245,24 @@ export default function WorkspaceBrowser({ onClose }) {
         )}
 
         {view === "home" && (
-          <BrowserHomePage
-            onSearch={performSearch}
-            onNavigate={navigateToUrl}
-            loading={loading}
-          />
+          <div className="flex-1 overflow-y-auto">
+            <BrowserHomePage
+              onSearch={performSearch}
+              onNavigate={navigateToUrl}
+              loading={loading}
+            />
+          </div>
         )}
 
         {view === "search" && (
-          <BrowserSearchResults
-            query={searchQuery}
-            results={searchResults}
-            onNavigate={navigateToUrl}
-            loading={loading}
-          />
+          <div className="flex-1 overflow-y-auto">
+            <BrowserSearchResults
+              query={searchQuery}
+              results={searchResults}
+              onNavigate={navigateToUrl}
+              loading={loading}
+            />
+          </div>
         )}
 
         {view === "page" && pageData && (

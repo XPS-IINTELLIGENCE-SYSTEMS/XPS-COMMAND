@@ -18,16 +18,15 @@ import QuickLinksWidget from "./QuickLinksWidget";
 import ActivityStream from "./ActivityStream";
 import QuickAccessBar from "./QuickAccessBar";
 import CategorizedToolsGrid from "./CategorizedToolsGrid";
-import DataCenterHero from "../datacenter/DataCenterHero";
 import { DEFAULT_TOOLS } from "./dashboardDefaults";
 
 const DEFAULT_GREETING = "";
 const DEFAULT_SUBTITLE = "";
 
 const DEFAULT_SECTIONS = [
-  { id: "sec_datacenter", type: "datacenter", title: "Command Center", size: "full", collapsed: false },
   { id: "sec_quickaccess", type: "quickaccess", title: "Quick Access", size: "full", collapsed: false },
   { id: "sec_pipeline", type: "pipeline", title: "Pipeline", size: "full", collapsed: false },
+  { id: "sec_calendar", type: "calendar", title: "Calendar", size: "full", collapsed: false },
   { id: "sec_summary", type: "summary", title: "Daily Summary", size: "half", collapsed: false },
   { id: "sec_sidebar", type: "sidebar", title: "Scheduled Items", size: "half", collapsed: false },
   { id: "sec_activity", type: "activity", title: "Activity Stream", size: "full", collapsed: false },
@@ -157,7 +156,7 @@ export default function DashboardHub({ onOpenTool }) {
 
   const addSection = (type) => {
     const id = `sec_${type}_${Date.now()}`;
-    const titles = { datacenter: "Command Center", calendar: "Weekly Calendar", summary: "Daily Summary", favorites: "Favorites", tools: "All Tools", categorized_tools: "All Tools", sidebar: "Scheduled Items", notes: "Quick Notes", quicklinks: "Quick Links", activity: "Activity Stream", quickaccess: "Quick Access" };
+    const titles = { calendar: "Weekly Calendar", summary: "Daily Summary", favorites: "Favorites", tools: "All Tools", categorized_tools: "All Tools", sidebar: "Scheduled Items", notes: "Quick Notes", quicklinks: "Quick Links", activity: "Activity Stream", quickaccess: "Quick Access" };
     const newSec = { id, type, title: titles[type] || type, size: ["calendar", "favorites", "tools"].includes(type) ? "full" : "half", collapsed: false };
     const updated = [...sections, newSec];
     setSections(updated);
@@ -289,9 +288,6 @@ export default function DashboardHub({ onOpenTool }) {
   // --- Render each section ---
   const renderSectionContent = (section) => {
     switch (section.type) {
-      case "datacenter":
-        return <DataCenterHero onOpenTool={onOpenTool} />;
-
       case "quickaccess":
         return <QuickAccessBar onOpenTool={onOpenTool} />;
 

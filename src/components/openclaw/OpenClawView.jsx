@@ -21,17 +21,25 @@ export default function OpenClawView() {
   const [result, setResult] = useState(null);
   const [expanded, setExpanded] = useState({});
 
+  const [error, setError] = useState(null);
+
   const run = async () => {
     if (!url.trim()) return;
     setRunning(true);
     setResult(null);
+    setError(null);
 
     const params = { action: engine, url: url.trim() };
     if (engine === "site_clone") params.depth = depth;
 
-    const res = await base44.functions.invoke("openClawEngine", params);
-    setResult(res.data);
-    setRunning(false);
+    try {
+      const res = await base44.functions.invoke("openClawEngine", params);
+      setResult(res.data);
+    } catch (err) {
+      setError(err?.response?.data?.error || err.message || "Engine returned an error. The target site may be unreachable or blocking scraping.");
+    } finally {
+      setRunning(false);
+    }
   };
 
   const toggle = (key) => setExpanded(p => ({ ...p, [key]: !p[key] }));
@@ -83,6 +91,14 @@ export default function OpenClawView() {
           {running ? `Running ${activeEngine?.label}...` : `Run ${activeEngine?.label}`}
         </Button>
       </div>
+
+      {/* Error */}
+      {error && (
+        <div className="glass-card rounded-xl p-4 border border-red-500/30 bg-red-500/5">
+          <p className="text-sm font-semibold text-red-400 mb-1">Engine Error</p>
+          <p className="text-xs text-muted-foreground">{error}</p>
+        </div>
+      )}
 
       {/* Results */}
       {result && (

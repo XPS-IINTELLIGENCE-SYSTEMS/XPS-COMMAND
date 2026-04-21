@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Zap, Loader2, Play, Eye, Check, ChevronDown, ChevronUp, AlertCircle, Pause, Sparkles, Clock, GitBranch } from "lucide-react";
+import { useState } from "react";
+import { Zap, Loader2, Play, Eye, Check, ChevronDown, ChevronUp, AlertCircle, Sparkles, Clock, GitBranch } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 const SYSTEM_SCAN_ENTITIES = [

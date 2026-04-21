@@ -30,12 +30,12 @@ export default function BrowserPageView({ data, onNavigate, onSearch, onSubmitFo
     onSubmitForm(form.action, form.method, fd);
   };
 
-  // Build the srcdoc with link interception
+  // Build the srcdoc with link + form interception
   const srcdoc = useMemo(() => {
     if (!data.previewHtml) return null;
-    // Inject a click interceptor that sends link clicks to parent
     const interceptScript = `
       <script>
+        // Intercept link clicks
         document.addEventListener('click', function(e) {
           var a = e.target.closest('a');
           if (a && a.href) {
@@ -44,21 +44,60 @@ export default function BrowserPageView({ data, onNavigate, onSearch, onSubmitFo
             window.parent.postMessage({ type: 'browser-navigate', url: a.href }, '*');
           }
         }, true);
+        // Intercept form submissions (e.g. Google search box)
+        document.addEventListener('submit', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          var form = e.target;
+          var data = new FormData(form);
+          var q = data.get('q') || data.get('query') || data.get('search') || '';
+          if (q) {
+            window.parent.postMessage({ type: 'browser-search', query: q }, '*');
+          } else {
+            // Build URL from form action
+            var action = form.action || '';
+            var params = new URLSearchParams(data).toString();
+            var url = action + (action.includes('?') ? '&' : '?') + params;
+            window.parent.postMessage({ type: 'browser-navigate', url: url }, '*');
+          }
+        }, true);
+        // Also intercept Enter key in inputs (Google uses JS, which we stripped)
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter') {
+            var input = e.target;
+            if (input.tagName === 'INPUT' || input.tagName === 'TEXTAREA') {
+              var form = input.closest('form');
+              if (form) {
+                e.preventDefault();
+                form.dispatchEvent(new Event('submit', {bubbles: true, cancelable: true}));
+              } else {
+                // Standalone input — treat as search
+                var val = input.value.trim();
+                if (val) {
+                  e.preventDefault();
+                  window.parent.postMessage({ type: 'browser-search', query: val }, '*');
+                }
+              }
+            }
+          }
+        }, true);
       </script>
     `;
     return data.previewHtml + interceptScript;
   }, [data.previewHtml]);
 
-  // Listen for link clicks from inside the iframe
+  // Listen for messages from inside the iframe (links, forms, search)
   useEffect(() => {
     const handler = (e) => {
       if (e.data?.type === 'browser-navigate' && e.data.url) {
         onNavigate(e.data.url);
+      } else if (e.data?.type === 'browser-search' && e.data.query) {
+        onSearch(e.data.query);
       }
     };
     window.addEventListener('message', handler);
     return () => window.removeEventListener('message', handler);
-  }, [onNavigate]);
+  }, [onNavigate, onSearch]);
 
   const hasContacts = (data.emails?.length > 0) || (data.phones?.length > 0);
   const hasForms = data.forms?.length > 0;

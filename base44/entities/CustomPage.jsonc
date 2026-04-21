@@ -1,0 +1,59 @@
+{
+  "name": "CustomPage",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Page display name"
+    },
+    "slug": {
+      "type": "string",
+      "description": "URL-safe identifier"
+    },
+    "description": {
+      "type": "string"
+    },
+    "icon_name": {
+      "type": "string",
+      "default": "FileText"
+    },
+    "color": {
+      "type": "string",
+      "default": "#d4af37"
+    },
+    "layout": {
+      "type": "string",
+      "description": "JSON array of widget placement objects: [{id, widgetType, config, x, y, w, h}]"
+    },
+    "template": {
+      "type": "string",
+      "enum": [
+        "blank",
+        "dashboard",
+        "data_view",
+        "report",
+        "kanban",
+        "custom"
+      ],
+      "default": "blank"
+    },
+    "is_published": {
+      "type": "boolean",
+      "default": false
+    },
+    "is_shared": {
+      "type": "boolean",
+      "default": false
+    },
+    "owner_email": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "slug"
+  ]
+}

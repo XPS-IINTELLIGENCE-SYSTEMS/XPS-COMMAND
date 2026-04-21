@@ -57,6 +57,7 @@ import IntelCoreView from "../intelcore/IntelCoreView";
 import HyperEvolverView from "../evolve/HyperEvolverView";
 import SupabaseControlCenter from "../supabase/SupabaseControlCenter";
 import OpenClawView from "../openclaw/OpenClawView";
+import EditorWorkspace from "../editor/EditorWorkspace";
 
 export default function AppContent({ activeView, onChatCommand, onNavigate }) {
   switch (activeView) {
@@ -122,6 +123,7 @@ export default function AppContent({ activeView, onChatCommand, onNavigate }) {
     case "hyper_evolver": return <HyperEvolverView />;
     case "supabase_control": return <SupabaseControlCenter />;
     case "open_claw": return <OpenClawView />;
+    case "editor_workspace": return <EditorWorkspace />;
     case "ui_builder": return null; // Opens as standalone page at /ui-builder
     case "agent_zero": return null; // Opens as standalone page at /agent-zero
     default: return <div className="text-center py-20 text-muted-foreground">View not found</div>;

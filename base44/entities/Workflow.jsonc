@@ -12,7 +12,7 @@
     },
     "steps": {
       "type": "string",
-      "description": "JSON string of workflow steps: [{step_number, action, config, status}]"
+      "description": "JSON string of workflow steps"
     },
     "status": {
       "type": "string",
@@ -29,18 +29,57 @@
       "type": "string",
       "description": "What triggers this workflow (manual, schedule, event)"
     },
+    "schedule": {
+      "type": "string",
+      "description": "Cron or interval schedule string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Lead Gen",
+        "Sales",
+        "Bidding",
+        "Marketing",
+        "SEO",
+        "Research",
+        "Operations",
+        "Finance",
+        "Integrations",
+        "Reporting",
+        "Custom"
+      ],
+      "default": "Custom"
+    },
+    "projected_result": {
+      "type": "string",
+      "description": "Expected ROI or outcome"
+    },
+    "is_template": {
+      "type": "boolean",
+      "default": false
+    },
+    "is_shared": {
+      "type": "boolean",
+      "default": false
+    },
+    "share_link": {
+      "type": "string",
+      "description": "Shareable link token"
+    },
+    "linked_tools": {
+      "type": "string",
+      "description": "JSON array of tool/integration IDs used"
+    },
     "last_run": {
       "type": "string",
-      "format": "date-time",
-      "description": "Last execution time"
+      "format": "date-time"
     },
     "run_count": {
       "type": "number",
-      "description": "Number of times this workflow has run"
+      "default": 0
     },
     "notes": {
-      "type": "string",
-      "description": "Internal notes"
+      "type": "string"
     }
   },
   "required": [

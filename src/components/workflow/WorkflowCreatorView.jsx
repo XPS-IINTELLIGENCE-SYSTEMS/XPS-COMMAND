@@ -6,6 +6,7 @@ import { DataPageHeader, DataLoading, StatusBadge, EmptyState } from "../shared/
 import WorkflowBuilder from "./WorkflowBuilder";
 import WORKFLOW_TEMPLATES from "./WorkflowTemplates";
 import DashboardWorkflowRecommendation from "./DashboardWorkflowRecommendation";
+import WorkflowTemplateLibrary from "./WorkflowTemplateLibrary";
 
 const STATUS_COLORS = {
   Draft: "bg-secondary text-muted-foreground",
@@ -103,52 +104,8 @@ export default function WorkflowCreatorView() {
       {/* AI Dashboard Workflow Recommendation */}
       <DashboardWorkflowRecommendation onCreateFromTemplate={createFromTemplate} />
 
-      {/* Pre-made Templates */}
-      <div className="mb-8">
-        <div className="flex items-center gap-2 mb-3">
-          <Sparkles className="w-4 h-4 text-primary" />
-          <h3 className="text-[15px] font-bold text-white">Quick Start Templates</h3>
-          <span className="text-[13px] text-white/40">— click to create</span>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
-          {WORKFLOW_TEMPLATES.map((tpl, i) => {
-            const Icon = tpl.icon;
-            return (
-              <button
-                key={i}
-                onClick={() => createFromTemplate(tpl)}
-                className="rounded-xl p-4 text-left transition-all group relative"
-                style={glassStyle}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "rgba(212, 175, 55, 0.25)";
-                  e.currentTarget.style.boxShadow = "0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.08)";
-                  e.currentTarget.style.boxShadow = "0 4px 24px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05)";
-                }}
-              >
-                {/* Number badge */}
-                <div className="absolute top-2.5 left-2.5 w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-bold metallic-gold-bg text-black">
-                  {i + 1}
-                </div>
-                <div className="flex items-center gap-2 mb-2 mt-3">
-                  <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${tpl.color}18` }}>
-                    <Icon className="w-5 h-5" style={{ color: tpl.color }} />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-[13px] font-bold metallic-gold truncate">{tpl.name}</div>
-                    <div className="text-[11px] text-white/40 flex items-center gap-1">
-                      <Clock className="w-3 h-3" /> {tpl.trigger} · {tpl.steps.length} steps
-                    </div>
-                  </div>
-                </div>
-                <p className="text-[12px] text-white/30 leading-relaxed line-clamp-3">{tpl.description}</p>
-              </button>
-            );
-          })}
-        </div>
-      </div>
+      {/* 50 Pre-Built Workflow Templates Library */}
+      <WorkflowTemplateLibrary onRefresh={load} />
 
       {/* Existing Workflows */}
       {workflows.length === 0 ? (

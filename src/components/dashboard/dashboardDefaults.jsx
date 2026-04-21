@@ -147,6 +147,7 @@ export const DEFAULT_TOOLS = [
   { id: "compliance_checker", label: "Compliance Checker", desc: "Cross-reference bid requirements with proposals", iconName: "Shield", color: "#f59e0b" },
   { id: "xps_intel_core", label: "XPS Intel Core", desc: "Master XPS intelligence — brands, pricing, social, 60+ locations", iconName: "Brain", color: "#d4af37" },
   { id: "hyper_evolver", label: "Hyper-Evolver", desc: "Self-evolving AI — scrapes top AI & industry sites, optimizes prompts, upgrades tools", iconName: "Zap", color: "#d4af37" },
+  { id: "supabase_control", label: "Supabase Control", desc: "Enterprise data layer — query, sync, insert, RPC, storage", iconName: "Database", color: "#22c55e" },
 ];
 
 // Tool categories with metallic gold headers & descriptions
@@ -203,6 +204,6 @@ export const TOOL_CATEGORIES = [
     id: "system_admin",
     title: "System & Admin",
     desc: "Platform configuration, user management, connectors, and system health.",
-    toolIds: ["admin", "settings", "connectors", "algorithm", "system_health", "tool_creator", "system_index", "system_instructions", "page_builder", "auto_enhance", "templates_library", "github_explorer", "hyper_evolver"],
+    toolIds: ["admin", "settings", "connectors", "algorithm", "system_health", "tool_creator", "system_index", "system_instructions", "page_builder", "auto_enhance", "templates_library", "github_explorer", "hyper_evolver", "supabase_control"],
   },
 ];

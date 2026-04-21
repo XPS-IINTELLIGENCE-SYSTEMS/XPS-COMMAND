@@ -7,6 +7,7 @@ import DashboardToolCard from "./DashboardToolCard";
 import DashboardCardEditModal from "./DashboardCardEditModal";
 import ToolCardManager from "./ToolCardManager";
 import CalendarCard from "./CalendarCard";
+import WeeklyCalendarView from "../calendar/WeeklyCalendarView";
 import PipelineBanner from "./PipelineBanner";
 import DailySummaryCard from "./DailySummaryCard";
 import ScheduledItemsSidebar from "./ScheduledItemsSidebar";
@@ -294,7 +295,7 @@ export default function DashboardHub({ onOpenTool }) {
         return <PipelineBanner onOpenFull={() => onOpenTool?.("master_pipeline")} />;
 
       case "calendar":
-        return <CalendarCard automations={automations} expanded={calendarExpanded} onToggleExpand={() => setCalendarExpanded(!calendarExpanded)} />;
+        return <WeeklyCalendarView />;
 
       case "summary":
         return <DailySummaryCard expanded={summaryExpanded} onToggleExpand={() => setSummaryExpanded(!summaryExpanded)} />;

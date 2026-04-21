@@ -7,7 +7,6 @@ import DashboardToolCard from "./DashboardToolCard";
 import DashboardCardEditModal from "./DashboardCardEditModal";
 import ToolCardManager from "./ToolCardManager";
 import CalendarCard from "./CalendarCard";
-import WeeklyCalendarView from "../calendar/WeeklyCalendarView";
 import PipelineBanner from "./PipelineBanner";
 import DailySummaryCard from "./DailySummaryCard";
 import ScheduledItemsSidebar from "./ScheduledItemsSidebar";
@@ -16,22 +15,20 @@ import AddSectionModal from "./AddSectionModal";
 import NotesWidget from "./NotesWidget";
 import QuickLinksWidget from "./QuickLinksWidget";
 import ActivityStream from "./ActivityStream";
-import QuickAccessBar from "./QuickAccessBar";
-import CategorizedToolsGrid from "./CategorizedToolsGrid";
 import { DEFAULT_TOOLS } from "./dashboardDefaults";
 
 const DEFAULT_GREETING = "";
-const DEFAULT_SUBTITLE = "";
+const DEFAULT_SUBTITLE = "Here's your sales intelligence briefing for today.";
 
 const DEFAULT_SECTIONS = [
-  { id: "sec_quickaccess", type: "quickaccess", title: "Quick Access", size: "full", collapsed: false },
+  { id: "sec_greeting", type: "greeting", title: "Greeting", size: "full", collapsed: false },
   { id: "sec_pipeline", type: "pipeline", title: "Pipeline", size: "full", collapsed: false },
   { id: "sec_calendar", type: "calendar", title: "Calendar", size: "full", collapsed: false },
   { id: "sec_summary", type: "summary", title: "Daily Summary", size: "half", collapsed: false },
   { id: "sec_sidebar", type: "sidebar", title: "Scheduled Items", size: "half", collapsed: false },
   { id: "sec_activity", type: "activity", title: "Activity Stream", size: "full", collapsed: false },
   { id: "sec_favorites", type: "favorites", title: "Favorites", size: "full", collapsed: false },
-  { id: "sec_tools", type: "categorized_tools", title: "All Tools", size: "full", collapsed: false },
+  { id: "sec_tools", type: "tools", title: "All Tools", size: "full", collapsed: false },
 ];
 
 export default function DashboardHub({ onOpenTool }) {
@@ -156,7 +153,7 @@ export default function DashboardHub({ onOpenTool }) {
 
   const addSection = (type) => {
     const id = `sec_${type}_${Date.now()}`;
-    const titles = { calendar: "Weekly Calendar", summary: "Daily Summary", favorites: "Favorites", tools: "All Tools", categorized_tools: "All Tools", sidebar: "Scheduled Items", notes: "Quick Notes", quicklinks: "Quick Links", activity: "Activity Stream", quickaccess: "Quick Access" };
+    const titles = { calendar: "Weekly Calendar", summary: "Daily Summary", favorites: "Favorites", tools: "All Tools", sidebar: "Scheduled Items", notes: "Quick Notes", quicklinks: "Quick Links", activity: "Activity Stream" };
     const newSec = { id, type, title: titles[type] || type, size: ["calendar", "favorites", "tools"].includes(type) ? "full" : "half", collapsed: false };
     const updated = [...sections, newSec];
     setSections(updated);
@@ -288,14 +285,36 @@ export default function DashboardHub({ onOpenTool }) {
   // --- Render each section ---
   const renderSectionContent = (section) => {
     switch (section.type) {
-      case "quickaccess":
-        return <QuickAccessBar onOpenTool={onOpenTool} />;
+      case "greeting":
+        return (
+          <div className="px-1 py-1">
+            {editingGreeting ? (
+              <div className="space-y-2">
+                <input value={greetingDraft} onChange={e => setGreetingDraft(e.target.value)} placeholder={`${autoGreeting()}, ${user?.full_name?.split(" ")[0] || "there"}`} className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight bg-transparent border-b-2 border-primary/40 outline-none w-full pb-1 placeholder:text-muted-foreground/40" autoFocus />
+                <input value={subtitleDraft} onChange={e => setSubtitleDraft(e.target.value)} placeholder="Subtitle text..." className="text-sm text-muted-foreground bg-transparent border-b border-border outline-none w-full pb-1 placeholder:text-muted-foreground/30" />
+                <div className="flex gap-2 pt-1">
+                  <button onClick={saveGreeting} className="flex items-center gap-1 text-xs text-primary hover:text-primary/80 font-medium"><Check className="w-3.5 h-3.5" /> Save</button>
+                  <button onClick={() => setEditingGreeting(false)} className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"><X className="w-3.5 h-3.5" /> Cancel</button>
+                  {greeting && <button onClick={() => { setGreetingDraft(""); setSubtitleDraft(DEFAULT_SUBTITLE); }} className="text-xs text-muted-foreground hover:text-foreground ml-2">Reset</button>}
+                </div>
+              </div>
+            ) : (
+              <div className="relative group/greet">
+                <h1 className="text-[24px] sm:text-[32px] font-extrabold metallic-gold tracking-tight leading-tight">{displayGreeting}</h1>
+                <p className="text-[13px] sm:text-[15px] text-white mt-1">{subtitle}</p>
+                <button onClick={startEditGreeting} className="absolute -right-1 top-0 p-2 rounded-lg active:bg-secondary sm:hover:bg-secondary opacity-100 sm:opacity-0 sm:group-hover/greet:opacity-100 transition-opacity" title="Edit greeting">
+                  <Pencil className="w-4 h-4 text-muted-foreground" />
+                </button>
+              </div>
+            )}
+          </div>
+        );
 
       case "pipeline":
         return <PipelineBanner onOpenFull={() => onOpenTool?.("master_pipeline")} />;
 
       case "calendar":
-        return <WeeklyCalendarView />;
+        return <CalendarCard automations={automations} expanded={calendarExpanded} onToggleExpand={() => setCalendarExpanded(!calendarExpanded)} />;
 
       case "summary":
         return <DailySummaryCard expanded={summaryExpanded} onToggleExpand={() => setSummaryExpanded(!summaryExpanded)} />;
@@ -338,23 +357,35 @@ export default function DashboardHub({ onOpenTool }) {
         );
 
       case "tools":
-      case "categorized_tools":
         return (
           <div>
-            <div className="flex items-center justify-between mb-4 px-1">
-              <h2 className="text-[15px] font-bold text-foreground">All Tools</h2>
+            <div className="flex items-center justify-between mb-3 px-1">
+              <h2 className="text-[15px] font-bold text-white">All Tools</h2>
               <button onClick={() => setShowManager(true)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg glass-card text-[11px] font-medium text-muted-foreground hover:text-foreground transition-colors">
                 <Settings2 className="w-3.5 h-3.5" /> Manage
               </button>
             </div>
-            <CategorizedToolsGrid
-              tools={tools}
-              starredIds={starredIds}
-              onOpen={onOpenTool}
-              onToggleStar={toggleStar}
-              onEdit={setEditingCard}
-              getDisplayNumber={getDisplayNumber}
-            />
+            <Droppable droppableId="all">
+              {(provided, snapshot) => (
+                <div ref={provided.innerRef} {...provided.droppableProps} className={`grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 rounded-xl p-1 transition-colors ${snapshot.isDraggingOver ? "bg-primary/5" : ""}`}>
+                  {gridIds.map((id, index) => {
+                    const tool = toolMap[id];
+                    if (!tool) return null;
+                    const globalIndex = favTools.length + index;
+                    return (
+                      <Draggable key={tool.id} draggableId={`all-${tool.id}`} index={index}>
+                        {(prov) => (
+                          <div ref={prov.innerRef} {...prov.draggableProps}>
+                            <DashboardToolCard tool={tool} starred={false} displayNumber={getDisplayNumber(tool.id, globalIndex)} onOpen={onOpenTool} onToggleStar={toggleStar} onEdit={setEditingCard} dragHandleProps={prov.dragHandleProps} />
+                          </div>
+                        )}
+                      </Draggable>
+                    );
+                  })}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
           </div>
         );
 

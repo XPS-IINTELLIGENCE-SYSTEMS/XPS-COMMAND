@@ -9,6 +9,7 @@ import PromptEnhancer from "./chat/PromptEnhancer";
 import { Button } from "@/components/ui/button";
 import { base44 } from "@/api/base44Client";
 import ReactMarkdown from "react-markdown";
+import { useBrowserBridge } from "@/lib/BrowserBridge";
 
 /* ── Tool call badge ── */
 function ToolCallBadge({ tc }) {
@@ -88,6 +89,8 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
   const [currentAgentName, setCurrentAgentName] = useState("xps_assistant");
   const conversationRef = useRef(null);
   const prevMsgCountRef = useRef(0);
+  const browserBridge = useBrowserBridge();
+  const processedToolCallsRef = useRef(new Set());
 
   const [agents, setAgents] = useState([
     { id: "main", name: "XPS Agent", type: "main", status: "active" },
@@ -138,10 +141,34 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
           setLoading(false);
         }
         prevMsgCountRef.current = data.messages.length;
+
+        // Detect headlessBrowser tool calls and push to browser bridge
+        if (browserBridge) {
+          for (const msg of data.messages) {
+            if (!msg.tool_calls) continue;
+            for (const tc of msg.tool_calls) {
+              if (!tc.name?.includes("headlessBrowser")) continue;
+              if (tc.status !== "completed" && tc.status !== "success") continue;
+              const callId = `${msg.role}-${tc.name}-${tc.results?.substring(0, 50) || ""}`;
+              if (processedToolCallsRef.current.has(callId)) continue;
+              processedToolCallsRef.current.add(callId);
+              try {
+                const result = typeof tc.results === "string" ? JSON.parse(tc.results) : tc.results;
+                if (result?.success && result?.url) {
+                  browserBridge.pushBrowserAction({ type: "navigate_result", data: result });
+                } else if (result?.success && result?.results) {
+                  browserBridge.pushBrowserAction({ type: "search_result", data: result });
+                } else if (result?.success && result?.steps) {
+                  browserBridge.pushBrowserAction({ type: "agent_result", data: result });
+                }
+              } catch {}
+            }
+          }
+        }
       }
     });
     return () => { if (unsubscribe) unsubscribe(); };
-  }, [conversation?.id]);
+  }, [conversation?.id, browserBridge]);
 
   // Scroll to bottom on new messages
   useEffect(() => {
@@ -212,6 +239,7 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
       { label: "📋 Generate proposal", icon: FileText, cat: "bidding" },
       { label: "🏗️ Find commercial jobs in FL", icon: MapPin, cat: "leads" },
       { label: "⚡ Run system health check", icon: Zap, cat: "system" },
+      { label: "🌐 Browse a website for me", icon: Globe, cat: "browser" },
     ],
     seo_marketing: [
       { label: "Write a blog post", icon: Pencil },

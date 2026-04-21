@@ -18,6 +18,7 @@ import BlankWorkspace from "../components/tabs/BlankWorkspace";
 import useWorkspaceTabs from "../hooks/useWorkspaceTabs";
 import { DEFAULT_TOOLS } from "../components/dashboard/dashboardDefaults";
 import useSystemTheme from "../hooks/useSystemTheme";
+import { BrowserBridgeProvider } from "../lib/BrowserBridge";
 
 export default function Home() {
   const workspace = useWorkspaceTabs();
@@ -160,6 +161,7 @@ export default function Home() {
   };
 
   return (
+    <BrowserBridgeProvider>
     <div className="h-screen bg-background flex overflow-hidden hex-bg">
       <PageHexGlow />
       {showPrivacy && <PrivacyDisclaimer onAccept={handlePrivacyAccept} />}
@@ -286,5 +288,6 @@ export default function Home() {
         </div>
       )}
     </div>
+    </BrowserBridgeProvider>
   );
 }

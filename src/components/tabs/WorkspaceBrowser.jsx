@@ -9,6 +9,7 @@ import BrowserHomePage from "./browser/BrowserHomePage";
 import BrowserSearchResults from "./browser/BrowserSearchResults";
 import BrowserPageView from "./browser/BrowserPageView";
 import BrowserAgentPanel from "./browser/BrowserAgentPanel";
+import { useBrowserBridge } from "@/lib/BrowserBridge";
 
 export default function WorkspaceBrowser({ onClose }) {
   const [url, setUrl] = useState("");
@@ -28,6 +29,33 @@ export default function WorkspaceBrowser({ onClose }) {
   const [historyIdx, setHistoryIdx] = useState(-1);
 
   const inputRef = useRef(null);
+  const browserBridge = useBrowserBridge();
+
+  // Listen for agent-driven browser actions from ChatPanel
+  useEffect(() => {
+    if (!browserBridge) return;
+    return browserBridge.onBrowserAction((action) => {
+      if (action.type === "navigate_result" && action.data) {
+        const d = action.data;
+        setPageData(d);
+        setUrl(d.url || "");
+        setInputUrl(d.url || "");
+        setView("page");
+        pushHistory({ type: "page", url: d.url, data: d });
+      } else if (action.type === "search_result" && action.data) {
+        const d = action.data;
+        setSearchResults(d.results || []);
+        setSearchQuery(d.query || "");
+        setInputUrl(d.query || "");
+        setUrl("");
+        setView("search");
+        pushHistory({ type: "search", query: d.query, results: d.results || [] });
+      } else if (action.type === "agent_result" && action.data?.current_page?.url) {
+        // Agent task completed — navigate to final page
+        navigateToUrl(action.data.current_page.url);
+      }
+    });
+  }, [browserBridge]);
 
   const pushHistory = (entry) => {
     const newHist = [...history.slice(0, historyIdx + 1), entry];

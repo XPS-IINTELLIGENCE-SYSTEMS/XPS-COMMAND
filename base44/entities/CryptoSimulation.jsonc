@@ -1,0 +1,134 @@
+{
+  "name": "CryptoSimulation",
+  "type": "object",
+  "properties": {
+    "simulation_name": {
+      "type": "string",
+      "description": "Name of the simulated coin or research run"
+    },
+    "simulation_type": {
+      "type": "string",
+      "enum": [
+        "research",
+        "coin_creation",
+        "launch_simulation",
+        "pattern_analysis",
+        "full_pipeline"
+      ],
+      "default": "research"
+    },
+    "coin_name": {
+      "type": "string",
+      "description": "Name of the simulated coin"
+    },
+    "coin_ticker": {
+      "type": "string",
+      "description": "Ticker symbol e.g. XPS"
+    },
+    "blockchain_platform": {
+      "type": "string",
+      "enum": [
+        "ethereum_erc20",
+        "solana_spl",
+        "base_l2",
+        "polygon",
+        "bnb_chain",
+        "avalanche",
+        "custom"
+      ],
+      "default": "ethereum_erc20"
+    },
+    "token_standard": {
+      "type": "string",
+      "description": "ERC-20, SPL, etc."
+    },
+    "total_supply": {
+      "type": "number",
+      "description": "Total token supply"
+    },
+    "initial_price": {
+      "type": "number",
+      "description": "Simulated launch price in USD"
+    },
+    "current_simulated_price": {
+      "type": "number",
+      "description": "Current simulated price"
+    },
+    "market_cap_simulated": {
+      "type": "number"
+    },
+    "tokenomics": {
+      "type": "string",
+      "description": "JSON \u2014 supply distribution, vesting, burns, staking"
+    },
+    "smart_contract_code": {
+      "type": "string",
+      "description": "AI-generated Solidity/Rust token contract code"
+    },
+    "deployment_steps": {
+      "type": "string",
+      "description": "JSON array of deployment process steps with status"
+    },
+    "launch_strategy": {
+      "type": "string",
+      "description": "DEX listing, liquidity pool, marketing plan"
+    },
+    "market_research": {
+      "type": "string",
+      "description": "Deep crypto market research findings"
+    },
+    "pattern_analysis": {
+      "type": "string",
+      "description": "JSON \u2014 detected market patterns, correlations, signals"
+    },
+    "price_simulation_data": {
+      "type": "string",
+      "description": "JSON array of simulated price points over time"
+    },
+    "correlated_assets": {
+      "type": "string",
+      "description": "JSON \u2014 assets correlated with this coin's behavior"
+    },
+    "risk_assessment": {
+      "type": "string",
+      "description": "AI risk analysis"
+    },
+    "documentation": {
+      "type": "string",
+      "description": "Full documentation \u2014 whitepaper-style"
+    },
+    "ai_insights": {
+      "type": "string",
+      "description": "AI strategic insights and recommendations"
+    },
+    "phase": {
+      "type": "string",
+      "enum": [
+        "research",
+        "design",
+        "contract_generation",
+        "testing",
+        "deployment_simulation",
+        "launch",
+        "trading",
+        "complete"
+      ],
+      "default": "research"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "paused",
+        "complete",
+        "failed"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "simulation_name",
+    "simulation_type",
+    "status"
+  ]
+}

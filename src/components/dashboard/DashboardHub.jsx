@@ -25,6 +25,8 @@ import FocusToolbar from "../focus/FocusToolbar";
 import { DEFAULT_TOOLS } from "./dashboardDefaults";
 import ToolCategoryGrid from "./ToolCategoryGrid";
 import DashboardWorkflowCreator from "./DashboardWorkflowCreator";
+import AutoDashboardConfigurator from "./AutoDashboardConfigurator";
+import AutoWorkflowEngine from "./AutoWorkflowEngine";
 
 const DEFAULT_GREETING = "";
 const DEFAULT_SUBTITLE = "Here's your sales intelligence briefing for today.";
@@ -164,7 +166,7 @@ export default function DashboardHub({ onOpenTool }) {
 
   const addSection = (type) => {
     const id = `sec_${type}_${Date.now()}`;
-    const titles = { calendar: "Weekly Calendar", summary: "Daily Summary", favorites: "Favorites", tools: "All Tools", sidebar: "Scheduled Items", notes: "Quick Notes", quicklinks: "Quick Links", activity: "Activity Stream", command_notepad: "Command Notepad", quick_workflow: "Quick Workflow", create_workflow: "Create Workflow", system_guardian: "System Guardian", financial_sandbox: "Financial Sandbox", orchestrator: "Orchestrator", focus_dashboard: "Focus Dashboard" };
+    const titles = { calendar: "Weekly Calendar", summary: "Daily Summary", favorites: "Favorites", tools: "All Tools", sidebar: "Scheduled Items", notes: "Quick Notes", quicklinks: "Quick Links", activity: "Activity Stream", command_notepad: "Command Notepad", quick_workflow: "Quick Workflow", create_workflow: "Create Workflow", system_guardian: "System Guardian", financial_sandbox: "Financial Sandbox", orchestrator: "Orchestrator", focus_dashboard: "Focus Dashboard", auto_dashboard: "Auto Dashboard Configurator", auto_workflow_engine: "Auto Workflow Engine" };
     const newSec = { id, type, title: titles[type] || type, size: ["calendar", "favorites", "tools"].includes(type) ? "full" : "half", collapsed: false };
     const updated = [...sections, newSec];
     setSections(updated);
@@ -403,6 +405,12 @@ export default function DashboardHub({ onOpenTool }) {
 
       case "activity":
         return <ActivityStream />;
+
+      case "auto_dashboard":
+        return <AutoDashboardConfigurator onApply={loadData} />;
+
+      case "auto_workflow_engine":
+        return <AutoWorkflowEngine onOpenTool={onOpenTool} />;
 
       default:
         return <div className="text-xs text-muted-foreground p-4 text-center">Unknown section</div>;

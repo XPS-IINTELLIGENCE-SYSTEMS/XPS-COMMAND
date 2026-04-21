@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, Plus, Calendar, FileText, Star, LayoutGrid, Clock, Bot, BarChart3, Wrench, MessageSquare, List, Activity, Zap, StickyNote, GitBranch, Shield, DollarSign, Crown, Target } from "lucide-react";
+import { X, Plus, Calendar, FileText, Star, LayoutGrid, Clock, Bot, BarChart3, Wrench, MessageSquare, List, Activity, Zap, StickyNote, GitBranch, Shield, DollarSign, Crown, Target, Layout } from "lucide-react";
 
 const SECTION_TEMPLATES = [
   { type: "command_notepad", label: "Command Notepad", desc: "Smart notes → tasks, workflows, schedules, reminders", icon: StickyNote, color: "#d4af37" },
@@ -18,6 +18,8 @@ const SECTION_TEMPLATES = [
   { type: "financial_sandbox", label: "Financial Sandbox", desc: "Mock $20K portfolio tracker with AI-managed buckets", icon: DollarSign, color: "#d4af37" },
   { type: "orchestrator", label: "Orchestrator", desc: "AI CEO — autonomous ops, agent coordination, self-scheduling", icon: Crown, color: "#d4af37" },
   { type: "focus_dashboard", label: "Focus Dashboard", desc: "Custom drag & drop tool boards for focused workflows", icon: Target, color: "#6366f1" },
+  { type: "auto_dashboard", label: "Auto Dashboard", desc: "AI-powered dashboard layout generator — presets or custom", icon: Layout, color: "#d4af37" },
+  { type: "auto_workflow_engine", label: "Auto Workflow Engine", desc: "Scan system → AI generates workflows → preview → execute", icon: Zap, color: "#f59e0b" },
 ];
 
 export default function AddSectionModal({ existingSections, onAdd, onClose }) {

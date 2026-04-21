@@ -65,6 +65,8 @@ import OrchestratorDashboard from "../orchestrator/OrchestratorDashboard";
 import HeyGenAvatarStudio from "../heygen/HeyGenAvatarStudio";
 import FocusDashboard from "../focus/FocusDashboard";
 import UsageEstimatorView from "../dashboard/UsageEstimatorView";
+import AutoDashboardConfigurator from "../dashboard/AutoDashboardConfigurator";
+import AutoWorkflowEngine from "../dashboard/AutoWorkflowEngine";
 
 export default function AppContent({ activeView, onChatCommand, onNavigate }) {
   switch (activeView) {
@@ -138,6 +140,8 @@ export default function AppContent({ activeView, onChatCommand, onNavigate }) {
     case "heygen_studio": return <HeyGenAvatarStudio />;
     case "focus_dashboard": return <FocusDashboard onOpenTool={onNavigate} />;
     case "usage_estimator": return <UsageEstimatorView />;
+    case "auto_dashboard": return <div className="max-w-3xl mx-auto p-6"><AutoDashboardConfigurator onApply={() => onNavigate?.("dashboard")} /></div>;
+    case "auto_workflow_engine": return <div className="max-w-3xl mx-auto p-6"><AutoWorkflowEngine onOpenTool={onNavigate} /></div>;
     case "ui_builder": return null; // Opens as standalone page at /ui-builder
     case "agent_zero": return null; // Opens as standalone page at /agent-zero
     default: return <div className="text-center py-20 text-muted-foreground">View not found</div>;

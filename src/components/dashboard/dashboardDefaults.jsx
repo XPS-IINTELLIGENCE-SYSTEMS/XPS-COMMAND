@@ -160,6 +160,8 @@ export const DEFAULT_TOOLS = [
   { id: "orchestrator", label: "Orchestrator", desc: "AI CEO — autonomous business ops, agent coordination, self-scheduling", iconName: "Brain", color: "#d4af37" },
   { id: "heygen_studio", label: "Avatar Studio", desc: "HeyGen lifelike AI avatars — create, generate videos, translate, lip-sync", iconName: "Users", color: "#ec4899" },
   { id: "usage_estimator", label: "Usage Estimator", desc: "Full audit of integration credit usage — automations, functions, costs", iconName: "BarChart3", color: "#ef4444" },
+  { id: "auto_dashboard", label: "Auto Dashboard", desc: "AI-powered dashboard layout generator — presets or custom AI", iconName: "Layout", color: "#d4af37" },
+  { id: "auto_workflow_engine", label: "Auto Workflows", desc: "Scan system → AI generates smart workflows → preview → execute", iconName: "Zap", color: "#f59e0b" },
 ];
 
 // Tool categories with metallic gold headers & descriptions
@@ -216,6 +218,6 @@ export const TOOL_CATEGORIES = [
     id: "system_admin",
     title: "System & Admin",
     desc: "Platform configuration, user management, connectors, and system health.",
-    toolIds: ["admin", "settings", "connectors", "algorithm", "system_health", "system_guardian", "tool_creator", "system_index", "system_instructions", "page_builder", "auto_enhance", "templates_library", "github_explorer", "hyper_evolver", "supabase_control", "ui_builder", "open_claw", "agent_zero", "editor_workspace", "focus_dashboard", "financial_sandbox", "passive_intel", "crypto_simulation", "orchestrator"],
+    toolIds: ["admin", "settings", "connectors", "algorithm", "system_health", "system_guardian", "tool_creator", "system_index", "system_instructions", "page_builder", "auto_enhance", "templates_library", "github_explorer", "hyper_evolver", "supabase_control", "ui_builder", "open_claw", "agent_zero", "editor_workspace", "focus_dashboard", "financial_sandbox", "passive_intel", "crypto_simulation", "orchestrator", "auto_dashboard", "auto_workflow_engine"],
   },
 ];

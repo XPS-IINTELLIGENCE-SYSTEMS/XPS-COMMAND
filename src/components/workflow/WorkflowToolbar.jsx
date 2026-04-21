@@ -58,10 +58,14 @@ export default function WorkflowToolbar({
 
   const aiOptimize = async () => {
     setAiOptimizing(true);
-    const result = await base44.integrations.Core.InvokeLLM({
-      prompt: `You are an XPS workflow optimization AI. Analyze this workflow and suggest improvements:\nName: ${name}\nDescription: ${description}\nTrigger: ${trigger}\nSteps: ${JSON.stringify(nodes.map(n => ({ type: n.type, label: n.label, agent: n.agent, config: n.config })))}\n\nSuggest: 1) Missing steps that would improve results 2) Better ordering 3) Agent assignments 4) Parameter optimizations. Be specific to the flooring/epoxy contractor business. Return a short text summary.`,
-    });
-    alert(result);
+    try {
+      const res = await base44.functions.invoke("groqLLM", {
+        prompt: `You are an XPS workflow optimization AI. Analyze this workflow and suggest improvements:\nName: ${name}\nDescription: ${description}\nTrigger: ${trigger}\nSteps: ${JSON.stringify(nodes.map(n => ({ type: n.type, label: n.label, agent: n.agent, config: n.config })))}\n\nSuggest: 1) Missing steps that would improve results 2) Better ordering 3) Agent assignments 4) Parameter optimizations. Be specific to the flooring/epoxy contractor business. Return a short text summary.`,
+      });
+      alert(res.data?.result || "No suggestions returned");
+    } catch (err) {
+      alert("AI optimization failed: " + (err.message || "Unknown error"));
+    }
     setAiOptimizing(false);
   };
 

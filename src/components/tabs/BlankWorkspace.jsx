@@ -4,6 +4,9 @@ import { toast } from "@/components/ui/use-toast";
 import WorkspaceNotes from "./WorkspaceNotes";
 import WorkspaceToolPicker from "./WorkspaceToolPicker";
 import WorkspaceToolPanel from "./WorkspaceToolPanel";
+import GoogleAppsBar from "./GoogleAppsBar";
+import GoogleAppEmbed from "./GoogleAppEmbed";
+import WorkspaceBrowser from "./WorkspaceBrowser";
 
 export default function BlankWorkspace({
   tab, onUpdateTab, onOpenTool, projects, onOpenProjects, onSetTabProject,
@@ -12,6 +15,7 @@ export default function BlankWorkspace({
   const [showToolPicker, setShowToolPicker] = useState(false);
   const [showShare, setShowShare] = useState(false);
   const [showEmail, setShowEmail] = useState(false);
+  const [activeGoogleApp, setActiveGoogleApp] = useState(null);
 
   const handleSave = () => {
     onUpdateTab(tab.id, { savedAt: new Date().toISOString() });
@@ -75,6 +79,21 @@ export default function BlankWorkspace({
         })}
       </div>
 
+      {/* Google Apps Bar */}
+      <GoogleAppsBar activeApp={activeGoogleApp} onSelectApp={setActiveGoogleApp} />
+
+      {/* Active Google App or Web Browser */}
+      {activeGoogleApp === "browser" && (
+        <div className="w-full mb-6">
+          <WorkspaceBrowser onClose={() => setActiveGoogleApp(null)} />
+        </div>
+      )}
+      {activeGoogleApp && activeGoogleApp !== "browser" && (
+        <div className="w-full mb-6">
+          <GoogleAppEmbed appId={activeGoogleApp} onClose={() => setActiveGoogleApp(null)} />
+        </div>
+      )}
+
       {/* Notes panel — inline expandable */}
       {showNotes && (
         <div className="w-full max-w-2xl mb-6">
@@ -97,15 +116,15 @@ export default function BlankWorkspace({
         </div>
       )}
 
-      {/* Empty state when nothing is added yet */}
-      {!showNotes && (tab.tools || []).length === 0 && (
+      {/* Empty state when nothing is active */}
+      {!showNotes && !activeGoogleApp && (tab.tools || []).length === 0 && (
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
             <div className="w-16 h-16 rounded-2xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-center mx-auto mb-4">
               <Wrench className="w-7 h-7 text-muted-foreground/30" />
             </div>
             <p className="text-sm text-muted-foreground/60 mb-1">Empty workspace</p>
-            <p className="text-xs text-muted-foreground/40">Use the buttons above to add tools, notes, or link a project</p>
+            <p className="text-xs text-muted-foreground/40">Use the Google apps above or action buttons to get started</p>
           </div>
         </div>
       )}

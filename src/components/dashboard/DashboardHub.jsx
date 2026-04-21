@@ -309,7 +309,7 @@ export default function DashboardHub({ onOpenTool }) {
               </div>
             ) : (
               <div className="relative group/greet">
-                <h1 className="text-[24px] sm:text-[32px] font-extrabold metallic-gold tracking-tight leading-tight">{displayGreeting}</h1>
+                <h1 className="text-[24px] sm:text-[32px] font-extrabold text-white tracking-tight leading-tight">{displayGreeting}</h1>
                 <p className="text-[13px] sm:text-[15px] text-white mt-1">{subtitle}</p>
                 <button onClick={startEditGreeting} className="absolute -right-1 top-0 p-2 rounded-lg active:bg-secondary sm:hover:bg-secondary opacity-100 sm:opacity-0 sm:group-hover/greet:opacity-100 transition-opacity" title="Edit greeting">
                   <Pencil className="w-4 h-4 text-muted-foreground" />

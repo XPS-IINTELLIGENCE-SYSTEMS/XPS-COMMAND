@@ -12,11 +12,18 @@ import MobileBottomBar from "../components/mobile/MobileBottomBar";
 import MobileToolHeader from "../components/mobile/MobileToolHeader";
 import AnimatedView from "../components/mobile/AnimatedView";
 import GlobalSearchModal from "../components/search/GlobalSearchModal";
+import BrowserTabBar from "../components/tabs/BrowserTabBar";
+import ProjectDrawer from "../components/tabs/ProjectDrawer";
+import TabProjectBanner from "../components/tabs/TabProjectBanner";
+import useWorkspaceTabs from "../hooks/useWorkspaceTabs";
 import { DEFAULT_TOOLS } from "../components/dashboard/dashboardDefaults";
 import useSystemTheme from "../hooks/useSystemTheme";
 
 export default function Home() {
-  const [activeView, setActiveView] = useState(null); // null = show dashboard hub
+  const workspace = useWorkspaceTabs();
+  const activeView = workspace.activeTab?.activeView || null;
+  const setActiveView = (view) => workspace.setTabView(workspace.activeTabId, view);
+
   const [chatWidth, setChatWidth] = useState(() => parseInt(localStorage.getItem("xps-chat-width")) || 340);
   const [chatOpen, setChatOpen] = useState(true);
   const [theme, setTheme] = useState(() => {
@@ -28,7 +35,8 @@ export default function Home() {
   const [showPrivacy, setShowPrivacy] = useState(false);
   const [mobileTab, setMobileTab] = useState("home"); // home, chat, tools, settings
   const [showSearch, setShowSearch] = useState(false);
-  const tabViewMemory = useRef({}); // remembers activeView per tab
+  const [projectDrawerOpen, setProjectDrawerOpen] = useState(false);
+  const tabViewMemory = useRef({}); // remembers activeView per mobile tab
   const chatRef = useRef(null);
   const resizing = useRef(false);
 
@@ -174,8 +182,22 @@ export default function Home() {
         {/* Global top nav with hamburger, home, back */}
         <GlobalNav />
 
-        {/* Secondary bar: theme toggle + chat toggle (desktop only) */}
-        <div className="hidden lg:flex h-10 items-center justify-end px-4 gap-2 flex-shrink-0 border-b border-white/[0.06]"
+        {/* Browser-style tab bar (desktop) */}
+        <div className="hidden lg:block">
+          <BrowserTabBar
+            tabs={workspace.tabs}
+            activeTabId={workspace.activeTabId}
+            onSelectTab={workspace.setActiveTabId}
+            onAddTab={() => workspace.addTab()}
+            onCloseTab={workspace.closeTab}
+            onRenameTab={workspace.renameTab}
+            projects={workspace.projects}
+            onOpenProjects={() => setProjectDrawerOpen(true)}
+          />
+        </div>
+
+        {/* Secondary bar: back + search + theme (desktop only) */}
+        <div className="hidden lg:flex h-9 items-center justify-end px-4 gap-2 flex-shrink-0 border-b border-white/[0.06]"
           style={{ background: "rgba(0,0,0,0.3)" }}
         >
           {activeView && (
@@ -204,13 +226,21 @@ export default function Home() {
 
         {/* Content: Dashboard Hub or Tool View with slide animation */}
         <main className="flex-1 overflow-y-auto pb-16 lg:pb-0">
+          {/* Project banner at top of content area */}
+          <div className="hidden lg:block max-w-[1100px] mx-auto px-3 sm:px-6 pt-3">
+            <TabProjectBanner
+              project={workspace.projects.find(p => p.id === workspace.activeTab?.projectId)}
+              onOpenProjects={() => setProjectDrawerOpen(true)}
+            />
+          </div>
+
           <AnimatePresence mode="wait">
             {activeView === null ? (
-              <AnimatedView viewKey="dashboard">
+              <AnimatedView viewKey={`dashboard-${workspace.activeTabId}`}>
                 <DashboardHub onOpenTool={handleOpenTool} />
               </AnimatedView>
             ) : (
-              <AnimatedView viewKey={activeView}>
+              <AnimatedView viewKey={`${workspace.activeTabId}-${activeView}`}>
                 <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
                   <AppContent activeView={activeView} onChatCommand={() => {}} onNavigate={handleOpenTool} />
                 </div>
@@ -222,6 +252,18 @@ export default function Home() {
 
       {/* Mobile Bottom Tab Bar */}
       <MobileBottomBar activeTab={mobileTab} onTabChange={handleMobileTab} />
+
+      {/* Project Drawer */}
+      <ProjectDrawer
+        open={projectDrawerOpen}
+        onClose={() => setProjectDrawerOpen(false)}
+        projects={workspace.projects}
+        onCreateProject={workspace.createProject}
+        onRenameProject={workspace.renameProject}
+        onDeleteProject={workspace.deleteProject}
+        tabs={workspace.tabs}
+        onAddTab={workspace.addTab}
+      />
 
       {/* Mobile Chat Drawer — triggered by bottom bar "Chat" tab */}
       {chatOpen && (

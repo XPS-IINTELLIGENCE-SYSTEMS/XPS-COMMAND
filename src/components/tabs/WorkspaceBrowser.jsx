@@ -8,6 +8,7 @@ import { base44 } from "@/api/base44Client";
 import BrowserHomePage from "./browser/BrowserHomePage";
 import BrowserSearchResults from "./browser/BrowserSearchResults";
 import BrowserPageView from "./browser/BrowserPageView";
+import BrowserAgentPanel from "./browser/BrowserAgentPanel";
 
 export default function WorkspaceBrowser({ onClose }) {
   const [url, setUrl] = useState("");
@@ -121,6 +122,34 @@ export default function WorkspaceBrowser({ onClose }) {
       setUrl("");
       setView("search");
     }
+  };
+
+  // Submit form action
+  const submitForm = async (formAction, formMethod, formData) => {
+    if (!formAction) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await base44.functions.invoke("headlessBrowser", {
+        action: "submit_form",
+        form_action: formAction,
+        form_method: formMethod,
+        form_data: formData,
+      });
+      const d = res.data;
+      if (d?.success) {
+        setPageData(d);
+        setUrl(d.url || formAction);
+        setInputUrl(d.url || formAction);
+        setView("page");
+        pushHistory({ type: "page", url: d.url || formAction, data: d });
+      } else {
+        setError(d?.error || "Form submission failed");
+      }
+    } catch (err) {
+      setError(err.message);
+    }
+    setLoading(false);
   };
 
   const goHome = () => {
@@ -237,9 +266,18 @@ export default function WorkspaceBrowser({ onClose }) {
             data={pageData}
             onNavigate={navigateToUrl}
             onSearch={performSearch}
+            onSubmitForm={submitForm}
           />
         )}
       </div>
+
+      {/* Agent panel */}
+      <BrowserAgentPanel
+        currentUrl={url}
+        pageData={pageData}
+        onNavigate={navigateToUrl}
+        onSearch={performSearch}
+      />
     </div>
   );
 }

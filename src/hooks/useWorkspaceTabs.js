@@ -28,7 +28,17 @@ export default function useWorkspaceTabs() {
       if (me?.workspace_tabs) {
         try {
           const data = typeof me.workspace_tabs === "string" ? JSON.parse(me.workspace_tabs) : me.workspace_tabs;
-          if (data.tabs?.length) setTabs(data.tabs);
+          if (data.tabs?.length) {
+            // Ensure the default tab is always present and always first
+            const hasDefault = data.tabs.some(t => t.id === DEFAULT_TAB.id);
+            const restored = hasDefault
+              ? data.tabs.map(t => t.id === DEFAULT_TAB.id ? { ...DEFAULT_TAB, ...t, isDefault: true } : t)
+              : [DEFAULT_TAB, ...data.tabs];
+            // Make sure default tab is first
+            const defaultTab = restored.find(t => t.id === DEFAULT_TAB.id);
+            const otherTabs = restored.filter(t => t.id !== DEFAULT_TAB.id);
+            setTabs([defaultTab, ...otherTabs]);
+          }
           if (data.activeTabId) setActiveTabId(data.activeTabId);
           if (data.projects) setProjects(data.projects);
         } catch {}
@@ -65,6 +75,7 @@ export default function useWorkspaceTabs() {
 
   const closeTab = useCallback((tabId) => {
     if (tabs.length <= 1) return; // Keep at least one tab
+    if (tabId === DEFAULT_TAB.id) return; // Never close the default dashboard tab
     const idx = tabs.findIndex(t => t.id === tabId);
     const updated = tabs.filter(t => t.id !== tabId);
     setTabs(updated);

@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Plus, X, FolderOpen } from "lucide-react";
+import { Plus, X, FolderOpen, Home } from "lucide-react";
 
 export default function BrowserTabBar({
   tabs, activeTabId, onSelectTab, onAddTab, onCloseTab, onRenameTab,
@@ -86,15 +86,17 @@ export default function BrowserTabBar({
               </span>
             )}
 
-            {/* Close button */}
-            {tabs.length > 1 && (
+            {/* Close button — hidden for default tab */}
+            {tab.isDefault ? (
+              <Home className="w-3 h-3 ml-auto text-primary/50 flex-shrink-0" />
+            ) : tabs.length > 1 ? (
               <button
                 onClick={(e) => { e.stopPropagation(); onCloseTab(tab.id); }}
                 className="ml-auto p-0.5 rounded hover:bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
               >
                 <X className="w-3 h-3" />
               </button>
-            )}
+            ) : null}
           </div>
         );
       })}

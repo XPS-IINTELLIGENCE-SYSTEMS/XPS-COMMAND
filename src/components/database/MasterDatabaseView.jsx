@@ -120,7 +120,7 @@ export default function MasterDatabaseView() {
         <div className="flex items-center gap-3">
           <Database className="w-6 h-6 metallic-gold-icon" />
           <div>
-            <h2 className="text-xl font-bold metallic-gold">Master Database</h2>
+            <h2 className="text-xl font-bold metallic-gold">Operations Database</h2>
             <p className="text-[10px] text-muted-foreground">
               {allRecords.length} total records — {totalProfiled} profiled — {leads.length} companies, {contractors.length} contractors, {jobs.length} jobs
             </p>

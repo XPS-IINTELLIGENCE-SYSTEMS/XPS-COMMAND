@@ -101,12 +101,11 @@ Return the most valuable, actionable intelligence found. Include: new products, 
       // Store enhancement idea as SiteImprovement
       if (result.system_enhancement_idea) {
         await base44.asServiceRole.entities.SiteImprovement.create({
-          title: `[HyperEvolve] ${target.name}: ${result.system_enhancement_idea.substring(0, 100)}`,
-          description: result.system_enhancement_idea,
-          category: 'AI Enhancement',
-          priority: 'Medium',
-          status: 'Proposed',
-          source: `HyperEvolver — ${target.name}`,
+          page_affected: 'System',
+          improvement_type: 'new_feature',
+          description: `[HyperEvolve] ${target.name}: ${result.system_enhancement_idea}`,
+          agent_triggered: `HyperEvolver — ${target.name}`,
+          notes: result.system_enhancement_idea,
         }).catch(() => {});
       }
     } catch (e) {

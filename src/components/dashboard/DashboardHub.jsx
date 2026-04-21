@@ -15,6 +15,8 @@ import AddSectionModal from "./AddSectionModal";
 import NotesWidget from "./NotesWidget";
 import QuickLinksWidget from "./QuickLinksWidget";
 import ActivityStream from "./ActivityStream";
+import CommandNotepad from "./CommandNotepad";
+import QuickWorkflowBar from "./QuickWorkflowBar";
 import { DEFAULT_TOOLS } from "./dashboardDefaults";
 import ToolCategoryGrid from "./ToolCategoryGrid";
 
@@ -23,6 +25,8 @@ const DEFAULT_SUBTITLE = "Here's your sales intelligence briefing for today.";
 
 const DEFAULT_SECTIONS = [
   { id: "sec_greeting", type: "greeting", title: "Greeting", size: "full", collapsed: false },
+  { id: "sec_notepad", type: "command_notepad", title: "Command Notepad", size: "half", collapsed: false },
+  { id: "sec_workflow", type: "quick_workflow", title: "Quick Workflow", size: "half", collapsed: false },
   { id: "sec_pipeline", type: "pipeline", title: "Pipeline", size: "full", collapsed: false },
   { id: "sec_calendar", type: "calendar", title: "Calendar", size: "full", collapsed: false },
   { id: "sec_summary", type: "summary", title: "Daily Summary", size: "half", collapsed: false },
@@ -154,7 +158,7 @@ export default function DashboardHub({ onOpenTool }) {
 
   const addSection = (type) => {
     const id = `sec_${type}_${Date.now()}`;
-    const titles = { calendar: "Weekly Calendar", summary: "Daily Summary", favorites: "Favorites", tools: "All Tools", sidebar: "Scheduled Items", notes: "Quick Notes", quicklinks: "Quick Links", activity: "Activity Stream" };
+    const titles = { calendar: "Weekly Calendar", summary: "Daily Summary", favorites: "Favorites", tools: "All Tools", sidebar: "Scheduled Items", notes: "Quick Notes", quicklinks: "Quick Links", activity: "Activity Stream", command_notepad: "Command Notepad", quick_workflow: "Quick Workflow" };
     const newSec = { id, type, title: titles[type] || type, size: ["calendar", "favorites", "tools"].includes(type) ? "full" : "half", collapsed: false };
     const updated = [...sections, newSec];
     setSections(updated);
@@ -385,6 +389,12 @@ export default function DashboardHub({ onOpenTool }) {
             </Droppable>
           </div>
         );
+
+      case "command_notepad":
+        return <CommandNotepad onOpenTool={onOpenTool} />;
+
+      case "quick_workflow":
+        return <QuickWorkflowBar onOpenTool={onOpenTool} />;
 
       case "notes":
         return <NotesWidget content={widgetData[section.id]?.notes || ""} onChange={(val) => updateWidgetData(section.id, { ...widgetData[section.id], notes: val })} />;

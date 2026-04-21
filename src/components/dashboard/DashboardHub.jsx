@@ -28,7 +28,6 @@ const DEFAULT_SECTIONS = [
   { id: "sec_datacenter", type: "datacenter", title: "Command Center", size: "full", collapsed: false },
   { id: "sec_quickaccess", type: "quickaccess", title: "Quick Access", size: "full", collapsed: false },
   { id: "sec_pipeline", type: "pipeline", title: "Pipeline", size: "full", collapsed: false },
-  { id: "sec_calendar", type: "calendar", title: "Calendar", size: "full", collapsed: false },
   { id: "sec_summary", type: "summary", title: "Daily Summary", size: "half", collapsed: false },
   { id: "sec_sidebar", type: "sidebar", title: "Scheduled Items", size: "half", collapsed: false },
   { id: "sec_activity", type: "activity", title: "Activity Stream", size: "full", collapsed: false },

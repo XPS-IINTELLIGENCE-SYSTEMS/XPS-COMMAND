@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { X, Plus, Calendar, FileText, Star, LayoutGrid, Clock, Bot, BarChart3, Wrench, MessageSquare, List, Activity, Zap } from "lucide-react";
+import { X, Plus, FileText, Star, LayoutGrid, Clock, Bot, BarChart3, Wrench, MessageSquare, List, Activity, Zap } from "lucide-react";
 
 const SECTION_TEMPLATES = [
+  { type: "datacenter", label: "Command Center", desc: "Enterprise intelligence data center view", icon: Zap, color: "#d4af37" },
   { type: "pipeline", label: "Pipeline", desc: "Interactive XPS master workflow pipeline", icon: Zap, color: "#d4af37" },
-  { type: "calendar", label: "Calendar", desc: "Daily / Weekly / Monthly schedule", icon: Calendar, color: "#d4af37" },
   { type: "summary", label: "Daily Summary", desc: "Today's KPIs and activity", icon: FileText, color: "#22c55e" },
   { type: "activity", label: "Activity Stream", desc: "Real-time AI agent actions & approvals", icon: Activity, color: "#8b5cf6" },
   { type: "favorites", label: "Favorites Grid", desc: "Pinned tool cards", icon: Star, color: "#f59e0b" },

@@ -112,6 +112,24 @@ Return ONLY the JSON array, no explanation. Pick 3-8 steps that logically achiev
         </Button>
       </div>
 
+      {/* Quick goal buttons */}
+      {!loading && (
+        <div className="flex flex-wrap gap-1.5">
+          {[
+            "Scrape 25 leads in FL, score & email top ones",
+            "Find commercial bids, generate takeoff & send proposal",
+            "Research competitors and build SEO content strategy",
+            "Bulk enrich all new leads and sync to HubSpot",
+            "Morning brief → score leads → auto follow-up stale ones",
+            "Scrape contractors in 3 states, profile & send intro packages",
+          ].map((g) => (
+            <button key={g} onClick={() => { setGoal(g); }} className="px-2.5 py-1.5 rounded-lg bg-secondary/50 hover:bg-secondary text-[9px] text-muted-foreground hover:text-foreground transition-colors text-left">
+              {g}
+            </button>
+          ))}
+        </div>
+      )}
+
       {error && <p className="text-[10px] text-destructive">{error}</p>}
 
       {loading && (

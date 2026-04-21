@@ -62,6 +62,7 @@ import SystemGuardianDashboard from "../guardian/SystemGuardianDashboard";
 import FinancialSandboxView from "../financial/FinancialSandboxView";
 import CryptoSimulationView from "../crypto/CryptoSimulationView";
 import OrchestratorDashboard from "../orchestrator/OrchestratorDashboard";
+import HeyGenAvatarStudio from "../heygen/HeyGenAvatarStudio";
 
 export default function AppContent({ activeView, onChatCommand, onNavigate }) {
   switch (activeView) {
@@ -132,6 +133,7 @@ export default function AppContent({ activeView, onChatCommand, onNavigate }) {
     case "financial_sandbox": return <FinancialSandboxView />;
     case "crypto_simulation": return <CryptoSimulationView />;
     case "orchestrator": return <OrchestratorDashboard />;
+    case "heygen_studio": return <HeyGenAvatarStudio />;
     case "ui_builder": return null; // Opens as standalone page at /ui-builder
     case "agent_zero": return null; // Opens as standalone page at /agent-zero
     default: return <div className="text-center py-20 text-muted-foreground">View not found</div>;

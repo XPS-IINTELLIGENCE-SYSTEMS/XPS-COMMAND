@@ -157,6 +157,7 @@ export const DEFAULT_TOOLS = [
   { id: "passive_intel", label: "Passive Intel", desc: "Auto-scrape finance, AI, industry trends daily", iconName: "Radar", color: "#8b5cf6" },
   { id: "crypto_simulation", label: "Crypto Lab", desc: "Deep research, coin creation, launch simulation, pattern detection", iconName: "TrendingUp", color: "#f59e0b" },
   { id: "orchestrator", label: "Orchestrator", desc: "AI CEO — autonomous business ops, agent coordination, self-scheduling", iconName: "Brain", color: "#d4af37" },
+  { id: "heygen_studio", label: "Avatar Studio", desc: "HeyGen lifelike AI avatars — create, generate videos, translate, lip-sync", iconName: "Users", color: "#ec4899" },
 ];
 
 // Tool categories with metallic gold headers & descriptions
@@ -195,7 +196,7 @@ export const TOOL_CATEGORIES = [
     id: "content_media",
     title: "Content & Media",
     desc: "Branding, social media, video, and AI-generated marketing assets.",
-    toolIds: ["media_hub", "scrape_social", "scrape_trends", "analytics"],
+    toolIds: ["media_hub", "heygen_studio", "scrape_social", "scrape_trends", "analytics"],
   },
   {
     id: "ai_agents",

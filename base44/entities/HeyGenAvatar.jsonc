@@ -1,0 +1,85 @@
+{
+  "name": "HeyGenAvatar",
+  "type": "object",
+  "properties": {
+    "avatar_name": {
+      "type": "string",
+      "description": "Display name for the avatar"
+    },
+    "avatar_id": {
+      "type": "string",
+      "description": "HeyGen avatar_id returned from API"
+    },
+    "avatar_type": {
+      "type": "string",
+      "enum": [
+        "photo",
+        "studio",
+        "instant",
+        "custom"
+      ],
+      "default": "photo"
+    },
+    "gender": {
+      "type": "string",
+      "enum": [
+        "male",
+        "female",
+        "unspecified"
+      ],
+      "default": "unspecified"
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "heygen_stock",
+        "uploaded",
+        "generated"
+      ],
+      "default": "heygen_stock"
+    },
+    "preview_url": {
+      "type": "string",
+      "description": "Avatar preview image URL"
+    },
+    "photo_urls": {
+      "type": "string",
+      "description": "JSON array of uploaded photo URLs used to create this avatar"
+    },
+    "voice_id": {
+      "type": "string",
+      "description": "Default voice ID for this avatar"
+    },
+    "voice_name": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "creating",
+        "ready",
+        "failed",
+        "archived"
+      ],
+      "default": "creating"
+    },
+    "videos_created": {
+      "type": "number",
+      "default": 0
+    },
+    "last_video_url": {
+      "type": "string"
+    },
+    "metadata": {
+      "type": "string",
+      "description": "JSON blob \u2014 HeyGen raw avatar data"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "avatar_name",
+    "status"
+  ]
+}

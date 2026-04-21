@@ -19,6 +19,7 @@ import CommandNotepad from "./CommandNotepad";
 import QuickWorkflowBar from "./QuickWorkflowBar";
 import SystemGuardianDashboard from "../guardian/SystemGuardianDashboard";
 import FinancialSandboxView from "../financial/FinancialSandboxView";
+import OrchestratorDashboard from "../orchestrator/OrchestratorDashboard";
 import { DEFAULT_TOOLS } from "./dashboardDefaults";
 import ToolCategoryGrid from "./ToolCategoryGrid";
 
@@ -160,7 +161,7 @@ export default function DashboardHub({ onOpenTool }) {
 
   const addSection = (type) => {
     const id = `sec_${type}_${Date.now()}`;
-    const titles = { calendar: "Weekly Calendar", summary: "Daily Summary", favorites: "Favorites", tools: "All Tools", sidebar: "Scheduled Items", notes: "Quick Notes", quicklinks: "Quick Links", activity: "Activity Stream", command_notepad: "Command Notepad", quick_workflow: "Quick Workflow", system_guardian: "System Guardian", financial_sandbox: "Financial Sandbox" };
+    const titles = { calendar: "Weekly Calendar", summary: "Daily Summary", favorites: "Favorites", tools: "All Tools", sidebar: "Scheduled Items", notes: "Quick Notes", quicklinks: "Quick Links", activity: "Activity Stream", command_notepad: "Command Notepad", quick_workflow: "Quick Workflow", system_guardian: "System Guardian", financial_sandbox: "Financial Sandbox", orchestrator: "Orchestrator" };
     const newSec = { id, type, title: titles[type] || type, size: ["calendar", "favorites", "tools"].includes(type) ? "full" : "half", collapsed: false };
     const updated = [...sections, newSec];
     setSections(updated);
@@ -409,6 +410,9 @@ export default function DashboardHub({ onOpenTool }) {
 
       case "financial_sandbox":
         return <FinancialSandboxView />;
+
+      case "orchestrator":
+        return <OrchestratorDashboard />;
 
       case "activity":
         return <ActivityStream />;

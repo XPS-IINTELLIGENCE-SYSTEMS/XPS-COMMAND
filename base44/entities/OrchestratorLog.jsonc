@@ -1,0 +1,80 @@
+{
+  "name": "OrchestratorLog",
+  "type": "object",
+  "properties": {
+    "cycle_id": {
+      "type": "string",
+      "description": "Unique cycle identifier"
+    },
+    "cycle_type": {
+      "type": "string",
+      "enum": [
+        "morning_ops",
+        "midday_optimize",
+        "afternoon_outreach",
+        "evening_analysis",
+        "overnight_maintenance",
+        "on_demand",
+        "strategic_review"
+      ],
+      "default": "on_demand"
+    },
+    "summary": {
+      "type": "string",
+      "description": "Human-readable plain English summary of what happened"
+    },
+    "agents_deployed": {
+      "type": "string",
+      "description": "JSON array of agent names activated this cycle"
+    },
+    "actions_taken": {
+      "type": "string",
+      "description": "JSON array of action objects with agent, action, result, impact"
+    },
+    "improvements_made": {
+      "type": "string",
+      "description": "JSON array of system improvements identified and executed"
+    },
+    "metrics_before": {
+      "type": "string",
+      "description": "JSON snapshot of system metrics before cycle"
+    },
+    "metrics_after": {
+      "type": "string",
+      "description": "JSON snapshot of system metrics after cycle"
+    },
+    "next_scheduled_actions": {
+      "type": "string",
+      "description": "JSON array of what the orchestrator plans to do next"
+    },
+    "decisions_made": {
+      "type": "string",
+      "description": "JSON array of strategic decisions with reasoning"
+    },
+    "health_score": {
+      "type": "number",
+      "description": "Overall system health 0-100 after this cycle"
+    },
+    "revenue_impact": {
+      "type": "string",
+      "description": "Estimated revenue impact of actions taken"
+    },
+    "duration_ms": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "running",
+        "complete",
+        "partial",
+        "failed"
+      ],
+      "default": "running"
+    }
+  },
+  "required": [
+    "cycle_type",
+    "status"
+  ]
+}

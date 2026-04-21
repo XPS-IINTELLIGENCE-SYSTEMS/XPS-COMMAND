@@ -156,6 +156,7 @@ export const DEFAULT_TOOLS = [
   { id: "financial_sandbox", label: "Financial Sandbox", desc: "Mock $20K portfolio — AI trades, reflection, growth", iconName: "TrendingUp", color: "#d4af37" },
   { id: "passive_intel", label: "Passive Intel", desc: "Auto-scrape finance, AI, industry trends daily", iconName: "Radar", color: "#8b5cf6" },
   { id: "crypto_simulation", label: "Crypto Lab", desc: "Deep research, coin creation, launch simulation, pattern detection", iconName: "TrendingUp", color: "#f59e0b" },
+  { id: "orchestrator", label: "Orchestrator", desc: "AI CEO — autonomous business ops, agent coordination, self-scheduling", iconName: "Brain", color: "#d4af37" },
 ];
 
 // Tool categories with metallic gold headers & descriptions
@@ -212,6 +213,6 @@ export const TOOL_CATEGORIES = [
     id: "system_admin",
     title: "System & Admin",
     desc: "Platform configuration, user management, connectors, and system health.",
-    toolIds: ["admin", "settings", "connectors", "algorithm", "system_health", "system_guardian", "tool_creator", "system_index", "system_instructions", "page_builder", "auto_enhance", "templates_library", "github_explorer", "hyper_evolver", "supabase_control", "ui_builder", "open_claw", "agent_zero", "editor_workspace", "financial_sandbox", "passive_intel", "crypto_simulation"],
+    toolIds: ["admin", "settings", "connectors", "algorithm", "system_health", "system_guardian", "tool_creator", "system_index", "system_instructions", "page_builder", "auto_enhance", "templates_library", "github_explorer", "hyper_evolver", "supabase_control", "ui_builder", "open_claw", "agent_zero", "editor_workspace", "financial_sandbox", "passive_intel", "crypto_simulation", "orchestrator"],
   },
 ];

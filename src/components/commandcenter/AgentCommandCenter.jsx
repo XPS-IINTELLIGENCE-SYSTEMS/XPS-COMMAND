@@ -1,13 +1,17 @@
 import { useState, useEffect, useCallback } from "react";
 import { base44 } from "@/api/base44Client";
-import { Loader2, RefreshCw, Cpu, Eye } from "lucide-react";
+import { Loader2, RefreshCw, Cpu, Eye, Users, Brain } from "lucide-react";
 import GoalInput from "./GoalInput";
+import CollabGoalInput from "./CollabGoalInput";
+import CollabResultPanel from "./CollabResultPanel";
+import ReflectionPanel from "./ReflectionPanel";
 import AgentStatusCard from "./AgentStatusCard";
 import LiveActivityFeed from "./LiveActivityFeed";
 import TaskQueue from "./TaskQueue";
 import PerformanceBar from "./PerformanceBar";
 import JobDetailModal from "./JobDetailModal";
 import ShadowBrowserPanel from "./ShadowBrowserPanel";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const AGENT_NAMES = ["Coordinator", "Browser", "Research", "Scraper", "Writer", "Analyst", "Coder", "Scheduler", "Shadow Browser"];
 
@@ -17,12 +21,15 @@ export default function AgentCommandCenter() {
   const [submitting, setSubmitting] = useState(false);
   const [selectedJob, setSelectedJob] = useState(null);
   const [lastGoalResult, setLastGoalResult] = useState(null);
+  const [collabSubmitting, setCollabSubmitting] = useState(false);
+  const [collabResult, setCollabResult] = useState(null);
+  const [commandTab, setCommandTab] = useState("single");
 
   const loadDashboard = useCallback(async () => {
     try {
       const res = await base44.functions.invoke("autonomousEngine", { action: "dashboard" });
       setStats(res.data);
-    } catch { /* ignore */ }
+    } catch (e) { /* ignore */ }
     setLoading(false);
   }, []);
 
@@ -78,30 +85,65 @@ export default function AgentCommandCenter() {
         </button>
       </div>
 
-      {/* Goal Input */}
+      {/* Goal Input with Tabs */}
       <div className="bg-card border border-border rounded-xl p-4">
-        <GoalInput onSubmit={handleSubmitGoal} loading={submitting} />
-        {lastGoalResult && !lastGoalResult.error && (
-          <div className="mt-3 p-3 rounded-lg bg-green-500/10 border border-green-500/20">
-            <p className="text-xs font-semibold text-green-400 mb-1">
-              Goal launched — {lastGoalResult.tasks_created} tasks created
-            </p>
-            <p className="text-[11px] text-green-300/80">{lastGoalResult.plan_summary}</p>
-            {lastGoalResult.coordinator_job_id && (
-              <button
-                onClick={() => setSelectedJob(lastGoalResult.coordinator_job_id)}
-                className="mt-2 text-[10px] text-primary hover:underline"
-              >
-                View execution details →
-              </button>
+        <Tabs value={commandTab} onValueChange={setCommandTab}>
+          <TabsList className="bg-secondary/50 p-0.5 h-auto mb-3">
+            <TabsTrigger value="single" className="text-[10px] px-3 py-1.5 gap-1"><Cpu className="w-3 h-3" /> Single Agent</TabsTrigger>
+            <TabsTrigger value="collab" className="text-[10px] px-3 py-1.5 gap-1"><Users className="w-3 h-3" /> Multi-Agent Collab</TabsTrigger>
+            <TabsTrigger value="reflect" className="text-[10px] px-3 py-1.5 gap-1"><Brain className="w-3 h-3" /> Self-Reflection</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="single" className="mt-0">
+            <GoalInput onSubmit={handleSubmitGoal} loading={submitting} />
+            {lastGoalResult && !lastGoalResult.error && (
+              <div className="mt-3 p-3 rounded-lg bg-green-500/10 border border-green-500/20">
+                <p className="text-xs font-semibold text-green-400 mb-1">
+                  Goal launched — {lastGoalResult.tasks_created} tasks created
+                </p>
+                <p className="text-[11px] text-green-300/80">{lastGoalResult.plan_summary}</p>
+                {lastGoalResult.coordinator_job_id && (
+                  <button
+                    onClick={() => setSelectedJob(lastGoalResult.coordinator_job_id)}
+                    className="mt-2 text-[10px] text-primary hover:underline"
+                  >
+                    View execution details →
+                  </button>
+                )}
+              </div>
             )}
-          </div>
-        )}
-        {lastGoalResult?.error && (
-          <div className="mt-3 p-3 rounded-lg bg-red-500/10 border border-red-500/20">
-            <p className="text-xs text-red-400">{lastGoalResult.error}</p>
-          </div>
-        )}
+            {lastGoalResult?.error && (
+              <div className="mt-3 p-3 rounded-lg bg-red-500/10 border border-red-500/20">
+                <p className="text-xs text-red-400">{lastGoalResult.error}</p>
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="collab" className="mt-0">
+            <CollabGoalInput
+              onSubmit={async (goal) => {
+                setCollabSubmitting(true);
+                setCollabResult(null);
+                try {
+                  const res = await base44.functions.invoke("multiAgentCollab", { action: "collaborative_goal", goal });
+                  setCollabResult(res.data);
+                  loadDashboard();
+                } catch (err) {
+                  setCollabResult({ error: err.message });
+                }
+                setCollabSubmitting(false);
+              }}
+              loading={collabSubmitting}
+            />
+            <div className="mt-3">
+              <CollabResultPanel result={collabResult} />
+            </div>
+          </TabsContent>
+
+          <TabsContent value="reflect" className="mt-0">
+            <ReflectionPanel />
+          </TabsContent>
+        </Tabs>
       </div>
 
       {/* Performance Metrics */}

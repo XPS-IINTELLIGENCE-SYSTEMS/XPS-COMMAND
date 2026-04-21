@@ -1,0 +1,99 @@
+{
+  "name": "AgentReflection",
+  "type": "object",
+  "properties": {
+    "agent_type": {
+      "type": "string",
+      "description": "Which agent performed this reflection"
+    },
+    "reflection_type": {
+      "type": "string",
+      "enum": [
+        "performance_review",
+        "skill_upgrade",
+        "collaboration_review",
+        "self_correction",
+        "strategy_shift"
+      ],
+      "default": "performance_review"
+    },
+    "trigger": {
+      "type": "string",
+      "enum": [
+        "scheduled",
+        "failure",
+        "low_performance",
+        "collaboration_end",
+        "manual"
+      ],
+      "default": "scheduled"
+    },
+    "jobs_analyzed": {
+      "type": "number",
+      "default": 0
+    },
+    "success_rate": {
+      "type": "number",
+      "description": "Success rate 0-100 for period analyzed"
+    },
+    "avg_duration_ms": {
+      "type": "number"
+    },
+    "strengths": {
+      "type": "string",
+      "description": "JSON array of identified strengths"
+    },
+    "weaknesses": {
+      "type": "string",
+      "description": "JSON array of identified weaknesses"
+    },
+    "improvements_applied": {
+      "type": "string",
+      "description": "JSON array of concrete improvements made"
+    },
+    "prompt_upgrades": {
+      "type": "string",
+      "description": "JSON \u2014 upgraded system prompts or parameters"
+    },
+    "collaboration_score": {
+      "type": "number",
+      "description": "How well this agent collaborated with others 0-100"
+    },
+    "delegation_efficiency": {
+      "type": "number",
+      "description": "How efficiently tasks were delegated 0-100"
+    },
+    "self_correction_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Times the agent self-corrected during the period"
+    },
+    "summary": {
+      "type": "string",
+      "description": "Human-readable reflection summary"
+    },
+    "next_actions": {
+      "type": "string",
+      "description": "JSON array of recommended next actions"
+    },
+    "performance_trend": {
+      "type": "string",
+      "enum": [
+        "improving",
+        "stable",
+        "declining",
+        "new"
+      ],
+      "default": "new"
+    },
+    "related_job_ids": {
+      "type": "string",
+      "description": "JSON array of job IDs analyzed"
+    }
+  },
+  "required": [
+    "agent_type",
+    "reflection_type",
+    "summary"
+  ]
+}

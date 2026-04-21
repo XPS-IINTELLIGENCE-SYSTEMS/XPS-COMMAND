@@ -14,7 +14,7 @@ import AnimatedView from "../components/mobile/AnimatedView";
 import GlobalSearchModal from "../components/search/GlobalSearchModal";
 import BrowserTabBar from "../components/tabs/BrowserTabBar";
 import ProjectDrawer from "../components/tabs/ProjectDrawer";
-import TabProjectBanner from "../components/tabs/TabProjectBanner";
+import BlankWorkspace from "../components/tabs/BlankWorkspace";
 import useWorkspaceTabs from "../hooks/useWorkspaceTabs";
 import { DEFAULT_TOOLS } from "../components/dashboard/dashboardDefaults";
 import useSystemTheme from "../hooks/useSystemTheme";
@@ -224,18 +224,22 @@ export default function Home() {
           />
         )}
 
-        {/* Content: Dashboard Hub or Tool View with slide animation */}
+        {/* Content: Dashboard Hub, Blank Workspace, or Tool View */}
         <main className="flex-1 overflow-y-auto pb-16 lg:pb-0">
-          {/* Project banner at top of content area */}
-          <div className="hidden lg:block max-w-[1100px] mx-auto px-3 sm:px-6 pt-3">
-            <TabProjectBanner
-              project={workspace.projects.find(p => p.id === workspace.activeTab?.projectId)}
-              onOpenProjects={() => setProjectDrawerOpen(true)}
-            />
-          </div>
-
           <AnimatePresence mode="wait">
-            {activeView === null ? (
+            {/* Non-default tabs: blank workspace (or tool view if a tool is open) */}
+            {!workspace.activeTab?.isDefault && activeView === null ? (
+              <AnimatedView viewKey={`blank-${workspace.activeTabId}`}>
+                <BlankWorkspace
+                  tab={workspace.activeTab}
+                  onUpdateTab={workspace.updateTab}
+                  onOpenTool={handleOpenTool}
+                  projects={workspace.projects}
+                  onOpenProjects={() => setProjectDrawerOpen(true)}
+                  onSetTabProject={(projId) => workspace.setTabProject(workspace.activeTabId, projId)}
+                />
+              </AnimatedView>
+            ) : activeView === null ? (
               <AnimatedView viewKey={`dashboard-${workspace.activeTabId}`}>
                 <DashboardHub onOpenTool={handleOpenTool} />
               </AnimatedView>

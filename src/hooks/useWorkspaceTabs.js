@@ -6,6 +6,9 @@ const DEFAULT_TAB = {
   name: "Main Dashboard",
   projectId: null,       // null = general workspace, string = linked to a project
   activeView: null,      // null = dashboard hub, string = tool id
+  isDefault: true,       // the original dashboard tab
+  notes: "",             // tab-level notes
+  tools: [],             // tools added to this workspace tab
 };
 
 function generateId() {
@@ -45,8 +48,14 @@ export default function useWorkspaceTabs() {
   }, [tabs, activeTabId, projects]);
 
   // Tab actions
+  const updateTab = useCallback((tabId, updates) => {
+    const updated = tabs.map(t => t.id === tabId ? { ...t, ...updates } : t);
+    setTabs(updated);
+    persist({ tabs: updated });
+  }, [tabs, persist]);
+
   const addTab = useCallback((name, projectId = null) => {
-    const newTab = { id: generateId(), name: name || "New Tab", projectId, activeView: null };
+    const newTab = { id: generateId(), name: name || "New Tab", projectId, activeView: null, isDefault: false, notes: "", tools: [] };
     const updated = [...tabs, newTab];
     setTabs(updated);
     setActiveTabId(newTab.id);
@@ -119,7 +128,7 @@ export default function useWorkspaceTabs() {
 
   return {
     tabs, activeTab, activeTabId, setActiveTabId: (id) => { setActiveTabId(id); persist({ activeTabId: id }); },
-    addTab, closeTab, renameTab, setTabView, setTabProject,
+    addTab, closeTab, renameTab, setTabView, setTabProject, updateTab,
     projects, createProject, renameProject, deleteProject,
     loaded,
   };

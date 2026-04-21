@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef, useCallback, forwardRef, useImperativeHandle } from "react";
 import { Send, Plus, Loader2, Sparkles, Globe, Pencil, Database, Code, Search, GitBranch, TrendingUp, CheckCircle2, AlertCircle, Clock, ChevronDown, MessageCircle, Brain, FileText, Zap, BarChart3, Phone, Wrench, MapPin, ChevronUp } from "lucide-react";
-import VoiceChat from "./chat/VoiceChat";
 import AgentSwitcher, { AGENTS } from "./chat/AgentSwitcher";
 import QuickActionButtons from "./chat/QuickActionButtons";
 import ChatSmartSuggestions from "./chat/ChatSmartSuggestions";
@@ -239,9 +238,6 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
   const lastMsg = messages[messages.length - 1];
   const isLastStreaming = loading && lastMsg?.role === "assistant";
 
-  // Track last complete assistant message for voice output
-  const lastCompleteAssistant = [...messages].reverse().find(m => m.role === "assistant" && m.content && !(loading && m === lastMsg));
-  const lastAssistantText = lastCompleteAssistant?.content || "";
 
   return (
     <div className={`${mobile ? 'w-full' : ''} h-full ${mobile ? '' : 'border-r border-[#8a8a8a]/30'} flex flex-col bg-background`} style={!mobile ? { width: '100%' } : undefined}>
@@ -337,18 +333,6 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
                 base44.agents.addMessage(conversation, { role: "user", content: routeMsg });
               }
             }}
-          />
-          <VoiceChat
-            mobile={mobile}
-            onTranscript={(text) => {
-              setInput(text);
-              // Auto-send voice input
-              if (conversation && !loading && text.trim()) {
-                setLoading(true);
-                base44.agents.addMessage(conversation, { role: "user", content: text.trim() });
-              }
-            }}
-            lastAssistantMessage={lastAssistantText}
           />
           <input
             value={input}

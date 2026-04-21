@@ -137,13 +137,21 @@ export default function BrowserPageView({ data, onNavigate, onSearch, onSubmitFo
       {mode === "live" && (
         <div className="flex-1 relative bg-white" style={{ minHeight: 0 }}>
           {srcdoc ? (
-            <iframe
-              srcDoc={srcdoc}
-              title={data.title || "Web page"}
-              style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: "none" }}
-              sandbox="allow-same-origin allow-scripts"
-              referrerPolicy="no-referrer"
-            />
+            <>
+              <iframe
+                srcDoc={srcdoc}
+                title={data.title || "Web page"}
+                style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: "none" }}
+                sandbox="allow-same-origin allow-scripts"
+                referrerPolicy="no-referrer"
+              />
+              {/* Hint overlay for Google homepage */}
+              {data.url?.includes("google.com") && !data.url?.includes("search") && (
+                <div className="absolute top-2 left-1/2 -translate-x-1/2 px-3 py-1.5 rounded-full bg-black/70 text-white text-[11px] font-medium z-10 pointer-events-none animate-pulse">
+                  Use the URL bar above to search
+                </div>
+              )}
+            </>
           ) : (
             <div className="flex items-center justify-center h-full">
               <p className="text-sm text-gray-400">No visual preview available. Switch to Data view.</p>

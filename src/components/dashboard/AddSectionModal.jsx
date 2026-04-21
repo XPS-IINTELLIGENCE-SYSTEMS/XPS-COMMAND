@@ -3,6 +3,7 @@ import { X, Plus, Calendar, FileText, Star, LayoutGrid, Clock, Bot, BarChart3, W
 
 const SECTION_TEMPLATES = [
   { type: "command_notepad", label: "Command Notepad", desc: "Smart notes → tasks, workflows, schedules, reminders", icon: StickyNote, color: "#d4af37" },
+  { type: "create_workflow", label: "Create Workflow", desc: "Drag & drop workflow builder — add nodes, reorder, save", icon: GitBranch, color: "#d4af37" },
   { type: "quick_workflow", label: "Quick Workflow", desc: "Drag & drop workflow builder with save & schedule", icon: GitBranch, color: "#8b5cf6" },
   { type: "pipeline", label: "Pipeline", desc: "Interactive XPS master workflow pipeline", icon: Zap, color: "#d4af37" },
   { type: "calendar", label: "Calendar", desc: "Daily / Weekly / Monthly schedule", icon: Calendar, color: "#d4af37" },

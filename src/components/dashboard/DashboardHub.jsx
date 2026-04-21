@@ -24,6 +24,7 @@ import FocusDashboard from "../focus/FocusDashboard";
 import FocusToolbar from "../focus/FocusToolbar";
 import { DEFAULT_TOOLS } from "./dashboardDefaults";
 import ToolCategoryGrid from "./ToolCategoryGrid";
+import DashboardWorkflowCreator from "./DashboardWorkflowCreator";
 
 const DEFAULT_GREETING = "";
 const DEFAULT_SUBTITLE = "Here's your sales intelligence briefing for today.";
@@ -163,7 +164,7 @@ export default function DashboardHub({ onOpenTool }) {
 
   const addSection = (type) => {
     const id = `sec_${type}_${Date.now()}`;
-    const titles = { calendar: "Weekly Calendar", summary: "Daily Summary", favorites: "Favorites", tools: "All Tools", sidebar: "Scheduled Items", notes: "Quick Notes", quicklinks: "Quick Links", activity: "Activity Stream", command_notepad: "Command Notepad", quick_workflow: "Quick Workflow", system_guardian: "System Guardian", financial_sandbox: "Financial Sandbox", orchestrator: "Orchestrator", focus_dashboard: "Focus Dashboard" };
+    const titles = { calendar: "Weekly Calendar", summary: "Daily Summary", favorites: "Favorites", tools: "All Tools", sidebar: "Scheduled Items", notes: "Quick Notes", quicklinks: "Quick Links", activity: "Activity Stream", command_notepad: "Command Notepad", quick_workflow: "Quick Workflow", create_workflow: "Create Workflow", system_guardian: "System Guardian", financial_sandbox: "Financial Sandbox", orchestrator: "Orchestrator", focus_dashboard: "Focus Dashboard" };
     const newSec = { id, type, title: titles[type] || type, size: ["calendar", "favorites", "tools"].includes(type) ? "full" : "half", collapsed: false };
     const updated = [...sections, newSec];
     setSections(updated);
@@ -378,6 +379,9 @@ export default function DashboardHub({ onOpenTool }) {
 
       case "quick_workflow":
         return <QuickWorkflowBar onOpenTool={onOpenTool} />;
+
+      case "create_workflow":
+        return <DashboardWorkflowCreator onOpenTool={onOpenTool} />;
 
       case "notes":
         return <NotesWidget content={widgetData[section.id]?.notes || ""} onChange={(val) => updateWidgetData(section.id, { ...widgetData[section.id], notes: val })} />;

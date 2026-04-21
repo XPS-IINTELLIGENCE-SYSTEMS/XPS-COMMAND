@@ -123,6 +123,7 @@ export default function AppContent({ activeView, onChatCommand, onNavigate }) {
     case "supabase_control": return <SupabaseControlCenter />;
     case "open_claw": return <OpenClawView />;
     case "ui_builder": return null; // Opens as standalone page at /ui-builder
+    case "agent_zero": return null; // Opens as standalone page at /agent-zero
     default: return <div className="text-center py-20 text-muted-foreground">View not found</div>;
   }
 }

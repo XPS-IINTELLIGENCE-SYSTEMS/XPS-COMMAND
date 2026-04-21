@@ -150,6 +150,7 @@ export const DEFAULT_TOOLS = [
   { id: "supabase_control", label: "Supabase Control", desc: "Enterprise data layer — query, sync, insert, RPC, storage", iconName: "Database", color: "#22c55e" },
   { id: "ui_builder", label: "UI Builder", desc: "Generate production UI from natural language", iconName: "Layout", color: "#6366f1" },
   { id: "open_claw", label: "Open Claw", desc: "Site clone, key harvest, shadow scrape, algorithm extract", iconName: "Radar", color: "#ef4444" },
+  { id: "agent_zero", label: "Agent Zero", desc: "Autonomous AI agent — Manus-class task execution", iconName: "Zap", color: "#d4af37" },
 ];
 
 // Tool categories with metallic gold headers & descriptions
@@ -206,6 +207,6 @@ export const TOOL_CATEGORIES = [
     id: "system_admin",
     title: "System & Admin",
     desc: "Platform configuration, user management, connectors, and system health.",
-    toolIds: ["admin", "settings", "connectors", "algorithm", "system_health", "tool_creator", "system_index", "system_instructions", "page_builder", "auto_enhance", "templates_library", "github_explorer", "hyper_evolver", "supabase_control", "ui_builder", "open_claw"],
+    toolIds: ["admin", "settings", "connectors", "algorithm", "system_health", "tool_creator", "system_index", "system_instructions", "page_builder", "auto_enhance", "templates_library", "github_explorer", "hyper_evolver", "supabase_control", "ui_builder", "open_claw", "agent_zero"],
   },
 ];

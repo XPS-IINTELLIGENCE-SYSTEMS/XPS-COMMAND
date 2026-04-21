@@ -28,6 +28,7 @@ import AdminControl from './pages/AdminControl';
 import FieldTech from './pages/FieldTech';
 import ClientPortal from './pages/ClientPortal';
 import UIBuilder from './pages/UIBuilder';
+import AgentZero from './pages/AgentZero';
 
 /** Shared public marketing routes */
 const PublicRoutes = () => (
@@ -82,6 +83,7 @@ const AuthenticatedApp = () => (
     <Route path="/field-tech" element={<FieldTech />} />
     <Route path="/client-portal" element={<ClientPortal />} />
     <Route path="/ui-builder" element={<UIBuilder />} />
+    <Route path="/agent-zero" element={<AgentZero />} />
 
     <Route path="*" element={<PageNotFound />} />
   </Routes>

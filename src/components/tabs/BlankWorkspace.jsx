@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { Save, Share2, Mail, StickyNote, Wrench, FolderOpen, Plus, Pencil, Check } from "lucide-react";
+import { Save, Share2, StickyNote, Wrench, FolderOpen, Plus, Pencil, Check, GitBranch } from "lucide-react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { toast } from "@/components/ui/use-toast";
 import GoogleAppsBar from "./GoogleAppsBar";
@@ -8,6 +8,7 @@ import WorkspaceBrowser from "./WorkspaceBrowser";
 import WorkspaceToolPicker from "./WorkspaceToolPicker";
 import WorkspaceSection from "./WorkspaceSection";
 import AddSectionMenu from "./AddSectionMenu";
+import DashboardWorkflowCreator from "../dashboard/DashboardWorkflowCreator";
 
 let sectionIdCounter = Date.now();
 const newId = () => `sec_${sectionIdCounter++}`;
@@ -18,6 +19,7 @@ export default function BlankWorkspace({
   const [showToolPicker, setShowToolPicker] = useState(false);
   const [toolPickerTarget, setToolPickerTarget] = useState(null); // section id or null
   const [showAddMenu, setShowAddMenu] = useState(false);
+  const [showWorkflowCreator, setShowWorkflowCreator] = useState(false);
   const [activeGoogleApp, setActiveGoogleApp] = useState(null);
   const [editingTitle, setEditingTitle] = useState(false);
   const [titleDraft, setTitleDraft] = useState(tab.workspaceTitle || tab.name || "");
@@ -45,12 +47,6 @@ export default function BlankWorkspace({
     const text = `Workspace: ${tab.workspaceTitle || tab.name}\nSections: ${sections.length}`;
     navigator.clipboard.writeText(text);
     toast({ title: "Copied to clipboard" });
-  };
-
-  const handleEmail = () => {
-    const subject = encodeURIComponent(`Workspace: ${tab.workspaceTitle || tab.name}`);
-    const body = encodeURIComponent(`Workspace: ${tab.workspaceTitle || tab.name}\nSections: ${sections.length}`);
-    window.open(`https://mail.google.com/mail/?view=cm&fs=1&su=${subject}&body=${body}`, "_blank");
   };
 
   // --- Section CRUD ---
@@ -96,7 +92,7 @@ export default function BlankWorkspace({
   const ACTION_BUTTONS = [
     { id: "save", label: "Save", icon: Save, onClick: handleSave, color: "#22c55e" },
     { id: "share", label: "Share", icon: Share2, onClick: handleShare, color: "#6366f1" },
-    { id: "email", label: "Email", icon: Mail, onClick: handleEmail, color: "#06b6d4" },
+    { id: "workflow", label: "Create Workflow", icon: GitBranch, onClick: () => setShowWorkflowCreator(!showWorkflowCreator), color: "#d4af37", active: showWorkflowCreator },
     { id: "add", label: "Add Section", icon: Plus, onClick: () => setShowAddMenu(!showAddMenu), color: "#f59e0b", active: showAddMenu },
     { id: "tools", label: "Add Tools", icon: Wrench, onClick: () => { setToolPickerTarget(null); setShowToolPicker(true); }, color: "#ec4899" },
     { id: "project", label: linkedProject ? linkedProject.name : "Link Project", icon: FolderOpen, onClick: onOpenProjects, color: linkedProject?.color || "#8b5cf6" },
@@ -158,6 +154,20 @@ export default function BlankWorkspace({
         {showAddMenu && (
           <div className="mb-4">
             <AddSectionMenu onAdd={addSection} onClose={() => setShowAddMenu(false)} />
+          </div>
+        )}
+
+        {/* Create Workflow panel */}
+        {showWorkflowCreator && (
+          <div className="mb-4 glass-card rounded-xl p-4">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <GitBranch className="w-4 h-4 text-primary" />
+                <span className="text-sm font-bold text-foreground">Create Workflow</span>
+              </div>
+              <button onClick={() => setShowWorkflowCreator(false)} className="text-[10px] text-muted-foreground hover:text-foreground transition-colors">Close</button>
+            </div>
+            <DashboardWorkflowCreator onOpenTool={onOpenTool} />
           </div>
         )}
 

@@ -27,7 +27,7 @@ export default function BlankWorkspace({
   const handleEmail = () => {
     const subject = encodeURIComponent(`Workspace: ${tab.name}`);
     const body = encodeURIComponent(`Workspace: ${tab.name}\n\nNotes:\n${tab.notes || "(none)"}\n\nTools added: ${(tab.tools || []).length}\nProject: ${tab.projectId ? projects.find(p => p.id === tab.projectId)?.name : "None"}`);
-    window.open(`mailto:?subject=${subject}&body=${body}`, "_blank");
+    window.open(`https://mail.google.com/mail/?view=cm&fs=1&su=${subject}&body=${body}`, "_blank");
   };
 
   const handleAddTools = (toolIds) => {
@@ -81,6 +81,7 @@ export default function BlankWorkspace({
           <WorkspaceNotes
             notes={tab.notes || ""}
             onChange={(val) => onUpdateTab(tab.id, { notes: val })}
+            onClose={() => setShowNotes(false)}
           />
         </div>
       )}

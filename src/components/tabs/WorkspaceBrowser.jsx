@@ -266,12 +266,14 @@ export default function WorkspaceBrowser({ onClose }) {
         )}
 
         {view === "page" && pageData && (
-          <BrowserPageView
-            data={pageData}
-            onNavigate={navigateToUrl}
-            onSearch={performSearch}
-            onSubmitForm={submitForm}
-          />
+          <div className="flex-1 flex flex-col" style={{ minHeight: 0 }}>
+            <BrowserPageView
+              data={pageData}
+              onNavigate={navigateToUrl}
+              onSearch={performSearch}
+              onSubmitForm={submitForm}
+            />
+          </div>
         )}
       </div>
 

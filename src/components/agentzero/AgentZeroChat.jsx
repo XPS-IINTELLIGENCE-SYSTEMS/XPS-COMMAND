@@ -1,15 +1,13 @@
 import { useState, useRef, useEffect } from "react";
-import { ArrowUp, Paperclip, Globe, Code2, FileText, Monitor, Loader2, CheckCircle2, AlertCircle, ChevronRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { ArrowUp, Plus, Globe, Code2, FileText, Monitor, Loader2, CheckCircle2, AlertCircle, ChevronRight } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 
 function ToolCallBubble({ tool }) {
   const [open, setOpen] = useState(false);
   const status = tool.status || "running";
   const icons = {
-    running: <Loader2 className="w-3 h-3 animate-spin text-primary" />,
-    complete: <CheckCircle2 className="w-3 h-3 text-green-500" />,
+    running: <Loader2 className="w-3 h-3 animate-spin text-[#666]" />,
+    complete: <CheckCircle2 className="w-3 h-3 text-green-600" />,
     failed: <AlertCircle className="w-3 h-3 text-red-500" />,
   };
 
@@ -17,14 +15,14 @@ function ToolCallBubble({ tool }) {
     <div className="my-1">
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-border bg-secondary/30 text-xs hover:bg-secondary/60 transition-all"
+        className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#e0e0e0] bg-[#f7f7f7] text-xs hover:bg-[#eee] transition-all"
       >
         {icons[status] || icons.running}
-        <span className="text-muted-foreground">{tool.name}</span>
-        {tool.result && <ChevronRight className={`w-3 h-3 text-muted-foreground transition-transform ${open ? "rotate-90" : ""}`} />}
+        <span className="text-[#666]">{tool.name}</span>
+        {tool.result && <ChevronRight className={`w-3 h-3 text-[#999] transition-transform ${open ? "rotate-90" : ""}`} />}
       </button>
       {open && tool.result && (
-        <pre className="mt-1 ml-3 pl-3 border-l-2 border-border text-xs bg-secondary/20 rounded p-2 max-h-40 overflow-auto text-muted-foreground whitespace-pre-wrap">
+        <pre className="mt-1 ml-3 pl-3 border-l-2 border-[#e0e0e0] text-xs bg-[#f5f5f5] rounded p-2 max-h-40 overflow-auto text-[#666] whitespace-pre-wrap">
           {typeof tool.result === "object" ? JSON.stringify(tool.result, null, 2) : tool.result}
         </pre>
       )}
@@ -38,21 +36,21 @@ function MessageBubble({ msg }) {
   return (
     <div className={`flex gap-3 ${isUser ? "justify-end" : "justify-start"}`}>
       {!isUser && (
-        <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mt-0.5 shrink-0">
-          <div className="h-2 w-2 rounded-full bg-primary" />
+        <div className="h-7 w-7 rounded-full bg-[#f0f0f0] flex items-center justify-center mt-0.5 shrink-0 border border-[#e5e5e5]">
+          <div className="h-2 w-2 rounded-full bg-[#999]" />
         </div>
       )}
       <div className={`max-w-[80%] ${isUser ? "flex flex-col items-end" : ""}`}>
         {msg.content && (
           <div className={`rounded-2xl px-4 py-2.5 ${
             isUser
-              ? "bg-primary/10 border border-primary/20 text-foreground"
-              : "bg-card border border-border text-foreground"
+              ? "bg-[#1a1a1a] text-white"
+              : "bg-white border border-[#e5e5e5] text-[#1a1a1a]"
           }`}>
             {isUser ? (
-              <p className="text-sm leading-relaxed">{msg.content}</p>
+              <p className="text-[14px] leading-relaxed">{msg.content}</p>
             ) : (
-              <ReactMarkdown className="text-sm prose prose-sm prose-invert max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
+              <ReactMarkdown className="text-[14px] prose prose-sm max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 prose-headings:text-[#1a1a1a] prose-p:text-[#333] prose-a:text-blue-600 prose-code:text-[#333] prose-code:bg-[#f5f5f5]">
                 {msg.content}
               </ReactMarkdown>
             )}
@@ -73,9 +71,8 @@ function AgentWorkspace({ activeTab, setActiveTab, agentState }) {
   ];
 
   return (
-    <div className="flex flex-col h-full border-l border-border bg-card">
-      {/* Tab bar */}
-      <div className="flex items-center border-b border-border px-2 gap-0.5">
+    <div className="flex flex-col h-full border-l border-[#e5e5e5] bg-white">
+      <div className="flex items-center border-b border-[#e5e5e5] px-2 gap-0.5">
         {tabs.map(tab => {
           const Icon = tab.icon;
           return (
@@ -84,8 +81,8 @@ function AgentWorkspace({ activeTab, setActiveTab, agentState }) {
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-1.5 px-3 py-2.5 text-xs font-medium transition-all border-b-2 ${
                 activeTab === tab.id
-                  ? "border-primary text-foreground"
-                  : "border-transparent text-muted-foreground hover:text-foreground"
+                  ? "border-[#1a1a1a] text-[#1a1a1a]"
+                  : "border-transparent text-[#999] hover:text-[#666]"
               }`}
             >
               <Icon className="w-3.5 h-3.5" />
@@ -95,29 +92,23 @@ function AgentWorkspace({ activeTab, setActiveTab, agentState }) {
         })}
       </div>
 
-      {/* Tab content */}
       <div className="flex-1 flex items-center justify-center p-6">
         {agentState === "idle" ? (
-          <div className="text-center text-muted-foreground">
-            <Monitor className="w-12 h-12 mx-auto mb-3 opacity-20" />
-            <p className="text-sm">Agent workspace will appear here</p>
-            <p className="text-xs mt-1 opacity-60">Submit a task to see the agent in action</p>
+          <div className="text-center">
+            <Monitor className="w-10 h-10 mx-auto mb-3 text-[#ddd]" />
+            <p className="text-[13px] text-[#999]">Agent workspace will appear here</p>
+            <p className="text-[11px] mt-1 text-[#ccc]">Submit a task to see the agent in action</p>
           </div>
         ) : agentState === "working" ? (
           <div className="text-center">
-            <div className="relative inline-flex mb-4">
-              <div className="w-16 h-16 rounded-full border-2 border-primary/20 flex items-center justify-center">
-                <Loader2 className="w-8 h-8 text-primary animate-spin" />
-              </div>
-              <div className="absolute inset-0 rounded-full border-2 border-primary/40 animate-ping" />
-            </div>
-            <p className="text-sm text-foreground font-medium">Agent is working...</p>
-            <p className="text-xs text-muted-foreground mt-1">Browsing, analyzing, and executing tasks</p>
+            <Loader2 className="w-10 h-10 text-[#999] animate-spin mx-auto mb-3" />
+            <p className="text-[13px] text-[#666] font-medium">Agent is working...</p>
+            <p className="text-[11px] text-[#999] mt-1">Browsing, analyzing, and executing</p>
           </div>
         ) : (
-          <div className="text-center text-muted-foreground">
-            <CheckCircle2 className="w-12 h-12 mx-auto mb-3 text-green-500/40" />
-            <p className="text-sm">Task completed</p>
+          <div className="text-center">
+            <CheckCircle2 className="w-10 h-10 mx-auto mb-3 text-green-500/50" />
+            <p className="text-[13px] text-[#999]">Task completed</p>
           </div>
         )}
       </div>
@@ -144,34 +135,33 @@ export default function AgentZeroChat({ messages, onSend, agentState }) {
     <div className="flex-1 flex h-full">
       {/* Chat column */}
       <div className="flex-1 flex flex-col min-w-0">
-        {/* Messages */}
-        <div className="flex-1 overflow-y-auto px-4 md:px-8 py-6 space-y-6">
+        <div className="flex-1 overflow-y-auto px-4 md:px-8 py-6 space-y-5">
           {messages.map((msg, i) => <MessageBubble key={i} msg={msg} />)}
           <div ref={bottomRef} />
         </div>
 
-        {/* Input */}
         <div className="px-4 md:px-8 pb-4">
-          <div className="rounded-2xl border border-border bg-card overflow-hidden shadow-sm">
-            <Textarea
+          <div className="rounded-2xl bg-white border border-[#e5e5e5] overflow-hidden shadow-[0_1px_3px_rgba(0,0,0,0.06)]">
+            <textarea
               value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
               placeholder="Send a message..."
-              className="min-h-[60px] max-h-[150px] resize-none border-0 bg-transparent p-4 pr-14 text-sm focus-visible:ring-0"
+              rows={2}
+              className="w-full resize-none border-0 bg-transparent px-5 pt-4 pb-1 text-[14px] text-[#1a1a1a] placeholder:text-[#999] focus:outline-none"
             />
             <div className="flex items-center justify-between px-3 pb-3">
-              <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground">
-                <Paperclip className="w-4 h-4" />
-              </Button>
-              <Button
+              <button className="h-7 w-7 flex items-center justify-center rounded-full hover:bg-[#f0f0f0] text-[#999] transition-colors">
+                <Plus className="w-4 h-4" />
+              </button>
+              <button
                 onClick={handleSend}
                 disabled={!input.trim()}
-                size="icon"
-                className="h-8 w-8 rounded-full bg-primary hover:bg-primary/90 disabled:opacity-30"
+                className="h-8 w-8 flex items-center justify-center rounded-full transition-all disabled:opacity-20"
+                style={{ backgroundColor: input.trim() ? "#1a1a1a" : "#e0e0e0" }}
               >
-                <ArrowUp className="w-4 h-4 text-primary-foreground" />
-              </Button>
+                <ArrowUp className="w-4 h-4 text-white" />
+              </button>
             </div>
           </div>
         </div>

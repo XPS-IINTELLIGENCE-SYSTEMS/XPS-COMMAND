@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import AgentZeroNav from "@/components/agentzero/AgentZeroNav";
 import AgentZeroSidebar from "@/components/agentzero/AgentZeroSidebar";
 import AgentZeroHome from "@/components/agentzero/AgentZeroHome";
 import AgentZeroChat from "@/components/agentzero/AgentZeroChat";
@@ -14,25 +15,20 @@ export default function AgentZero() {
   const [conversations, setConversations] = useState([]);
   const [activeConvId, setActiveConvId] = useState(null);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [agentState, setAgentState] = useState("idle"); // idle | working | done
+  const [agentState, setAgentState] = useState("idle");
 
   const activeConv = conversations.find(c => c.id === activeConvId);
 
   const createConversation = useCallback((firstMessage) => {
     const id = generateId();
     const title = firstMessage.length > 40 ? firstMessage.slice(0, 40) + "..." : firstMessage;
-    const newConv = {
-      id,
-      title,
-      messages: [{ role: "user", content: firstMessage }],
-    };
+    const newConv = { id, title, messages: [{ role: "user", content: firstMessage }] };
     setConversations(prev => [newConv, ...prev]);
     setActiveConvId(id);
     return newConv;
   }, []);
 
   const handleSubmit = useCallback(async (prompt) => {
-    // Create or update conversation
     let conv;
     if (!activeConvId) {
       conv = createConversation(prompt);
@@ -54,7 +50,6 @@ export default function AgentZero() {
       setConversations(prev =>
         prev.map(c => {
           if (c.id !== (conv?.id || activeConvId)) return c;
-          // Replace last assistant message if it's a partial
           const msgs = [...c.messages];
           const lastIdx = msgs.length - 1;
           if (lastIdx >= 0 && msgs[lastIdx].role === "assistant" && !msgs[lastIdx].finalized) {
@@ -70,7 +65,6 @@ export default function AgentZero() {
     const executor = isResearch ? executeResearchTask : executeAgentTask;
     const result = await executor(prompt, onUpdate);
 
-    // Finalize
     setConversations(prev =>
       prev.map(c => {
         if (c.id !== (conv?.id || activeConvId)) return c;
@@ -102,29 +96,42 @@ export default function AgentZero() {
     }
   };
 
-  return (
-    <div className="h-screen w-full flex bg-background overflow-hidden">
-      {/* Sidebar */}
-      <AgentZeroSidebar
-        conversations={conversations}
-        activeId={activeConvId}
-        onSelect={setActiveConvId}
-        onNew={handleNewConversation}
-        onDelete={handleDeleteConversation}
-        collapsed={sidebarCollapsed}
-        onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
-      />
+  // Home view = no sidebar, just nav + centered prompt (like Manus landing)
+  // Chat view = sidebar + chat + workspace
+  const isHome = !activeConvId;
 
-      {/* Main Area */}
-      <div className="flex-1 flex flex-col min-w-0">
-        {!activeConvId ? (
+  return (
+    <div className="h-screen w-full flex flex-col overflow-hidden"
+      style={{ background: "linear-gradient(180deg, #F3F3F3 0%, #EDEDED 100%)" }}
+    >
+      {/* Top Nav — always visible */}
+      <AgentZeroNav />
+
+      {/* Content */}
+      <div className="flex-1 flex min-h-0">
+        {isHome ? (
+          /* Home: full-width centered prompt, no sidebar */
           <AgentZeroHome onSubmit={handleSubmit} />
         ) : (
-          <AgentZeroChat
-            messages={activeConv?.messages || []}
-            onSend={handleSubmit}
-            agentState={agentState}
-          />
+          /* Chat: sidebar + chat area */
+          <>
+            <AgentZeroSidebar
+              conversations={conversations}
+              activeId={activeConvId}
+              onSelect={setActiveConvId}
+              onNew={handleNewConversation}
+              onDelete={handleDeleteConversation}
+              collapsed={sidebarCollapsed}
+              onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
+            />
+            <div className="flex-1 flex flex-col min-w-0 bg-[#fafafa]">
+              <AgentZeroChat
+                messages={activeConv?.messages || []}
+                onSend={handleSubmit}
+                agentState={agentState}
+              />
+            </div>
+          </>
         )}
       </div>
     </div>

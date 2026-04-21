@@ -67,14 +67,7 @@ export default function UIBuilder() {
 </html>`;
   };
 
-  useEffect(() => {
-    if (previewHtml && iframeRef.current) {
-      const doc = iframeRef.current.contentDocument;
-      doc.open();
-      doc.write(previewHtml);
-      doc.close();
-    }
-  }, [previewHtml]);
+  // Removed manual doc.write — using srcdoc attribute instead
 
   const copyCode = () => {
     navigator.clipboard.writeText(generatedCode);
@@ -190,6 +183,7 @@ export default function UIBuilder() {
                 </div>
                 <iframe
                   ref={iframeRef}
+                  srcDoc={previewHtml}
                   className="w-full bg-background border-0"
                   style={{ height: "400px" }}
                   sandbox="allow-scripts"

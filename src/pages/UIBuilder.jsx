@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { Code, Loader2, Play, Copy, Check, RefreshCw, Globe, Sparkles, Save, ChevronDown, ChevronUp } from "lucide-react";
+import { Code, Loader2, Play, Copy, Check, RefreshCw, Globe, Sparkles, Save, ChevronDown, ChevronUp, Database } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import SavedAssetsList from "../components/assets/SavedAssetsList";
 
 export default function UIBuilder() {
   const [prompt, setPrompt] = useState("");
@@ -14,6 +15,8 @@ export default function UIBuilder() {
   const [copied, setCopied] = useState(false);
   const [showCode, setShowCode] = useState(false);
   const [componentType, setComponentType] = useState("page");
+  const [showSaved, setShowSaved] = useState(false);
+  const [savedKey, setSavedKey] = useState(0);
   const iframeRef = useRef(null);
 
   const generateUI = async () => {
@@ -37,6 +40,7 @@ export default function UIBuilder() {
     setPreviewHtml(preview);
 
     setHistory(prev => [{ prompt, code, timestamp: new Date().toISOString() }, ...prev].slice(0, 20));
+    setSavedKey(k => k + 1); // refresh saved list
     setGenerating(false);
   };
 
@@ -150,9 +154,31 @@ export default function UIBuilder() {
           </div>
 
           {/* History */}
+          {/* Saved Assets from Database */}
+          <div>
+            <button onClick={() => setShowSaved(!showSaved)}
+              className="flex items-center gap-2 text-[10px] font-semibold text-muted-foreground uppercase mb-2 w-full">
+              <Database className="w-3 h-3" /> Saved to Database {showSaved ? <ChevronUp className="w-3 h-3 ml-auto" /> : <ChevronDown className="w-3 h-3 ml-auto" />}
+            </button>
+            {showSaved && (
+              <SavedAssetsList
+                key={savedKey}
+                filterType="ui_component"
+                compact
+                onSelect={(asset) => {
+                  if (asset.code) {
+                    setGeneratedCode(asset.code);
+                    setPreviewHtml(buildPreviewHtml(asset.code));
+                    setPrompt(asset.prompt || asset.title);
+                  }
+                }}
+              />
+            )}
+          </div>
+
           {history.length > 0 && (
             <div>
-              <label className="text-[10px] font-semibold text-muted-foreground uppercase mb-2 block">Generation History</label>
+              <label className="text-[10px] font-semibold text-muted-foreground uppercase mb-2 block">Session History</label>
               <div className="space-y-1 max-h-48 overflow-y-auto">
                 {history.map((h, i) => (
                   <button key={i} onClick={() => { setPrompt(h.prompt); setGeneratedCode(h.code); setPreviewHtml(buildPreviewHtml(h.code)); }}

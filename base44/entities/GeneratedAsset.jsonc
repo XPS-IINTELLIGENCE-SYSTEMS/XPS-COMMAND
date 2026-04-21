@@ -1,0 +1,76 @@
+{
+  "name": "GeneratedAsset",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Display name for this asset"
+    },
+    "asset_type": {
+      "type": "string",
+      "enum": [
+        "ui_component",
+        "site_clone",
+        "shadow_scrape",
+        "key_harvest",
+        "algorithm_extract",
+        "template",
+        "proposal",
+        "custom"
+      ],
+      "default": "custom",
+      "description": "Type of generated asset"
+    },
+    "source_tool": {
+      "type": "string",
+      "description": "Tool that created this (UI Builder, Open Claw, etc.)"
+    },
+    "prompt": {
+      "type": "string",
+      "description": "Original prompt or URL used to generate"
+    },
+    "code": {
+      "type": "string",
+      "description": "Generated code (React, HTML, CSS)"
+    },
+    "result_data": {
+      "type": "string",
+      "description": "JSON string of structured result data"
+    },
+    "preview_html": {
+      "type": "string",
+      "description": "HTML for iframe preview"
+    },
+    "component_type": {
+      "type": "string",
+      "description": "page, component, section, form, table, chart"
+    },
+    "source_url": {
+      "type": "string",
+      "description": "Reference or target URL if applicable"
+    },
+    "tags": {
+      "type": "string",
+      "description": "Comma-separated tags"
+    },
+    "is_favorite": {
+      "type": "boolean",
+      "default": false
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "saved",
+        "deployed",
+        "archived"
+      ],
+      "default": "saved"
+    }
+  },
+  "required": [
+    "title",
+    "asset_type",
+    "status"
+  ]
+}

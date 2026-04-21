@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { Radar, Loader2, Globe, Key, Eye, Code, Layers, Play, Copy, Check, ChevronDown, ChevronUp } from "lucide-react";
+import { Radar, Loader2, Globe, Key, Eye, Code, Layers, Play, Copy, Check, ChevronDown, ChevronUp, Database } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import SavedAssetsList from "../assets/SavedAssetsList";
 
 const ENGINES = [
   { id: "site_clone", label: "Site Clone", desc: "Full-fidelity multi-page clone with design token extraction", icon: Globe, color: "text-blue-400" },
@@ -20,8 +21,9 @@ export default function OpenClawView() {
   const [running, setRunning] = useState(false);
   const [result, setResult] = useState(null);
   const [expanded, setExpanded] = useState({});
-
   const [error, setError] = useState(null);
+  const [showSaved, setShowSaved] = useState(false);
+  const [savedKey, setSavedKey] = useState(0);
 
   const run = async () => {
     if (!url.trim()) return;
@@ -35,6 +37,7 @@ export default function OpenClawView() {
     try {
       const res = await base44.functions.invoke("openClawEngine", params);
       setResult(res.data);
+      setSavedKey(k => k + 1);
     } catch (err) {
       setError(err?.response?.data?.error || err.message || "Engine returned an error. The target site may be unreachable or blocking scraping.");
     } finally {
@@ -99,6 +102,27 @@ export default function OpenClawView() {
           <p className="text-xs text-muted-foreground">{error}</p>
         </div>
       )}
+
+      {/* Saved Assets */}
+      <div className="glass-card rounded-xl p-4">
+        <button onClick={() => setShowSaved(!showSaved)}
+          className="flex items-center gap-2 text-sm font-bold text-foreground w-full">
+          <Database className="w-4 h-4 text-primary" /> Saved Results
+          <Badge variant="secondary" className="text-[8px] ml-auto">{showSaved ? "Hide" : "Show"}</Badge>
+        </button>
+        {showSaved && (
+          <div className="mt-3">
+            <SavedAssetsList
+              key={savedKey}
+              onSelect={(asset) => {
+                if (asset.result_data) {
+                  try { setResult(JSON.parse(asset.result_data)); } catch { setResult({ raw: asset.result_data }); }
+                }
+              }}
+            />
+          </div>
+        )}
+      </div>
 
       {/* Results */}
       {result && (

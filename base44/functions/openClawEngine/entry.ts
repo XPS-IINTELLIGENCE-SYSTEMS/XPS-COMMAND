@@ -211,6 +211,18 @@ Deno.serve(async (req) => {
     await saveIntel(base44, `Site Clone: ${url}`, "website", { pages_count: pages.length, analysis, pages: pages.map(p => ({ url: p.url, title: p.title, links: p.internal_links.length })) }, url);
     await logActivity(base44, "site_clone", `Cloned ${url} — ${pages.length} pages at depth ${depth}`);
 
+    // Save to GeneratedAsset
+    await base44.asServiceRole.entities.GeneratedAsset.create({
+      title: `Site Clone: ${new URL(url).hostname}`,
+      asset_type: "site_clone",
+      source_tool: "Open Claw",
+      prompt: url,
+      result_data: JSON.stringify({ pages_cloned: pages.length, analysis }).substring(0, 50000),
+      source_url: url,
+      tags: "site-clone,scrape",
+      status: "saved",
+    }).catch(() => {});
+
     return Response.json({ success: true, pages_cloned: pages.length, pages: pages.map(p => ({ url: p.url, title: p.title, level: p.level, html_length: p.html_length, links: p.internal_links.length, css_vars: p.css_variables.length })), analysis });
   }
 
@@ -289,6 +301,18 @@ Extract: technology_stack, frameworks, CDNs, analytics tools, payment providers,
     await saveIntel(base44, `Key Harvest: ${url}`, "technology", { findings, ai_analysis: aiFindings }, url);
     await logActivity(base44, "key_harvest", `Harvested ${url} — ${findings.length} findings (${findings.filter(f => f.severity === "CRITICAL").length} critical)`);
 
+    // Save to GeneratedAsset
+    await base44.asServiceRole.entities.GeneratedAsset.create({
+      title: `Key Harvest: ${new URL(url).hostname}`,
+      asset_type: "key_harvest",
+      source_tool: "Open Claw",
+      prompt: url,
+      result_data: JSON.stringify({ findings, ai_analysis: aiFindings }).substring(0, 50000),
+      source_url: url,
+      tags: "key-harvest,security",
+      status: "saved",
+    }).catch(() => {});
+
     return Response.json({
       success: true, url,
       findings_count: findings.length,
@@ -342,6 +366,18 @@ Extract everything: company info, pricing, products, contacts, API endpoints dis
 
     await saveIntel(base44, `Shadow Scrape: ${url}`, "website", { analysis, network_requests: networkData.requests?.length || 0 }, url);
     await logActivity(base44, "shadow_scrape", `Shadow scraped ${url} — ${networkData.requests?.length || 0} network calls intercepted`);
+
+    // Save to GeneratedAsset
+    await base44.asServiceRole.entities.GeneratedAsset.create({
+      title: `Shadow Scrape: ${new URL(url).hostname}`,
+      asset_type: "shadow_scrape",
+      source_tool: "Open Claw",
+      prompt: url,
+      result_data: JSON.stringify({ analysis, network_count: networkData.requests?.length || 0 }).substring(0, 50000),
+      source_url: url,
+      tags: "shadow-scrape,intel",
+      status: "saved",
+    }).catch(() => {});
 
     return Response.json({
       success: true, url,
@@ -416,6 +452,18 @@ Analyze: framework, state management, routing, API patterns, auth flow, data sch
     await saveIntel(base44, `Algorithm Extract: ${url}`, "technology", { analysis, scripts_count: scripts.length }, url);
     await logActivity(base44, "algorithm_extract", `Reverse-engineered ${url} — ${scripts.length} scripts, framework: ${analysis.framework}`);
 
+    // Save to GeneratedAsset
+    await base44.asServiceRole.entities.GeneratedAsset.create({
+      title: `Algorithm Extract: ${new URL(url).hostname}`,
+      asset_type: "algorithm_extract",
+      source_tool: "Open Claw",
+      prompt: url,
+      result_data: JSON.stringify({ analysis, scripts_count: scripts.length }).substring(0, 50000),
+      source_url: url,
+      tags: "algorithm,reverse-engineer",
+      status: "saved",
+    }).catch(() => {});
+
     return Response.json({ success: true, url, external_scripts: scripts.length, inline_scripts: inlineScripts.length, analysis });
   }
 
@@ -462,7 +510,20 @@ Return ONLY the React component code. No markdown wrapping. No explanation.`
 
     await logActivity(base44, "generate_ui", `Generated ${component_type}: ${description.substring(0, 100)}`);
 
-    return Response.json({ success: true, code: cleanCode, component_type, description });
+    // Save to GeneratedAsset
+    const asset = await base44.asServiceRole.entities.GeneratedAsset.create({
+      title: description.substring(0, 120),
+      asset_type: "ui_component",
+      source_tool: "UI Builder",
+      prompt: description,
+      code: cleanCode.substring(0, 50000),
+      component_type,
+      source_url: reference_url || "",
+      tags: `ui,${component_type},generated`,
+      status: "saved",
+    }).catch(() => null);
+
+    return Response.json({ success: true, code: cleanCode, component_type, description, asset_id: asset?.id || null });
   }
 
   // ═══════════════════════════════════════════

@@ -20,6 +20,7 @@ import QuickWorkflowBar from "./QuickWorkflowBar";
 import SystemGuardianDashboard from "../guardian/SystemGuardianDashboard";
 import FinancialSandboxView from "../financial/FinancialSandboxView";
 import OrchestratorDashboard from "../orchestrator/OrchestratorDashboard";
+import FocusDashboard from "../focus/FocusDashboard";
 import { DEFAULT_TOOLS } from "./dashboardDefaults";
 import ToolCategoryGrid from "./ToolCategoryGrid";
 
@@ -161,7 +162,7 @@ export default function DashboardHub({ onOpenTool }) {
 
   const addSection = (type) => {
     const id = `sec_${type}_${Date.now()}`;
-    const titles = { calendar: "Weekly Calendar", summary: "Daily Summary", favorites: "Favorites", tools: "All Tools", sidebar: "Scheduled Items", notes: "Quick Notes", quicklinks: "Quick Links", activity: "Activity Stream", command_notepad: "Command Notepad", quick_workflow: "Quick Workflow", system_guardian: "System Guardian", financial_sandbox: "Financial Sandbox", orchestrator: "Orchestrator" };
+    const titles = { calendar: "Weekly Calendar", summary: "Daily Summary", favorites: "Favorites", tools: "All Tools", sidebar: "Scheduled Items", notes: "Quick Notes", quicklinks: "Quick Links", activity: "Activity Stream", command_notepad: "Command Notepad", quick_workflow: "Quick Workflow", system_guardian: "System Guardian", financial_sandbox: "Financial Sandbox", orchestrator: "Orchestrator", focus_dashboard: "Focus Dashboard" };
     const newSec = { id, type, title: titles[type] || type, size: ["calendar", "favorites", "tools"].includes(type) ? "full" : "half", collapsed: false };
     const updated = [...sections, newSec];
     setSections(updated);
@@ -340,7 +341,7 @@ export default function DashboardHub({ onOpenTool }) {
             </div>
             <Droppable droppableId="favorites">
               {(provided, snapshot) => (
-                <div ref={provided.innerRef} {...provided.droppableProps} className={`grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 min-h-[90px] rounded-xl border-2 border-dashed p-3 transition-colors ${snapshot.isDraggingOver ? "border-yellow-400/40 bg-yellow-400/5" : "border-border/50 bg-transparent"}`}>
+                <div ref={provided.innerRef} {...provided.droppableProps} className={`grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 min-h-[180px] rounded-xl border-2 border-dashed p-3 transition-colors ${snapshot.isDraggingOver ? "border-yellow-400/40 bg-yellow-400/5" : "border-border/50 bg-transparent"}`}>
                   {favTools.length === 0 && !snapshot.isDraggingOver && (
                     <div className="col-span-full flex items-center justify-center py-4 sm:py-6 text-[11px] sm:text-xs text-white/50">
                       <Star className="w-3.5 h-3.5 mr-1.5 text-muted-foreground/50" />
@@ -413,6 +414,9 @@ export default function DashboardHub({ onOpenTool }) {
 
       case "orchestrator":
         return <OrchestratorDashboard />;
+
+      case "focus_dashboard":
+        return <FocusDashboard onOpenTool={onOpenTool} compact />;
 
       case "activity":
         return <ActivityStream />;

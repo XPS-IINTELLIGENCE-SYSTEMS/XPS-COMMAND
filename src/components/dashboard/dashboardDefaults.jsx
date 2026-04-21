@@ -152,6 +152,7 @@ export const DEFAULT_TOOLS = [
   { id: "open_claw", label: "Open Claw", desc: "Site clone, key harvest, shadow scrape, algorithm extract", iconName: "Radar", color: "#ef4444" },
   { id: "agent_zero", label: "Agent Zero", desc: "Autonomous AI agent — Manus-class task execution", iconName: "Zap", color: "#d4af37" },
   { id: "editor_workspace", label: "Editor", desc: "Full-stack editor — chat + canvas + every tool", iconName: "Layout", color: "#6366f1" },
+  { id: "focus_dashboard", label: "Focus Dashboard", desc: "Custom drag & drop tool boards for focused workflows", iconName: "Target", color: "#6366f1" },
   { id: "system_guardian", label: "System Guardian", desc: "Autonomous audit → diagnose → fix → heal → harden", iconName: "Shield", color: "#22c55e" },
   { id: "financial_sandbox", label: "Financial Sandbox", desc: "Mock $20K portfolio — AI trades, reflection, growth", iconName: "TrendingUp", color: "#d4af37" },
   { id: "passive_intel", label: "Passive Intel", desc: "Auto-scrape finance, AI, industry trends daily", iconName: "Radar", color: "#8b5cf6" },
@@ -214,6 +215,6 @@ export const TOOL_CATEGORIES = [
     id: "system_admin",
     title: "System & Admin",
     desc: "Platform configuration, user management, connectors, and system health.",
-    toolIds: ["admin", "settings", "connectors", "algorithm", "system_health", "system_guardian", "tool_creator", "system_index", "system_instructions", "page_builder", "auto_enhance", "templates_library", "github_explorer", "hyper_evolver", "supabase_control", "ui_builder", "open_claw", "agent_zero", "editor_workspace", "financial_sandbox", "passive_intel", "crypto_simulation", "orchestrator"],
+    toolIds: ["admin", "settings", "connectors", "algorithm", "system_health", "system_guardian", "tool_creator", "system_index", "system_instructions", "page_builder", "auto_enhance", "templates_library", "github_explorer", "hyper_evolver", "supabase_control", "ui_builder", "open_claw", "agent_zero", "editor_workspace", "focus_dashboard", "financial_sandbox", "passive_intel", "crypto_simulation", "orchestrator"],
   },
 ];

@@ -15,6 +15,30 @@ async function fetchPage(targetUrl) {
   return { html, status: res.status, finalUrl: res.url };
 }
 
+// Rewrite HTML so it can render inside a sandboxed iframe
+function rewriteHtmlForPreview(html, pageUrl) {
+  let out = html;
+  // Add base tag so relative resources resolve
+  const baseTag = `<base href="${pageUrl}" target="_blank">`;
+  if (out.includes('<head>')) {
+    out = out.replace('<head>', '<head>' + baseTag);
+  } else if (out.includes('<html>')) {
+    out = out.replace('<html>', '<html><head>' + baseTag + '</head>');
+  } else {
+    out = baseTag + out;
+  }
+  // Remove scripts to prevent errors & security issues in sandboxed iframe
+  out = out.replace(/<script[\s\S]*?<\/script>/gi, '');
+  // Remove meta redirects
+  out = out.replace(/<meta[^>]+http-equiv=["']refresh["'][^>]*>/gi, '');
+  // Fix protocol-relative URLs
+  out = out.replace(/src=["']\/\//g, 'src="https://');
+  out = out.replace(/href=["']\/\//g, 'href="https://');
+  // Limit size to prevent huge payloads
+  if (out.length > 500000) out = out.substring(0, 500000);
+  return out;
+}
+
 function extractPageData(html, pageUrl) {
   const title = (html.match(/<title[^>]*>([\s\S]*?)<\/title>/i) || [])[1]?.trim() || '';
   const desc = (html.match(/<meta[^>]+name=["']description["'][^>]+content=["']([^"']+)/i) || [])[1] || '';
@@ -208,7 +232,8 @@ Deno.serve(async (req) => {
       const targetUrl = body.url || 'https://www.google.com';
       const { html, status, finalUrl } = await fetchPage(targetUrl);
       const data = extractPageData(html, finalUrl);
-      return Response.json({ success: true, url: finalUrl, status, ...data });
+      const previewHtml = rewriteHtmlForPreview(html, finalUrl);
+      return Response.json({ success: true, url: finalUrl, status, previewHtml, ...data });
     }
 
     // Search

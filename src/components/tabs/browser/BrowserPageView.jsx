@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { FileText, Link2, Image, ChevronRight, FormInput, Mail, Phone, Globe, Eye } from "lucide-react";
 
 const DATA_TABS = [
@@ -10,35 +10,63 @@ const DATA_TABS = [
 ];
 
 export default function BrowserPageView({ data, onNavigate, onSearch, onSubmitForm }) {
-  // "live" = real iframe, "data" = extracted data view
   const [mode, setMode] = useState("live");
   const [activeTab, setActiveTab] = useState("reader");
   const [formValues, setFormValues] = useState({});
 
-  const getDomain = (url) => {
-    try { return new URL(url).hostname.replace("www.", ""); } catch { return url; }
+  const getDomain = (u) => {
+    try { return new URL(u).hostname.replace("www.", ""); } catch { return u; }
   };
 
-  const handleFormFieldChange = (formIdx, fieldName, value) => {
-    setFormValues(prev => ({ ...prev, [`${formIdx}_${fieldName}`]: value }));
+  const handleFormFieldChange = (fi, name, val) => {
+    setFormValues(p => ({ ...p, [`${fi}_${name}`]: val }));
   };
 
-  const handleSubmitForm = (formIdx) => {
-    const form = data.forms?.[formIdx];
+  const handleSubmitForm = (fi) => {
+    const form = data.forms?.[fi];
     if (!form || !onSubmitForm) return;
-    const formData = {};
-    form.fields.forEach(f => {
-      formData[f.name] = formValues[`${formIdx}_${f.name}`] ?? f.value ?? "";
-    });
-    onSubmitForm(form.action, form.method, formData);
+    const fd = {};
+    form.fields.forEach(f => { fd[f.name] = formValues[`${fi}_${f.name}`] ?? f.value ?? ""; });
+    onSubmitForm(form.action, form.method, fd);
   };
+
+  // Build the srcdoc with link interception
+  const srcdoc = useMemo(() => {
+    if (!data.previewHtml) return null;
+    // Inject a click interceptor that sends link clicks to parent
+    const interceptScript = `
+      <script>
+        document.addEventListener('click', function(e) {
+          var a = e.target.closest('a');
+          if (a && a.href) {
+            e.preventDefault();
+            e.stopPropagation();
+            window.parent.postMessage({ type: 'browser-navigate', url: a.href }, '*');
+          }
+        }, true);
+      </script>
+    `;
+    return data.previewHtml + interceptScript;
+  }, [data.previewHtml]);
+
+  // Listen for link clicks from inside the iframe
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.data?.type === 'browser-navigate' && e.data.url) {
+        onNavigate(e.data.url);
+      }
+    };
+    window.addEventListener('message', handler);
+    return () => window.removeEventListener('message', handler);
+  }, [onNavigate]);
 
   const hasContacts = (data.emails?.length > 0) || (data.phones?.length > 0);
+  const hasForms = data.forms?.length > 0;
 
   return (
-    <div className="h-full flex flex-col overflow-hidden" style={{ backgroundColor: "#fff" }}>
+    <div className="h-full flex flex-col overflow-hidden bg-white">
       {/* Mode toggle bar */}
-      <div className="flex items-center gap-2 px-3 py-1.5 bg-[#f1f3f4] border-b border-[#dadce0]">
+      <div className="flex items-center gap-2 px-3 py-1.5 bg-[#f1f3f4] border-b border-[#dadce0] flex-shrink-0">
         <button
           onClick={() => setMode("live")}
           className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition-colors ${
@@ -46,7 +74,7 @@ export default function BrowserPageView({ data, onNavigate, onSearch, onSubmitFo
           }`}
         >
           <Globe className="w-3 h-3" />
-          Live Page
+          Visual
         </button>
         <button
           onClick={() => setMode("data")}
@@ -55,41 +83,49 @@ export default function BrowserPageView({ data, onNavigate, onSearch, onSubmitFo
           }`}
         >
           <Eye className="w-3 h-3" />
-          Extracted Data
+          Data
         </button>
         <div className="flex-1" />
-        <span className="text-[10px] text-gray-400 truncate max-w-[200px]">{data.title}</span>
+        {hasContacts && (
+          <span className="text-[10px] text-green-600 font-medium">
+            {data.emails?.length || 0} emails · {data.phones?.length || 0} phones
+          </span>
+        )}
+        <span className="text-[10px] text-gray-400 truncate max-w-[180px]">{data.title}</span>
       </div>
 
-      {/* LIVE MODE — real iframe */}
+      {/* VISUAL MODE — rendered HTML in sandboxed srcdoc iframe */}
       {mode === "live" && (
-        <div className="flex-1 relative">
-          <iframe
-            src={data.url}
-            title={data.title || "Web page"}
-            className="absolute inset-0 w-full h-full border-0"
-            sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-            referrerPolicy="no-referrer"
-          />
+        <div className="flex-1 relative bg-white">
+          {srcdoc ? (
+            <iframe
+              srcDoc={srcdoc}
+              title={data.title || "Web page"}
+              className="absolute inset-0 w-full h-full border-0"
+              sandbox="allow-same-origin"
+              referrerPolicy="no-referrer"
+            />
+          ) : (
+            <div className="flex items-center justify-center h-full">
+              <p className="text-sm text-gray-400">No visual preview available. Switch to Data view.</p>
+            </div>
+          )}
         </div>
       )}
 
       {/* DATA MODE — extracted content */}
       {mode === "data" && (
         <div className="flex-1 overflow-y-auto">
-          {/* Page header */}
+          {/* Page header & tabs */}
           <div className="bg-white border-b border-gray-200 px-6 py-4">
             <div className="flex items-start gap-3">
-              {data.favicon && (
-                <img src={data.favicon} alt="" className="w-5 h-5 mt-1 rounded flex-shrink-0" onError={(e) => e.target.style.display = 'none'} />
-              )}
+              {data.favicon && <img src={data.favicon} alt="" className="w-5 h-5 mt-1 rounded flex-shrink-0" onError={(e) => e.target.style.display = 'none'} />}
               <div className="min-w-0 flex-1">
                 <h1 className="text-lg font-medium text-gray-900 leading-tight">{data.title || "Untitled"}</h1>
                 <p className="text-xs text-green-700 truncate mt-0.5">{data.url}</p>
                 {data.description && <p className="text-sm text-gray-500 mt-1 line-clamp-2">{data.description}</p>}
               </div>
             </div>
-            {/* Tab switcher */}
             <div className="flex items-center gap-1 mt-3 -mb-4 overflow-x-auto scrollbar-hide">
               {DATA_TABS.map((tab) => {
                 const Icon = tab.icon;
@@ -100,43 +136,33 @@ export default function BrowserPageView({ data, onNavigate, onSearch, onSubmitFo
                 else if (tab.id === "forms") count = data.forms?.length;
                 else if (tab.id === "contacts") count = (data.emails?.length || 0) + (data.phones?.length || 0);
                 if (tab.id === "contacts" && !hasContacts) return null;
-                if (tab.id === "forms" && (!data.forms || data.forms.length === 0)) return null;
+                if (tab.id === "forms" && !hasForms) return null;
                 return (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center gap-1.5 px-3 py-2 text-xs font-medium border-b-2 transition-colors whitespace-nowrap ${
-                      active ? "border-blue-600 text-blue-600" : "border-transparent text-gray-500 hover:text-gray-700"
-                    }`}
-                  >
+                  <button key={tab.id} onClick={() => setActiveTab(tab.id)}
+                    className={`flex items-center gap-1.5 px-3 py-2 text-xs font-medium border-b-2 transition-colors whitespace-nowrap ${active ? "border-blue-600 text-blue-600" : "border-transparent text-gray-500 hover:text-gray-700"}`}>
                     <Icon className="w-3.5 h-3.5" />
                     {tab.label}
-                    {count !== null && count > 0 && <span className="text-[10px] text-gray-400 ml-0.5">({count})</span>}
+                    {count > 0 && <span className="text-[10px] text-gray-400 ml-0.5">({count})</span>}
                   </button>
                 );
               })}
             </div>
           </div>
 
-          {/* Content area */}
           <div className="px-6 py-5 max-w-[750px]">
             {activeTab === "reader" && (
               <div>
                 {data.ogImage && <img src={data.ogImage} alt="" className="w-full max-h-[240px] object-cover rounded-lg mb-5" onError={(e) => e.target.style.display = 'none'} />}
                 {data.headings?.length > 0 ? (
-                  <div className="space-y-4">
-                    {data.headings.map((h, i) => {
-                      if (h.level === 1) return <h2 key={i} className="text-xl font-semibold text-gray-900">{h.text}</h2>;
-                      if (h.level === 2) return <h3 key={i} className="text-lg font-medium text-gray-800 mt-2">{h.text}</h3>;
-                      return <h4 key={i} className="text-base font-medium text-gray-700 mt-1">{h.text}</h4>;
-                    })}
+                  <div className="space-y-3">
+                    {data.headings.map((h, i) => (
+                      <div key={i} className={h.level === 1 ? "text-xl font-semibold text-gray-900" : h.level === 2 ? "text-lg font-medium text-gray-800" : "text-base font-medium text-gray-700"}>{h.text}</div>
+                    ))}
                     {data.text && <p className="text-sm text-gray-600 leading-relaxed mt-4 whitespace-pre-line">{data.text.substring(0, 3000)}</p>}
                   </div>
                 ) : data.text ? (
                   <p className="text-sm text-gray-600 leading-relaxed whitespace-pre-line">{data.text.substring(0, 3000)}</p>
-                ) : (
-                  <p className="text-sm text-gray-400 italic">No readable content extracted.</p>
-                )}
+                ) : <p className="text-sm text-gray-400 italic">No readable content extracted.</p>}
               </div>
             )}
 
@@ -174,7 +200,7 @@ export default function BrowserPageView({ data, onNavigate, onSearch, onSubmitFo
 
             {activeTab === "forms" && (
               <div className="space-y-4">
-                {data.forms?.length > 0 ? data.forms.map((form, fi) => (
+                {hasForms ? data.forms.map((form, fi) => (
                   <div key={fi} className="border border-gray-200 rounded-lg p-4">
                     <div className="flex items-center gap-2 mb-3">
                       <FormInput className="w-4 h-4 text-blue-600" />
@@ -185,13 +211,8 @@ export default function BrowserPageView({ data, onNavigate, onSearch, onSubmitFo
                       {form.fields.filter(f => f.type !== 'hidden').map((field, ffi) => (
                         <div key={ffi}>
                           <label className="text-xs text-gray-500 mb-0.5 block">{field.name || field.placeholder || `Field ${ffi + 1}`}</label>
-                          <input
-                            type={field.type === 'password' ? 'password' : 'text'}
-                            value={formValues[`${fi}_${field.name}`] ?? field.value ?? ""}
-                            onChange={(e) => handleFormFieldChange(fi, field.name, e.target.value)}
-                            placeholder={field.placeholder}
-                            className="w-full px-3 py-1.5 border border-gray-200 rounded text-sm text-gray-900 placeholder:text-gray-300"
-                          />
+                          <input type="text" value={formValues[`${fi}_${field.name}`] ?? field.value ?? ""} onChange={(e) => handleFormFieldChange(fi, field.name, e.target.value)} placeholder={field.placeholder}
+                            className="w-full px-3 py-1.5 border border-gray-200 rounded text-sm text-gray-900 placeholder:text-gray-300" />
                         </div>
                       ))}
                     </div>
@@ -206,17 +227,13 @@ export default function BrowserPageView({ data, onNavigate, onSearch, onSubmitFo
                 {data.emails?.length > 0 && (
                   <div>
                     <h3 className="text-sm font-medium text-gray-900 mb-2 flex items-center gap-2"><Mail className="w-4 h-4 text-blue-600" /> Emails</h3>
-                    {data.emails.map((email, i) => (
-                      <a key={i} href={`mailto:${email}`} className="block px-3 py-2 rounded-lg hover:bg-gray-50 text-sm text-blue-600 hover:underline">{email}</a>
-                    ))}
+                    {data.emails.map((email, i) => <a key={i} href={`mailto:${email}`} className="block px-3 py-2 rounded-lg hover:bg-gray-50 text-sm text-blue-600 hover:underline">{email}</a>)}
                   </div>
                 )}
                 {data.phones?.length > 0 && (
                   <div>
                     <h3 className="text-sm font-medium text-gray-900 mb-2 flex items-center gap-2"><Phone className="w-4 h-4 text-green-600" /> Phones</h3>
-                    {data.phones.map((phone, i) => (
-                      <a key={i} href={`tel:${phone}`} className="block px-3 py-2 rounded-lg hover:bg-gray-50 text-sm text-green-700 hover:underline">{phone}</a>
-                    ))}
+                    {data.phones.map((phone, i) => <a key={i} href={`tel:${phone}`} className="block px-3 py-2 rounded-lg hover:bg-gray-50 text-sm text-green-700 hover:underline">{phone}</a>)}
                   </div>
                 )}
               </div>

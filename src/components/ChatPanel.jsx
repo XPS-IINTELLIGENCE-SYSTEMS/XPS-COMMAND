@@ -149,7 +149,8 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
             for (const tc of msg.tool_calls) {
               if (!tc.name?.includes("headlessBrowser")) continue;
               if (tc.status !== "completed" && tc.status !== "success") continue;
-              const callId = `${msg.role}-${tc.name}-${tc.results?.substring(0, 50) || ""}`;
+              const resultsStr = typeof tc.results === "string" ? tc.results : JSON.stringify(tc.results || "");
+              const callId = `${msg.role}-${tc.name}-${resultsStr.substring(0, 50)}`;
               if (processedToolCallsRef.current.has(callId)) continue;
               processedToolCallsRef.current.add(callId);
               try {
@@ -374,7 +375,7 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
             size="icon"
             className={`${mobile ? 'h-10 w-10' : 'h-8 w-8'} metallic-gold-bg text-background hover:brightness-110 rounded-lg`}
             onClick={handleSend}
-            disabled={loading || initializing || !input.trim()}
+            disabled={loading || initializing || !(input || "").trim()}
           >
             {loading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
           </Button>

@@ -232,10 +232,12 @@ export default function WorkspaceBrowser({ onClose }) {
 
       {/* Viewport */}
       <div
-        className="overflow-hidden rounded-b-xl flex flex-col"
+        className="overflow-hidden rounded-b-xl"
         style={{
           height: fullscreen ? "calc(100vh - 82px)" : 600,
           backgroundColor: view === "home" ? "#202124" : "#ffffff",
+          display: "flex",
+          flexDirection: "column",
         }}
       >
         {error && (
@@ -266,14 +268,12 @@ export default function WorkspaceBrowser({ onClose }) {
         )}
 
         {view === "page" && pageData && (
-          <div className="flex-1 flex flex-col" style={{ minHeight: 0 }}>
-            <BrowserPageView
-              data={pageData}
-              onNavigate={navigateToUrl}
-              onSearch={performSearch}
-              onSubmitForm={submitForm}
-            />
-          </div>
+          <BrowserPageView
+            data={pageData}
+            onNavigate={navigateToUrl}
+            onSearch={performSearch}
+            onSubmitForm={submitForm}
+          />
         )}
       </div>
 

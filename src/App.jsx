@@ -27,6 +27,7 @@ import DataBank from './pages/DataBank';
 import AdminControl from './pages/AdminControl';
 import FieldTech from './pages/FieldTech';
 import ClientPortal from './pages/ClientPortal';
+import UIBuilder from './pages/UIBuilder';
 
 /** Shared public marketing routes */
 const PublicRoutes = () => (
@@ -80,6 +81,7 @@ const AuthenticatedApp = () => (
     <Route path="/account-settings" element={<AccountSettings />} />
     <Route path="/field-tech" element={<FieldTech />} />
     <Route path="/client-portal" element={<ClientPortal />} />
+    <Route path="/ui-builder" element={<UIBuilder />} />
 
     <Route path="*" element={<PageNotFound />} />
   </Routes>

@@ -64,7 +64,7 @@ export default function BrowserPageView({ data, onNavigate, onSearch, onSubmitFo
   const hasForms = data.forms?.length > 0;
 
   return (
-    <div className="h-full flex flex-col overflow-hidden bg-white">
+    <div className="flex-1 flex flex-col overflow-hidden bg-white" style={{ minHeight: 0 }}>
       {/* Mode toggle bar */}
       <div className="flex items-center gap-2 px-3 py-1.5 bg-[#f1f3f4] border-b border-[#dadce0] flex-shrink-0">
         <button
@@ -96,13 +96,13 @@ export default function BrowserPageView({ data, onNavigate, onSearch, onSubmitFo
 
       {/* VISUAL MODE — rendered HTML in sandboxed srcdoc iframe */}
       {mode === "live" && (
-        <div className="flex-1 relative bg-white">
+        <div className="flex-1 relative bg-white" style={{ minHeight: 0 }}>
           {srcdoc ? (
             <iframe
               srcDoc={srcdoc}
               title={data.title || "Web page"}
-              className="absolute inset-0 w-full h-full border-0"
-              sandbox="allow-same-origin"
+              style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: "none" }}
+              sandbox="allow-same-origin allow-scripts"
               referrerPolicy="no-referrer"
             />
           ) : (

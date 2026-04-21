@@ -52,7 +52,8 @@ export default function WorkspaceBrowser({ onClose }) {
         setError(d?.error || "Failed to load page");
       }
     } catch (err) {
-      setError(err.message);
+      console.error("Browser navigate error:", err);
+      setError(err?.response?.data?.error || err.message || "Navigation failed");
     }
     setLoading(false);
   };
@@ -231,10 +232,9 @@ export default function WorkspaceBrowser({ onClose }) {
 
       {/* Viewport */}
       <div
-        className="flex-1 overflow-hidden rounded-b-xl flex flex-col"
+        className="overflow-hidden rounded-b-xl flex flex-col"
         style={{
-          minHeight: fullscreen ? "calc(100vh - 82px)" : 500,
-          maxHeight: fullscreen ? "calc(100vh - 82px)" : 700,
+          height: fullscreen ? "calc(100vh - 82px)" : 600,
           backgroundColor: view === "home" ? "#202124" : "#ffffff",
         }}
       >

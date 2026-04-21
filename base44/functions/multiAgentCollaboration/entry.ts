@@ -23,6 +23,7 @@ const AGENT_CAPABILITIES = {
 function safeJSON(str) { try { return JSON.parse(str || '[]'); } catch { return []; } }
 
 Deno.serve(async (req) => {
+  try {
   const base44 = createClientFromRequest(req);
   const user = await base44.auth.me();
   if (!user) return Response.json({ error: 'Unauthorized' }, { status: 401 });
@@ -296,10 +297,11 @@ Be brutally honest and specific. This is for autonomous self-improvement.`,
     });
 
     // Save reflection
-    const ref = await base44.asServiceRole.entities.AgentReflection.create({
+    const refData = {
       agent_type: agent_type || 'All',
       reflection_type: 'performance_review',
       trigger: trigger || 'manual',
+      summary: `${agent_type || 'All'} agent reflection: score ${analysis.performance_score || 0}/100, ${(analysis.strengths || []).length} strengths, ${(analysis.weaknesses || []).length} weaknesses, ${(analysis.skill_upgrades || []).length} skill upgrades`,
       performance_score: analysis.performance_score || avgQuality,
       tasks_analyzed: totalTasks,
       success_rate: successRate,
@@ -310,18 +312,19 @@ Be brutally honest and specific. This is for autonomous self-improvement.`,
       prompt_optimizations: JSON.stringify(analysis.prompt_optimizations || []),
       collaboration_insights: JSON.stringify(analysis.collaboration_insights || []),
       before_metrics: JSON.stringify({ totalTasks, successRate, avgQuality }),
-      full_analysis: analysis.full_analysis || '',
+      full_analysis: analysis.full_analysis || 'Reflection complete',
       next_actions: JSON.stringify(analysis.next_actions || []),
       related_job_ids: JSON.stringify(recentComplete.slice(0, 10).map(j => j.id)),
       status: 'complete',
-    });
+    };
+    const ref = await base44.asServiceRole.entities.AgentReflection.create(refData);
 
     // Log activity
     await base44.asServiceRole.entities.AgentActivity.create({
       agent_name: agent_type || 'System',
-      action: `Self-reflection: score ${analysis.performance_score}/100, ${(analysis.weaknesses || []).length} weaknesses, ${(analysis.skill_upgrades || []).length} upgrades recommended`,
+      action: `Self-reflection: score ${analysis.performance_score || 0}/100, ${(analysis.weaknesses || []).length} weaknesses, ${(analysis.skill_upgrades || []).length} upgrades recommended`,
       status: 'success', category: 'system',
-      details: JSON.stringify({ reflection_id: ref.id, score: analysis.performance_score }),
+      details: JSON.stringify({ reflection_id: ref.id, score: analysis.performance_score || 0 }),
     });
 
     return Response.json({ success: true, reflection: { id: ref.id, ...analysis, metrics: { totalTasks, successRate, avgQuality } } });
@@ -472,9 +475,10 @@ Analyze what went wrong, fix the issues, and produce a corrected, higher-quality
   }
 
   return Response.json({ error: 'Invalid action. Use: collaborate, reflect, delegate, self_correct, dashboard' }, { status: 400 });
+  } catch (error) {
+    return Response.json({ error: error.message, stack: error.stack }, { status: 500 });
+  }
 });
-
-// Wrap with error handling
 
 // Helper: Run collaborative reflection after a group finishes
 async function runReflection(base44, groupId, allResults, goal) {
@@ -514,6 +518,7 @@ Provide collaboration-specific insights: what worked, what didn't, how agents co
     agent_type: 'Coordinator',
     reflection_type: 'collaboration_review',
     trigger: 'collaboration_end',
+    summary: `Collaboration review: score ${review.collaboration_score || 0}/100, ${(review.what_worked || []).length} successes, ${(review.what_failed || []).length} issues`,
     performance_score: review.collaboration_score || avgQuality,
     tasks_analyzed: agentsUsed.length,
     success_rate: avgQuality,

@@ -4,40 +4,45 @@
   "properties": {
     "agent_type": {
       "type": "string",
-      "description": "Which agent performed this reflection"
+      "description": "Agent that performed the reflection"
     },
     "reflection_type": {
       "type": "string",
       "enum": [
         "performance_review",
-        "skill_upgrade",
-        "collaboration_review",
+        "skill_gap",
         "self_correction",
-        "strategy_shift"
+        "collaboration_review",
+        "strategy_upgrade"
       ],
       "default": "performance_review"
     },
     "trigger": {
       "type": "string",
       "enum": [
+        "post_task",
         "scheduled",
-        "failure",
-        "low_performance",
+        "failure_recovery",
         "collaboration_end",
         "manual"
       ],
-      "default": "scheduled"
+      "default": "post_task"
     },
-    "jobs_analyzed": {
+    "summary": {
+      "type": "string",
+      "description": "Human-readable summary of the reflection"
+    },
+    "performance_score": {
+      "type": "number",
+      "description": "Self-assessed score 0-100"
+    },
+    "tasks_analyzed": {
       "type": "number",
       "default": 0
     },
     "success_rate": {
       "type": "number",
-      "description": "Success rate 0-100 for period analyzed"
-    },
-    "avg_duration_ms": {
-      "type": "number"
+      "description": "Percentage 0-100"
     },
     "strengths": {
       "type": "string",
@@ -49,51 +54,58 @@
     },
     "improvements_applied": {
       "type": "string",
-      "description": "JSON array of concrete improvements made"
+      "description": "JSON array of improvements the agent applied to itself"
     },
-    "prompt_upgrades": {
+    "skill_upgrades": {
       "type": "string",
-      "description": "JSON \u2014 upgraded system prompts or parameters"
+      "description": "JSON array of new skills/tools the agent recommended adding"
+    },
+    "prompt_optimizations": {
+      "type": "string",
+      "description": "JSON array of prompt/strategy adjustments made"
+    },
+    "collaboration_insights": {
+      "type": "string",
+      "description": "JSON \u2014 insights on multi-agent coordination"
     },
     "collaboration_score": {
       "type": "number",
-      "description": "How well this agent collaborated with others 0-100"
+      "description": "Multi-agent collaboration quality score 0-100"
     },
-    "delegation_efficiency": {
-      "type": "number",
-      "description": "How efficiently tasks were delegated 0-100"
-    },
-    "self_correction_count": {
-      "type": "number",
-      "default": 0,
-      "description": "Times the agent self-corrected during the period"
-    },
-    "summary": {
+    "before_metrics": {
       "type": "string",
-      "description": "Human-readable reflection summary"
+      "description": "JSON \u2014 metrics before reflection cycle"
+    },
+    "after_metrics": {
+      "type": "string",
+      "description": "JSON \u2014 metrics after applying improvements"
+    },
+    "full_analysis": {
+      "type": "string",
+      "description": "Full LLM-generated analysis text"
     },
     "next_actions": {
       "type": "string",
       "description": "JSON array of recommended next actions"
     },
-    "performance_trend": {
-      "type": "string",
-      "enum": [
-        "improving",
-        "stable",
-        "declining",
-        "new"
-      ],
-      "default": "new"
-    },
     "related_job_ids": {
       "type": "string",
-      "description": "JSON array of job IDs analyzed"
+      "description": "JSON array of AgentJob IDs analyzed"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "analyzing",
+        "complete",
+        "applied",
+        "failed"
+      ],
+      "default": "analyzing"
     }
   },
   "required": [
     "agent_type",
     "reflection_type",
-    "summary"
+    "status"
   ]
 }

@@ -17,6 +17,8 @@ import QuickLinksWidget from "./QuickLinksWidget";
 import ActivityStream from "./ActivityStream";
 import CommandNotepad from "./CommandNotepad";
 import QuickWorkflowBar from "./QuickWorkflowBar";
+import SystemGuardianDashboard from "../guardian/SystemGuardianDashboard";
+import FinancialSandboxView from "../financial/FinancialSandboxView";
 import { DEFAULT_TOOLS } from "./dashboardDefaults";
 import ToolCategoryGrid from "./ToolCategoryGrid";
 
@@ -158,7 +160,7 @@ export default function DashboardHub({ onOpenTool }) {
 
   const addSection = (type) => {
     const id = `sec_${type}_${Date.now()}`;
-    const titles = { calendar: "Weekly Calendar", summary: "Daily Summary", favorites: "Favorites", tools: "All Tools", sidebar: "Scheduled Items", notes: "Quick Notes", quicklinks: "Quick Links", activity: "Activity Stream", command_notepad: "Command Notepad", quick_workflow: "Quick Workflow" };
+    const titles = { calendar: "Weekly Calendar", summary: "Daily Summary", favorites: "Favorites", tools: "All Tools", sidebar: "Scheduled Items", notes: "Quick Notes", quicklinks: "Quick Links", activity: "Activity Stream", command_notepad: "Command Notepad", quick_workflow: "Quick Workflow", system_guardian: "System Guardian", financial_sandbox: "Financial Sandbox" };
     const newSec = { id, type, title: titles[type] || type, size: ["calendar", "favorites", "tools"].includes(type) ? "full" : "half", collapsed: false };
     const updated = [...sections, newSec];
     setSections(updated);
@@ -401,6 +403,12 @@ export default function DashboardHub({ onOpenTool }) {
 
       case "quicklinks":
         return <QuickLinksWidget links={widgetData[section.id]?.links || []} onChange={(val) => updateWidgetData(section.id, { ...widgetData[section.id], links: val })} />;
+
+      case "system_guardian":
+        return <SystemGuardianDashboard />;
+
+      case "financial_sandbox":
+        return <FinancialSandboxView />;
 
       case "activity":
         return <ActivityStream />;

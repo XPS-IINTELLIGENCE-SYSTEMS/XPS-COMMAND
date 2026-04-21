@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, Plus, Calendar, FileText, Star, LayoutGrid, Clock, Bot, BarChart3, Wrench, MessageSquare, List, Activity, Zap, StickyNote, GitBranch } from "lucide-react";
+import { X, Plus, Calendar, FileText, Star, LayoutGrid, Clock, Bot, BarChart3, Wrench, MessageSquare, List, Activity, Zap, StickyNote, GitBranch, Shield, DollarSign } from "lucide-react";
 
 const SECTION_TEMPLATES = [
   { type: "command_notepad", label: "Command Notepad", desc: "Smart notes → tasks, workflows, schedules, reminders", icon: StickyNote, color: "#d4af37" },
@@ -13,6 +13,8 @@ const SECTION_TEMPLATES = [
   { type: "sidebar", label: "Scheduled Items", desc: "Automations & items sidebar", icon: Clock, color: "#06b6d4" },
   { type: "notes", label: "Quick Notes", desc: "Freeform text/notes widget", icon: MessageSquare, color: "#ec4899" },
   { type: "quicklinks", label: "Quick Links", desc: "Custom link list", icon: List, color: "#14b8a6" },
+  { type: "system_guardian", label: "System Guardian", desc: "Live health score, fix history, autonomous repair status", icon: Shield, color: "#22c55e" },
+  { type: "financial_sandbox", label: "Financial Sandbox", desc: "Mock $20K portfolio tracker with AI-managed buckets", icon: DollarSign, color: "#d4af37" },
 ];
 
 export default function AddSectionModal({ existingSections, onAdd, onClose }) {

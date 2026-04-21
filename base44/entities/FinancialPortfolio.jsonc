@@ -1,0 +1,83 @@
+{
+  "name": "FinancialPortfolio",
+  "type": "object",
+  "properties": {
+    "portfolio_name": {
+      "type": "string",
+      "description": "Name of portfolio bucket"
+    },
+    "bucket": {
+      "type": "string",
+      "enum": [
+        "low_risk",
+        "mid_risk",
+        "high_risk",
+        "day_trading",
+        "business_venture"
+      ],
+      "description": "Risk bucket"
+    },
+    "initial_balance": {
+      "type": "number",
+      "default": 0
+    },
+    "current_balance": {
+      "type": "number",
+      "default": 0
+    },
+    "total_gain_loss": {
+      "type": "number",
+      "default": 0
+    },
+    "total_gain_loss_pct": {
+      "type": "number",
+      "default": 0
+    },
+    "day_gain_loss": {
+      "type": "number",
+      "default": 0
+    },
+    "trades_today": {
+      "type": "number",
+      "default": 0
+    },
+    "total_trades": {
+      "type": "number",
+      "default": 0
+    },
+    "holdings": {
+      "type": "string",
+      "description": "JSON array of current holdings"
+    },
+    "trade_history": {
+      "type": "string",
+      "description": "JSON array of recent trades"
+    },
+    "strategy": {
+      "type": "string",
+      "description": "Current AI strategy for this bucket"
+    },
+    "ai_reflection": {
+      "type": "string",
+      "description": "Latest AI self-reflection on performance"
+    },
+    "last_trade_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "paused",
+        "closed"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "portfolio_name",
+    "bucket",
+    "status"
+  ]
+}

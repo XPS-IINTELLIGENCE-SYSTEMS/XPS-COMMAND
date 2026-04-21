@@ -191,13 +191,18 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
     setMessages([]);
     setConversation(null);
     conversationRef.current = null;
+    processedToolCallsRef.current = new Set();
     const agentCfg = AGENTS.find(a => a.id === currentAgentName) || AGENTS[0];
-    const conv = await base44.agents.createConversation({
-      agent_name: currentAgentName,
-      metadata: { name: `${agentCfg.fullName || currentAgentName} Session` },
-    });
-    setConversation(conv);
-    conversationRef.current = conv;
+    try {
+      const conv = await base44.agents.createConversation({
+        agent_name: currentAgentName,
+        metadata: { name: `${agentCfg.fullName || currentAgentName} Session` },
+      });
+      setConversation(conv);
+      conversationRef.current = conv;
+    } catch (err) {
+      console.error("Failed to create conversation:", err);
+    }
     setInitializing(false);
   };
 
@@ -206,8 +211,17 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
     const msg = input.trim();
     setInput("");
     setLoading(true);
-    await base44.agents.addMessage(conversation, { role: "user", content: msg });
-    // Loading will be cleared by subscription when agent responds
+    try {
+      await base44.agents.addMessage(conversation, { role: "user", content: msg });
+    } catch (err) {
+      console.error("Send message error:", err);
+      if (err?.message?.includes("Access denied") || err?.message?.includes("another user")) {
+        // Conversation belongs to another user session — create a fresh one
+        await initConversation();
+        setInput(msg); // restore the message so user can retry
+      }
+      setLoading(false);
+    }
   };
 
   const handleNewChat = async () => {

@@ -16,6 +16,7 @@ import NotesWidget from "./NotesWidget";
 import QuickLinksWidget from "./QuickLinksWidget";
 import ActivityStream from "./ActivityStream";
 import { DEFAULT_TOOLS } from "./dashboardDefaults";
+import ToolCategoryGrid from "./ToolCategoryGrid";
 
 const DEFAULT_GREETING = "";
 const DEFAULT_SUBTITLE = "Here's your sales intelligence briefing for today.";
@@ -359,7 +360,7 @@ export default function DashboardHub({ onOpenTool }) {
       case "tools":
         return (
           <div>
-            <div className="flex items-center justify-between mb-3 px-1">
+            <div className="flex items-center justify-between mb-4 px-1">
               <h2 className="text-[15px] font-bold text-white">All Tools</h2>
               <button onClick={() => setShowManager(true)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg glass-card text-[11px] font-medium text-muted-foreground hover:text-foreground transition-colors">
                 <Settings2 className="w-3.5 h-3.5" /> Manage
@@ -367,21 +368,17 @@ export default function DashboardHub({ onOpenTool }) {
             </div>
             <Droppable droppableId="all">
               {(provided, snapshot) => (
-                <div ref={provided.innerRef} {...provided.droppableProps} className={`grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 rounded-xl p-1 transition-colors ${snapshot.isDraggingOver ? "bg-primary/5" : ""}`}>
-                  {gridIds.map((id, index) => {
-                    const tool = toolMap[id];
-                    if (!tool) return null;
-                    const globalIndex = favTools.length + index;
-                    return (
-                      <Draggable key={tool.id} draggableId={`all-${tool.id}`} index={index}>
-                        {(prov) => (
-                          <div ref={prov.innerRef} {...prov.draggableProps}>
-                            <DashboardToolCard tool={tool} starred={false} displayNumber={getDisplayNumber(tool.id, globalIndex)} onOpen={onOpenTool} onToggleStar={toggleStar} onEdit={setEditingCard} dragHandleProps={prov.dragHandleProps} />
-                          </div>
-                        )}
-                      </Draggable>
-                    );
-                  })}
+                <div ref={provided.innerRef} {...provided.droppableProps} className={`rounded-xl p-1 transition-colors ${snapshot.isDraggingOver ? "bg-primary/5" : ""}`}>
+                  <ToolCategoryGrid
+                    gridIds={gridIds}
+                    toolMap={toolMap}
+                    favToolsCount={favTools.length}
+                    starredIds={starredIds}
+                    getDisplayNumber={getDisplayNumber}
+                    onOpenTool={onOpenTool}
+                    onToggleStar={toggleStar}
+                    onEditCard={setEditingCard}
+                  />
                   {provided.placeholder}
                 </div>
               )}

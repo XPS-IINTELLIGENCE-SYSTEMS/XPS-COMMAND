@@ -147,3 +147,61 @@ export const DEFAULT_TOOLS = [
   { id: "compliance_checker", label: "Compliance Checker", desc: "Cross-reference bid requirements with proposals", iconName: "Shield", color: "#f59e0b" },
   { id: "xps_intel_core", label: "XPS Intel Core", desc: "Master XPS intelligence — brands, pricing, social, 60+ locations", iconName: "Brain", color: "#d4af37" },
 ];
+
+// Tool categories with metallic gold headers & descriptions
+export const TOOL_CATEGORIES = [
+  {
+    id: "lead_engine",
+    title: "Lead Engine",
+    desc: "Discover, qualify, and manage your sales pipeline — from raw prospects to closed deals.",
+    toolIds: ["xpress_leads", "find_companies", "find_jobs", "data_bank", "crm", "seeds_sources", "lead_sniper", "master_database"],
+  },
+  {
+    id: "outreach_revenue",
+    title: "Outreach & Revenue",
+    desc: "Automated campaigns, proposals, and follow-ups that turn leads into revenue.",
+    toolIds: ["get_work", "win_work", "bid_center", "outreach_automation", "sentiment_analyst", "gc_bid_pipeline", "master_pipeline"],
+  },
+  {
+    id: "estimating_pricing",
+    title: "Estimating & Pricing",
+    desc: "AI-powered takeoffs, dynamic pricing, and professional proposal generation.",
+    toolIds: ["blueprint_takeoff", "dynamic_pricing", "proposal_generator", "auto_proposal", "compliance_checker"],
+  },
+  {
+    id: "field_operations",
+    title: "Field Operations",
+    desc: "On-site tools for work orders, time tracking, photos, and client approvals.",
+    toolIds: ["field_tech", "job_site_map", "client_portal", "status_reports"],
+  },
+  {
+    id: "intelligence_research",
+    title: "Intelligence & Research",
+    desc: "Deep web research, competitor monitoring, and XPS brand intelligence.",
+    toolIds: ["research", "knowledge", "knowledge_upload", "competition", "competitor_comparison", "xps_intel_core", "company_assets"],
+  },
+  {
+    id: "content_media",
+    title: "Content & Media",
+    desc: "Branding, social media, video, and AI-generated marketing assets.",
+    toolIds: ["media_hub", "scrape_social", "scrape_trends", "analytics"],
+  },
+  {
+    id: "ai_agents",
+    title: "AI Agents",
+    desc: "Build, deploy, and command autonomous AI agents across your entire operation.",
+    toolIds: ["ai_assistant", "agent_builder", "agent_fleet", "agent_command", "agent_skills", "agent_knowledge", "skills_creator"],
+  },
+  {
+    id: "automation_workflows",
+    title: "Automation & Workflows",
+    desc: "Drag-and-drop automation, scheduled scraping, and data routing pipelines.",
+    toolIds: ["workflows", "scheduler", "master_scraper", "approval_queue"],
+  },
+  {
+    id: "system_admin",
+    title: "System & Admin",
+    desc: "Platform configuration, user management, connectors, and system health.",
+    toolIds: ["admin", "settings", "connectors", "algorithm", "system_health", "tool_creator", "system_index", "system_instructions", "page_builder", "auto_enhance", "templates_library", "github_explorer"],
+  },
+];

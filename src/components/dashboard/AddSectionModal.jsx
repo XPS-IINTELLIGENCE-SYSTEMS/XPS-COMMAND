@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { X, Plus, Calendar, FileText, Star, LayoutGrid, Clock, Bot, BarChart3, Wrench, MessageSquare, List, Activity, Zap } from "lucide-react";
+import { X, Plus, Calendar, FileText, Star, LayoutGrid, Clock, Bot, BarChart3, Wrench, MessageSquare, List, Activity, Zap, Hexagon } from "lucide-react";
 
 const SECTION_TEMPLATES = [
+  { type: "3dhero", label: "3D Command Center", desc: "Animated 3D hexagon pipeline with live metrics", icon: Hexagon, color: "#d4af37" },
   { type: "pipeline", label: "Pipeline", desc: "Interactive XPS master workflow pipeline", icon: Zap, color: "#d4af37" },
   { type: "calendar", label: "Calendar", desc: "Daily / Weekly / Monthly schedule", icon: Calendar, color: "#d4af37" },
   { type: "summary", label: "Daily Summary", desc: "Today's KPIs and activity", icon: FileText, color: "#22c55e" },
@@ -26,7 +27,7 @@ export default function AddSectionModal({ existingSections, onAdd, onClose }) {
         </div>
         <div className="p-4 space-y-2 max-h-[60vh] overflow-y-auto">
           {SECTION_TEMPLATES.map(tmpl => {
-            const exists = existingTypes.includes(tmpl.type) && ["pipeline", "calendar", "summary", "favorites", "tools"].includes(tmpl.type);
+            const exists = existingTypes.includes(tmpl.type) && ["3dhero", "pipeline", "calendar", "summary", "favorites", "tools"].includes(tmpl.type);
             return (
               <button
                 key={tmpl.type}

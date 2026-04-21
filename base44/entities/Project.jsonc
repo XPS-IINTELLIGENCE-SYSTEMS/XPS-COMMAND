@@ -1,0 +1,105 @@
+{
+  "name": "Project",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "File or folder name"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "folder",
+        "document",
+        "spreadsheet",
+        "presentation",
+        "image",
+        "pdf",
+        "video",
+        "link",
+        "workspace"
+      ],
+      "default": "document",
+      "description": "Item type"
+    },
+    "parent_id": {
+      "type": "string",
+      "description": "Parent folder ID (null = root)"
+    },
+    "description": {
+      "type": "string",
+      "description": "Item description or notes"
+    },
+    "content": {
+      "type": "string",
+      "description": "Text content for documents"
+    },
+    "file_url": {
+      "type": "string",
+      "description": "Uploaded file URL"
+    },
+    "link_url": {
+      "type": "string",
+      "description": "External link URL"
+    },
+    "thumbnail_url": {
+      "type": "string",
+      "description": "Preview thumbnail URL"
+    },
+    "color": {
+      "type": "string",
+      "default": "#d4af37",
+      "description": "Folder or item accent color"
+    },
+    "size_bytes": {
+      "type": "number",
+      "default": 0,
+      "description": "File size in bytes"
+    },
+    "is_starred": {
+      "type": "boolean",
+      "default": false
+    },
+    "is_trashed": {
+      "type": "boolean",
+      "default": false
+    },
+    "shared_with": {
+      "type": "string",
+      "description": "JSON array of email addresses this is shared with"
+    },
+    "share_permission": {
+      "type": "string",
+      "enum": [
+        "view",
+        "edit",
+        "comment"
+      ],
+      "default": "view"
+    },
+    "tags": {
+      "type": "string",
+      "description": "Comma-separated tags"
+    },
+    "linked_tools": {
+      "type": "string",
+      "description": "JSON array of tool IDs linked to this project"
+    },
+    "linked_lead_id": {
+      "type": "string",
+      "description": "Linked Lead entity ID"
+    },
+    "linked_job_id": {
+      "type": "string",
+      "description": "Linked CommercialJob entity ID"
+    },
+    "last_opened": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "name",
+    "type"
+  ]
+}

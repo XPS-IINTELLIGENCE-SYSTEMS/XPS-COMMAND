@@ -5,6 +5,7 @@ import QuickActionButtons from "./chat/QuickActionButtons";
 import ChatSmartSuggestions from "./chat/ChatSmartSuggestions";
 import SubAgentChat from "./chat/SubAgentChat";
 import ChatAttachmentButton from "./chat/ChatAttachmentButton";
+import PromptEnhancer from "./chat/PromptEnhancer";
 import { Button } from "@/components/ui/button";
 import { base44 } from "@/api/base44Client";
 import ReactMarkdown from "react-markdown";
@@ -315,6 +316,11 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
               base44.agents.addMessage(conversation, { role: "user", content: cmd });
             }
           }}
+        />
+        <PromptEnhancer
+          rawInput={input}
+          onAccept={(enhanced) => setInput(enhanced)}
+          disabled={loading || initializing}
         />
         <div className="flex gap-1.5 items-center">
           <ChatAttachmentButton

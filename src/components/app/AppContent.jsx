@@ -54,6 +54,7 @@ import SystemIndexView from "../systemindex/SystemIndexView";
 import AdminCommandCenter from "../systemindex/AdminCommandCenter";
 import ComplianceCheckerView from "../compliance/ComplianceCheckerView";
 import IntelCoreView from "../intelcore/IntelCoreView";
+import HyperEvolverView from "../evolve/HyperEvolverView";
 
 export default function AppContent({ activeView, onChatCommand, onNavigate }) {
   switch (activeView) {
@@ -116,6 +117,7 @@ export default function AppContent({ activeView, onChatCommand, onNavigate }) {
     case "system_instructions": return <AdminCommandCenter />;
     case "compliance_checker": return <ComplianceCheckerView />;
     case "xps_intel_core": return <IntelCoreView />;
+    case "hyper_evolver": return <HyperEvolverView />;
     default: return <div className="text-center py-20 text-muted-foreground">View not found</div>;
   }
 }

@@ -21,6 +21,7 @@ import SystemGuardianDashboard from "../guardian/SystemGuardianDashboard";
 import FinancialSandboxView from "../financial/FinancialSandboxView";
 import OrchestratorDashboard from "../orchestrator/OrchestratorDashboard";
 import FocusDashboard from "../focus/FocusDashboard";
+import FocusToolbar from "../focus/FocusToolbar";
 import { DEFAULT_TOOLS } from "./dashboardDefaults";
 import ToolCategoryGrid from "./ToolCategoryGrid";
 
@@ -295,29 +296,7 @@ export default function DashboardHub({ onOpenTool }) {
   const renderSectionContent = (section) => {
     switch (section.type) {
       case "greeting":
-        return (
-          <div className="px-1 py-1">
-            {editingGreeting ? (
-              <div className="space-y-2">
-                <input value={greetingDraft} onChange={e => setGreetingDraft(e.target.value)} placeholder={`${autoGreeting()}, ${user?.full_name?.split(" ")[0] || "there"}`} className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight bg-transparent border-b-2 border-primary/40 outline-none w-full pb-1 placeholder:text-muted-foreground/40" autoFocus />
-                <input value={subtitleDraft} onChange={e => setSubtitleDraft(e.target.value)} placeholder="Subtitle text..." className="text-sm text-muted-foreground bg-transparent border-b border-border outline-none w-full pb-1 placeholder:text-muted-foreground/30" />
-                <div className="flex gap-2 pt-1">
-                  <button onClick={saveGreeting} className="flex items-center gap-1 text-xs text-primary hover:text-primary/80 font-medium"><Check className="w-3.5 h-3.5" /> Save</button>
-                  <button onClick={() => setEditingGreeting(false)} className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"><X className="w-3.5 h-3.5" /> Cancel</button>
-                  {greeting && <button onClick={() => { setGreetingDraft(""); setSubtitleDraft(DEFAULT_SUBTITLE); }} className="text-xs text-muted-foreground hover:text-foreground ml-2">Reset</button>}
-                </div>
-              </div>
-            ) : (
-              <div className="relative group/greet">
-                <h1 className="text-[24px] sm:text-[32px] font-extrabold text-white tracking-tight leading-tight">{displayGreeting}</h1>
-                <p className="text-[13px] sm:text-[15px] text-white mt-1">{subtitle}</p>
-                <button onClick={startEditGreeting} className="absolute -right-1 top-0 p-2 rounded-lg active:bg-secondary sm:hover:bg-secondary opacity-100 sm:opacity-0 sm:group-hover/greet:opacity-100 transition-opacity" title="Edit greeting">
-                  <Pencil className="w-4 h-4 text-muted-foreground" />
-                </button>
-              </div>
-            )}
-          </div>
-        );
+        return <FocusToolbar user={user} />;
 
       case "pipeline":
         return <PipelineBanner onOpenFull={() => onOpenTool?.("master_pipeline")} />;

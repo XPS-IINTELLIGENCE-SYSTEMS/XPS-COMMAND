@@ -29,6 +29,7 @@ import FieldTech from './pages/FieldTech';
 import ClientPortal from './pages/ClientPortal';
 import UIBuilder from './pages/UIBuilder';
 import AgentZero from './pages/AgentZero';
+import FocusWorkspace from './pages/FocusWorkspace';
 
 /** Shared public marketing routes */
 const PublicRoutes = () => (
@@ -84,6 +85,7 @@ const AuthenticatedApp = () => (
     <Route path="/client-portal" element={<ClientPortal />} />
     <Route path="/ui-builder" element={<UIBuilder />} />
     <Route path="/agent-zero" element={<AgentZero />} />
+    <Route path="/focus/:cardId" element={<FocusWorkspace />} />
 
     <Route path="*" element={<PageNotFound />} />
   </Routes>

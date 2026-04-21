@@ -9,8 +9,17 @@ const DATA_TABS = [
   { id: "contacts", label: "Contacts", icon: Mail },
 ];
 
+// Detect if the page HTML has meaningful visible content
+function hasVisibleContent(html) {
+  if (!html || html.length < 500) return false;
+  // Strip tags and check remaining text length
+  const text = html.replace(/<style[\s\S]*?<\/style>/gi, '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+  return text.length > 200;
+}
+
 export default function BrowserPageView({ data, onNavigate, onSearch, onSubmitForm }) {
-  const [mode, setMode] = useState("live");
+  const isContentRich = hasVisibleContent(data.previewHtml);
+  const [mode, setMode] = useState(isContentRich ? "live" : "data");
   const [activeTab, setActiveTab] = useState("reader");
   const [formValues, setFormValues] = useState({});
 
@@ -150,6 +159,17 @@ export default function BrowserPageView({ data, onNavigate, onSearch, onSubmitFo
                     color: "#fff", fontSize: 11, fontWeight: 500, zIndex: 10, pointerEvents: "none"
                   }}>
                     Use the URL bar above to search
+                  </div>
+                )}
+                {!isContentRich && (
+                  <div style={{
+                    position: "absolute", bottom: 16, left: "50%", transform: "translateX(-50%)",
+                    padding: "8px 16px", borderRadius: 12, background: "rgba(0,0,0,0.85)",
+                    color: "#fff", fontSize: 12, fontWeight: 500, zIndex: 10, cursor: "pointer",
+                    display: "flex", alignItems: "center", gap: 8
+                  }} onClick={() => setMode("data")}>
+                    <Eye style={{ width: 14, height: 14, color: "#60a5fa" }} />
+                    This site needs JS to render. Click for extracted data →
                   </div>
                 )}
               </>

@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { StickyNote, Wrench, FolderOpen, Plus, Pencil, Check, GitBranch, Sparkles } from "lucide-react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { toast } from "@/components/ui/use-toast";
@@ -131,6 +131,28 @@ export default function BlankWorkspace({
 
   const linkedProject = tab.projectId ? projects.find(p => p.id === tab.projectId) : null;
 
+  // Auto-load Call Center dashboard if this is a Call Center tab
+  const isCallCenterTab = tab.name?.toLowerCase().includes("call center");
+  
+  useEffect(() => {
+    if (isCallCenterTab && sections.length === 0) {
+      const fixedTools = getFixedTopTools();
+      const callCenterSection = {
+        id: newId(),
+        type: "tool_panel",
+        contentType: "tool",
+        label: "Call Center Dashboard",
+        toolIds: ["call_center"],
+        notes: "",
+        text: ""
+      };
+      onUpdateTab(tab.id, {
+        workspaceTitle: "Call Center",
+        sections: [...fixedTools, callCenterSection]
+      });
+    }
+  }, [isCallCenterTab, tab.id, sections.length, onUpdateTab]);
+
   // Number only non-divider sections
   let sectionNumber = 0;
 
@@ -141,7 +163,7 @@ export default function BlankWorkspace({
   ];
 
   return (
-    <div className="flex-1 flex flex-col overflow-y-auto min-h-0 scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent">
+    <div className="flex-1 flex flex-col overflow-y-scroll min-h-0" style={{ scrollbarWidth: "12px" }}>
       <div className="px-4 pt-6 pb-20 max-w-5xl mx-auto w-full">
 
         {/* Workspace Title */}

@@ -22,6 +22,7 @@ import FinancialSandboxView from "../financial/FinancialSandboxView";
 import OrchestratorDashboard from "../orchestrator/OrchestratorDashboard";
 import FocusDashboard from "../focus/FocusDashboard";
 import FocusToolbar from "../focus/FocusToolbar";
+import CallCenterIntegrated from "../callcenter/CallCenterIntegrated";
 import { DEFAULT_TOOLS } from "./dashboardDefaults";
 import ToolCategoryGrid from "./ToolCategoryGrid";
 import DashboardWorkflowCreator from "./DashboardWorkflowCreator";
@@ -32,6 +33,7 @@ const DEFAULT_GREETING = "";
 const DEFAULT_SUBTITLE = "Here's your sales intelligence briefing for today.";
 
 const DEFAULT_SECTIONS = [
+  { id: "sec_callcenter", type: "callcenter", title: "Call Center — Operations Hub", size: "full", collapsed: false, pinned: true },
   { id: "sec_greeting", type: "greeting", title: "Greeting", size: "full", collapsed: false },
   { id: "sec_notepad", type: "command_notepad", title: "Command Notepad", size: "half", collapsed: false },
   { id: "sec_workflow", type: "quick_workflow", title: "Quick Workflow", size: "half", collapsed: false },
@@ -166,8 +168,8 @@ export default function DashboardHub({ onOpenTool }) {
 
   const addSection = (type) => {
     const id = `sec_${type}_${Date.now()}`;
-    const titles = { calendar: "Weekly Calendar", summary: "Daily Summary", favorites: "Favorites", tools: "All Tools", sidebar: "Scheduled Items", notes: "Quick Notes", quicklinks: "Quick Links", activity: "Activity Stream", command_notepad: "Command Notepad", quick_workflow: "Quick Workflow", create_workflow: "Create Workflow", system_guardian: "System Guardian", financial_sandbox: "Financial Sandbox", orchestrator: "Orchestrator", focus_dashboard: "Focus Dashboard", auto_dashboard: "Auto Dashboard Configurator", auto_workflow_engine: "Auto Workflow Engine" };
-    const newSec = { id, type, title: titles[type] || type, size: ["calendar", "favorites", "tools"].includes(type) ? "full" : "half", collapsed: false };
+    const titles = { calendar: "Weekly Calendar", summary: "Daily Summary", favorites: "Favorites", tools: "All Tools", sidebar: "Scheduled Items", notes: "Quick Notes", quicklinks: "Quick Links", activity: "Activity Stream", command_notepad: "Command Notepad", quick_workflow: "Quick Workflow", create_workflow: "Create Workflow", system_guardian: "System Guardian", financial_sandbox: "Financial Sandbox", orchestrator: "Orchestrator", focus_dashboard: "Focus Dashboard", auto_dashboard: "Auto Dashboard Configurator", auto_workflow_engine: "Auto Workflow Engine", callcenter: "Call Center — Operations Hub" };
+    const newSec = { id, type, title: titles[type] || type, size: ["calendar", "favorites", "tools", "callcenter"].includes(type) ? "full" : "half", collapsed: false };
     const updated = [...sections, newSec];
     setSections(updated);
     saveConfig({ sections: updated });
@@ -411,6 +413,9 @@ export default function DashboardHub({ onOpenTool }) {
 
       case "auto_workflow_engine":
         return <AutoWorkflowEngine onOpenTool={onOpenTool} />;
+
+      case "callcenter":
+        return <CallCenterIntegrated />;
 
       default:
         return <div className="text-xs text-muted-foreground p-4 text-center">Unknown section</div>;

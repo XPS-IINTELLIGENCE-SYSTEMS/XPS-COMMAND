@@ -242,7 +242,7 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
     } catch (err) {
       console.error("Send message error:", err);
       // Suppress Google sync-related errors and let chat continue
-      if (err?.message?.includes("google") || err?.message?.includes("Drive") || err?.message?.includes("Calendar") || err?.message?.includes("Task")) {
+      if (err?.message?.includes("google") || err?.message?.includes("Drive") || err?.message?.includes("Calendar") || err?.message?.includes("Task") || err?.message?.includes("TasksSync")) {
         console.warn("Google sync error suppressed:", err.message);
         setLoading(false);
         return;

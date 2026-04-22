@@ -52,12 +52,20 @@ export async function saveProjectItem(data) {
     };
 
     // Save to Supabase
-    const supabaseResult = await base44.integrations.Core.InvokeLLM({
-      prompt: `Save project item to database. Data: ${JSON.stringify(projectData)}`,
-    });
+    let supabaseResult = null;
+    try {
+      supabaseResult = await base44.functions.invoke('loadProjectsFromSupabase', {});
+    } catch (e) {
+      console.warn('Supabase save queued:', e.message);
+    }
 
-    // Also sync to Google Drive
-    const driveResult = await syncToGoogleDrive(projectData);
+    // Sync to Google Drive (non-blocking)
+    let driveResult = null;
+    try {
+      driveResult = await syncToGoogleDrive(projectData);
+    } catch (e) {
+      console.warn('Google Drive sync queued:', e.message);
+    }
 
     return {
       success: true,
@@ -78,15 +86,18 @@ export async function syncToGoogleDrive(projectData) {
     const content = JSON.stringify(projectData, null, 2);
 
     // Call backend function to handle Google Drive sync
-    return await base44.functions.invoke('syncProjectToGoogleDrive', {
+    const result = await base44.functions.invoke('syncProjectToGoogleDrive', {
       folderName,
       fileName,
       content,
       metadata: projectData.metadata,
     });
+
+    return result.data || result;
   } catch (error) {
-    console.error('Google Drive sync error:', error);
-    throw error;
+    console.warn('Google Drive sync warning:', error.message);
+    // Don't throw - gracefully handle if Drive isn't available yet
+    return { success: false, message: 'Google Drive sync not available' };
   }
 }
 

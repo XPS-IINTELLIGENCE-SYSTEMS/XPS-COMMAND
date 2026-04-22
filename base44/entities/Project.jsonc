@@ -4,102 +4,67 @@
   "properties": {
     "name": {
       "type": "string",
-      "description": "File or folder name"
-    },
-    "type": {
-      "type": "string",
-      "enum": [
-        "folder",
-        "document",
-        "spreadsheet",
-        "presentation",
-        "image",
-        "pdf",
-        "video",
-        "link",
-        "workspace"
-      ],
-      "default": "document",
-      "description": "Item type"
-    },
-    "parent_id": {
-      "type": "string",
-      "description": "Parent folder ID (null = root)"
+      "description": "Project name"
     },
     "description": {
       "type": "string",
-      "description": "Item description or notes"
+      "description": "Project description and purpose"
     },
-    "content": {
+    "category": {
       "type": "string",
-      "description": "Text content for documents"
-    },
-    "file_url": {
-      "type": "string",
-      "description": "Uploaded file URL"
-    },
-    "link_url": {
-      "type": "string",
-      "description": "External link URL"
-    },
-    "thumbnail_url": {
-      "type": "string",
-      "description": "Preview thumbnail URL"
+      "enum": [
+        "leads",
+        "bidding",
+        "operations",
+        "marketing",
+        "research",
+        "custom"
+      ],
+      "default": "custom",
+      "description": "Project category"
     },
     "color": {
       "type": "string",
-      "default": "#d4af37",
-      "description": "Folder or item accent color"
+      "description": "Hex color code for UI representation"
     },
-    "size_bytes": {
+    "owner_email": {
+      "type": "string",
+      "description": "Email of the project owner"
+    },
+    "google_drive_folder_id": {
+      "type": "string",
+      "description": "Google Drive folder ID for synced items"
+    },
+    "items": {
+      "type": "string",
+      "description": "JSON array of saved item references {itemId, itemType, toolType, savedAt}"
+    },
+    "item_count": {
       "type": "number",
       "default": 0,
-      "description": "File size in bytes"
+      "description": "Count of items in project"
     },
-    "is_starred": {
-      "type": "boolean",
-      "default": false
-    },
-    "is_trashed": {
-      "type": "boolean",
-      "default": false
-    },
-    "shared_with": {
+    "last_synced": {
       "type": "string",
-      "description": "JSON array of email addresses this is shared with"
+      "format": "date-time",
+      "description": "Last sync to Google Drive"
     },
-    "share_permission": {
-      "type": "string",
-      "enum": [
-        "view",
-        "edit",
-        "comment"
-      ],
-      "default": "view"
+    "is_archived": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether project is archived"
     },
     "tags": {
       "type": "string",
-      "description": "Comma-separated tags"
+      "description": "Comma-separated tags for organization"
     },
-    "linked_tools": {
+    "metadata": {
       "type": "string",
-      "description": "JSON array of tool IDs linked to this project"
-    },
-    "linked_lead_id": {
-      "type": "string",
-      "description": "Linked Lead entity ID"
-    },
-    "linked_job_id": {
-      "type": "string",
-      "description": "Linked CommercialJob entity ID"
-    },
-    "last_opened": {
-      "type": "string",
-      "format": "date-time"
+      "description": "JSON object for custom fields"
     }
   },
   "required": [
     "name",
-    "type"
+    "owner_email"
   ]
 }

@@ -241,6 +241,12 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
       await base44.agents.addMessage(conversation, { role: "user", content: msg });
     } catch (err) {
       console.error("Send message error:", err);
+      // Suppress Google sync-related errors and let chat continue
+      if (err?.message?.includes("google") || err?.message?.includes("Drive") || err?.message?.includes("Calendar") || err?.message?.includes("Task")) {
+        console.warn("Google sync error suppressed:", err.message);
+        setLoading(false);
+        return;
+      }
       if (err?.message?.includes("Access denied") || err?.message?.includes("another user")) {
         // Conversation belongs to another user session — create a fresh one
         await initConversation();

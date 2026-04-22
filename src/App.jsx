@@ -32,6 +32,7 @@ import AgentZero from './pages/AgentZero';
 import FocusWorkspace from './pages/FocusWorkspace';
 import ProjectDrive from './pages/ProjectDrive';
 import MasterDashboard from './pages/MasterDashboard';
+import MigrationDashboard from './pages/MigrationDashboard';
 
 /** Shared public marketing routes */
 const PublicRoutes = () => (
@@ -90,6 +91,7 @@ const AuthenticatedApp = () => (
     <Route path="/focus/:cardId" element={<FocusWorkspace />} />
     <Route path="/projects" element={<ProjectDrive />} />
     <Route path="/master" element={<MasterDashboard />} />
+    <Route path="/migration" element={<MigrationDashboard />} />
 
     <Route path="*" element={<PageNotFound />} />
   </Routes>

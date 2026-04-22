@@ -16,38 +16,59 @@ export default function SupabaseProvisionPanel() {
 
   const getSchema = async () => {
     setLoadingKey('schema', true);
-    const res = await base44.functions.invoke('supabaseProvision', { action: 'get_schema_sql' });
-    setSchemaSQL(res.data);
+    try {
+      const res = await base44.functions.invoke('supabaseProvision', { action: 'get_schema_sql' });
+      setSchemaSQL(res.data);
+    } catch (error) {
+      toast.error('Failed to generate schema SQL');
+    }
     setLoadingKey('schema', false);
   };
 
   const autoProvision = async () => {
     setLoadingKey('provision', true);
     setProvisionResult(null);
-    const res = await base44.functions.invoke('supabaseProvision', { action: 'auto_provision' });
-    setProvisionResult(res.data);
+    try {
+      const res = await base44.functions.invoke('supabaseProvision', { action: 'auto_provision' });
+      setProvisionResult(res.data);
+    } catch (error) {
+      toast.error('Auto-provision failed: Check function logs');
+    }
     setLoadingKey('provision', false);
   };
 
   const createBuckets = async () => {
     setLoadingKey('buckets', true);
-    const res = await base44.functions.invoke('supabaseProvision', { action: 'create_buckets' });
-    setBucketResult(res.data);
+    try {
+      const res = await base44.functions.invoke('supabaseProvision', { action: 'create_buckets' });
+      setBucketResult(res.data);
+    } catch (error) {
+      toast.error('Failed to create buckets');
+    }
     setLoadingKey('buckets', false);
   };
 
   const verify = async () => {
     setLoadingKey('verify', true);
-    const res = await base44.functions.invoke('supabaseProvision', { action: 'verify' });
-    setVerification(res.data);
+    try {
+      const res = await base44.functions.invoke('supabaseProvision', { action: 'verify' });
+      setVerification(res.data);
+    } catch (error) {
+      toast.error(error?.data?.message || 'Verification failed: Check your Supabase URL & API key');
+      setVerification({ error: error?.data?.message || error.message });
+    }
     setLoadingKey('verify', false);
   };
 
   const fullSync = async () => {
     setLoadingKey('sync', true);
     setSyncResult(null);
-    const res = await base44.functions.invoke('supabaseProvision', { action: 'full_sync' });
-    setSyncResult(res.data);
+    try {
+      const res = await base44.functions.invoke('supabaseProvision', { action: 'full_sync' });
+      setSyncResult(res.data);
+    } catch (error) {
+      toast.error('Sync failed: Ensure tables exist in Supabase');
+    }
     setLoadingKey('sync', false);
   };
 

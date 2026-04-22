@@ -7,7 +7,13 @@ const getGroqKey = () => {
   if (typeof window !== 'undefined') {
     return import.meta.env.VITE_GROQ_API_KEY;
   }
-  return Deno?.env?.get?.('GROQ_API_KEY') || process?.env?.GROQ_API_KEY;
+  if (typeof Deno !== 'undefined') {
+    return Deno.env.get('GROQ_API_KEY');
+  }
+  if (typeof process !== 'undefined') {
+    return process.env.GROQ_API_KEY;
+  }
+  return null;
 };
 
 // GROQ MODEL SELECTION

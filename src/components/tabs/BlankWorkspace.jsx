@@ -51,9 +51,30 @@ export default function BlankWorkspace({
   };
 
   // --- Pre-generated dashboards ---
+  const getFixedTopTools = () => {
+    return [
+      { id: newId(), type: "tools", contentType: "tools", label: "Essential Tools", toolIds: ["ai_assistant", "workflows", "master_database", "connectors"], notes: "", text: "" },
+    ];
+  };
+
   const handleLoadPreGeneratedDashboard = (dashboardId) => {
-    // Open the existing dashboard tool instead of creating sections
-    onOpenTool?.(dashboardId);
+    // Add fixed top tools + the dashboard as a section
+    const fixedTools = getFixedTopTools();
+    const dashboardSection = {
+      id: newId(),
+      type: "tool_panel",
+      contentType: "tool",
+      label: dashboardId.replace(/_/g, " ").toUpperCase(),
+      toolIds: [dashboardId],
+      notes: "",
+      text: ""
+    };
+    
+    onUpdateTab(tab.id, {
+      workspaceTitle: dashboardId.replace(/_/g, " "),
+      name: dashboardId.replace(/_/g, " "),
+      sections: [...fixedTools, dashboardSection]
+    });
   };
 
   // --- Section CRUD ---

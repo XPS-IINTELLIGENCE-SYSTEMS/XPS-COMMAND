@@ -1,0 +1,62 @@
+{
+  "name": "AgentConversation",
+  "type": "object",
+  "properties": {
+    "agent_type": {
+      "type": "string",
+      "enum": [
+        "ceo",
+        "xps_assistant",
+        "admin_operator",
+        "lead_gen",
+        "sales_director",
+        "prediction",
+        "validation"
+      ],
+      "description": "Which agent this conversation is with"
+    },
+    "agent_name": {
+      "type": "string",
+      "description": "Display name of the agent"
+    },
+    "messages": {
+      "type": "string",
+      "description": "JSON array of all messages [{role, content, timestamp}] \u2014 full conversation history"
+    },
+    "context": {
+      "type": "string",
+      "description": "Persistent context/memory for agent \u2014 owner preferences, standing orders, learned behaviors"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "completed",
+        "archived"
+      ],
+      "default": "active",
+      "description": "Conversation status"
+    },
+    "last_action": {
+      "type": "string",
+      "description": "Last action taken by or for this agent"
+    },
+    "audit_log": {
+      "type": "string",
+      "description": "JSON array of audit entries [{action, entity, change, timestamp, user}]"
+    },
+    "standing_orders": {
+      "type": "string",
+      "description": "JSON array of permanent rules issued by owner [{rule, created_date, priority}]"
+    },
+    "learned_preferences": {
+      "type": "string",
+      "description": "JSON of learned owner behavior [{preference, instances, confidence}]"
+    }
+  },
+  "required": [
+    "agent_type",
+    "agent_name",
+    "status"
+  ]
+}

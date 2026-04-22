@@ -1,5 +1,4 @@
-import { useState, useEffect, useRef } from "react";
-import { base44 } from "@/api/base44Client";
+import { useContext, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import {
   Crown, Target, Brain, Zap, Users, Phone, Mail, FileText, BarChart3, Shield,
@@ -10,6 +9,8 @@ import {
   LayoutDashboard, PieChart, Layers, HardHat, Briefcase, Archive, Bell, Sparkles
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { MasterDashboardContext, MasterDashboardProvider } from "@/components/context/MasterDashboardContext";
+import { base44 } from "@/api/base44Client";
 
 // All the tools imported as embedded sections
 import StrategyView from "../components/strategy/StrategyView";
@@ -50,7 +51,6 @@ function DashSection({ id, icon: SectionIcon, title, badge, color = "#d4af37", c
 
   return (
     <section id={id} ref={ref} className="glass-card rounded-2xl overflow-hidden border border-white/[0.06]">
-      {/* Header */}
       <div
         className="flex items-center justify-between px-5 py-3.5 cursor-pointer select-none"
         style={{ background: `linear-gradient(90deg, ${color}12 0%, transparent 100%)`, borderBottom: open ? "1px solid rgba(255,255,255,0.06)" : "none" }}
@@ -116,88 +116,27 @@ function QuickAction({ icon: Icon, label, color, onClick, badge }) {
 }
 
 // ── Main Dashboard ─────────────────────────────────────────────────────────
-export default function MasterDashboard() {
-  const [stats, setStats] = useState({ leads: 0, jobs: 0, bids: 0, prospects: 0, contractors: 0, callLogs: 0, proposals: 0, invoices: 0 });
-  const [loading, setLoading] = useState(true);
-  const [leads, setLeads] = useState([]);
-  const [prospects, setProspects] = useState([]);
-  const [callLogs, setCallLogs] = useState([]);
-  const [callQueue, setCallQueue] = useState([]);
+function MasterDashboardContent() {
+  const ctx = useContext(MasterDashboardContext);
+  if (!ctx) throw new Error("MasterDashboard must be used inside MasterDashboardProvider");
+
+  const { data, stats, loading, lastRefresh, queue: callQueue, loadAll } = ctx;
   const [activeSection, setActiveSection] = useState(null);
-  const [lastRefresh, setLastRefresh] = useState(null);
   const [aiLayout, setAiLayout] = useState(null);
   const [layoutLoading, setLayoutLoading] = useState(false);
 
   const sectionRefs = {
-    strategy: useRef(null),
-    orchestrator: useRef(null),
-    metrics: useRef(null),
-    workflow: useRef(null),
-    ops_db: useRef(null),
-    crm: useRef(null),
-    call_center: useRef(null),
-    discovery: useRef(null),
-    bidding: useRef(null),
-    takeoff: useRef(null),
-    competitor: useRef(null),
-    compliance: useRef(null),
-    approvals: useRef(null),
-    outreach: useRef(null),
-    followup: useRef(null),
-    branding: useRef(null),
-    scheduler: useRef(null),
-    google: useRef(null),
-    analytics: useRef(null),
-    enhance: useRef(null),
-    configurator: useRef(null),
-    sandbox: useRef(null),
+    strategy: useRef(null), orchestrator: useRef(null), metrics: useRef(null), workflow: useRef(null),
+    ops_db: useRef(null), crm: useRef(null), call_center: useRef(null), discovery: useRef(null),
+    bidding: useRef(null), takeoff: useRef(null), competitor: useRef(null), compliance: useRef(null),
+    approvals: useRef(null), outreach: useRef(null), followup: useRef(null), branding: useRef(null),
+    scheduler: useRef(null), google: useRef(null), analytics: useRef(null), enhance: useRef(null),
+    configurator: useRef(null), sandbox: useRef(null),
   };
 
   const scrollTo = (key) => {
     sectionRefs[key]?.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     setActiveSection(key);
-  };
-
-  useEffect(() => { loadAll(); }, []);
-
-  const loadAll = async () => {
-    setLoading(true);
-    const [leadsList, prospectList, contractors, jobs, logs, proposals, invoices, bids] = await Promise.all([
-      base44.entities.Lead.list("-score", 1000).catch(() => []),
-      base44.entities.ProspectCompany.list("-cold_call_priority", 500).catch(() => []),
-      base44.entities.Contractor.list("-score", 200).catch(() => []),
-      base44.entities.CommercialJob.list("-urgency_score", 200).catch(() => []),
-      base44.entities.CallLog.list("-created_date", 500).catch(() => []),
-      base44.entities.Proposal.list("-created_date", 100).catch(() => []),
-      base44.entities.Invoice.list("-created_date", 100).catch(() => []),
-      base44.entities.BidDocument.list("-created_date", 100).catch(() => []),
-    ]);
-
-    setLeads(leadsList);
-    setProspects(prospectList);
-    setCallLogs(logs);
-    setStats({
-      leads: leadsList.length,
-      jobs: jobs.length,
-      bids: bids.length,
-      prospects: prospectList.length,
-      contractors: contractors.length,
-      callLogs: logs.length,
-      proposals: proposals.length,
-      invoices: invoices.filter(i => i.status !== "Paid").length,
-    });
-
-    // Build call queue
-    const loggedIds = new Set(logs.map(l => l.source_id));
-    const queue = [];
-    leadsList.forEach(l => {
-      if (!l.phone && !l.email) return;
-      queue.push({ id: l.id, company_name: l.company || "Unknown", contact_name: l.contact_name || "", phone: l.phone || "", email: l.email || "", website: l.website || "", location: l.location || "", priority: l.priority || 5, score: l.score || 0, source_type: "Lead", source_id: l.id, logged: loggedIds.has(l.id), lastLog: logs.find(log => log.source_id === l.id) });
-    });
-    queue.sort((a, b) => (b.priority || 0) - (a.priority || 0));
-    setCallQueue(queue);
-    setLastRefresh(new Date());
-    setLoading(false);
   };
 
   const generateAiLayout = async () => {
@@ -206,9 +145,9 @@ export default function MasterDashboard() {
       prompt: `You are the XPS Operations AI. Analyze this business data and recommend the optimal dashboard section ORDER and PRIORITY for maximum productivity, minimum friction, and fastest path to revenue:
 
 Stats: ${JSON.stringify(stats)}
-Active leads: ${leads.filter(l => ["Incoming","Validated","Qualified"].includes(l.stage)).length}
-Hot leads: ${leads.filter(l => l.score > 70).length}
-Follow-up needed: ${callLogs.filter(l => ["Callback","No Answer","Voicemail"].includes(l.call_outcome)).length}
+Active leads: ${data.leads.filter(l => ["Incoming","Validated","Qualified"].includes(l.stage)).length}
+Hot leads: ${data.leads.filter(l => l.score > 70).length}
+Follow-up needed: ${data.callLogs.filter(l => ["Callback","No Answer","Voicemail"].includes(l.call_outcome)).length}
 Pending bids: ${stats.bids}
 Proposals: ${stats.proposals}
 
@@ -232,9 +171,9 @@ Recommend:
     setLayoutLoading(false);
   };
 
-  const followUps = callLogs.filter(l => ["Callback", "No Answer", "Voicemail"].includes(l.call_outcome));
-  const closedDeals = callLogs.filter(l => l.call_outcome === "Sold");
-  const totalRevenue = callLogs.filter(l => l.call_outcome === "Sold").reduce((s, l) => s + (l.deal_value || 0), 0);
+  const followUps = data.callLogs.filter(l => ["Callback", "No Answer", "Voicemail"].includes(l.call_outcome));
+  const closedDeals = data.callLogs.filter(l => l.call_outcome === "Sold");
+  const totalRevenue = data.callLogs.filter(l => l.call_outcome === "Sold").reduce((s, l) => s + (l.deal_value || 0), 0);
 
   const NAV_ITEMS = [
     { key: "strategy", label: "30-Day Plan", icon: Target, color: "#d4af37" },
@@ -265,7 +204,6 @@ Recommend:
     <div className="min-h-screen bg-background">
       {/* ── Sticky Top Nav ─────────────────────────────────────────── */}
       <div className="sticky top-0 z-50 bg-background/95 backdrop-blur-xl border-b border-border">
-        {/* Title row */}
         <div className="flex items-center justify-between px-4 py-2">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl metallic-gold-bg flex items-center justify-center flex-shrink-0">
@@ -273,7 +211,7 @@ Recommend:
             </div>
             <div>
               <h1 className="text-base font-black metallic-gold leading-tight">XPS Master Operations Dashboard</h1>
-              <p className="text-[9px] text-muted-foreground">AI-Orchestrated • Fully Linked • Autonomous</p>
+              <p className="text-[9px] text-muted-foreground">Unified • Integrated • Fully Linked</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -283,10 +221,9 @@ Recommend:
               {layoutLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Brain className="w-3.5 h-3.5" />}
               <span className="hidden sm:inline ml-1.5">AI Optimize</span>
             </Button>
-            <Link to="/dashboard" className="text-[10px] text-muted-foreground hover:text-foreground px-2 py-1 rounded-lg hover:bg-secondary transition-colors">← Main Dashboard</Link>
+            <Link to="/dashboard" className="text-[10px] text-muted-foreground hover:text-foreground px-2 py-1 rounded-lg hover:bg-secondary transition-colors">← Main</Link>
           </div>
         </div>
-        {/* Section nav pills */}
         <div className="flex gap-1 px-3 pb-2 overflow-x-auto scrollbar-hide">
           {NAV_ITEMS.map(n => (
             <button
@@ -303,7 +240,7 @@ Recommend:
 
       {/* ── Data Quality Bar ────────────────────────────────────────── */}
       <div className="px-4 pt-3">
-        <DataQualityBar leads={leads} prospects={prospects} />
+        <DataQualityBar leads={data.leads} prospects={data.prospects} />
       </div>
 
       {/* ── AI Layout Recommendation ────────────────────────────────── */}
@@ -326,202 +263,146 @@ Recommend:
                   <span className={`ml-auto text-[8px] px-1.5 py-0.5 rounded-full font-bold ${f.urgency === "critical" ? "bg-red-500/20 text-red-400" : f.urgency === "high" ? "bg-yellow-500/20 text-yellow-400" : "bg-blue-500/20 text-blue-400"}`}>{f.urgency}</span>
                 </div>
                 <p className="text-[9px] text-muted-foreground ml-7">{f.action}</p>
-                {f.section && <div className="ml-7 mt-1 text-[8px] text-primary/60 group-hover:text-primary transition-colors flex items-center gap-1">Jump to section <ArrowRight className="w-2.5 h-2.5" /></div>}
               </button>
             ))}
           </div>
           {aiLayout.bottlenecks?.length > 0 && (
             <div className="border-t border-border pt-2">
-              <p className="text-[9px] font-bold text-red-400 mb-1 flex items-center gap-1"><AlertTriangle className="w-3 h-3" /> Bottlenecks Detected:</p>
+              <p className="text-[9px] font-bold text-red-400 mb-1 flex items-center gap-1"><AlertTriangle className="w-3 h-3" /> Bottlenecks:</p>
               <div className="flex flex-wrap gap-1">{aiLayout.bottlenecks.map((b, i) => <span key={i} className="text-[8px] px-2 py-0.5 rounded-full bg-red-500/10 text-red-400">{b}</span>)}</div>
-            </div>
-          )}
-          {aiLayout.automation_recommendations?.length > 0 && (
-            <div className="border-t border-border pt-2 mt-2">
-              <p className="text-[9px] font-bold text-primary mb-1 flex items-center gap-1"><Zap className="w-3 h-3" /> Automation Recommendations:</p>
-              <div className="space-y-0.5">{aiLayout.automation_recommendations.map((r, i) => <p key={i} className="text-[9px] text-muted-foreground flex items-start gap-1"><CheckCircle2 className="w-2.5 h-2.5 text-green-400 flex-shrink-0 mt-0.5" />{r}</p>)}</div>
             </div>
           )}
         </div>
       )}
 
-      {/* ── Endless Scroll Sections ─────────────────────────────────── */}
+      {/* ── Sections ────────────────────────────────────────────────────── */}
       <div className="px-3 sm:px-4 py-4 space-y-5 pb-24">
 
-        {/* 1. 30-Day Strategy */}
         <div ref={sectionRefs.strategy}>
-          <DashSection id="strategy" icon={Target} title="30-Day Launch Strategy" badge="Checklist • AI Priority Analysis • Phase Tracking" color="#d4af37" defaultOpen={true}
-            actions={<button onClick={() => scrollTo("orchestrator")} className="text-[9px] text-primary flex items-center gap-1 hover:underline">Next: Orchestrator <ArrowRight className="w-2.5 h-2.5" /></button>}
+          <DashSection id="strategy" icon={Target} title="30-Day Launch Strategy" badge="Checklist • AI Priority" color="#d4af37" defaultOpen={true}
+            actions={<button onClick={() => scrollTo("orchestrator")} className="text-[9px] text-primary flex items-center gap-1 hover:underline">Next <ArrowRight className="w-2.5 h-2.5" /></button>}
           >
             <StrategyView />
           </DashSection>
         </div>
 
-        {/* 2. Metrics Overview */}
         <div ref={sectionRefs.metrics}>
-          <DashSection id="metrics" icon={BarChart3} title="Live Metrics" badge="Real-time pipeline snapshot" color="#3b82f6" defaultOpen={true}>
+          <DashSection id="metrics" icon={BarChart3} title="Live Metrics" badge="Real-time snapshot" color="#3b82f6" defaultOpen={true}>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
-              <MetricCard label="Total Leads" value={stats.leads} icon={Users} color="#6366f1" trend={5} onClick={() => scrollTo("crm")} sub="Click to open CRM" />
-              <MetricCard label="Prospects" value={stats.prospects} icon={Building2} color="#ef4444" onClick={() => scrollTo("discovery")} sub="Company database" />
-              <MetricCard label="Active Jobs" value={stats.jobs} icon={HardHat} color="#06b6d4" onClick={() => scrollTo("bidding")} sub="Commercial pipeline" />
-              <MetricCard label="Bid Docs" value={stats.bids} icon={FileText} color="#8b5cf6" onClick={() => scrollTo("bidding")} sub="Active bids" />
-              <MetricCard label="Calls Made" value={stats.callLogs} icon={Phone} color="#22c55e" onClick={() => scrollTo("call_center")} sub="All logged calls" />
-              <MetricCard label="Proposals" value={stats.proposals} icon={Briefcase} color="#f59e0b" onClick={() => scrollTo("bidding")} sub="Sent proposals" />
-              <MetricCard label="Open Invoices" value={stats.invoices} icon={DollarSign} color="#ec4899" onClick={() => scrollTo("approvals")} sub="Unpaid invoices" />
-              <MetricCard label="Revenue Closed" value={`$${totalRevenue.toLocaleString()}`} icon={TrendingUp} color="#10b981" trend={12} onClick={() => scrollTo("analytics")} sub="Sold call logs" />
+              <MetricCard label="Total Leads" value={stats.leads} icon={Users} color="#6366f1" onClick={() => scrollTo("crm")} />
+              <MetricCard label="Prospects" value={stats.prospects} icon={Building2} color="#ef4444" onClick={() => scrollTo("discovery")} />
+              <MetricCard label="Active Jobs" value={stats.jobs} icon={HardHat} color="#06b6d4" onClick={() => scrollTo("bidding")} />
+              <MetricCard label="Bid Docs" value={stats.bids} icon={FileText} color="#8b5cf6" onClick={() => scrollTo("bidding")} />
+              <MetricCard label="Calls Made" value={stats.callLogs} icon={Phone} color="#22c55e" onClick={() => scrollTo("call_center")} />
+              <MetricCard label="Proposals" value={stats.proposals} icon={Briefcase} color="#f59e0b" onClick={() => scrollTo("bidding")} />
+              <MetricCard label="Open Invoices" value={stats.invoices} icon={DollarSign} color="#ec4899" />
+              <MetricCard label="Revenue Closed" value={`$${totalRevenue.toLocaleString()}`} icon={TrendingUp} color="#10b981" />
             </div>
-            {/* Quick actions bar */}
             <div>
               <p className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider mb-2">Quick Actions</p>
               <div className="grid grid-cols-3 sm:grid-cols-9 gap-2">
-                <QuickAction icon={Bot} label="Run AI Scan" color="#d4af37" onClick={generateAiLayout} />
-                <QuickAction icon={Phone} label="Call Queue" color="#22c55e" onClick={() => scrollTo("call_center")} badge={callQueue.filter(c => !c.logged).length || null} />
-                <QuickAction icon={Mail} label="Email Daily" color="#ec4899" onClick={() => scrollTo("outreach")} />
+                <QuickAction icon={Bot} label="AI Scan" color="#d4af37" onClick={generateAiLayout} />
+                <QuickAction icon={Phone} label="Calls" color="#22c55e" onClick={() => scrollTo("call_center")} badge={callQueue.filter(c => !c.logged).length || null} />
+                <QuickAction icon={Mail} label="Email" color="#ec4899" onClick={() => scrollTo("outreach")} />
                 <QuickAction icon={FileText} label="New Bid" color="#06b6d4" onClick={() => scrollTo("bidding")} />
                 <QuickAction icon={Search} label="Find Jobs" color="#f59e0b" onClick={() => scrollTo("discovery")} />
-                <QuickAction icon={CheckCircle2} label="Approvals" color="#10b981" onClick={() => scrollTo("approvals")} badge={stats.proposals || null} />
+                <QuickAction icon={CheckCircle2} label="Approve" color="#10b981" onClick={() => scrollTo("approvals")} />
                 <QuickAction icon={BarChart3} label="Analytics" color="#3b82f6" onClick={() => scrollTo("analytics")} />
-                <QuickAction icon={Globe} label="Google Suite" color="#4285f4" onClick={() => scrollTo("google")} />
-                <QuickAction icon={Sparkles} label="AI Sandbox" color="#a855f7" onClick={() => scrollTo("sandbox")} />
+                <QuickAction icon={Globe} label="Google" color="#4285f4" onClick={() => scrollTo("google")} />
+                <QuickAction icon={Sparkles} label="Sandbox" color="#a855f7" onClick={() => scrollTo("sandbox")} />
               </div>
             </div>
           </DashSection>
         </div>
 
-        {/* 3. CEO Orchestrator */}
         <div ref={sectionRefs.orchestrator}>
-          <DashSection id="orchestrator" icon={Crown} title="CEO Orchestrator" badge="Autonomous operations • AI agent coordination • Full system compile" color="#8b5cf6" defaultOpen={true}
-            actions={
-              <div className="flex items-center gap-1.5">
-                <span className="text-[9px] text-green-400 flex items-center gap-1"><Activity className="w-2.5 h-2.5" /> Live</span>
-              </div>
-            }
-          >
-            <OrchestratorPanel lastLog={null} onRefresh={loadAll} onCompileComplete={(compiled) => { setCallQueue(compiled); }} />
+          <DashSection id="orchestrator" icon={Crown} title="CEO Orchestrator" badge="Autonomous operations" color="#8b5cf6">
+            <OrchestratorPanel lastLog={null} onRefresh={loadAll} />
           </DashSection>
         </div>
 
-        {/* 4. AI Workflow Engine */}
         <div ref={sectionRefs.workflow}>
-          <DashSection id="workflow" icon={Workflow} title="AI Workflow Engine" badge="Auto-builds optimized workflows from all tools • Zero friction • Double validated" color="#14b8a6" defaultOpen={false}>
-            <AutoWorkflowEngine onOpenTool={(view) => { window.scrollTo(0, 0); }} />
+          <DashSection id="workflow" icon={Workflow} title="AI Workflow Engine" badge="Auto-builds workflows" color="#14b8a6" defaultOpen={false}>
+            <AutoWorkflowEngine />
           </DashSection>
         </div>
 
-        {/* 5. Operations Database */}
         <div ref={sectionRefs.ops_db}>
-          <DashSection id="ops_db" icon={Database} title="Operations Database" badge="Exhaustive overview of every lead, job, company • Searchable • Exportable" color="#ef4444" defaultOpen={false}
-            actions={
-              <div className="flex items-center gap-1.5">
-                <button className="text-[9px] text-muted-foreground hover:text-foreground flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-secondary transition-colors"><Download className="w-3 h-3" /> Export</button>
-                <button className="text-[9px] text-muted-foreground hover:text-foreground flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-secondary transition-colors"><Share2 className="w-3 h-3" /> Share</button>
-              </div>
-            }
-          >
+          <DashSection id="ops_db" icon={Database} title="Operations Database" badge="Full data overview" color="#ef4444" defaultOpen={false}>
             <MasterDatabaseView />
           </DashSection>
         </div>
 
-        {/* 6. CRM */}
         <div ref={sectionRefs.crm}>
-          <DashSection id="crm" icon={Users} title="CRM — Contacts & Deals" badge="Full pipeline • AI insights • Sentiment scoring • Google linked" color="#6366f1" defaultOpen={false}
-            actions={
-              <div className="flex items-center gap-1.5">
-                <button className="text-[9px] text-primary hover:underline flex items-center gap-1" onClick={() => scrollTo("call_center")}><Phone className="w-3 h-3" /> Go to Calls</button>
-              </div>
-            }
-          >
+          <DashSection id="crm" icon={Users} title="CRM — Contacts & Deals" badge="Full pipeline" color="#6366f1" defaultOpen={false}>
             <CRMView />
           </DashSection>
         </div>
 
-        {/* 7. Call Center */}
         <div ref={sectionRefs.call_center}>
-          <DashSection id="call_center" icon={Phone} title="Call Center" badge="AI-prioritized queue • Scripts • Logging • Outcome tracking" color="#22c55e" defaultOpen={false}
-            actions={<span className="text-[9px] text-green-400 font-bold">{callQueue.filter(c => !c.logged).length} in queue</span>}
-          >
-            <CallListTab queue={callQueue} callLogs={callLogs} onRefresh={loadAll} />
+          <DashSection id="call_center" icon={Phone} title="Call Center" badge={`${callQueue.filter(c => !c.logged).length} in queue`} color="#22c55e" defaultOpen={false}>
+            <CallListTab queue={callQueue} callLogs={data.callLogs} onRefresh={loadAll} />
           </DashSection>
         </div>
 
-        {/* 8. Discovery: Find Jobs, Companies, Contractors */}
         <div ref={sectionRefs.discovery}>
-          <DashSection id="discovery" icon={Crosshair} title="Discovery Engine" badge="Find Jobs • Prospect Companies • Find Contractors • AI Scoring • Data Enrichment" color="#f59e0b" defaultOpen={false}>
+          <DashSection id="discovery" icon={Crosshair} title="Discovery Engine" badge="Find • Score • Enrich" color="#f59e0b" defaultOpen={false}>
             <div className="space-y-6">
               <div>
-                <p className="text-xs font-bold text-foreground mb-3 flex items-center gap-2"><Search className="w-3.5 h-3.5 text-yellow-400" /> Lead Sniper — Full Discovery System</p>
+                <p className="text-xs font-bold text-foreground mb-3 flex items-center gap-2"><Search className="w-3.5 h-3.5" /> Lead Sniper</p>
                 <LeadSniperSystem />
               </div>
               <div>
-                <p className="text-xs font-bold text-foreground mb-3 flex items-center gap-2"><Building2 className="w-3.5 h-3.5 text-red-400" /> Prospect Company Scraper</p>
+                <p className="text-xs font-bold text-foreground mb-3 flex items-center gap-2"><Building2 className="w-3.5 h-3.5" /> Find Companies</p>
                 <FindCompaniesView />
               </div>
               <div>
-                <p className="text-xs font-bold text-foreground mb-3 flex items-center gap-2"><HardHat className="w-3.5 h-3.5 text-blue-400" /> Find Commercial Jobs</p>
+                <p className="text-xs font-bold text-foreground mb-3 flex items-center gap-2"><HardHat className="w-3.5 h-3.5" /> Find Jobs</p>
                 <FindJobsView />
               </div>
               <div>
-                <p className="text-xs font-bold text-foreground mb-3 flex items-center gap-2"><Database className="w-3.5 h-3.5 text-purple-400" /> Prospect Database — Scoring & Enrichment</p>
-                <ProspectDatabaseTab prospects={prospects} callLogs={callLogs} onRefresh={loadAll} />
+                <p className="text-xs font-bold text-foreground mb-3 flex items-center gap-2"><Database className="w-3.5 h-3.5" /> Prospect Database</p>
+                <ProspectDatabaseTab prospects={data.prospects} callLogs={data.callLogs} onRefresh={loadAll} />
               </div>
             </div>
           </DashSection>
         </div>
 
-        {/* 9. Bid Command Center + GC Pipeline */}
         <div ref={sectionRefs.bidding}>
-          <DashSection id="bidding" icon={Briefcase} title="Bid Command Center + GC Pipeline" badge="National average pricing • Competitor intel • Full bid workflow • Auto-pipeline" color="#06b6d4" defaultOpen={false}
-            actions={<button onClick={() => scrollTo("takeoff")} className="text-[9px] text-primary flex items-center gap-1 hover:underline">AI Takeoff <ArrowRight className="w-2.5 h-2.5" /></button>}
-          >
+          <DashSection id="bidding" icon={Briefcase} title="Bid Command Center" badge="National pricing" color="#06b6d4" defaultOpen={false}>
             <div className="space-y-6">
               <BidPipelineDashboard />
-              <div>
-                <p className="text-xs font-bold text-foreground mb-3 flex items-center gap-2"><FileText className="w-3.5 h-3.5 text-cyan-400" /> Full Bid Command Center</p>
-                <BidCommandCenter />
-              </div>
+              <BidCommandCenter />
             </div>
           </DashSection>
         </div>
 
-        {/* 10. Blueprint Takeoff */}
         <div ref={sectionRefs.takeoff}>
-          <DashSection id="takeoff" icon={Layers} title="AI Blueprint Takeoff" badge="Full cost out — materials • labor • overhead • profit margin • plans included" color="#a855f7" defaultOpen={false}>
+          <DashSection id="takeoff" icon={Layers} title="AI Blueprint Takeoff" badge="Full cost out" color="#a855f7" defaultOpen={false}>
             <BlueprintTakeoffView />
           </DashSection>
         </div>
 
-        {/* 11. Competitor Analysis */}
         <div ref={sectionRefs.competitor}>
-          <DashSection id="competitor" icon={TrendingUp} title="Competitor Intelligence" badge="Price benchmarking • Feature comparison • Market positioning" color="#ec4899" defaultOpen={false}>
+          <DashSection id="competitor" icon={TrendingUp} title="Competitor Intelligence" badge="Price benchmarking" color="#ec4899" defaultOpen={false}>
             <CompetitorComparisonView />
           </DashSection>
         </div>
 
-        {/* 12. Bid Compliance Checker */}
         <div ref={sectionRefs.compliance}>
-          <DashSection id="compliance" icon={Shield} title="Bid Compliance Checker" badge="AI validation • Requirements check • Auto-flag missing items" color="#f97316" defaultOpen={false}>
+          <DashSection id="compliance" icon={Shield} title="Bid Compliance Checker" badge="AI validation" color="#f97316" defaultOpen={false}>
             <ComplianceCheckerView />
           </DashSection>
         </div>
 
-        {/* 13. Human Approval Queue */}
         <div ref={sectionRefs.approvals}>
-          <DashSection id="approvals" icon={CheckCircle2} title="Human Approval Queue" badge="National avg pricing • Competitor pricing • AI Takeoff • Full job cost • Profit calculation" color="#10b981" defaultOpen={false}
-            actions={<span className="text-[9px] text-yellow-400 font-bold flex items-center gap-1"><Bell className="w-3 h-3" /> {stats.proposals} pending</span>}
-          >
+          <DashSection id="approvals" icon={CheckCircle2} title="Approval Queue" badge={`${stats.proposals} pending`} color="#10b981" defaultOpen={false}>
             <ApprovalQueueView />
           </DashSection>
         </div>
 
-        {/* 14. Outreach + Email Daily Scan */}
         <div ref={sectionRefs.outreach}>
-          <DashSection id="outreach" icon={Mail} title="Outreach Automation + Daily Email Scan" badge="Check email daily for bid requests • Bulk outreach • AI-generated templates • Google linked" color="#ec4899" defaultOpen={false}
-            actions={
-              <div className="flex items-center gap-1.5">
-                <button className="text-[8px] bg-primary/10 text-primary px-2 py-1 rounded-lg font-bold hover:bg-primary/20 transition-colors flex items-center gap-1"><Mail className="w-2.5 h-2.5" /> Scan Inbox Now</button>
-              </div>
-            }
-          >
+          <DashSection id="outreach" icon={Mail} title="Outreach Automation" badge="AI templates • Daily scan" color="#ec4899" defaultOpen={false}>
             <div className="space-y-6">
               <EmailTemplatesView />
               <OutreachAutomationView />
@@ -529,86 +410,66 @@ Recommend:
           </DashSection>
         </div>
 
-        {/* 15. Follow-Up System */}
         <div ref={sectionRefs.followup}>
-          <DashSection id="followup" icon={Zap} title="Follow-Up System + Closed Deals" badge="Auto-archive on close • Scraper triggers to keep DB full • AI follow-up chains" color="#eab308" defaultOpen={false}
-            actions={<span className="text-[9px] text-yellow-400 font-bold">{followUps.length} pending follow-ups</span>}
-          >
+          <DashSection id="followup" icon={Zap} title="Follow-Up System" badge={`${followUps.length} pending`} color="#eab308" defaultOpen={false}>
             <div className="space-y-5">
               <FollowUpTab callLogs={followUps} queue={callQueue} onRefresh={loadAll} />
               <div>
-                <p className="text-xs font-bold text-foreground mb-3 flex items-center gap-2"><Archive className="w-3.5 h-3.5 text-green-400" /> Closed Deals (Archived)</p>
+                <p className="text-xs font-bold text-foreground mb-3 flex items-center gap-2"><Archive className="w-3.5 h-3.5" /> Closed Deals</p>
                 <ClosedDealsTab callLogs={closedDeals} onRefresh={loadAll} />
               </div>
               <div>
-                <p className="text-xs font-bold text-foreground mb-3 flex items-center gap-2"><Activity className="w-3.5 h-3.5 text-purple-400" /> AI Sentiment Analysis</p>
+                <p className="text-xs font-bold text-foreground mb-3 flex items-center gap-2"><Activity className="w-3.5 h-3.5" /> Sentiment</p>
                 <SentimentAnalystView />
               </div>
             </div>
           </DashSection>
         </div>
 
-        {/* 16. Branding Studio */}
         <div ref={sectionRefs.branding}>
-          <DashSection id="branding" icon={Palette} title="Branding & Media Studio" badge="Brand assets • Social content • Videos • AI image generation" color="#a855f7" defaultOpen={false}>
+          <DashSection id="branding" icon={Palette} title="Branding & Media" badge="Assets • Videos • Content" color="#a855f7" defaultOpen={false}>
             <MediaHub />
           </DashSection>
         </div>
 
-        {/* 17. Scheduler */}
         <div ref={sectionRefs.scheduler}>
-          <DashSection id="scheduler" icon={Clock} title="Automation Scheduler" badge="Optimized scheduling • Scraper triggers • Email daily scans • Nightly jobs" color="#64748b" defaultOpen={false}>
+          <DashSection id="scheduler" icon={Clock} title="Scheduler" badge="Scraper triggers" color="#64748b" defaultOpen={false}>
             <ScraperSchedulerView />
           </DashSection>
         </div>
 
-        {/* 18. Google Suite */}
         <div ref={sectionRefs.google}>
-          <DashSection id="google" icon={Globe} title="Google Workspace Integration" badge="Gmail • Drive • Calendar • Sheets — linked to all tools" color="#4285f4" defaultOpen={false}>
+          <DashSection id="google" icon={Globe} title="Google Workspace" badge="Gmail • Drive • Calendar" color="#4285f4" defaultOpen={false}>
             <GoogleSuitePanel />
           </DashSection>
         </div>
 
-        {/* 19. Analytics */}
         <div ref={sectionRefs.analytics}>
-          <DashSection id="analytics" icon={PieChart} title="Analytics & Revenue Intelligence" badge="Pipeline charts • Win rates • Revenue forecast • Cost per lead" color="#3b82f6" defaultOpen={false}>
+          <DashSection id="analytics" icon={PieChart} title="Analytics & Revenue" badge="Pipeline • Win rates" color="#3b82f6" defaultOpen={false}>
             <PipelineCharts />
           </DashSection>
         </div>
 
-        {/* 20. AI Auto-Enhance */}
         <div ref={sectionRefs.enhance}>
-          <DashSection id="enhance" icon={Brain} title="AI System Enhancement" badge="Identifies missing steps • Recommends tools • Self-healing • Workflow hardening" color="#10b981" defaultOpen={false}>
+          <DashSection id="enhance" icon={Brain} title="AI Enhancement" badge="Self-healing" color="#10b981" defaultOpen={false}>
             <AutoEnhanceView />
           </DashSection>
         </div>
 
-        {/* 21. Sandbox + AI Optimizer */}
         <div ref={sectionRefs.sandbox}>
-          <DashSection id="sandbox" icon={Activity} title="Sandbox — AI Optimizer + Pipeline Tester" badge="Full system scan • Auto-ranked recs • 1-click auto-fix • Live pipeline simulation" color="#a855f7" defaultOpen={true}
-            actions={
-              <button
-                onClick={() => sectionRefs.sandbox?.current?.querySelector("button")?.click()}
-                className="flex items-center gap-1.5 px-3 py-1 rounded-lg metallic-gold-bg text-background text-[9px] font-black hover:brightness-110 transition-all"
-              >
-                <Activity className="w-3 h-3" /> Auto-Run
-              </button>
-            }
-          >
-            <SandboxSystem autoRun={false} onScrollTo={scrollTo} />
+          <DashSection id="sandbox" icon={Activity} title="Sandbox — AI Optimizer" badge="Full system scan" color="#a855f7" defaultOpen={true}>
+            <SandboxSystem autoRun={false} />
           </DashSection>
         </div>
 
-        {/* 22. Multi-Dashboard Configurator */}
         <div ref={sectionRefs.configurator}>
-          <DashSection id="configurator" icon={Settings} title="Multi-Dashboard Configurator" badge="AI generates multiple configurations until you find your perfect setup" color="#94a3b8" defaultOpen={false}>
-            <AutoDashboardConfigurator onApply={() => {}} />
+          <DashSection id="configurator" icon={Settings} title="Dashboard Configurator" badge="AI generates configs" color="#94a3b8" defaultOpen={false}>
+            <AutoDashboardConfigurator />
           </DashSection>
         </div>
 
       </div>
 
-      {/* ── Back to top ─────────────────────────────────────────────── */}
       <div className="fixed bottom-6 right-6 z-40">
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
@@ -620,3 +481,15 @@ Recommend:
     </div>
   );
 }
+
+// ── Export with context provider wrapper ────────────────────────────────────
+export default function MasterDashboard() {
+  return (
+    <MasterDashboardProvider>
+      <MasterDashboardContent />
+    </MasterDashboardProvider>
+  );
+}
+
+// Re-export context provider for external access
+export { MasterDashboardProvider } from "@/components/context/MasterDashboardContext";

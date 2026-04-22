@@ -85,9 +85,6 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
   const [conversation, setConversation] = useState(null);
   const [loading, setLoading] = useState(false);
   const [initializing, setInitializing] = useState(true);
-  const [pastConversations, setPastConversations] = useState([]);
-  const [showPastConversations, setShowPastConversations] = useState(false);
-  const [parallelOps, setParallelOps] = useState([]);
   const scrollRef = useRef(null);
   const [currentAgentName, setCurrentAgentName] = useState("xps_assistant");
   const conversationRef = useRef(null);
@@ -129,22 +126,6 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
       setLoading(false);
     }
   }));
-
-  // Load past conversations on mount
-  useEffect(() => {
-    loadPastConversations();
-  }, []);
-
-  const loadPastConversations = async () => {
-    try {
-      const convs = await base44.agents.listConversations({
-        agent_name: currentAgentName,
-      });
-      setPastConversations(convs || []);
-    } catch (err) {
-      console.error("Failed to load past conversations:", err);
-    }
-  };
 
   useEffect(() => { initConversation(); }, [currentAgentName]);
 
@@ -254,39 +235,6 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
     conversationRef.current = conv;
     setMessages([]);
     setInitializing(false);
-    loadPastConversations();
-  };
-
-  const loadPastConversation = async (convId) => {
-    setInitializing(true);
-    try {
-      const conv = await base44.agents.getConversation(convId);
-      setConversation(conv);
-      conversationRef.current = conv;
-      setMessages(conv.messages || []);
-      setShowPastConversations(false);
-    } catch (err) {
-      console.error("Failed to load conversation:", err);
-    }
-    setInitializing(false);
-  };
-
-  const spawnParallelOperation = async (operationName, operationData) => {
-    const opId = `op_${Date.now()}`;
-    const newOp = { id: opId, name: operationName, status: 'running', data: operationData, startTime: Date.now(), results: null };
-    setParallelOps(prev => [...prev, newOp]);
-
-    try {
-      const result = await base44.functions.invoke('xpsOpsOrchestratorMaster', {
-        command: 'orchestrate',
-        operations: [operationData],
-        parallelExecute: true,
-        persistMemory: true,
-      });
-      setParallelOps(prev => prev.map(op => op.id === opId ? { ...op, status: 'complete', results: result, endTime: Date.now() } : op));
-    } catch (err) {
-      setParallelOps(prev => prev.map(op => op.id === opId ? { ...op, status: 'failed', error: err.message, endTime: Date.now() } : op));
-    }
   };
 
   const handleAgentSwitch = (agentName) => {
@@ -297,17 +245,6 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
   const activeAgentConfig = AGENTS.find(a => a.id === currentAgentName) || AGENTS[0];
 
   const agentQuickActions = {
-    xps_ops_master: [
-      { label: "🔥 Full system audit & health check", icon: Zap, cat: "system" },
-      { label: "🌐 Headless browser scrape URL", icon: Globe, cat: "browser" },
-      { label: "📋 Fill & submit form headfully", icon: FileText, cat: "browser" },
-      { label: "🔀 Orchestrate multi-agent task", icon: GitBranch, cat: "orchestration" },
-      { label: "💾 Retrieve persistent memory", icon: Database, cat: "memory" },
-      { label: "📸 Screenshot & extract data", icon: Search, cat: "browser" },
-      { label: "⚙️ Execute parallel operations", icon: Wrench, cat: "system" },
-      { label: "🔐 Full system admin access", icon: Code, cat: "admin" },
-      { label: "🤖 Spawn & coordinate sub-agents", icon: GitBranch, cat: "orchestration" },
-    ],
     xps_assistant: [
       { label: "🔍 Scrape 25 leads in Tampa", icon: Search, cat: "leads" },
       { label: "📊 Pipeline status", icon: BarChart3, cat: "analytics" },
@@ -347,50 +284,15 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
 
   return (
     <div className={`${mobile ? 'w-full' : ''} h-full ${mobile ? '' : 'border-r border-[#8a8a8a]/30'} flex flex-col bg-background`} style={!mobile ? { width: '100%' } : undefined}>
-      {/* Agent Switcher + Controls */}
+      {/* Agent Switcher */}
       <div className={`${mobile ? 'min-h-[36px]' : 'min-h-[40px]'} border-b border-border flex items-center gap-1 px-2 py-1`}>
         <div className="flex-1 overflow-hidden">
           <AgentSwitcher activeAgent={currentAgentName} onSwitch={handleAgentSwitch} mobile={mobile} />
         </div>
-        <Button variant="ghost" size="icon" className="shimmer-card h-6 w-6 flex-shrink-0" onClick={() => setShowPastConversations(!showPastConversations)} title="Past conversations">
-          <MessageCircle className="w-3 h-3 metallic-silver-icon" />
-        </Button>
-        <Button variant="ghost" size="icon" className="shimmer-card h-6 w-6 flex-shrink-0" onClick={handleNewChat} title="New chat">
+        <Button variant="ghost" size="icon" className="shimmer-card h-6 w-6 flex-shrink-0" onClick={handleNewChat}>
           <Plus className="w-3 h-3 shimmer-icon metallic-silver-icon" />
         </Button>
       </div>
-
-      {/* Past Conversations Dropdown */}
-      {showPastConversations && !mobile && pastConversations.length > 0 && (
-        <div className="border-b border-border bg-secondary/30 max-h-48 overflow-y-auto p-2 space-y-1">
-          <div className="text-[10px] font-bold text-muted-foreground px-2 py-1">Recent Conversations</div>
-          {pastConversations.map((conv) => (
-            <button
-              key={conv.id}
-              onClick={() => loadPastConversation(conv.id)}
-              className="w-full text-left shimmer-card glass-card rounded px-2 py-1.5 hover:bg-white/10 transition-all"
-            >
-              <div className="text-[10px] font-medium text-foreground truncate">{conv.metadata?.name || `Conv ${conv.id.slice(0, 8)}`}</div>
-              <div className="text-[8px] text-muted-foreground">{new Date(conv.id).toLocaleDateString()}</div>
-            </button>
-          ))}
-        </div>
-      )}
-
-      {/* Parallel Operations Status */}
-      {parallelOps.length > 0 && !mobile && (
-        <div className="border-b border-border bg-secondary/20 p-2 space-y-1 max-h-32 overflow-y-auto">
-          <div className="text-[9px] font-bold text-muted-foreground">Parallel Operations ({parallelOps.length})</div>
-          {parallelOps.map((op) => (
-            <div key={op.id} className="text-[9px] glass-card rounded px-2 py-1 flex items-center justify-between">
-              <span className="truncate text-foreground">{op.name}</span>
-              {op.status === 'running' && <Loader2 className="w-2.5 h-2.5 animate-spin text-primary flex-shrink-0 ml-1" />}
-              {op.status === 'complete' && <CheckCircle2 className="w-2.5 h-2.5 text-green-500 flex-shrink-0 ml-1" />}
-              {op.status === 'failed' && <AlertCircle className="w-2.5 h-2.5 text-destructive flex-shrink-0 ml-1" />}
-            </div>
-          ))}
-        </div>
-      )}
 
       {/* Messages */}
       {activeAgentId !== "main" && !mobile ? (
@@ -501,54 +403,21 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
               }
             }} />
             <div className="flex items-center gap-2 mt-1">
-              <button
-              onClick={() => spawnParallelOperation('parallel_scrape', { action: 'multi_scrape', urls: [] })}
-              className="shimmer-card flex items-center gap-1 text-[9px] text-muted-foreground hover:text-foreground transition-colors px-2 py-1 rounded-md"
-              title="Run parallel operations"
-            >
-              <Zap className="w-2.5 h-2.5 metallic-silver-icon shimmer-icon" /> Parallel Ops
-            </button>
-            <button onClick={() => spawnSubAgent()} className="shimmer-card flex items-center gap-1 text-[9px] text-muted-foreground hover:text-foreground transition-colors px-2 py-1 rounded-md">
-              <GitBranch className="w-2.5 h-2.5 metallic-silver-icon shimmer-icon" /> Add Helper
-            </button>
-            <button onClick={handleNewChat} className="shimmer-card flex items-center gap-1 text-[9px] text-muted-foreground hover:text-foreground transition-colors px-2 py-1 rounded-md">
-              <Plus className="w-2.5 h-2.5 metallic-silver-icon shimmer-icon" /> New Chat
-            </button>
-          </div>
-            <div className="flex gap-1 mt-1.5">
-              <button
-                onClick={loadPastConversations}
-                className="flex-1 shimmer-card flex items-center justify-center gap-1 py-1.5 rounded-lg text-[10px] font-medium text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <Clock className="w-3 h-3 metallic-silver-icon" /> Load History
+              <button onClick={() => spawnSubAgent()} className="shimmer-card flex items-center gap-1 text-[9px] text-muted-foreground hover:text-foreground transition-colors px-2 py-1 rounded-md">
+                <GitBranch className="w-2.5 h-2.5 metallic-silver-icon shimmer-icon" /> Add Helper
               </button>
-              <button
-                onClick={() => setShowPastConversations(!showPastConversations)}
-                className="flex-1 shimmer-card flex items-center justify-center gap-1 py-1.5 rounded-lg text-[10px] font-medium text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <Database className="w-3 h-3 metallic-silver-icon" /> Memory
-                </button>
-                <button
-                  onClick={() => {
-                    setMessages([]);
-                    setParallelOps([]);
-                    setShowPastConversations(false);
-                    initConversation();
-                  }}
-                  className="flex-1 shimmer-card flex items-center justify-center gap-1 py-1.5 rounded-lg text-[10px] font-medium text-destructive hover:bg-destructive/10 transition-colors"
-                  title="Clear all messages and operations, start fresh"
-                >
-                  <AlertCircle className="w-3 h-3" /> Clear All
-                </button>
-                </div>
-                <a
-                  href={base44.agents.getWhatsAppConnectURL('xps_assistant')}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-1.5 mt-1.5 py-1.5 rounded-lg bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#25D366] text-[10px] font-medium transition-colors"
-                >
-                  <MessageCircle className="w-3 h-3" /> Chat on WhatsApp
-                </a>
+              <button onClick={handleNewChat} className="shimmer-card flex items-center gap-1 text-[9px] text-muted-foreground hover:text-foreground transition-colors px-2 py-1 rounded-md">
+                <Plus className="w-2.5 h-2.5 metallic-silver-icon shimmer-icon" /> New Chat
+              </button>
+            </div>
+            <a
+              href={base44.agents.getWhatsAppConnectURL('xps_assistant')}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-1.5 mt-1.5 py-1.5 rounded-lg bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#25D366] text-[10px] font-medium transition-colors"
+            >
+              <MessageCircle className="w-3 h-3" /> Chat on WhatsApp
+            </a>
           </>
         )}
       </div>

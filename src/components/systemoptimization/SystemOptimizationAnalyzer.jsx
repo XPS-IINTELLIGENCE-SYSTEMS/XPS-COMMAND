@@ -9,7 +9,10 @@ export default function SystemOptimizationAnalyzer() {
   const [validationResult, setValidationResult] = useState(null);
   const [guardianRecommendations, setGuardianRecommendations] = useState(null);
   const [orchestratorPlan, setOrchestratorPlan] = useState(null);
+  const [fullReport, setFullReport] = useState(null);
+  const [markdownReport, setMarkdownReport] = useState('');
   const [selectedPhase, setSelectedPhase] = useState(1);
+  const [exporting, setExporting] = useState(false);
 
   const runFullAnalysis = async () => {
     setLoading(true);
@@ -18,7 +21,6 @@ export default function SystemOptimizationAnalyzer() {
       const analysisRes = await base44.functions.invoke("systemFullAnalysis", {});
       setAnalysis(analysisRes?.data?.analysis || {});
       
-      // Small delay to avoid quota limits
       await new Promise(resolve => setTimeout(resolve, 1000));
 
       // Step 2: Validation agent
@@ -37,7 +39,7 @@ export default function SystemOptimizationAnalyzer() {
       
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      // Step 4: Orchestrator (all data available now)
+      // Step 4: Orchestrator
       const orchestratorRes = await base44.functions.invoke("orchestratorOptimizationPlan", {
         analysisData: analysisRes?.data?.analysis,
         validationData: validationRes?.data?.validation,
@@ -45,7 +47,23 @@ export default function SystemOptimizationAnalyzer() {
       });
       setOrchestratorPlan(orchestratorRes?.data?.plan || {});
 
-      toast({ title: "Analysis complete—all agents processed." });
+      // Step 5: Generate full report
+      const reportRes = await base44.functions.invoke("generateSystemReport", {
+        analysisData: analysisRes?.data?.analysis,
+        validationData: validationRes?.data?.validation,
+        guardianData: guardianRes?.data?.recommendations,
+        orchestratorData: orchestratorRes?.data?.plan
+      });
+      
+      if (reportRes?.data?.report) {
+        const markdownRes = await base44.functions.invoke("reportToMarkdown", {
+          report: reportRes.data.report
+        });
+        setFullReport(reportRes.data.report);
+        setMarkdownReport(markdownRes?.data?.markdown || '');
+      }
+
+      toast({ title: "Analysis complete with full report." });
     } catch (error) {
       const msg = error?.message || "Analysis failed";
       if (msg.includes("integration") || msg.includes("quota") || msg.includes("limit")) {
@@ -62,20 +80,41 @@ export default function SystemOptimizationAnalyzer() {
   };
 
   const exportReport = () => {
-    const report = {
-      analysis,
-      validation: validationResult,
-      guardian: guardianRecommendations,
-      orchestrator: orchestratorPlan,
-      timestamp: new Date().toISOString()
-    };
-    const blob = new Blob([JSON.stringify(report, null, 2)], { type: "application/json" });
+    const blob = new Blob([markdownReport], { type: "text/markdown" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `system-optimization-report-${Date.now()}.json`;
+    a.download = `system-optimization-report-${Date.now()}.md`;
     a.click();
     URL.revokeObjectURL(url);
+    toast({ title: "Report exported as Markdown" });
+  };
+
+  const exportToGoogleDocs = async () => {
+    if (!markdownReport) {
+      toast({ title: "Generate report first", variant: "destructive" });
+      return;
+    }
+    
+    setExporting(true);
+    try {
+      const res = await base44.functions.invoke("exportReportToGoogleDocs", {
+        markdownContent: markdownReport,
+        reportTitle: "XPS System Analysis Report"
+      });
+      
+      if (res?.data?.docUrl) {
+        toast({ title: "Report exported to Google Docs", description: "Opening document..." });
+        window.open(res.data.docUrl, '_blank');
+      }
+    } catch (error) {
+      toast({ 
+        title: "Export failed", 
+        description: error.message,
+        variant: "destructive" 
+      });
+    }
+    setExporting(false);
   };
 
   return (
@@ -99,13 +138,22 @@ export default function SystemOptimizationAnalyzer() {
               {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
               Run Analysis
             </button>
-            {analysis && (
-              <button
-                onClick={exportReport}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg border border-border hover:bg-white/10 transition-all font-medium"
-              >
-                <Download className="w-4 h-4" /> Export
-              </button>
+            {markdownReport && (
+              <>
+                <button
+                  onClick={exportReport}
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg border border-border hover:bg-white/10 transition-all font-medium"
+                >
+                  <Download className="w-4 h-4" /> Export MD
+                </button>
+                <button
+                  onClick={exportToGoogleDocs}
+                  disabled={exporting}
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg border border-border hover:bg-white/10 transition-all font-medium disabled:opacity-50"
+                >
+                  {exporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />} Google Docs
+                </button>
+              </>
             )}
           </div>
         </div>
@@ -118,7 +166,8 @@ export default function SystemOptimizationAnalyzer() {
             { id: 1, label: "System Audit", icon: BarChart3 },
             { id: 2, label: "Validation", icon: CheckCircle2 },
             { id: 3, label: "Guardian", icon: Shield },
-            { id: 4, label: "Orchestrator Plan", icon: Workflow }
+            { id: 4, label: "Orchestrator Plan", icon: Workflow },
+            { id: 5, label: "Full Report", icon: Download }
           ].map(tab => {
             const Icon = tab.icon;
             return (
@@ -248,6 +297,41 @@ export default function SystemOptimizationAnalyzer() {
               <pre className="bg-black/30 rounded-lg p-4 text-xs text-foreground overflow-auto max-h-96 border border-border">
                 {JSON.stringify(orchestratorPlan, null, 2)}
               </pre>
+            </div>
+          </div>
+        )}
+
+        {markdownReport && selectedPhase === 5 && (
+          <div className="space-y-4">
+            <div className="bg-accent/10 border border-accent/30 rounded-lg p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Download className="w-5 h-5 text-accent" />
+                <span className="font-bold text-foreground">Full Markdown Report</span>
+              </div>
+              <p className="text-sm text-muted-foreground">Comprehensive analysis ready to export</p>
+            </div>
+
+            <div>
+              <h3 className="font-bold text-foreground mb-3">Report Preview</h3>
+              <pre className="bg-black/30 rounded-lg p-4 text-xs text-foreground overflow-auto max-h-96 border border-border whitespace-pre-wrap">
+                {markdownReport}
+              </pre>
+            </div>
+
+            <div className="flex gap-2">
+              <button
+                onClick={exportReport}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 font-medium"
+              >
+                <Download className="w-4 h-4" /> Download Markdown
+              </button>
+              <button
+                onClick={exportToGoogleDocs}
+                disabled={exporting}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg border border-border hover:bg-white/10 font-medium disabled:opacity-50"
+              >
+                {exporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />} Export to Google Docs
+              </button>
             </div>
           </div>
         )}

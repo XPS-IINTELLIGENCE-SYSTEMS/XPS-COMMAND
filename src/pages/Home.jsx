@@ -193,6 +193,8 @@ export default function Home() {
             onAddTab={() => workspace.addTab()}
             onCloseTab={workspace.closeTab}
             onRenameTab={workspace.renameTab}
+            onTogglePin={workspace.toggleTabPin}
+            onSetTabStyle={workspace.setTabStyle}
             projects={workspace.projects}
             onOpenProjects={() => setProjectDrawerOpen(true)}
           />

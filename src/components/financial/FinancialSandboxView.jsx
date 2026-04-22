@@ -156,13 +156,11 @@ export default function FinancialSandboxView() {
 
       {/* Tabbed View */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-11 text-xs">
+        <TabsList className="grid w-full grid-cols-9 text-xs overflow-x-auto">
           <TabsTrigger value="overview">Portfolio</TabsTrigger>
           <TabsTrigger value="allocation">Rebalance</TabsTrigger>
-          <TabsTrigger value="monitor">Monitor</TabsTrigger>
           <TabsTrigger value="harvest">Tax Loss</TabsTrigger>
           <TabsTrigger value="hedging">Hedging</TabsTrigger>
-          <TabsTrigger value="sentiment">AI Sentiment</TabsTrigger>
           <TabsTrigger value="scenario">What-If</TabsTrigger>
           <TabsTrigger value="attribution">Attribution</TabsTrigger>
           <TabsTrigger value="analysis">Analysis</TabsTrigger>
@@ -190,10 +188,6 @@ export default function FinancialSandboxView() {
 
         <TabsContent value="allocation">
           <AssetAllocationRebalancer />
-        </TabsContent>
-
-        <TabsContent value="monitor">
-          <AutoRebalanceMonitorView />
         </TabsContent>
 
         <TabsContent value="harvest">

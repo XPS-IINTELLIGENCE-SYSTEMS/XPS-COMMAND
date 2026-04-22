@@ -62,13 +62,21 @@ export default function AISentimentDashboard() {
 
   if (loading && !analysis) {
     return (
-      <div className="flex items-center justify-center py-12">
+      <div className="flex items-center justify-center py-12 bg-card border rounded-lg">
         <Loader2 className="w-6 h-6 animate-spin text-primary" />
       </div>
     );
   }
 
-  const selectedData = analysis?.analysis.find(a => a.symbol === selectedSymbol) || analysis?.analysis[0];
+  if (!analysis) {
+    return (
+      <div className="bg-card border rounded-lg p-4 text-center text-muted-foreground">
+        No sentiment data available
+      </div>
+    );
+  }
+
+  const selectedData = analysis?.analysis?.find(a => a.symbol === selectedSymbol) || analysis?.analysis?.[0];
 
   return (
     <div className="space-y-4">

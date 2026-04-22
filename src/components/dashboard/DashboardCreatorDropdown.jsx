@@ -34,8 +34,7 @@ export default function DashboardCreatorDropdown() {
       <div className="relative">
         <button
           onClick={() => setOpen(!open)}
-          className="flex items-center gap-1.5 px-3 py-2 rounded-xl border transition-all text-xs font-medium glass-card hover:scale-105 text-muted-foreground hover:text-foreground"
-          style={{ borderColor: "#d4af37" }}
+          className="flex items-center gap-1.5 px-3 py-2 rounded-xl transition-all text-xs font-medium glass-card hover:scale-105 text-muted-foreground hover:text-foreground"
         >
           <Plus className="w-3.5 h-3.5" style={{ color: "#d4af37" }} />
           Add Dashboard

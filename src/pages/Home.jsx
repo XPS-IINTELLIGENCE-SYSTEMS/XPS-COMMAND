@@ -162,7 +162,7 @@ export default function Home() {
 
   return (
     <BrowserBridgeProvider>
-    <div className="h-screen bg-background flex overflow-hidden hex-bg">
+      <div className="h-screen bg-background flex overflow-hidden hex-bg">
       <PageHexGlow />
       {showPrivacy && <PrivacyDisclaimer onAccept={handlePrivacyAccept} />}
       {showSearch && <GlobalSearchModal onClose={() => setShowSearch(false)} onNavigate={handleOpenTool} />}
@@ -289,7 +289,7 @@ export default function Home() {
           </div>
         </div>
       )}
-    </div>
+      </div>
     </BrowserBridgeProvider>
   );
 }

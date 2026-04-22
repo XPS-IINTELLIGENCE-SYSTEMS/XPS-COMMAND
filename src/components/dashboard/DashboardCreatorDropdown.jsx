@@ -3,7 +3,7 @@ import { Plus, ChevronDown, Sparkles, Layout, Code2, Zap, LayoutDashboard, Wrenc
 import { useNavigate } from "react-router-dom";
 import DashboardCreatorModal from "./DashboardCreatorModal";
 
-export default function DashboardCreatorDropdown() {
+export default function DashboardCreatorDropdown({ onLoadDashboard }) {
   const [open, setOpen] = useState(false);
   const [showCreator, setShowCreator] = useState(false);
   const [creatorMode, setCreatorMode] = useState(null);
@@ -31,9 +31,7 @@ export default function DashboardCreatorDropdown() {
   };
 
   const handleLoadDashboard = (dashboardId) => {
-    // Load pre-generated dashboard directly
-    // TODO: Integrate with your dashboard loading logic
-    console.log("Loading dashboard:", dashboardId);
+    onLoadDashboard?.(dashboardId);
     setOpen(false);
   };
 

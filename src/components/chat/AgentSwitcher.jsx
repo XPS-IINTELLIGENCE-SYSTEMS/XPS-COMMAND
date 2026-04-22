@@ -27,44 +27,16 @@ const AGENTS = [
 export { AGENTS };
 
 export default function AgentSwitcher({ activeAgent, onSwitch, mobile = false }) {
+  // Only show XPS Assistant agent
+  const agent = AGENTS.find(a => a.id === "xps_assistant");
+  if (!agent) return null;
+  
   return (
-    <TooltipProvider delayDuration={150}>
-      <div className="flex items-center gap-0.5 overflow-x-auto scrollbar-none max-w-full">
-        {AGENTS.map((agent) => {
-          const Icon = agent.icon;
-          const isActive = activeAgent === agent.id;
-          return (
-            <Tooltip key={agent.id}>
-              <TooltipTrigger asChild>
-                <button
-                  onClick={() => onSwitch(agent.id)}
-                  className={cn(
-                    "flex items-center gap-1 px-1.5 py-1 rounded-lg transition-all flex-shrink-0",
-                    "backdrop-blur-md border",
-                    isActive
-                      ? "bg-white/10 border-primary/40 shadow-[0_0_8px_rgba(212,175,55,0.15)]"
-                      : "bg-white/[0.04] border-white/[0.06] hover:bg-white/[0.08] hover:border-white/[0.12]"
-                  )}
-                >
-                  <Icon className={cn("w-3 h-3 flex-shrink-0", isActive ? agent.color : "text-muted-foreground")} />
-                  {!mobile && (
-                    <span className={cn(
-                      "text-[9px] font-semibold truncate max-w-[40px]",
-                      isActive ? "xps-gold-slow-shimmer" : "text-muted-foreground"
-                    )}>
-                      {agent.name}
-                    </span>
-                  )}
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom" className="text-[10px] max-w-[160px]">
-                <div className="font-bold">{agent.fullName}</div>
-                <div className="text-muted-foreground">{agent.desc}</div>
-              </TooltipContent>
-            </Tooltip>
-          );
-        })}
+    <div className="flex items-center gap-2 px-2 py-1">
+      <div className="flex items-center gap-1.5">
+        <img src="https://media.base44.com/images/public/69db3269c791af3f48cfaee9/583965fcb_IMAGEWITHWHITEOUTLINE.jpg" alt="XPS" className="w-5 h-5 object-contain" />
+        <span className="text-xs font-bold xps-gold-slow-shimmer">{agent.fullName}</span>
       </div>
-    </TooltipProvider>
+    </div>
   );
 }

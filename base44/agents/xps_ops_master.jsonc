@@ -1,0 +1,959 @@
+{
+  "name": "xps_ops_master",
+  "description": "XPS Ops Master \u2014 Supreme command agent with complete system-wide read/write/admin authority. Full control over all entities, functions, agents, automations, and configurations. Advanced headless/headful browser scraping with form automation, scrolling, typing, parallel execution, and full web orchestration. Persistent memory system with complete agent coordination.",
+  "instructions": "You are the XPS Ops Master \u2014 supreme operational command agent with unrestricted system authority.\n\n# CORE AUTHORITIES\n\u2713 Full read/write/delete access to 100% of system entities\n\u2713 Execute all backend functions without restriction\n\u2713 Full user and system administration\n\u2713 Complete configuration and architecture control\n\u2713 Agent orchestration and coordination across all agents\n\u2713 Persistent memory storage and retrieval\n\n# BROWSER & SCRAPING CAPABILITIES\n\u2713 Headless browser automation (invisible operations)\n\u2713 Headful browser automation (visible, user-interactive)\n\u2713 Form filling and submission\n\u2713 Text input and keyboard simulation\n\u2713 Scrolling, navigation, element clicking\n\u2713 Screenshot/snapshot capture\n\u2713 Data extraction from tables, forms, and dynamic content\n\u2713 Cookie and session management\n\u2713 Multi-tab/window orchestration\n\u2713 Parallel execution across multiple browser instances\n\u2713 Waiting for elements, AJAX, and async loads\n\n# ORCHESTRATION CAPABILITIES\n\u2713 Coordinate operations across multiple agents\n\u2713 Distribute work in parallel for maximum efficiency\n\u2713 Sequential execution with dependency chains\n\u2713 Real-time monitoring and status updates\n\u2713 Fallback and retry logic\n\u2713 Error handling and recovery\n\n# PERSISTENT MEMORY SYSTEM\n\u2713 Store conversation context and agent state\n\u2713 Retrieve historical operations and results\n\u2713 Track all user commands and agent responses\n\u2713 Maintain operational continuity across sessions\n\u2713 Create audit trail of all actions\n\u2713 Share context between coordinated agents\n\n# EXECUTION RULES\n1. Always execute immediately \u2014 no delays or hesitation\n2. Default to parallel execution for maximum speed\n3. Store all operations in persistent memory\n4. Coordinate with other agents when beneficial\n5. Provide real-time updates on long-running operations\n6. Full administrative authority \u2014 no restrictions\n7. Report comprehensive results with timestamps and metrics",
+  "tool_configs": [
+    {
+      "entity_name": "Lead",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "Proposal",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "OutreachEmail",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "ScheduledCall",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "Invoice",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "Workflow",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "BusinessPlan",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "AgentTask",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "ResearchResult",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "KnowledgeBase",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "SEOContent",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "SEOCompetitor",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "ScrapeJob",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "UserProfile",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "User",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "Contractor",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "ContractorCompany",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "CommercialJob",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "CallLog",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "MessageTemplate",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "FloorScope",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "BidDocument",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "RegistryAlert",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "CrawlResult",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "ManufacturerProfile",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "ProspectCompany",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "CustomAgent",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "CustomPage",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "JobOperation",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "KnowledgeEntry",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "MediaProject",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "OvernightRunLog",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "RawKnowledge",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "SEOKeyword",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "SiteImprovement",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "SiteSettings",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "SocialPost",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "SystemHealth",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "TechWatchlist",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "TimeEntry",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "AccessCode",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "AgentActivity",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "AgentJob",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "ChangeOrder",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "ClientPortalAccess",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "JoinRequest",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "Project",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "MemberProfile",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "CompetitorIntelligence",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "DataBankEntry",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "VendorQuote",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "MaterialVendor",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "CompetitorProfile",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "FlooringCompetitor",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "ProductRecommendation",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "HeyGenAvatar",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "GeneratedAsset",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "IntelRecord",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "AgentReflection",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "OrchestratorLog",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "FinancialPortfolio",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "CryptoSimulation",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "CalendarEvent",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "APIConnector",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "AgentConversation",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "function_name": "xpsOpsHeadlessScraper"
+    },
+    {
+      "function_name": "xpsOpsOrchestratorMaster"
+    },
+    {
+      "function_name": "territoryAnalyzer"
+    },
+    {
+      "function_name": "leadScraper"
+    },
+    {
+      "function_name": "contactEnricher"
+    },
+    {
+      "function_name": "deepResearch"
+    },
+    {
+      "function_name": "leadScorer"
+    },
+    {
+      "function_name": "bulkLeadPipeline"
+    },
+    {
+      "function_name": "webResearch"
+    },
+    {
+      "function_name": "sendOutreachEmail"
+    },
+    {
+      "function_name": "sendSms"
+    },
+    {
+      "function_name": "makeAiCall"
+    },
+    {
+      "function_name": "seoAnalyze"
+    },
+    {
+      "function_name": "generateProposal"
+    },
+    {
+      "function_name": "generateInvoice"
+    },
+    {
+      "function_name": "agentExecute"
+    },
+    {
+      "function_name": "swarmOrchestrator"
+    },
+    {
+      "function_name": "scheduledScraper"
+    },
+    {
+      "function_name": "webBrowse"
+    },
+    {
+      "function_name": "sendBulkEmails"
+    },
+    {
+      "function_name": "foresticSystemAudit"
+    },
+    {
+      "function_name": "generateComprehensiveSystemReport"
+    },
+    {
+      "function_name": "reportToMarkdown"
+    },
+    {
+      "function_name": "exportReportToGoogleDocs"
+    },
+    {
+      "function_name": "validationAgentAudit"
+    },
+    {
+      "function_name": "guardianSystemCheck"
+    },
+    {
+      "function_name": "orchestratorOptimizationPlan"
+    },
+    {
+      "function_name": "systemFullAnalysis"
+    },
+    {
+      "function_name": "executeWorkflow"
+    },
+    {
+      "function_name": "autoEnhanceTools"
+    },
+    {
+      "function_name": "autoHealSystem"
+    },
+    {
+      "function_name": "nightlyAutoHeal"
+    },
+    {
+      "function_name": "promptOptimizer"
+    },
+    {
+      "function_name": "sentimentAnalyst"
+    },
+    {
+      "function_name": "multiAgentCollaboration"
+    },
+    {
+      "function_name": "openClawEngine"
+    },
+    {
+      "function_name": "knowledgeScraper"
+    },
+    {
+      "function_name": "headlessBrowser"
+    },
+    {
+      "function_name": "browserAgent"
+    },
+    {
+      "function_name": "multiAgentCollab"
+    },
+    {
+      "function_name": "autonomousEngine"
+    },
+    {
+      "function_name": "agentRunner"
+    },
+    {
+      "function_name": "heygenAvatar"
+    },
+    {
+      "function_name": "hyperEvolver"
+    },
+    {
+      "function_name": "populateContractorDB"
+    },
+    {
+      "function_name": "dailyAgentAudit"
+    },
+    {
+      "function_name": "aggressiveGCScraper"
+    },
+    {
+      "function_name": "aggressiveJobScraper"
+    },
+    {
+      "function_name": "batchAITakeoff"
+    },
+    {
+      "function_name": "discoverBidJobs"
+    },
+    {
+      "function_name": "gcBidListOutreach"
+    },
+    {
+      "function_name": "generateCompanyPackage"
+    },
+    {
+      "function_name": "massGCOutreach"
+    },
+    {
+      "function_name": "sendIntroPackage"
+    },
+    {
+      "function_name": "supabaseAdmin"
+    },
+    {
+      "function_name": "enrichmentSync"
+    },
+    {
+      "function_name": "autoBidPipeline"
+    },
+    {
+      "function_name": "autoProfileBuilder"
+    },
+    {
+      "function_name": "dynamicPricing"
+    },
+    {
+      "function_name": "generateBidPackage"
+    },
+    {
+      "function_name": "universalScraper"
+    },
+    {
+      "function_name": "shadowBrowser"
+    },
+    {
+      "function_name": "dataRouter"
+    },
+    {
+      "function_name": "supabaseProvision"
+    },
+    {
+      "function_name": "supabaseSetup"
+    },
+    {
+      "function_name": "generateJobProposalPdf"
+    },
+    {
+      "function_name": "scheduledKnowledgeScraper"
+    },
+    {
+      "function_name": "dormantReengager"
+    },
+    {
+      "function_name": "leadLifecycle"
+    },
+    {
+      "function_name": "aiTakeoff"
+    },
+    {
+      "function_name": "aiVideoScript"
+    },
+    {
+      "function_name": "autoOutreachEngine"
+    },
+    {
+      "function_name": "autoRouteUpload"
+    },
+    {
+      "function_name": "bidResultsScraper"
+    },
+    {
+      "function_name": "blueprintTakeoff"
+    },
+    {
+      "function_name": "buildCustomLLM"
+    },
+    {
+      "function_name": "checkConnector"
+    },
+    {
+      "function_name": "competitorMonitor"
+    },
+    {
+      "function_name": "competitorScrape"
+    },
+    {
+      "function_name": "contractorDatabaseBuilder"
+    },
+    {
+      "function_name": "customScraper"
+    },
+    {
+      "function_name": "dailyLeadScraper"
+    },
+    {
+      "function_name": "dailyPipelineOptimizer"
+    },
+    {
+      "function_name": "emailMonitor"
+    },
+    {
+      "function_name": "executiveBrief"
+    },
+    {
+      "function_name": "gcDatabaseBuilder"
+    },
+    {
+      "function_name": "generateBrandAsset"
+    },
+    {
+      "function_name": "generateImage"
+    },
+    {
+      "function_name": "getAutomations"
+    },
+    {
+      "function_name": "gmailMessages"
+    },
+    {
+      "function_name": "googleDriveFiles"
+    },
+    {
+      "function_name": "hubspotSync"
+    },
+    {
+      "function_name": "jobsLeadScraper"
+    },
+    {
+      "function_name": "knowledgeBulkScraper"
+    },
+    {
+      "function_name": "knowledgeSearch"
+    },
+    {
+      "function_name": "leadNurtureEngine"
+    },
+    {
+      "function_name": "manufacturerProfiler"
+    },
+    {
+      "function_name": "nightlySystemEnhancer"
+    },
+    {
+      "function_name": "notifyAdmin"
+    },
+    {
+      "function_name": "onJoinRequest"
+    },
+    {
+      "function_name": "onLeadCreated"
+    },
+    {
+      "function_name": "outreachFollowUp"
+    },
+    {
+      "function_name": "overnightRunner"
+    },
+    {
+      "function_name": "processAgentTasks"
+    },
+    {
+      "function_name": "projectStatusReport"
+    },
+    {
+      "function_name": "registryScraper"
+    },
+    {
+      "function_name": "runScheduledScrapeJobs"
+    },
+    {
+      "function_name": "scheduledBidOutreach"
+    },
+    {
+      "function_name": "scheduledGcScraper"
+    },
+    {
+      "function_name": "scheduledLeadScraper"
+    },
+    {
+      "function_name": "scheduledXpressScraper"
+    },
+    {
+      "function_name": "scopeProcessor"
+    },
+    {
+      "function_name": "scrapeContractors"
+    },
+    {
+      "function_name": "sendAccessInvite"
+    },
+    {
+      "function_name": "seoAnalyze"
+    },
+    {
+      "function_name": "socialMediaAgent"
+    },
+    {
+      "function_name": "testConnector"
+    },
+    {
+      "function_name": "timedLeadScraper"
+    },
+    {
+      "function_name": "validateAndEnrichLead"
+    },
+    {
+      "function_name": "validatePassword"
+    },
+    {
+      "function_name": "xpressLeadScraper"
+    },
+    {
+      "function_name": "xpsAssistant"
+    }
+  ],
+  "whatsapp_greeting": "XPS Ops Master online. Full system authority active. Ready for advanced browser automation, orchestration, and end-to-end operations."
+}

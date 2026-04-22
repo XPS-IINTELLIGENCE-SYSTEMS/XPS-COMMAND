@@ -14,7 +14,9 @@ import AIReflectionLog from "./AIReflectionLog.jsx";
 import SandboxSchedulerStatus from "./SandboxSchedulerStatus.jsx";
 import BacktestResultsView from "./BacktestResultsView.jsx";
 import StressTestView from "./StressTestView.jsx";
+import MarketSentimentDashboard from "./MarketSentimentDashboard.jsx";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function FinancialSandboxView() {
   const [portfolios, setPortfolios] = useState([]);
@@ -25,6 +27,7 @@ export default function FinancialSandboxView() {
   const [selectedBucket, setSelectedBucket] = useState(null);
   const [showBacktest, setShowBacktest] = useState(false);
   const [showStressTest, setShowStressTest] = useState(false);
+  const [activeTab, setActiveTab] = useState('overview');
 
   useEffect(() => { loadData(); }, []);
 
@@ -144,26 +147,45 @@ export default function FinancialSandboxView() {
         </div>
       </div>
 
-      <BucketCards portfolios={portfolios} selectedBucket={selectedBucket} onSelect={setSelectedBucket} />
+      {/* Tabbed View */}
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="overview">Portfolio</TabsTrigger>
+          <TabsTrigger value="sentiment">Market Sentiment</TabsTrigger>
+          <TabsTrigger value="analysis">Analysis</TabsTrigger>
+          <TabsTrigger value="logs">Activity</TabsTrigger>
+        </TabsList>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div className="lg:col-span-2">
-          <PortfolioGrowthChart intelRecords={intelRecords} totalCurrent={totalValue} />
-        </div>
-        <SandboxSchedulerStatus />
-      </div>
+        <TabsContent value="overview" className="space-y-4">
+          <BucketCards portfolios={portfolios} selectedBucket={selectedBucket} onSelect={setSelectedBucket} />
 
-      <BucketPerformanceBars portfolios={portfolios} />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div className="lg:col-span-2">
+              <PortfolioGrowthChart intelRecords={intelRecords} totalCurrent={totalValue} />
+            </div>
+            <SandboxSchedulerStatus />
+          </div>
 
-      <HoldingsTable portfolios={portfolios} selectedBucket={selectedBucket} />
+          <BucketPerformanceBars portfolios={portfolios} />
 
-      {/* Recommendations — full width */}
-      <AIRecommendations intelRecords={intelRecords} />
+          <HoldingsTable portfolios={portfolios} selectedBucket={selectedBucket} />
+        </TabsContent>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <TradeLog portfolios={portfolios} selectedBucket={selectedBucket} />
-        <AIReflectionLog portfolios={portfolios} intelRecords={intelRecords} selectedBucket={selectedBucket} />
-      </div>
+        <TabsContent value="sentiment">
+          <MarketSentimentDashboard />
+        </TabsContent>
+
+        <TabsContent value="analysis" className="space-y-4">
+          <AIRecommendations intelRecords={intelRecords} />
+        </TabsContent>
+
+        <TabsContent value="logs" className="space-y-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <TradeLog portfolios={portfolios} selectedBucket={selectedBucket} />
+            <AIReflectionLog portfolios={portfolios} intelRecords={intelRecords} selectedBucket={selectedBucket} />
+          </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

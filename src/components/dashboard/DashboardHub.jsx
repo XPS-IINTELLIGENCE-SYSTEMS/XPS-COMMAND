@@ -33,7 +33,7 @@ const DEFAULT_GREETING = "";
 const DEFAULT_SUBTITLE = "Here's your sales intelligence briefing for today.";
 
 const DEFAULT_SECTIONS = [
-  { id: "sec_callcenter", type: "callcenter", title: "Call Center — Operations Hub", size: "full", collapsed: false, pinned: true, locked: true },
+  { id: "sec_callcenter", type: "callcenter", title: "Call Center", size: "full", collapsed: false, pinned: true },
   { id: "sec_greeting", type: "greeting", title: "Greeting", size: "full", collapsed: false },
   { id: "sec_notepad", type: "command_notepad", title: "Command Notepad", size: "half", collapsed: false },
   { id: "sec_workflow", type: "quick_workflow", title: "Quick Workflow", size: "half", collapsed: false },

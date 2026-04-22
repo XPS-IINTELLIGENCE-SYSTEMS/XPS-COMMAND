@@ -27,7 +27,7 @@ export default function DashboardSection({
     <div
       className={cn(
         "rounded-xl transition-all relative group/section",
-        editMode && "ring-1 ring-border/60 hover:ring-primary/30",
+        "ring-1 ring-border/60 hover:ring-primary/30",
         collapsed && "opacity-70"
       )}
     >

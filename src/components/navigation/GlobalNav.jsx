@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Menu, X, Home, ArrowLeft, UserCircle } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import DashboardCreatorDropdown from "../dashboard/DashboardCreatorDropdown";
 
 const PUBLIC_LINKS = [
   { to: "/", label: "Home" },
@@ -79,9 +78,8 @@ export default function GlobalNav() {
         <span className="text-[15px] font-extrabold metallic-gold tracking-wider hidden sm:inline">XPS INTELLIGENCE</span>
       </Link>
 
-      {/* Right: Dashboard Creator + User avatar + Hamburger */}
+      {/* Right: User avatar + Hamburger */}
       <div className="flex items-center gap-1">
-        {isAuthed && <DashboardCreatorDropdown />}
         {isAuthed && (
           <Link
             to="/account-settings"

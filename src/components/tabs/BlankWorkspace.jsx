@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { Save, Share2, StickyNote, Wrench, FolderOpen, Plus, Pencil, Check, GitBranch } from "lucide-react";
+import { StickyNote, Wrench, FolderOpen, Plus, Pencil, Check, GitBranch, Sparkles } from "lucide-react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { toast } from "@/components/ui/use-toast";
 import GoogleAppsBar from "./GoogleAppsBar";
@@ -9,6 +9,10 @@ import WorkspaceToolPicker from "./WorkspaceToolPicker";
 import WorkspaceSection from "./WorkspaceSection";
 import AddSectionMenu from "./AddSectionMenu";
 import DashboardWorkflowCreator from "../dashboard/DashboardWorkflowCreator";
+import SaveDropdown from "./SaveDropdown";
+import ShareDropdown from "./ShareDropdown";
+import DashboardCreatorDropdown from "../dashboard/DashboardCreatorDropdown";
+import VerticalScrollTool from "./VerticalScrollTool";
 
 let sectionIdCounter = Date.now();
 const newId = () => `sec_${sectionIdCounter++}`;
@@ -38,15 +42,12 @@ export default function BlankWorkspace({
   };
 
   // --- Actions ---
-  const handleSave = () => {
-    onUpdateTab(tab.id, { savedAt: new Date().toISOString() });
-    toast({ title: "Workspace saved", description: `"${tab.workspaceTitle || tab.name}" saved.` });
+  const handleSave = (destination) => {
+    onUpdateTab(tab.id, { savedAt: new Date().toISOString(), lastSaveDestination: destination });
   };
 
-  const handleShare = () => {
-    const text = `Workspace: ${tab.workspaceTitle || tab.name}\nSections: ${sections.length}`;
-    navigator.clipboard.writeText(text);
-    toast({ title: "Copied to clipboard" });
+  const handleShare = (destination) => {
+    toast({ title: `Shared via ${destination}` });
   };
 
   // --- Section CRUD ---
@@ -90,12 +91,9 @@ export default function BlankWorkspace({
   let sectionNumber = 0;
 
   const ACTION_BUTTONS = [
-    { id: "save", label: "Save", icon: Save, onClick: handleSave, color: "#22c55e" },
-    { id: "share", label: "Share", icon: Share2, onClick: handleShare, color: "#6366f1" },
     { id: "workflow", label: "Create Workflow", icon: GitBranch, onClick: () => setShowWorkflowCreator(!showWorkflowCreator), color: "#d4af37", active: showWorkflowCreator },
     { id: "add", label: "Add Section", icon: Plus, onClick: () => setShowAddMenu(!showAddMenu), color: "#f59e0b", active: showAddMenu },
     { id: "tools", label: "Add Tools", icon: Wrench, onClick: () => { setToolPickerTarget(null); setShowToolPicker(true); }, color: "#ec4899" },
-    { id: "project", label: linkedProject ? linkedProject.name : "Link Project", icon: FolderOpen, onClick: onOpenProjects, color: linkedProject?.color || "#8b5cf6" },
   ];
 
   return (
@@ -131,6 +129,9 @@ export default function BlankWorkspace({
 
         {/* Action buttons */}
         <div className="flex flex-wrap items-center justify-center gap-2 mb-4">
+          <DashboardCreatorDropdown />
+          <SaveDropdown tab={tab} onSave={handleSave} />
+          <ShareDropdown tab={tab} onShare={handleShare} />
           {ACTION_BUTTONS.map((btn) => {
             const Icon = btn.icon;
             return (
@@ -148,6 +149,16 @@ export default function BlankWorkspace({
               </button>
             );
           })}
+          {linkedProject && (
+            <button
+              onClick={onOpenProjects}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl glass-card hover:scale-105 text-muted-foreground hover:text-foreground transition-all text-xs font-medium border"
+              style={{ borderColor: linkedProject?.color || "#8b5cf6", color: linkedProject?.color || "#8b5cf6" }}
+            >
+              <FolderOpen className="w-3.5 h-3.5" />
+              {linkedProject.name}
+            </button>
+          )}
         </div>
 
         {/* Add section menu */}
@@ -272,6 +283,9 @@ export default function BlankWorkspace({
           onClose={() => { setShowToolPicker(false); setToolPickerTarget(null); }}
         />
       )}
+
+      {/* Vertical Scroll Tool */}
+      <VerticalScrollTool />
     </div>
   );
 }

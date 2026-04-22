@@ -161,10 +161,11 @@ export const DEFAULT_TOOLS = [
   { id: "usage_estimator", label: "Usage Estimator", desc: "Full audit of integration credit usage — automations, functions, costs", iconName: "BarChart3", color: "#ef4444" },
   { id: "auto_dashboard", label: "Auto Dashboard", desc: "AI-powered dashboard layout generator — presets or custom AI", iconName: "Layout", color: "#d4af37" },
   { id: "auto_workflow_engine", label: "Auto Workflows", desc: "Scan system → AI generates smart workflows → preview → execute", iconName: "Zap", color: "#f59e0b" },
-  { id: "call_center", label: "Call Center", desc: "AI-enhanced outbound call system — unified call log, scripts, products, invoicing", iconName: "Phone", color: "#22c55e" },
+  { id: "call_center", label: "Call Center", desc: "Sales call management & tracking system", iconName: "Phone", color: "#ef4444" },
   { id: "email_templates", label: "Email Templates", desc: "XPS branded outreach — GC bid list, contractor intro, epoxy intro, follow-up, sales", iconName: "Send", color: "#ec4899" },
   { id: "strategy_30day", label: "30-Day Strategy", desc: "Systematic launch plan — daily actions, progress tracking, AI priorities", iconName: "Target", color: "#d4af37" },
-  { id: "master_ops", label: "⚡ Master Ops Dashboard", desc: "All tools unified — AI orchestrated • Endless scroll • Fully linked", iconName: "Zap", color: "#d4af37" },
+  { id: "master_ops", label: "Master Ops", desc: "Full operations control center — all tools unified", iconName: "Zap", color: "#8b5cf6" },
+  { id: "saved_dashboards", label: "Dashboards", desc: "Pre-built & custom dashboards", iconName: "LayoutDashboard", color: "#6366f1" },
   { id: "workflow_simulator", label: "Workflow Simulator", desc: "Test, score, validate, auto-fix, and harden every workflow before launch", iconName: "Shield", color: "#8b5cf6" },
 ];
 

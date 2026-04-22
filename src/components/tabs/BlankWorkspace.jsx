@@ -51,45 +51,9 @@ export default function BlankWorkspace({
   };
 
   // --- Pre-generated dashboards ---
-  const getDashboardConfig = (dashboardId) => {
-    const configs = {
-      call_center: {
-        title: "Call Center",
-        sections: [
-          { id: newId(), type: "greeting", contentType: "greeting", label: "Call Center Header", notes: "", text: "" },
-          { id: newId(), type: "tool_panel", contentType: "tools", label: "Call Management Tools", toolIds: ["call_center", "email_templates", "crm"], notes: "", text: "" },
-          { id: newId(), type: "tool_panel", contentType: "tools", label: "Support Tools", toolIds: ["analytics", "status_reports", "ai_assistant"], notes: "", text: "" },
-        ]
-      },
-      master_ops: {
-        title: "Master Ops",
-        sections: [
-          { id: newId(), type: "greeting", contentType: "greeting", label: "Master Operations", notes: "", text: "" },
-          { id: newId(), type: "tool_panel", contentType: "tools", label: "Pipeline & Lead Gen", toolIds: ["master_pipeline", "lead_sniper", "xpress_leads", "crm"], notes: "", text: "" },
-          { id: newId(), type: "tool_panel", contentType: "tools", label: "Outreach & Revenue", toolIds: ["get_work", "win_work", "bid_center", "proposals"], notes: "", text: "" },
-        ]
-      },
-      lead_sniper: {
-        title: "Lead Sniper",
-        sections: [
-          { id: newId(), type: "greeting", contentType: "greeting", label: "Lead Sniper System", notes: "", text: "" },
-          { id: newId(), type: "tool_panel", contentType: "tools", label: "Discovery & Targeting", toolIds: ["lead_sniper", "find_companies", "find_jobs", "master_scraper"], notes: "", text: "" },
-          { id: newId(), type: "tool_panel", contentType: "tools", label: "Automation", toolIds: ["workflows", "scheduler", "auto_workflow_engine"], notes: "", text: "" },
-        ]
-      }
-    };
-    return configs[dashboardId];
-  };
-
   const handleLoadPreGeneratedDashboard = (dashboardId) => {
-    const config = getDashboardConfig(dashboardId);
-    if (config) {
-      onUpdateTab(tab.id, { 
-        workspaceTitle: config.title, 
-        name: config.title,
-        sections: config.sections 
-      });
-    }
+    // Open the existing dashboard tool instead of creating sections
+    onOpenTool?.(dashboardId);
   };
 
   // --- Section CRUD ---

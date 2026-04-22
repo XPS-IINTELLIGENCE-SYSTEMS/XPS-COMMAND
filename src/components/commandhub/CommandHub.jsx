@@ -152,7 +152,11 @@ export default function CommandHub() {
       </div>
 
       {/* Tab Content */}
-      {tab === "orchestrator" && <OrchestratorPanel lastLog={lastLog} onRefresh={loadAll} />}
+      {tab === "orchestrator" && <OrchestratorPanel lastLog={lastLog} onRefresh={loadAll} onCompileComplete={(compiled) => {
+        setCallQueue(compiled);
+        setLeads(compiled.filter(c => c.primary_source === "Lead"));
+        setProspects(compiled.filter(c => c.primary_source === "Prospect"));
+      }} />}
       {tab === "call_queue" && <CallListTab queue={callQueue} callLogs={callLogs} onRefresh={loadAll} />}
       {tab === "crm" && <CRMView />}
       {tab === "prospects" && <ProspectDatabaseTab prospects={prospects} callLogs={callLogs} onRefresh={loadAll} />}

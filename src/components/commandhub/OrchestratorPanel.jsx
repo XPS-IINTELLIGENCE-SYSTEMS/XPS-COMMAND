@@ -1,83 +1,90 @@
 import { useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { Crown, Play, Loader2, Shield, RefreshCcw, Mail, Brain, Zap, CheckCircle2, AlertTriangle, TrendingUp } from "lucide-react";
+import { Crown, Play, Loader2, Brain, TrendingUp, Mail, Database, CheckCircle2, AlertTriangle, Zap, RefreshCcw, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import CompileResultsPanel from "./CompileResultsPanel";
 
 const ACTIONS = [
-  { id: "full_briefing", label: "Full Scan + Briefing", icon: Crown, desc: "Enrich, score, test, analyze, email report", color: "#d4af37" },
-  { id: "enrich", label: "Enrich Leads", icon: Brain, desc: "AI-enrich 10 un-enriched leads", color: "#8b5cf6" },
-  { id: "score", label: "Score Leads", icon: TrendingUp, desc: "Score 20 unscored leads", color: "#22c55e" },
-  { id: "test_email", label: "Test Email", icon: Mail, desc: "Send system test email", color: "#3b82f6" },
+  { id: "compile", label: "Compile & Dedup", icon: Database, desc: "Merge all 9 data sources, remove duplicates", color: "#d4af37", fn: "compileCallQueue" },
+  { id: "full_briefing", label: "Full Scan", icon: Crown, desc: "Enrich + score + test + report", color: "#8b5cf6", fn: "ceoMorningBriefing" },
+  { id: "enrich", label: "Enrich Leads", icon: Brain, desc: "AI-enrich 10 leads from web", color: "#22c55e", fn: "ceoMorningBriefing" },
+  { id: "score", label: "Score Leads", icon: TrendingUp, desc: "Score 20 unscored leads", color: "#3b82f6", fn: "ceoMorningBriefing" },
+  { id: "test_email", label: "Test Email", icon: Mail, desc: "Send system test email", color: "#f59e0b", fn: "ceoMorningBriefing" },
 ];
 
-export default function OrchestratorPanel({ lastLog, onRefresh }) {
+export default function OrchestratorPanel({ lastLog, onRefresh, onCompileComplete }) {
   const [running, setRunning] = useState(null);
   const [result, setResult] = useState(null);
+  const [compileResult, setCompileResult] = useState(null);
 
   const runAction = async (action) => {
+    const cfg = ACTIONS.find(a => a.id === action);
     setRunning(action);
     setResult(null);
+    if (action === "compile") setCompileResult(null);
+
     try {
-      const res = await base44.functions.invoke('ceoMorningBriefing', { action });
-      setResult(res.data);
+      const payload = action === "compile" ? {} : { action };
+      const res = await base44.functions.invoke(cfg.fn, payload);
+      if (action === "compile") {
+        setCompileResult(res.data);
+        onCompileComplete?.(res.data.queue || []);
+      } else {
+        setResult(res.data);
+      }
     } catch (e) {
       setResult({ error: e.message });
     }
     setRunning(null);
-    onRefresh?.();
+    if (action !== "compile") onRefresh?.();
   };
 
-  const health = result?.analysis?.health_score || lastLog?.health_score || 0;
-  const healthColor = health >= 80 ? '#22c55e' : health >= 60 ? '#f59e0b' : '#ef4444';
-
   return (
-    <div className="glass-card rounded-xl p-4 space-y-3">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl metallic-gold-bg flex items-center justify-center">
-            <Crown className="w-5 h-5 text-background" />
+    <div className="space-y-3">
+      {/* Action Buttons Grid */}
+      <div className="glass-card rounded-xl p-4 space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Crown className="w-4 h-4 text-primary" />
+            <h2 className="text-sm font-black metallic-gold">Operations Control</h2>
           </div>
-          <div>
-            <h2 className="text-sm font-black metallic-gold">CEO Orchestrator</h2>
-            <p className="text-[9px] text-muted-foreground">Autonomous daily operations — scan, enrich, test, optimize</p>
-          </div>
+          <span className="text-[9px] text-muted-foreground">Manual — no automations running</span>
         </div>
-        {health > 0 && (
-          <div className="text-center">
-            <div className="text-2xl font-black" style={{ color: healthColor }}>{health}</div>
-            <div className="text-[8px] text-muted-foreground">HEALTH</div>
-          </div>
-        )}
+
+        <div className="grid grid-cols-5 gap-2">
+          {ACTIONS.map(a => {
+            const Icon = a.icon;
+            const isRunning = running === a.id;
+            return (
+              <button
+                key={a.id}
+                onClick={() => runAction(a.id)}
+                disabled={running}
+                className="flex flex-col items-center gap-1.5 p-3 rounded-xl transition-all hover:scale-105 disabled:opacity-50"
+                style={{ backgroundColor: `${a.color}10`, border: `1px solid ${a.color}25` }}
+              >
+                {isRunning ? (
+                  <Loader2 className="w-5 h-5 animate-spin" style={{ color: a.color }} />
+                ) : (
+                  <Icon className="w-5 h-5" style={{ color: a.color }} />
+                )}
+                <span className="text-[9px] font-bold text-foreground leading-tight text-center">{a.label}</span>
+                <span className="text-[8px] text-muted-foreground leading-tight text-center hidden sm:block">{a.desc}</span>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
-      {/* Action Buttons */}
-      <div className="grid grid-cols-4 gap-2">
-        {ACTIONS.map(a => {
-          const Icon = a.icon;
-          const isRunning = running === a.id;
-          return (
-            <button
-              key={a.id}
-              onClick={() => runAction(a.id)}
-              disabled={running}
-              className="flex flex-col items-center gap-1 p-3 rounded-xl transition-all hover:scale-105"
-              style={{ backgroundColor: `${a.color}10`, border: `1px solid ${a.color}25` }}
-            >
-              {isRunning ? <Loader2 className="w-4 h-4 animate-spin" style={{ color: a.color }} /> : <Icon className="w-4 h-4" style={{ color: a.color }} />}
-              <span className="text-[9px] font-bold text-foreground">{a.label}</span>
-            </button>
-          );
-        })}
-      </div>
+      {/* Compile Results */}
+      {compileResult && <CompileResultsPanel data={compileResult} />}
 
-      {/* Result Summary */}
+      {/* Orchestrator Results */}
       {result && !result.error && (
-        <div className="bg-secondary/30 rounded-xl p-3 space-y-2">
+        <div className="glass-card rounded-xl p-3 space-y-2">
           <div className="flex items-center gap-2">
             <CheckCircle2 className="w-3.5 h-3.5 text-green-400" />
-            <span className="text-xs font-bold text-green-400">Cycle Complete</span>
-            <span className="text-[9px] text-muted-foreground ml-auto">{((result.duration_ms || 0) / 1000).toFixed(1)}s</span>
+            <span className="text-xs font-bold text-green-400">Complete</span>
           </div>
           {result.results?.actions?.map((a, i) => (
             <div key={i} className="text-[10px] text-foreground/80 flex items-center gap-1">
@@ -89,22 +96,18 @@ export default function OrchestratorPanel({ lastLog, onRefresh }) {
               <span className="text-primary font-bold">{i + 1}.</span> {p.priority}
             </div>
           ))}
-          {result.results?.errors?.length > 0 && (
-            <div className="text-[10px] text-destructive flex items-center gap-1">
-              <AlertTriangle className="w-2.5 h-2.5" /> {result.results.errors.length} error(s)
-            </div>
-          )}
         </div>
       )}
 
       {result?.error && (
-        <div className="bg-destructive/10 rounded-lg p-2 text-[10px] text-destructive">{result.error}</div>
+        <div className="bg-destructive/10 rounded-lg p-2 text-[10px] text-destructive flex items-center gap-1">
+          <AlertTriangle className="w-3 h-3" /> {result.error}
+        </div>
       )}
 
-      {/* Last Run */}
       {lastLog && (
         <div className="text-[9px] text-muted-foreground">
-          Last: {new Date(lastLog.created_date).toLocaleString()} — {lastLog.status}
+          Last orchestrator run: {new Date(lastLog.created_date).toLocaleString()} — {lastLog.status}
         </div>
       )}
     </div>

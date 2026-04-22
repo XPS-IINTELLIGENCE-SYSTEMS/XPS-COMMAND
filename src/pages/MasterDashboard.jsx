@@ -144,8 +144,9 @@ function MasterDashboardContent() {
 
   const generateAiLayout = async () => {
     setLayoutLoading(true);
-    const res = await base44.integrations.Core.InvokeLLM({
-      prompt: `You are the XPS Operations AI. Analyze this business data and recommend the optimal dashboard section ORDER and PRIORITY for maximum productivity, minimum friction, and fastest path to revenue:
+    try {
+      const res = await base44.integrations.Core.InvokeLLM({
+        prompt: `You are the XPS Operations AI. Analyze this business data and recommend the optimal dashboard section ORDER and PRIORITY for maximum productivity, minimum friction, and fastest path to revenue:
 
 Stats: ${JSON.stringify(stats)}
 Active leads: ${data.leads.filter(l => ["Incoming","Validated","Qualified"].includes(l.stage)).length}
@@ -159,19 +160,27 @@ Recommend:
 2. Identify any missing tools or workflow gaps
 3. Rate the overall pipeline health 0-100
 4. Give 3 automation recommendations`,
-      response_json_schema: {
-        type: "object",
-        properties: {
-          focus_areas: { type: "array", items: { type: "object", properties: { area: { type: "string" }, action: { type: "string" }, urgency: { type: "string" }, section: { type: "string" } } } },
-          missing_tools: { type: "array", items: { type: "string" } },
-          pipeline_health: { type: "number" },
-          automation_recommendations: { type: "array", items: { type: "string" } },
-          bottlenecks: { type: "array", items: { type: "string" } },
+        response_json_schema: {
+          type: "object",
+          properties: {
+            focus_areas: { type: "array", items: { type: "object", properties: { area: { type: "string" }, action: { type: "string" }, urgency: { type: "string" }, section: { type: "string" } } } },
+            missing_tools: { type: "array", items: { type: "string" } },
+            pipeline_health: { type: "number" },
+            automation_recommendations: { type: "array", items: { type: "string" } },
+            bottlenecks: { type: "array", items: { type: "string" } },
+          }
         }
+      });
+      setAiLayout(res);
+    } catch (error) {
+      if (error.message?.includes('limit') || error.message?.includes('upgrade')) {
+        alert('🚨 Integration limit reached for this month. Upgrade your plan to continue using AI features.');
+      } else {
+        alert('AI optimization unavailable: ' + error.message);
       }
-    });
-    setAiLayout(res);
-    setLayoutLoading(false);
+    } finally {
+      setLayoutLoading(false);
+    }
   };
 
   const followUps = data.callLogs.filter(l => ["Callback", "No Answer", "Voicemail"].includes(l.call_outcome));

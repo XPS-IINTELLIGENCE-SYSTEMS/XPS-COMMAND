@@ -6,14 +6,18 @@ import { createClient } from '@supabase/supabase-js';
  * Mimics base44.entities.* interface for easy migration
  */
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || import.meta.env.SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.SUPABASE_ANON_KEY;
+const getSupabaseClient = () => {
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+  const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Supabase credentials missing. Set SUPABASE_URL and SUPABASE_ANON_KEY in .env.local or Base44 secrets');
-}
+  if (!supabaseUrl || !supabaseAnonKey) {
+    console.warn('⚠️ Supabase not configured. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to .env.local');
+    return null;
+  }
+  return createClient(supabaseUrl, supabaseAnonKey);
+};
 
-export const supabaseClient = createClient(supabaseUrl, supabaseAnonKey);
+export const supabaseClient = getSupabaseClient();
 
 /**
  * Supabase Entity Wrapper

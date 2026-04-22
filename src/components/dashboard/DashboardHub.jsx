@@ -33,7 +33,6 @@ const DEFAULT_GREETING = "";
 const DEFAULT_SUBTITLE = "Here's your sales intelligence briefing for today.";
 
 const DEFAULT_SECTIONS = [
-  { id: "sec_callcenter", type: "callcenter", title: "Call Center", size: "full", collapsed: false, pinned: true },
   { id: "sec_greeting", type: "greeting", title: "Greeting", size: "full", collapsed: false },
   { id: "sec_notepad", type: "command_notepad", title: "Command Notepad", size: "half", collapsed: false },
   { id: "sec_workflow", type: "quick_workflow", title: "Quick Workflow", size: "half", collapsed: false },
@@ -480,6 +479,13 @@ export default function DashboardHub({ onOpenTool }) {
               <Plus className="w-3.5 h-3.5" /> Add Section
             </button>
           )}
+        </div>
+
+        {/* Fixed Call Center Dashboard */}
+        <div className="bg-background border-b border-border mb-6 sticky top-0 z-40 p-4 sm:p-6">
+          <div className="max-w-[1100px] mx-auto">
+            <CallCenterWidget />
+          </div>
         </div>
 
         <DragDropContext onDragEnd={onSectionDragEnd}>

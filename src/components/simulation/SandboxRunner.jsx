@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import {
   Play, Loader2, CheckCircle2, XCircle, AlertCircle, Clock,
@@ -381,7 +381,6 @@ export default function SandboxRunner() {
       setCurrentStep(step.id);
       setElapsed(Math.round((Date.now() - start) / 1000));
       try {
-        // For AI score step, pass previous results as context
         const res = step.id === "ai_score"
           ? await step.fn(base44, stepResults)
           : await step.fn(base44);
@@ -400,6 +399,9 @@ export default function SandboxRunner() {
     setDone(true);
     setElapsed(Math.round((Date.now() - start) / 1000));
   };
+
+  // Auto-run on first mount
+  useEffect(() => { runAll(); }, []);
 
   const reset = () => { setResults({}); setDone(false); setCurrentStep(null); setElapsed(0); };
 

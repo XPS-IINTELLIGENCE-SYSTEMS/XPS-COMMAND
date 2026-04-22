@@ -68,6 +68,8 @@ import UsageEstimatorView from "../dashboard/UsageEstimatorView";
 import AutoDashboardConfigurator from "../dashboard/AutoDashboardConfigurator";
 import AutoWorkflowEngine from "../dashboard/AutoWorkflowEngine";
 import CallCenterView from "../callcenter/CallCenterView";
+import StrategyView from "../strategy/StrategyView";
+import SimulationView from "../simulation/SimulationView";
 
 export default function AppContent({ activeView, onChatCommand, onNavigate }) {
   switch (activeView) {
@@ -144,6 +146,8 @@ export default function AppContent({ activeView, onChatCommand, onNavigate }) {
     case "auto_dashboard": return <div className="max-w-3xl mx-auto p-6"><AutoDashboardConfigurator onApply={() => onNavigate?.("dashboard")} /></div>;
     case "auto_workflow_engine": return <div className="max-w-3xl mx-auto p-6"><AutoWorkflowEngine onOpenTool={onNavigate} /></div>;
     case "call_center": return <CallCenterView />;
+    case "strategy_30day": return <StrategyView />;
+    case "workflow_simulator": return <SimulationView />;
     case "ui_builder": return null; // Opens as standalone page at /ui-builder
     case "agent_zero": return null; // Opens as standalone page at /agent-zero
     default: return <div className="text-center py-20 text-muted-foreground">View not found</div>;

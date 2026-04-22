@@ -163,6 +163,8 @@ export const DEFAULT_TOOLS = [
   { id: "auto_dashboard", label: "Auto Dashboard", desc: "AI-powered dashboard layout generator — presets or custom AI", iconName: "Layout", color: "#d4af37" },
   { id: "auto_workflow_engine", label: "Auto Workflows", desc: "Scan system → AI generates smart workflows → preview → execute", iconName: "Zap", color: "#f59e0b" },
   { id: "call_center", label: "Call Center", desc: "AI-enhanced outbound call system — unified call log, scripts, products, invoicing", iconName: "Phone", color: "#22c55e" },
+  { id: "strategy_30day", label: "30-Day Strategy", desc: "Systematic launch plan — daily actions, progress tracking, AI priorities", iconName: "Target", color: "#d4af37" },
+  { id: "workflow_simulator", label: "Workflow Simulator", desc: "Test, score, validate, auto-fix, and harden every workflow before launch", iconName: "Shield", color: "#8b5cf6" },
 ];
 
 // Tool categories with metallic gold headers & descriptions
@@ -213,7 +215,7 @@ export const TOOL_CATEGORIES = [
     id: "automation_workflows",
     title: "Automation & Workflows",
     desc: "Drag-and-drop automation, scheduled scraping, and data routing pipelines.",
-    toolIds: ["workflows", "scheduler", "master_scraper", "approval_queue"],
+    toolIds: ["workflows", "scheduler", "master_scraper", "approval_queue", "strategy_30day", "workflow_simulator"],
   },
   {
     id: "system_admin",

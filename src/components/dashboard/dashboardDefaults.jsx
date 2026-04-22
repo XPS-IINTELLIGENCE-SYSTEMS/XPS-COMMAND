@@ -169,6 +169,7 @@ export const DEFAULT_TOOLS = [
   { id: "workflow_simulator", label: "Workflow Simulator", desc: "Test, score, validate, auto-fix, and harden every workflow before launch", iconName: "Shield", color: "#8b5cf6" },
   { id: "system_optimization", label: "System Optimization", desc: "Full system audit with validation, guardian, and orchestrator agents", iconName: "BarChart3", color: "#d4af37" },
   { id: "automation_center", label: "Automation Center", desc: "Schedule PDF exports & create event-driven task automations", iconName: "Zap", color: "#f59e0b" },
+  { id: "prompt_library", label: "Prompt Library", desc: "200+ AI prompts for operations, autonomous systems, wealth creation & AI engineering", iconName: "BookOpen", color: "#8b5cf6" },
   ];
 
 // Tool categories with metallic gold headers & descriptions

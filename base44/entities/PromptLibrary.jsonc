@@ -1,0 +1,100 @@
+{
+  "name": "PromptLibrary",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Prompt title"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "leads_intelligence",
+        "outreach_campaigns",
+        "bid_pricing",
+        "competitor_research",
+        "content_creation",
+        "agent_building",
+        "automation_workflows",
+        "financial_ai",
+        "autonomous_systems",
+        "wealth_creation",
+        "trading_systems",
+        "simulation_systems",
+        "prediction_systems",
+        "recommendation_systems",
+        "scraping_harvesting",
+        "system_cloning",
+        "invention_systems",
+        "meta_systems",
+        "open_source_integration",
+        "system_refactoring",
+        "recursive_building",
+        "millionaire_paths",
+        "pass_through_systems",
+        "consulting_systems",
+        "ai_architecture",
+        "idea_generation",
+        "custom"
+      ],
+      "description": "Prompt category"
+    },
+    "library_type": {
+      "type": "string",
+      "enum": [
+        "xps_operations",
+        "autonomous_ai_systems"
+      ],
+      "description": "Which library this belongs to"
+    },
+    "subcategory": {
+      "type": "string",
+      "description": "Optional subcategory for deeper organization"
+    },
+    "prompt_text": {
+      "type": "string",
+      "description": "Full prompt content"
+    },
+    "use_case": {
+      "type": "string",
+      "description": "Specific use case or example"
+    },
+    "variables": {
+      "type": "string",
+      "description": "JSON array of placeholder variables {{variable_name}}"
+    },
+    "tags": {
+      "type": "string",
+      "description": "Comma-separated tags for search"
+    },
+    "is_favorite": {
+      "type": "boolean",
+      "default": false,
+      "description": "User has favorited this prompt"
+    },
+    "usage_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Times this prompt has been used"
+    },
+    "last_used": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last time this prompt was used"
+    },
+    "created_by": {
+      "type": "string",
+      "description": "Email of creator"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Internal notes about the prompt"
+    }
+  },
+  "required": [
+    "title",
+    "category",
+    "library_type",
+    "prompt_text"
+  ]
+}

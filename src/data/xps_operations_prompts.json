@@ -1,0 +1,92 @@
+[
+  {
+    "title": "Lead Scoring Analysis",
+    "category": "leads_intelligence",
+    "library_type": "xps_operations",
+    "prompt_text": "Analyze the following lead information and provide a scoring from 0-100 based on fit, engagement, company size, budget indicators, and timeline:\n\nCompany: {{company_name}}\nIndustry: {{industry}}\nContact: {{contact_name}}\nRecent Activity: {{activity_summary}}\n\nProvide: 1) Overall score 2) Score breakdown by category 3) Key strengths 4) Areas of concern 5) Recommended next action",
+    "use_case": "Prioritize leads for outreach campaigns",
+    "variables": "[\"company_name\", \"industry\", \"contact_name\", \"activity_summary\"]",
+    "tags": "lead_scoring, intelligence, pipeline"
+  },
+  {
+    "title": "Competitor Pricing Intelligence",
+    "category": "competitor_research",
+    "library_type": "xps_operations",
+    "prompt_text": "Research and analyze competitor pricing for {{service_type}} in {{market_region}}. Create a competitive pricing matrix showing:\n\n1) Direct competitors and their pricing models\n2) Price ranges for {{specific_offering}}\n3) Value-add offerings that justify premium pricing\n4) Discount/bundling strategies\n5) Recommended pricing strategy for our offerings\n\nProvide actionable pricing recommendations based on market analysis.",
+    "use_case": "Set dynamic pricing and bid competitively",
+    "variables": "[\"service_type\", \"market_region\", \"specific_offering\"]",
+    "tags": "pricing, competition, market_analysis"
+  },
+  {
+    "title": "Email Campaign Copy Generator",
+    "category": "outreach_campaigns",
+    "library_type": "xps_operations",
+    "prompt_text": "Write a compelling {{email_type}} email for {{recipient_title}} at {{company_name}}. The email should:\n\n1) Hook: Reference something specific about their company/industry\n2) Problem: Identify a pain point in {{industry_vertical}}\n3) Solution: Present {{solution}} as the answer\n4) Proof: Include {{success_metric}} from similar companies\n5) CTA: Clear next step {{call_to_action}}\n\nTone: {{tone}} | Length: {{word_count}} words | Avoid being salesy.",
+    "use_case": "Generate personalized outreach templates",
+    "variables": "[\"email_type\", \"recipient_title\", \"company_name\", \"industry_vertical\", \"solution\", \"success_metric\", \"call_to_action\", \"tone\", \"word_count\"]",
+    "tags": "email, outreach, copywriting"
+  },
+  {
+    "title": "Bid Analysis & Recommendation",
+    "category": "bid_pricing",
+    "library_type": "xps_operations",
+    "prompt_text": "Analyze the following commercial bid opportunity and recommend a go/no-go decision:\n\nProject: {{project_name}}\nScope: {{scope_description}}\nBudget: {{budget_range}}\nTimeline: {{timeline}}\nCompetitors: {{estimated_competitors}}\nOur Capacity: {{capacity_status}}\n\nProvide: 1) Win probability estimate 2) Recommended bid price 3) Risk factors 4) Resource requirements 5) Final recommendation with reasoning",
+    "use_case": "Make data-driven bidding decisions",
+    "variables": "[\"project_name\", \"scope_description\", \"budget_range\", \"timeline\", \"estimated_competitors\", \"capacity_status\"]",
+    "tags": "bidding, pricing, opportunity_analysis"
+  },
+  {
+    "title": "Lead Qualification Framework",
+    "category": "leads_intelligence",
+    "library_type": "xps_operations",
+    "prompt_text": "Evaluate if this lead qualifies for our {{product_type}} offering using the BANT framework:\n\nBudget: {{budget_info}}\nAuthority: {{decision_maker_info}}\nNeed: {{stated_need}}\nTimeline: {{implementation_timeline}}\n\nAdditional Context:\n- Company Size: {{company_size}}\n- Industry Fit: {{industry}}\n- Current Solution: {{current_solution}}\n\nProvide: 1) BANT score for each dimension 2) Overall qualification level (Hot/Warm/Cold) 3) Gap analysis 4) Nurture strategy if not ready 5) Next conversation topics",
+    "use_case": "Qualify leads before sales engagement",
+    "variables": "[\"product_type\", \"budget_info\", \"decision_maker_info\", \"stated_need\", \"implementation_timeline\", \"company_size\", \"industry\", \"current_solution\"]",
+    "tags": "qualification, lead_assessment, sales_framework"
+  },
+  {
+    "title": "Content Audit & SEO Recommendations",
+    "category": "content_creation",
+    "library_type": "xps_operations",
+    "prompt_text": "Audit the content strategy for {{website_url}} in {{target_market}}. Analyze:\n\n1) Top-performing content (topics, formats, CTAs)\n2) SEO gaps in {{industry}} keywords\n3) Competitor content benchmarking\n4) Recommended content calendar (next 90 days)\n5) Content types with highest engagement potential\n\nProvide specific article topics, keywords, and publishing schedule that will drive {{business_objective}}.",
+    "use_case": "Plan content strategy for lead generation",
+    "variables": "[\"website_url\", \"target_market\", \"industry\", \"business_objective\"]",
+    "tags": "content, seo, strategy"
+  },
+  {
+    "title": "Workflow Automation Design",
+    "category": "automation_workflows",
+    "library_type": "xps_operations",
+    "prompt_text": "Design an automated workflow for {{process_name}} that reduces manual work by {{efficiency_target}}%.\n\nCurrent Process: {{current_steps}}\nPain Points: {{pain_points}}\nAvailable Tools: {{tool_stack}}\nTeam Skill Level: {{skill_level}}\n\nProvide: 1) Automation architecture diagram 2) Step-by-step workflow 3) Decision trees/conditions 4) Error handling 5) Monitoring/alerts 6) Expected time savings 7) Implementation roadmap",
+    "use_case": "Build scalable business processes",
+    "variables": "[\"process_name\", \"efficiency_target\", \"current_steps\", \"pain_points\", \"tool_stack\", \"skill_level\"]",
+    "tags": "automation, workflow, process_improvement"
+  },
+  {
+    "title": "Customer Journey Mapping",
+    "category": "leads_intelligence",
+    "library_type": "xps_operations",
+    "prompt_text": "Map the complete customer journey for {{customer_persona}} purchasing {{product_category}}:\n\nTarget Persona: {{persona_details}}\nPrice Range: {{price_sensitivity}}\nDecision Timeline: {{timeline}}\nKey Influencers: {{influencer_roles}}\n\nIdentify: 1) Awareness stage triggers 2) Consideration challenges 3) Decision factors 4) Post-purchase needs 5) Upsell opportunities 6) Touchpoints for each stage 7) Messaging for each stage",
+    "use_case": "Align marketing and sales efforts",
+    "variables": "[\"customer_persona\", \"product_category\", \"persona_details\", \"price_sensitivity\", \"timeline\", \"influencer_roles\"]",
+    "tags": "customer_journey, persona, marketing"
+  },
+  {
+    "title": "Proposal Win Strategy",
+    "category": "bid_pricing",
+    "library_type": "xps_operations",
+    "prompt_text": "Develop a winning proposal strategy for {{prospect_name}} requesting {{deliverable}}:\n\nCompeting Against: {{competitors}}\nDecision Criteria: {{stated_criteria}}\nBudget: {{budget}}\nUnique Advantage: {{our_advantage}}\n\nCreate: 1) Executive summary positioning 2) Proof of capability framework 3) Differentiation narrative 4) Risk mitigation strategy 5) Pricing justification 6) Timeline realism 7) Client success story alignment",
+    "use_case": "Win high-value deals",
+    "variables": "[\"prospect_name\", \"deliverable\", \"competitors\", \"stated_criteria\", \"budget\", \"our_advantage\"]",
+    "tags": "proposals, sales, strategy"
+  },
+  {
+    "title": "Agent Capability Definition",
+    "category": "agent_building",
+    "library_type": "xps_operations",
+    "prompt_text": "Define capabilities and boundaries for a {{agent_type}} agent focused on {{primary_function}}:\n\nDesired Outcomes: {{desired_outcomes}}\nData Sources: {{available_data}}\nDomain Expertise: {{expertise_domain}}\nConstraints: {{business_constraints}}\n\nSpecify: 1) Core responsibilities 2) Authority/decision-making limits 3) Required knowledge/tools 4) Success metrics 5) Escalation triggers 6) Error handling approach 7) Learning/improvement mechanisms",
+    "use_case": "Build effective autonomous agents",
+    "variables": "[\"agent_type\", \"primary_function\", \"desired_outcomes\", \"available_data\", \"expertise_domain\", \"business_constraints\"]",
+    "tags": "ai_agents, automation, design"
+  }
+]

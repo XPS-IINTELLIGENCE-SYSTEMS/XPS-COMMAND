@@ -75,6 +75,7 @@ import CommandHub from "../commandhub/CommandHub";
 import WarRoom from "../warroom/WarRoom";
 import SystemOptimizationAnalyzer from "../systemoptimization/SystemOptimizationAnalyzer";
 import AutomationCenter from "../automation/AutomationCenter";
+import PromptLibraryView from "../prompts/PromptLibraryView";
 
 export default function AppContent({ activeView, onChatCommand, onNavigate }) {
   switch (activeView) {
@@ -156,6 +157,7 @@ export default function AppContent({ activeView, onChatCommand, onNavigate }) {
     case "email_templates": return <EmailTemplatesView />;
     case "system_optimization": return <div className="max-w-7xl mx-auto p-6"><SystemOptimizationAnalyzer /></div>;
     case "automation_center": return <div className="max-w-5xl mx-auto p-6"><AutomationCenter /></div>;
+    case "prompt_library": return <PromptLibraryView />;
     case "master_ops": {
       window.location.href = "/master";
       return null;

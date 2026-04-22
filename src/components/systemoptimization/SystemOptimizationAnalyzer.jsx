@@ -14,23 +14,30 @@ export default function SystemOptimizationAnalyzer() {
   const runFullAnalysis = async () => {
     setLoading(true);
     try {
-      // Invoke system analysis function
+      // Step 1: System audit
       const analysisRes = await base44.functions.invoke("systemFullAnalysis", {});
       setAnalysis(analysisRes?.data?.analysis || {});
+      
+      // Small delay to avoid quota limits
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
-      // Invoke validation agent
+      // Step 2: Validation agent
       const validationRes = await base44.functions.invoke("validationAgentAudit", {
         analysisData: analysisRes?.data?.analysis
       });
       setValidationResult(validationRes?.data?.validation || {});
+      
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
-      // Invoke guardian agent
+      // Step 3: Guardian agent
       const guardianRes = await base44.functions.invoke("guardianSystemCheck", {
         analysisData: analysisRes?.data?.analysis
       });
       setGuardianRecommendations(guardianRes?.data?.recommendations || {});
+      
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
-      // Invoke orchestrator
+      // Step 4: Orchestrator (all data available now)
       const orchestratorRes = await base44.functions.invoke("orchestratorOptimizationPlan", {
         analysisData: analysisRes?.data?.analysis,
         validationData: validationRes?.data?.validation,
@@ -40,7 +47,16 @@ export default function SystemOptimizationAnalyzer() {
 
       toast({ title: "Analysis complete—all agents processed." });
     } catch (error) {
-      toast({ title: `Analysis failed: ${error.message}`, variant: "destructive" });
+      const msg = error?.message || "Analysis failed";
+      if (msg.includes("integration") || msg.includes("quota") || msg.includes("limit")) {
+        toast({ 
+          title: "Integration limit reached", 
+          description: "You've hit your monthly API quota. Upgrade your plan or wait for the next billing cycle.",
+          variant: "destructive" 
+        });
+      } else {
+        toast({ title: msg, variant: "destructive" });
+      }
     }
     setLoading(false);
   };

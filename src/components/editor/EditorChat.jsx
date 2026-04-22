@@ -74,8 +74,9 @@ export default function EditorChat({ onToolCommand, onCanvasUpdate }) {
       tools: [{ name: "Processing command...", status: "running" }]
     }]);
 
-    const result = await base44.integrations.Core.InvokeLLM({
-      prompt: `You are the XPS Editor Agent with full access to all tools. The user said:
+    try {
+      const result = await base44.integrations.Core.InvokeLLM({
+        prompt: `You are the XPS Editor Agent with full access to all tools. The user said:
 
 "${prompt}"
 
@@ -91,36 +92,47 @@ If the user wants a tool opened, respond with the tool ID.
 If the user wants UI created, output the full React JSX.
 
 Respond with structured JSON.`,
-      add_context_from_internet: prompt.toLowerCase().includes("http") || prompt.toLowerCase().includes("www") || prompt.toLowerCase().includes("research") || prompt.toLowerCase().includes("find"),
-      response_json_schema: {
-        type: "object",
-        properties: {
-          action: { type: "string", description: "tool_open | generate_ui | browse_url | chat_response" },
-          tool_id: { type: "string", description: "Tool ID to open if action=tool_open" },
-          html_content: { type: "string", description: "HTML/JSX to render on canvas if action=generate_ui or browse_url" },
-          message: { type: "string", description: "Response message to the user" },
-          tools_used: { type: "array", items: { type: "string" } }
+        add_context_from_internet: prompt.toLowerCase().includes("http") || prompt.toLowerCase().includes("www") || prompt.toLowerCase().includes("research") || prompt.toLowerCase().includes("find"),
+        response_json_schema: {
+          type: "object",
+          properties: {
+            action: { type: "string", description: "tool_open | generate_ui | browse_url | chat_response" },
+            tool_id: { type: "string", description: "Tool ID to open if action=tool_open" },
+            html_content: { type: "string", description: "HTML/JSX to render on canvas if action=generate_ui or browse_url" },
+            message: { type: "string", description: "Response message to the user" },
+            tools_used: { type: "array", items: { type: "string" } }
+          }
         }
+      });
+
+      // Remove thinking message and add result
+      setMessages(prev => {
+        const cleaned = prev.filter(m => m.tools?.[0]?.name !== "Processing command...");
+        const tools = (result.tools_used || []).map(t => ({ name: t, status: "complete" }));
+        return [...cleaned, {
+          role: "assistant",
+          content: result.message || "Done.",
+          tools: tools.length > 0 ? tools : [{ name: "Command executed", status: "complete" }]
+        }];
+      });
+
+      // Handle actions
+      if (result.action === "tool_open" && result.tool_id) {
+        onToolCommand(result.tool_id);
       }
-    });
-
-    // Remove thinking message and add result
-    setMessages(prev => {
-      const cleaned = prev.filter(m => m.tools?.[0]?.name !== "Processing command...");
-      const tools = (result.tools_used || []).map(t => ({ name: t, status: "complete" }));
-      return [...cleaned, {
-        role: "assistant",
-        content: result.message || "Done.",
-        tools: tools.length > 0 ? tools : [{ name: "Command executed", status: "complete" }]
-      }];
-    });
-
-    // Handle actions
-    if (result.action === "tool_open" && result.tool_id) {
-      onToolCommand(result.tool_id);
-    }
-    if ((result.action === "generate_ui" || result.action === "browse_url") && result.html_content) {
-      onCanvasUpdate(result.html_content);
+      if ((result.action === "generate_ui" || result.action === "browse_url") && result.html_content) {
+        onCanvasUpdate(result.html_content);
+      }
+    } catch (error) {
+      const msg = error?.message || "Command failed";
+      setMessages(prev => {
+        const cleaned = prev.filter(m => m.tools?.[0]?.name !== "Processing command...");
+        return [...cleaned, {
+          role: "assistant",
+          content: msg.includes("integration") || msg.includes("quota") ? "Integration quota reached. Please upgrade your plan." : msg,
+          tools: [{ name: "Error", status: "error" }]
+        }];
+      });
     }
 
     setLoading(false);

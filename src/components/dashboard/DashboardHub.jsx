@@ -22,7 +22,7 @@ import FinancialSandboxView from "../financial/FinancialSandboxView";
 import OrchestratorDashboard from "../orchestrator/OrchestratorDashboard";
 import FocusDashboard from "../focus/FocusDashboard";
 import FocusToolbar from "../focus/FocusToolbar";
-import CallCenterWidget from "./CallCenterWidget";
+import CallCenterDashboard from "../callcenter/CallCenterDashboard";
 import { DEFAULT_TOOLS } from "./dashboardDefaults";
 import ToolCategoryGrid from "./ToolCategoryGrid";
 import DashboardWorkflowCreator from "./DashboardWorkflowCreator";
@@ -420,7 +420,7 @@ export default function DashboardHub({ onOpenTool }) {
         return <AutoWorkflowEngine onOpenTool={onOpenTool} />;
 
       case "callcenter":
-        return <CallCenterWidget />;
+        return <CallCenterDashboard />;
 
       default:
         return <div className="text-xs text-muted-foreground p-4 text-center">Unknown section</div>;
@@ -484,7 +484,7 @@ export default function DashboardHub({ onOpenTool }) {
         {/* Fixed Call Center Dashboard */}
         <div className="bg-background border-b border-border mb-6 sticky top-0 z-40 p-4 sm:p-6">
           <div className="max-w-[1100px] mx-auto">
-            <CallCenterWidget />
+            <CallCenterDashboard />
           </div>
         </div>
 

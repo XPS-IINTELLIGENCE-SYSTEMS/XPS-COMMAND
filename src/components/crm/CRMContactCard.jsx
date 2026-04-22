@@ -3,6 +3,7 @@ import { Phone, Mail, Globe, MapPin, Brain, ChevronDown, ChevronUp, ExternalLink
 import { base44 } from "@/api/base44Client";
 import CRMValidationPanel from "./CRMValidationPanel";
 import CallActionBar from "../callcenter/CallActionBar";
+import PowerToolsBar from "../shared/PowerToolsBar";
 
 const STAGE_COLORS = {
   Incoming: "#6b7280", Validated: "#3b82f6", Qualified: "#8b5cf6", Prioritized: "#f59e0b",
@@ -155,6 +156,9 @@ Return: employee_count (number), estimated_revenue (number), years_in_business (
               ))}
             </div>
           </div>
+
+          {/* Power Tools — Takeoff, Proposal, Website, Workflow, Project */}
+          <PowerToolsBar contact={callContact} compact={true} />
 
           {/* Call Center integration */}
           <CallActionBar contact={callContact} onOutcome={() => onRefresh?.()} intel={null} />

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Phone, Mail, MessageCircle, Share2, FileText, Brain, Send, Calendar, Bot, CheckCircle2, X, Clock, Star, Loader2, PhoneCall } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import PowerToolsBar from "../shared/PowerToolsBar";
 
 const OUTCOMES = [
   { id: "Sold", label: "SOLD ✅", color: "#22c55e", icon: CheckCircle2 },
@@ -153,6 +154,9 @@ XPS Sales Team
           className="w-full glass-input rounded-lg p-2 text-xs text-foreground min-h-[60px] resize-none"
         />
       )}
+
+      {/* Power Tools */}
+      <PowerToolsBar contact={contact} compact={true} />
 
       {/* Outcome buttons */}
       <div className="flex flex-wrap gap-1.5">

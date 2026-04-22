@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { Phone, Loader2, AlertTriangle, CheckCircle2 } from "lucide-react";
+import { Phone, Loader2, AlertTriangle, CheckCircle2, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import WorkflowBuilder from "../callcenter/WorkflowBuilder";
 
 export default function CallCenterWidget() {
   const [queue, setQueue] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentCall, setCurrentCall] = useState(null);
   const [submitting, setSubmitting] = useState(false);
+  const [showWorkflows, setShowWorkflows] = useState(false);
   const [stats, setStats] = useState({ pending: 0, sold: 0, followup: 0 });
 
   useEffect(() => {
@@ -64,8 +66,33 @@ export default function CallCenterWidget() {
     );
   }
 
+  if (showWorkflows) {
+    return (
+      <div className="space-y-3">
+        <button
+          onClick={() => setShowWorkflows(false)}
+          className="text-xs text-muted-foreground hover:text-foreground"
+        >
+          ← Back to Call Center
+        </button>
+        <WorkflowBuilder onClose={() => setShowWorkflows(false)} />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4">
+      {/* Workflow button */}
+      <button
+        onClick={() => setShowWorkflows(true)}
+        className="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 transition-colors text-xs font-bold"
+      >
+        <span className="flex items-center gap-1.5">
+          <Zap className="w-3.5 h-3.5" /> Workflow Automation
+        </span>
+        →
+      </button>
+
       {/* Stats */}
       <div className="grid grid-cols-3 gap-2">
         <div className="bg-primary/5 rounded-lg p-3 text-center">

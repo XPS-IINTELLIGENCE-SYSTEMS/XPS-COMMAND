@@ -6,84 +6,39 @@
       "type": "string",
       "description": "Workflow name"
     },
-    "description": {
+    "nodes": {
       "type": "string",
-      "description": "What this workflow does"
+      "description": "JSON array of workflow nodes"
     },
-    "steps": {
+    "connections": {
       "type": "string",
-      "description": "JSON string of workflow steps"
+      "description": "JSON array of node connections (from -> to)"
     },
-    "status": {
+    "trigger_config": {
       "type": "string",
-      "enum": [
-        "Draft",
-        "Active",
-        "Paused",
-        "Completed",
-        "Failed"
-      ],
-      "default": "Draft"
+      "description": "JSON trigger configuration (manual/scheduled/event)"
     },
-    "trigger": {
-      "type": "string",
-      "description": "What triggers this workflow (manual, schedule, event)"
-    },
-    "schedule": {
-      "type": "string",
-      "description": "Cron or interval schedule string"
-    },
-    "category": {
-      "type": "string",
-      "enum": [
-        "Lead Gen",
-        "Sales",
-        "Bidding",
-        "Marketing",
-        "SEO",
-        "Research",
-        "Operations",
-        "Finance",
-        "Integrations",
-        "Reporting",
-        "Custom"
-      ],
-      "default": "Custom"
-    },
-    "projected_result": {
-      "type": "string",
-      "description": "Expected ROI or outcome"
-    },
-    "is_template": {
+    "is_active": {
       "type": "boolean",
-      "default": false
+      "default": true,
+      "description": "Whether workflow is active"
     },
-    "is_shared": {
-      "type": "boolean",
-      "default": false
-    },
-    "share_link": {
+    "last_executed": {
       "type": "string",
-      "description": "Shareable link token"
+      "format": "date-time",
+      "description": "Last execution timestamp"
     },
-    "linked_tools": {
-      "type": "string",
-      "description": "JSON array of tool/integration IDs used"
-    },
-    "last_run": {
-      "type": "string",
-      "format": "date-time"
-    },
-    "run_count": {
+    "execution_count": {
       "type": "number",
-      "default": 0
+      "default": 0,
+      "description": "Total execution count"
     },
     "notes": {
-      "type": "string"
+      "type": "string",
+      "description": "Workflow notes"
     }
   },
   "required": [
-    "name",
-    "status"
+    "name"
   ]
 }

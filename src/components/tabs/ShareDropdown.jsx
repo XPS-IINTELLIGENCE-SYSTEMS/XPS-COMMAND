@@ -60,8 +60,8 @@ export default function ShareDropdown({ tab, onShare }) {
       <button
         onClick={() => setOpen(!open)}
         disabled={sharing}
-        className="flex items-center gap-1.5 px-3 py-2 rounded-xl border glass-card hover:scale-105 text-muted-foreground hover:text-foreground transition-all text-xs font-medium disabled:opacity-50"
-        style={{ borderColor: "#6366f1", color: "#6366f1" }}
+        className="flex items-center gap-1.5 px-3 py-2 rounded-xl border transition-all text-xs font-medium glass-card hover:scale-105 text-muted-foreground hover:text-foreground disabled:opacity-50"
+        style={{ borderColor: "#6366f1" }}
       >
         <Share2 className="w-3.5 h-3.5" />
         Share

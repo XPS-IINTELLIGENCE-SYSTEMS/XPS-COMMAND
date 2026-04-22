@@ -30,6 +30,13 @@ export default function DashboardCreatorDropdown() {
     setOpen(false);
   };
 
+  const handleLoadDashboard = (dashboardId) => {
+    // Load pre-generated dashboard directly
+    // TODO: Integrate with your dashboard loading logic
+    console.log("Loading dashboard:", dashboardId);
+    setOpen(false);
+  };
+
   const handleExistingTool = (toolPath) => {
     navigate(toolPath);
     setOpen(false);
@@ -55,7 +62,7 @@ export default function DashboardCreatorDropdown() {
               {preGeneratedDashboards.map(opt => (
                 <button
                   key={opt.id}
-                  onClick={() => handleSelect(opt.id)}
+                  onClick={() => handleLoadDashboard(opt.id)}
                   className="w-full flex items-start gap-3 p-2.5 rounded-lg hover:bg-white/10 transition-colors text-left"
                 >
                   <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: `${opt.color}20` }}>

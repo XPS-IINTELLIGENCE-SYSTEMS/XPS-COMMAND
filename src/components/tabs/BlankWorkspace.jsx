@@ -13,6 +13,7 @@ import SaveDropdown from "./SaveDropdown";
 import ShareDropdown from "./ShareDropdown";
 import DashboardCreatorDropdown from "../dashboard/DashboardCreatorDropdown";
 import VerticalScrollTool from "./VerticalScrollTool";
+import WorkspaceDragZone from "./WorkspaceDragZone";
 
 let sectionIdCounter = Date.now();
 const newId = () => `sec_${sectionIdCounter++}`;
@@ -105,6 +106,22 @@ export default function BlankWorkspace({
 
   // --- Drag & Drop ---
   const onDragEnd = (result) => {
+    // Handle tool dropped from dashboard
+    if (result.destination?.droppableId === "workspace-drop-zone" && result.source.droppableId !== "workspace-sections") {
+      const toolId = result.draggableId.replace("tool-", "");
+      const sec = {
+        id: newId(),
+        type: "tool_panel",
+        contentType: "tool",
+        label: toolId.replace(/_/g, " ").toUpperCase(),
+        toolIds: [toolId],
+        notes: "",
+        text: ""
+      };
+      updateSections([...sections, sec]);
+      return;
+    }
+
     if (!result.destination) return;
     const reordered = Array.from(sections);
     const [moved] = reordered.splice(result.source.index, 1);
@@ -226,9 +243,10 @@ export default function BlankWorkspace({
 
         {/* Sections with drag & drop */}
         <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="workspace-sections">
-            {(provided) => (
-              <div ref={provided.innerRef} {...provided.droppableProps} className="space-y-3">
+          <WorkspaceDragZone>
+            <Droppable droppableId="workspace-sections">
+              {(provided) => (
+                <div ref={provided.innerRef} {...provided.droppableProps} className="space-y-3">
                 {sections.map((section, idx) => {
                   const isDivider = section.type === "divider";
                   if (!isDivider) sectionNumber++;
@@ -262,7 +280,8 @@ export default function BlankWorkspace({
                 {provided.placeholder}
               </div>
             )}
-          </Droppable>
+            </Droppable>
+          </WorkspaceDragZone>
         </DragDropContext>
 
         {/* Quick add button at bottom */}

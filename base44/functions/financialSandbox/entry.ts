@@ -41,7 +41,7 @@ Deno.serve(async (req) => {
     `[${p.bucket}] ${p.portfolio_name}: $${(p.current_balance||0).toFixed(2)} (start $${(p.initial_balance||0).toFixed(2)}, P&L $${(p.total_gain_loss||0).toFixed(2)}). Holdings: ${p.holdings || '[]'}. Strategy: ${p.strategy}`
   ).join('\n');
 
-  // Single LLM call with live web data for ALL buckets
+  // Single Groq call with live web data for ALL buckets
   const simulation = await base44.asServiceRole.integrations.Core.InvokeLLM({
     prompt: `You are an elite AI hedge fund manager. Time: ${ts}
 
@@ -50,18 +50,23 @@ LOOK UP REAL LIVE market data: S&P 500, NASDAQ, VIX, BTC, top movers, breaking n
 PORTFOLIO STATE:
 ${portfolioStates}
 
-For EACH bucket, generate trades using REAL current prices and tickers. Include:
-- day_trading: 2-4 trades with real intraday momentum
-- high_risk: 1-2 high-beta plays with real prices
-- mid_risk: 0-1 adjustments
-- low_risk: 0-1 adjustments
-- business_venture: revenue progress update
+RISK CONSTRAINTS:
+- Max position size per holding: 15% of bucket
+- Max leverage per bucket: 1.2x
+- Stop-loss triggers at -8% per position
+- Rebalance if sector concentration >25%
 
-For EVERY trade include: action, ticker, live_price (real), shares, amount, pnl, reason (2 sentences citing real market signals/prices/news).
+For EACH bucket, generate trades using REAL current prices and tickers:
+- day_trading: 2-4 intraday trades (apply 0.08% slippage, 0.05% commission per side)
+- high_risk: 1-2 high-beta plays (apply 0.12% slippage, 0.1% commission)
+- mid_risk: 0-1 adjustments (apply 0.06% slippage, 0.05% commission)
+- low_risk: 0-1 adjustments (apply 0.04% slippage, 0.02% commission)
+- business_venture: revenue update + dividend simulation
+
+INCLUDE realistic execution costs: position_pnl = gross_pnl - slippage_loss - commission
 
 Also generate 5 profitability recommendations with specific tickers, entry/target prices, expected gains, and urgency.`,
-    add_context_from_internet: true,
-    model: 'gemini_3_flash',
+    model: 'automatic',
     response_json_schema: {
       type: 'object',
       properties: {

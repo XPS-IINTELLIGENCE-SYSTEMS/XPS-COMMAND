@@ -71,6 +71,7 @@ import CallCenterView from "../callcenter/CallCenterView";
 import StrategyView from "../strategy/StrategyView";
 import SimulationView from "../simulation/SimulationView";
 import EmailTemplatesView from "../outreach/EmailTemplatesView";
+import CommandHub from "../commandhub/CommandHub";
 
 export default function AppContent({ activeView, onChatCommand, onNavigate }) {
   switch (activeView) {
@@ -79,7 +80,7 @@ export default function AppContent({ activeView, onChatCommand, onNavigate }) {
     case "lead_sniper": return <LeadSniperSystem />;
     case "xpress_leads": return <LeadPipelineView forcedTab="XPress" />;
     case "job_leads": return <LeadPipelineView forcedTab="Jobs" />;
-    case "crm": return <CRMView />;
+    case "crm": return <CommandHub />;
     case "data_bank": return <DataBankView />;
     case "find_jobs": return <FindJobsView />;
     case "find_companies": return <FindCompaniesView />;
@@ -140,13 +141,13 @@ export default function AppContent({ activeView, onChatCommand, onNavigate }) {
     case "system_guardian": return <SystemGuardianDashboard />;
     case "financial_sandbox": return <FinancialSandboxView />;
     case "crypto_simulation": return <CryptoSimulationView />;
-    case "orchestrator": return <OrchestratorDashboard />;
+    case "orchestrator": return <CommandHub />;
     case "heygen_studio": return <HeyGenAvatarStudio />;
     case "focus_dashboard": return <FocusDashboard onOpenTool={onNavigate} />;
     case "usage_estimator": return <UsageEstimatorView />;
     case "auto_dashboard": return <div className="max-w-3xl mx-auto p-6"><AutoDashboardConfigurator onApply={() => onNavigate?.("dashboard")} /></div>;
     case "auto_workflow_engine": return <div className="max-w-3xl mx-auto p-6"><AutoWorkflowEngine onOpenTool={onNavigate} /></div>;
-    case "call_center": return <CallCenterView />;
+    case "call_center": return <CommandHub />;
     case "strategy_30day": return <StrategyView />;
     case "workflow_simulator": return <SimulationView />;
     case "email_templates": return <EmailTemplatesView />;

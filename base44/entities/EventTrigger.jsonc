@@ -1,0 +1,77 @@
+{
+  "name": "EventTrigger",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Trigger name"
+    },
+    "trigger_type": {
+      "type": "string",
+      "enum": [
+        "lead_created",
+        "lead_qualified",
+        "lead_won",
+        "lead_lost",
+        "activity_added",
+        "deal_value_threshold",
+        "custom_condition"
+      ],
+      "description": "Type of event to trigger on"
+    },
+    "trigger_condition": {
+      "type": "string",
+      "description": "JSON object defining the condition (e.g., {\"field\": \"bid_stage\", \"operator\": \"equals\", \"value\": \"Awarded\"})"
+    },
+    "action_type": {
+      "type": "string",
+      "enum": [
+        "create_task",
+        "send_alert",
+        "update_field"
+      ],
+      "default": "create_task",
+      "description": "Action to perform when triggered"
+    },
+    "task_title": {
+      "type": "string",
+      "description": "Title of task to create"
+    },
+    "task_template": {
+      "type": "string",
+      "description": "JSON object for task details {\"description\", \"priority\", \"due_date_offset\"}"
+    },
+    "alert_message": {
+      "type": "string",
+      "description": "Message for alerts"
+    },
+    "alert_recipients": {
+      "type": "string",
+      "description": "JSON array of email addresses"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether trigger is enabled"
+    },
+    "trigger_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Times this trigger has fired"
+    },
+    "last_triggered": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last time trigger fired"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Optional notes"
+    }
+  },
+  "required": [
+    "name",
+    "trigger_type",
+    "action_type"
+  ]
+}

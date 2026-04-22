@@ -1,0 +1,90 @@
+{
+  "name": "ScheduledExport",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Export schedule name"
+    },
+    "export_type": {
+      "type": "string",
+      "enum": [
+        "daily_summary",
+        "pipeline_status",
+        "both"
+      ],
+      "default": "daily_summary",
+      "description": "What to export"
+    },
+    "schedule": {
+      "type": "string",
+      "enum": [
+        "daily",
+        "weekly",
+        "custom_cron"
+      ],
+      "default": "daily",
+      "description": "Schedule frequency"
+    },
+    "schedule_time": {
+      "type": "string",
+      "description": "Time in HH:MM format (e.g., 09:00)"
+    },
+    "schedule_days": {
+      "type": "string",
+      "description": "JSON array of days for weekly (0=Sun, 6=Sat), e.g. [1,3,5]"
+    },
+    "cron_expression": {
+      "type": "string",
+      "description": "Cron expression for custom schedules"
+    },
+    "delivery_method": {
+      "type": "string",
+      "enum": [
+        "email",
+        "slack"
+      ],
+      "default": "email",
+      "description": "How to deliver the PDF"
+    },
+    "delivery_target": {
+      "type": "string",
+      "description": "Email address or Slack webhook URL/channel"
+    },
+    "include_metrics": {
+      "type": "boolean",
+      "default": true,
+      "description": "Include performance metrics in export"
+    },
+    "include_charts": {
+      "type": "boolean",
+      "default": true,
+      "description": "Include charts in export"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether schedule is enabled"
+    },
+    "last_run": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last execution timestamp"
+    },
+    "next_run": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Next scheduled execution"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Optional notes"
+    }
+  },
+  "required": [
+    "name",
+    "export_type",
+    "delivery_method",
+    "delivery_target"
+  ]
+}

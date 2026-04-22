@@ -168,6 +168,7 @@ export const DEFAULT_TOOLS = [
   { id: "saved_dashboards", label: "Dashboards", desc: "Pre-built & custom dashboards", iconName: "LayoutDashboard", color: "#6366f1" },
   { id: "workflow_simulator", label: "Workflow Simulator", desc: "Test, score, validate, auto-fix, and harden every workflow before launch", iconName: "Shield", color: "#8b5cf6" },
   { id: "system_optimization", label: "System Optimization", desc: "Full system audit with validation, guardian, and orchestrator agents", iconName: "BarChart3", color: "#d4af37" },
+  { id: "automation_center", label: "Automation Center", desc: "Schedule PDF exports & create event-driven task automations", iconName: "Zap", color: "#f59e0b" },
   ];
 
 // Tool categories with metallic gold headers & descriptions
@@ -218,7 +219,7 @@ export const TOOL_CATEGORIES = [
     id: "automation_workflows",
     title: "Automation & Workflows",
     desc: "Drag-and-drop automation, scheduled scraping, and data routing pipelines.",
-    toolIds: ["workflows", "scheduler", "master_scraper", "approval_queue", "strategy_30day", "workflow_simulator"],
+    toolIds: ["workflows", "scheduler", "master_scraper", "approval_queue", "strategy_30day", "workflow_simulator", "automation_center"],
   },
   {
     id: "system_admin",

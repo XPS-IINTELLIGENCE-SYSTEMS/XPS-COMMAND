@@ -31,6 +31,7 @@ import UIBuilder from './pages/UIBuilder';
 import AgentZero from './pages/AgentZero';
 import FocusWorkspace from './pages/FocusWorkspace';
 import ProjectDrive from './pages/ProjectDrive';
+import MasterDashboard from './pages/MasterDashboard';
 
 /** Shared public marketing routes */
 const PublicRoutes = () => (
@@ -88,6 +89,7 @@ const AuthenticatedApp = () => (
     <Route path="/agent-zero" element={<AgentZero />} />
     <Route path="/focus/:cardId" element={<FocusWorkspace />} />
     <Route path="/projects" element={<ProjectDrive />} />
+    <Route path="/master" element={<MasterDashboard />} />
 
     <Route path="*" element={<PageNotFound />} />
   </Routes>

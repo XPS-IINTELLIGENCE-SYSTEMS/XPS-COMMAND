@@ -14,6 +14,7 @@ const PUBLIC_LINKS = [
 
 const AUTH_LINKS = [
   { to: "/dashboard", label: "Dashboard" },
+  { to: "/master", label: "⚡ Master Ops Dashboard" },
   { to: "/projects", label: "Projects" },
   { to: "/lead-engine", label: "Lead Engine" },
   { to: "/data-bank", label: "Data Bank" },

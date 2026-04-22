@@ -164,6 +164,7 @@ export const DEFAULT_TOOLS = [
   { id: "call_center", label: "Call Center", desc: "AI-enhanced outbound call system — unified call log, scripts, products, invoicing", iconName: "Phone", color: "#22c55e" },
   { id: "email_templates", label: "Email Templates", desc: "XPS branded outreach — GC bid list, contractor intro, epoxy intro, follow-up, sales", iconName: "Send", color: "#ec4899" },
   { id: "strategy_30day", label: "30-Day Strategy", desc: "Systematic launch plan — daily actions, progress tracking, AI priorities", iconName: "Target", color: "#d4af37" },
+  { id: "master_ops", label: "⚡ Master Ops Dashboard", desc: "All tools unified — AI orchestrated • Endless scroll • Fully linked", iconName: "Zap", color: "#d4af37" },
   { id: "workflow_simulator", label: "Workflow Simulator", desc: "Test, score, validate, auto-fix, and harden every workflow before launch", iconName: "Shield", color: "#8b5cf6" },
 ];
 

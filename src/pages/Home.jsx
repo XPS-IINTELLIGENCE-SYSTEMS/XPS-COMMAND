@@ -105,7 +105,7 @@ export default function Home() {
 
   // When opening a tool, switch mobile tab to home (content view)
   // Some tools open as standalone pages
-  const STANDALONE_PAGES = { ui_builder: "/ui-builder", agent_zero: "/agent-zero" };
+  const STANDALONE_PAGES = { ui_builder: "/ui-builder", agent_zero: "/agent-zero", master_ops: "/master" };
   const handleOpenTool = (toolId) => {
     if (STANDALONE_PAGES[toolId]) {
       window.location.href = STANDALONE_PAGES[toolId];

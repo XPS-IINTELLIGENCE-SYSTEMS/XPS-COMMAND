@@ -152,6 +152,10 @@ export default function AppContent({ activeView, onChatCommand, onNavigate }) {
     case "strategy_30day": return <StrategyView />;
     case "workflow_simulator": return <SimulationView />;
     case "email_templates": return <EmailTemplatesView />;
+    case "master_ops": {
+      window.location.href = "/master";
+      return null;
+    }
     case "ui_builder": return null; // Opens as standalone page at /ui-builder
     case "agent_zero": return null; // Opens as standalone page at /agent-zero
     default: return <div className="text-center py-20 text-muted-foreground">View not found</div>;

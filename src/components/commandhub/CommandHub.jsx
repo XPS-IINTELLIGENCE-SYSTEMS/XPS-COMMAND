@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { Phone, Users, Target, Crown, Loader2, RefreshCcw, Mail, Briefcase, Building2, Brain, Zap } from "lucide-react";
+import { Phone, Users, Target, Crown, Loader2, RefreshCcw, Mail, Briefcase, Building2, Brain, Zap, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import OrchestratorPanel from "./OrchestratorPanel";
 import DataQualityBar from "./DataQualityBar";
@@ -11,6 +11,7 @@ import ProductReferencePanel from "../callcenter/ProductReferencePanel";
 import ProspectDatabaseTab from "../callcenter/ProspectDatabaseTab";
 import CRMView from "../dashboard/CRMView";
 import EmailTemplatesView from "../outreach/EmailTemplatesView";
+import BadDataTab from "../callcenter/BadDataTab";
 
 const TABS = [
   { id: "orchestrator", label: "CEO Ops", icon: Crown, color: "#d4af37" },
@@ -21,6 +22,7 @@ const TABS = [
   { id: "closed", label: "Closed", icon: Target, color: "#22c55e" },
   { id: "followups", label: "Follow-Ups", icon: Zap, color: "#f59e0b" },
   { id: "products", label: "XPS Products", icon: Briefcase, color: "#8b5cf6" },
+  { id: "bad_data", label: "Bad Data", icon: AlertTriangle, color: "#ef4444" },
 ];
 
 export default function CommandHub() {
@@ -164,6 +166,7 @@ export default function CommandHub() {
       {tab === "closed" && <ClosedDealsTab callLogs={callLogs.filter(l => l.call_outcome === "Sold")} onRefresh={loadAll} />}
       {tab === "followups" && <FollowUpTab callLogs={callLogs.filter(l => ["Callback", "No Answer", "Voicemail"].includes(l.call_outcome))} queue={callQueue} onRefresh={loadAll} />}
       {tab === "products" && <ProductReferencePanel />}
+      {tab === "bad_data" && <BadDataTab queue={callQueue} onRefresh={loadAll} />}
     </div>
   );
 }

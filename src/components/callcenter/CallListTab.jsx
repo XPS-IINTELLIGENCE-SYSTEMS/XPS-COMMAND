@@ -17,7 +17,8 @@ export default function CallListTab({ queue, callLogs, onRefresh }) {
   const [hideCompleted, setHideCompleted] = useState(false);
 
   const filtered = useMemo(() => {
-    let list = [...queue];
+    // Exclude high-risk records — they go to the Bad Data tab
+    let list = queue.filter(c => c.risk !== "high");
 
     if (hideCompleted) {
       const completedIds = new Set(callLogs.filter(l => l.call_outcome === "Sold" || l.call_outcome === "No").map(l => l.source_id));

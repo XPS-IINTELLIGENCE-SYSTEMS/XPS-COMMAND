@@ -1,4 +1,4 @@
-import { Database, Users, Mail, Phone, CheckCircle2, Layers } from "lucide-react";
+import { Database, Users, Mail, Phone, CheckCircle2, Layers, AlertTriangle, XCircle, Shield } from "lucide-react";
 
 export default function CompileResultsPanel({ data }) {
   const s = data?.summary;
@@ -55,10 +55,14 @@ export default function CompileResultsPanel({ data }) {
         </div>
       </div>
 
-      {/* Contact Quality */}
-      <div className="flex gap-3 text-[10px]">
+      {/* Contact Quality + Validation */}
+      <div className="flex gap-3 text-[10px] flex-wrap">
         <div className="flex items-center gap-1"><Mail className="w-3 h-3 text-blue-400" /> <span className="text-muted-foreground">With Email:</span> <span className="font-bold">{s.with_email?.toLocaleString()}</span></div>
         <div className="flex items-center gap-1"><Phone className="w-3 h-3 text-green-400" /> <span className="text-muted-foreground">With Phone:</span> <span className="font-bold">{s.with_phone?.toLocaleString()}</span></div>
+        <span className="text-border">|</span>
+        <div className="flex items-center gap-1"><CheckCircle2 className="w-3 h-3 text-green-400" /> <span className="text-green-400 font-bold">{s.validation?.clean || 0} clean</span></div>
+        <div className="flex items-center gap-1"><AlertTriangle className="w-3 h-3 text-yellow-400" /> <span className="text-yellow-400 font-bold">{s.validation?.medium || 0} med</span></div>
+        <div className="flex items-center gap-1"><XCircle className="w-3 h-3 text-red-400" /> <span className="text-red-400 font-bold">{s.validation?.high || 0} high risk</span></div>
       </div>
 
       {/* Dupe Log Sample */}

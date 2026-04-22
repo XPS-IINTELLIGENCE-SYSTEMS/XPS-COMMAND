@@ -4,7 +4,8 @@ import { base44 } from "@/api/base44Client";
 import CallScriptPanel from "./CallScriptPanel";
 import CallActionBar from "./CallActionBar";
 
-const SOURCE_COLORS = { Lead: "#d4af37", Contractor: "#22c55e", ContractorCompany: "#3b82f6", CommercialJob: "#f59e0b" };
+const SOURCE_COLORS = { Lead: "#d4af37", Contractor: "#22c55e", ContractorCompany: "#3b82f6", CommercialJob: "#f59e0b", ProspectCompany: "#ec4899", "GC Company": "#3b82f6", Prospect: "#ec4899", Job: "#f59e0b", Outreach: "#8b5cf6", Registry: "#14b8a6", Bid: "#06b6d4", Proposal: "#a855f7" };
+const RISK_BADGES = { high: { color: "#ef4444", label: "⚠ RISK" }, medium: { color: "#f59e0b", label: "△" }, low: { color: "#3b82f6", label: "" }, clean: { color: "#22c55e", label: "" } };
 
 export default function CallContactCard({ contact, onOutcome, onRefresh }) {
   const [expanded, setExpanded] = useState(false);
@@ -86,6 +87,11 @@ Provide:
                 outcomeLabel === "Callback" ? "bg-blue-500/20 text-blue-400" :
                 "bg-red-500/20 text-red-400"
               }`}>{outcomeLabel}</span>
+            )}
+            {contact.risk && RISK_BADGES[contact.risk]?.label && (
+              <span className="text-[8px] font-bold px-1.5 py-0.5 rounded" style={{ backgroundColor: `${RISK_BADGES[contact.risk].color}15`, color: RISK_BADGES[contact.risk].color }}>
+                {RISK_BADGES[contact.risk].label}
+              </span>
             )}
           </div>
           <div className="flex items-center gap-3 text-[10px] text-muted-foreground mt-0.5">

@@ -99,13 +99,14 @@ Deno.serve(async (req) => {
     for (const lead of unenriched) {
       try {
         const enrichment = await base44.asServiceRole.integrations.Core.InvokeLLM({
-          prompt: `Research and provide intelligence on this company for XPS sales team:
-Company: ${lead.company} | Contact: ${lead.contact_name} | Location: ${lead.location || lead.city + ', ' + lead.state}
-Industry: ${lead.vertical || 'Unknown'} | Specialty: ${lead.specialty || 'Unknown'}
-Current materials: ${lead.existing_material || 'Unknown'}
+           prompt: `Research and provide intelligence on this company for XPS sales team:
+        Company: ${lead.company} | Contact: ${lead.contact_name} | Location: ${lead.location || lead.city + ', ' + lead.state}
+        Industry: ${lead.vertical || 'Unknown'} | Specialty: ${lead.specialty || 'Unknown'}
+        Current materials: ${lead.existing_material || 'Unknown'}
 
-Provide: business summary, recommended XPS products, estimated deal value, best approach strategy, and a lead score 0-100.`,
-          add_context_from_internet: true,
+        Provide: business summary, recommended XPS products, estimated deal value, best approach strategy, and a lead score 0-100.`,
+           model: 'gpt_5_mini',
+           add_context_from_internet: true,
           response_json_schema: {
             type: "object",
             properties: {
@@ -173,25 +174,26 @@ Provide: business summary, recommended XPS products, estimated deal value, best 
   // ═══════════════════════════════════════════════
   const analysis = await base44.asServiceRole.integrations.Core.InvokeLLM({
     prompt: `You are the CEO of XPS Intelligence — the AI operations platform for Xtreme Polishing Systems.
-Today is ${new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'America/New_York' })}.
+  Today is ${new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'America/New_York' })}.
 
-DATABASE STATE:
-${JSON.stringify(snapshot, null, 2)}
+  DATABASE STATE:
+  ${JSON.stringify(snapshot, null, 2)}
 
-ACTIONS COMPLETED THIS CYCLE:
-${results.actions.join('\n')}
+  ACTIONS COMPLETED THIS CYCLE:
+  ${results.actions.join('\n')}
 
-ERRORS: ${results.errors.length > 0 ? results.errors.join('; ') : 'None'}
+  ERRORS: ${results.errors.length > 0 ? results.errors.join('; ') : 'None'}
 
-Based on this data, provide:
-1. MORNING BRIEFING: 3-4 paragraph executive summary of business state
-2. TOP 5 PRIORITIES for today (specific, actionable)
-3. RECOMMENDATIONS: what needs fixing, optimizing, or attention
-4. RISK ALERTS: anything concerning
-5. REVENUE OPPORTUNITY: biggest immediate revenue actions
-6. SYSTEM HEALTH: 0-100 score with explanation
+  Based on this data, provide:
+  1. MORNING BRIEFING: 3-4 paragraph executive summary of business state
+  2. TOP 5 PRIORITIES for today (specific, actionable)
+  3. RECOMMENDATIONS: what needs fixing, optimizing, or attention
+  4. RISK ALERTS: anything concerning
+  5. REVENUE OPPORTUNITY: biggest immediate revenue actions
+  6. SYSTEM HEALTH: 0-100 score with explanation
 
-Be specific with numbers. Reference actual counts from the data. Think like a real CEO running a $10M flooring company.`,
+  Be specific with numbers. Reference actual counts from the data. Think like a real CEO running a $10M flooring company.`,
+    model: 'gpt_5_mini',
     response_json_schema: {
       type: "object",
       properties: {

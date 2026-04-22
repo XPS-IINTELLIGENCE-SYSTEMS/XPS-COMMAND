@@ -56,6 +56,7 @@ Deno.serve(async (req) => {
 
   // ── STEP 2: STRATEGIC PLANNING via LLM ──
   const plan = await base44.asServiceRole.integrations.Core.InvokeLLM({
+    model: 'gpt_5_mini',
     prompt: `You are the CEO/Orchestrator of XPS Intelligence — an autonomous AI-powered business operations platform for a commercial flooring company. The time is ${ts} (Eastern).
 
 CURRENT SYSTEM STATE:
@@ -176,8 +177,9 @@ Output a detailed operational plan with specific, executable actions.`,
   }
 
   // ── STEP 6: GENERATE HUMAN SUMMARY ──
-  const humanSummary = await base44.asServiceRole.integrations.Core.InvokeLLM({
-    prompt: `Write a clear, warm, human-readable summary of what the AI orchestrator just did for the business owner. Write it like a trusted operations manager giving an end-of-shift report. Use plain English, no jargon.
+   const humanSummary = await base44.asServiceRole.integrations.Core.InvokeLLM({
+     model: 'gpt_5_mini',
+     prompt: `Write a clear, warm, human-readable summary of what the AI orchestrator just did for the business owner. Write it like a trusted operations manager giving an end-of-shift report. Use plain English, no jargon.
 
 CEO BRIEFING: ${plan.ceo_briefing}
 

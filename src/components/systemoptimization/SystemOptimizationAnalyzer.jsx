@@ -47,8 +47,8 @@ export default function SystemOptimizationAnalyzer() {
       });
       setOrchestratorPlan(orchestratorRes?.data?.plan || {});
 
-      // Step 5: Generate full report
-      const reportRes = await base44.functions.invoke("generateSystemReport", {
+      // Step 5: Generate comprehensive report
+      const reportRes = await base44.functions.invoke("generateComprehensiveSystemReport", {
         analysisData: analysisRes?.data?.analysis,
         validationData: validationRes?.data?.validation,
         guardianData: guardianRes?.data?.recommendations,
@@ -301,23 +301,163 @@ export default function SystemOptimizationAnalyzer() {
           </div>
         )}
 
-        {markdownReport && selectedPhase === 5 && (
-          <div className="space-y-4">
-            <div className="bg-accent/10 border border-accent/30 rounded-lg p-4">
-              <div className="flex items-center gap-2 mb-2">
-                <Download className="w-5 h-5 text-accent" />
-                <span className="font-bold text-foreground">Full Markdown Report</span>
+        {fullReport && selectedPhase === 5 && (
+          <div className="space-y-6">
+            {/* Executive Summary */}
+            <div className="bg-primary/10 border border-primary/30 rounded-lg p-6">
+              <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-2">
+                <BarChart3 className="w-6 h-6 text-primary" />
+                Executive Summary
+              </h2>
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <div className="bg-card rounded p-3">
+                  <div className="text-2xl font-bold text-primary">{fullReport.executiveSummary.systemHealthScore}%</div>
+                  <div className="text-xs text-muted-foreground">Overall System Health</div>
+                </div>
+                <div className="bg-card rounded p-3">
+                  <div className="text-2xl font-bold text-red-500">{fullReport.executiveSummary.criticalIssuesCount}</div>
+                  <div className="text-xs text-muted-foreground">Critical Issues</div>
+                </div>
               </div>
-              <p className="text-sm text-muted-foreground">Comprehensive analysis ready to export</p>
+              <div className="space-y-2 text-sm">
+                <p><strong>Refactor Priority:</strong> {fullReport.executiveSummary.refactorPriority}</p>
+                <p><strong>Estimated Effort:</strong> {fullReport.executiveSummary.estimatedRefactorEffort}</p>
+                <div>
+                  <strong>Key Recommendations:</strong>
+                  <ul className="mt-2 space-y-1 ml-4">
+                    {fullReport.executiveSummary.keyRecommendations.map((rec, i) => (
+                      <li key={i} className="text-muted-foreground">• {rec}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
             </div>
 
-            <div>
-              <h3 className="font-bold text-foreground mb-3">Report Preview</h3>
-              <pre className="bg-black/30 rounded-lg p-4 text-xs text-foreground overflow-auto max-h-96 border border-border whitespace-pre-wrap">
-                {markdownReport}
-              </pre>
+            {/* System State */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-bold text-foreground">Current System State</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-card border border-border rounded-lg p-4">
+                  <div className="text-sm font-bold text-foreground mb-2">Entities</div>
+                  <div className="text-xs text-muted-foreground space-y-1">
+                    <p>Total: {fullReport.systemState.entities.total}</p>
+                    <p>Data Integrity: {fullReport.systemState.entities.dataIntegrityScore}%</p>
+                    <p>Orphaned Records: {fullReport.systemState.entities.orphanedRecords}</p>
+                  </div>
+                </div>
+                <div className="bg-card border border-border rounded-lg p-4">
+                  <div className="text-sm font-bold text-foreground mb-2">Functions</div>
+                  <div className="text-xs text-muted-foreground space-y-1">
+                    <p>Total: {fullReport.systemState.functions.total}</p>
+                    <p>Unmaintained: {fullReport.systemState.functions.unmaintainedCount}</p>
+                    <p>Error Prone: {fullReport.systemState.functions.errorProne}</p>
+                  </div>
+                </div>
+                <div className="bg-card border border-border rounded-lg p-4">
+                  <div className="text-sm font-bold text-foreground mb-2">Automations</div>
+                  <div className="text-xs text-muted-foreground space-y-1">
+                    <p>Total: {fullReport.systemState.automations.total}</p>
+                    <p>Active: {fullReport.systemState.automations.active}</p>
+                    <p>Failure Rate: {fullReport.systemState.automations.failureRate}%</p>
+                  </div>
+                </div>
+                <div className="bg-card border border-border rounded-lg p-4">
+                  <div className="text-sm font-bold text-foreground mb-2">Integrations</div>
+                  <div className="text-xs text-muted-foreground space-y-1">
+                    <p>Total: {fullReport.systemState.integrations.total}</p>
+                    <p>Authorized: {fullReport.systemState.integrations.authorized}</p>
+                    <p>Disconnected: {fullReport.systemState.integrations.disconnectedServices}</p>
+                  </div>
+                </div>
+              </div>
             </div>
 
+            {/* Architecture Assessment */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-bold text-foreground">Architecture Assessment</h3>
+              <div className="bg-card border border-border rounded-lg p-4 space-y-3">
+                <div>
+                  <div className="text-sm font-bold text-foreground mb-1">Current State</div>
+                  <div className="text-xs text-muted-foreground">{fullReport.architectureAssessment.currentState}</div>
+                </div>
+                <div>
+                  <div className="text-sm font-bold text-foreground mb-2">Bottlenecks</div>
+                  <div className="space-y-2 text-xs">
+                    {fullReport.architectureAssessment.bottlenecks.map((bn, i) => (
+                      <div key={i} className="bg-black/20 rounded p-2">
+                        <div className="font-medium text-red-400">{bn.name}</div>
+                        <div className="text-muted-foreground mt-1">Impact: {bn.impact}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-sm font-bold text-foreground mb-2">Scalability Issues</div>
+                  <ul className="space-y-1 text-xs text-muted-foreground">
+                    {fullReport.architectureAssessment.scalabilityIssues.map((issue, i) => (
+                      <li key={i}>• {issue}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* Full Refactor Roadmap */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-bold text-foreground">Refactor Roadmap (16 Weeks)</h3>
+              <div className="space-y-3">
+                {Object.entries(fullReport.refactorRoadmap).map(([key, phase]) => (
+                  <div key={key} className="bg-card border border-border rounded-lg p-4">
+                    <div className="flex items-start justify-between mb-3">
+                      <div>
+                        <div className="font-bold text-foreground">{phase.name}</div>
+                        <div className="text-xs text-muted-foreground mt-1">{phase.objectives.join(" • ")}</div>
+                      </div>
+                      <div className="text-xs bg-primary/20 text-primary px-2 py-1 rounded">{phase.duration}</div>
+                    </div>
+                    <div className="space-y-2 text-xs">
+                      {phase.tasks && phase.tasks.slice(0, 2).map((task, i) => (
+                        <div key={i} className="bg-black/20 rounded p-2">
+                          <div className="font-medium">{task.task}</div>
+                          <div className="text-muted-foreground mt-1">Owner: {task.owner} | Effort: {task.estimatedEffort}</div>
+                        </div>
+                      ))}
+                      {phase.successCriteria && (
+                        <div className="bg-green-500/10 border border-green-500/20 rounded p-2">
+                          <div className="font-medium text-green-400">Success Criteria</div>
+                          <ul className="mt-1 space-y-1 text-muted-foreground text-xs">
+                            {phase.successCriteria.slice(0, 2).map((c, i) => (
+                              <li key={i}>✓ {c}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Implementation Strategy */}
+            <div className="bg-card border border-border rounded-lg p-4 space-y-3">
+              <h3 className="font-bold text-foreground">Implementation Strategy</h3>
+              <div className="grid grid-cols-2 gap-4 text-xs">
+                <div>
+                  <div className="text-muted-foreground">Timeline</div>
+                  <div className="font-bold text-foreground">{fullReport.implementationStrategy.timeline}</div>
+                </div>
+                <div>
+                  <div className="text-muted-foreground">Team Size</div>
+                  <div className="font-bold text-foreground">{fullReport.implementationStrategy.teamSize}</div>
+                </div>
+                <div>
+                  <div className="text-muted-foreground">Total Effort</div>
+                  <div className="font-bold text-foreground">{fullReport.implementationStrategy.totalEstimatedEffort}</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Export Buttons */}
             <div className="flex gap-2">
               <button
                 onClick={exportReport}

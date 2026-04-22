@@ -1,14 +1,16 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { Phone, Users, PhoneForwarded, Trophy, Clock, RefreshCcw, Loader2, Filter, Search, ArrowUpDown } from "lucide-react";
+import { Phone, Users, PhoneForwarded, Trophy, Clock, RefreshCcw, Loader2, Filter, Search, ArrowUpDown, Radar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import CallListTab from "./CallListTab";
 import ClosedDealsTab from "./ClosedDealsTab";
 import FollowUpTab from "./FollowUpTab";
 import ProductReferencePanel from "./ProductReferencePanel";
+import ProspectDatabaseTab from "./ProspectDatabaseTab";
 
 const TABS = [
   { id: "active", label: "Call Queue", icon: Phone, color: "#d4af37" },
+  { id: "prospects", label: "Prospect DB", icon: Radar, color: "#ef4444" },
   { id: "closed", label: "Closed Deals", icon: Trophy, color: "#22c55e" },
   { id: "followup", label: "Follow-Ups", icon: Clock, color: "#f59e0b" },
   { id: "products", label: "XPS Products", icon: Users, color: "#6366f1" },
@@ -19,19 +21,22 @@ export default function CallCenterView() {
   const [loading, setLoading] = useState(true);
   const [callQueue, setCallQueue] = useState([]);
   const [callLogs, setCallLogs] = useState([]);
+  const [prospects, setProspects] = useState([]);
   const [syncing, setSyncing] = useState(false);
 
   useEffect(() => { loadAll(); }, []);
 
   const loadAll = async () => {
     setLoading(true);
-    const [leads, contractors, gcCompanies, jobs, logs] = await Promise.all([
+    const [leads, contractors, gcCompanies, jobs, logs, prospectList] = await Promise.all([
       base44.entities.Lead.list("-score", 200).catch(() => []),
       base44.entities.Contractor.list("-score", 200).catch(() => []),
       base44.entities.ContractorCompany.list("-created_date", 200).catch(() => []),
       base44.entities.CommercialJob.list("-urgency_score", 100).catch(() => []),
       base44.entities.CallLog.list("-created_date", 500).catch(() => []),
+      base44.entities.ProspectCompany.list("-cold_call_priority", 500).catch(() => []),
     ]);
+    setProspects(prospectList);
     setCallLogs(logs);
 
     // Build unified call queue — merge all sources, skip already-logged
@@ -142,6 +147,36 @@ export default function CallCenterView() {
       });
     });
 
+    // Add prospect companies to the call queue
+    prospectList.forEach(p => {
+      if (!p.phone && !p.email) return;
+      if (p.cold_call_status === "Sold" || p.cold_call_status === "Not Interested" || p.cold_call_status === "Out of Business") return;
+      queue.push({
+        id: p.id,
+        source_type: "ProspectCompany",
+        source_id: p.id,
+        company_name: p.company_name || "Unknown",
+        contact_name: p.owner_name || "",
+        phone: p.phone || "",
+        email: p.email || "",
+        website: p.website || "",
+        location: `${p.city || ""}, ${p.state || ""}`.trim(),
+        priority: p.cold_call_priority || 5,
+        score: (p.cold_call_priority || 5) * 10,
+        employee_count: p.employee_count || 0,
+        years_in_business: p.years_in_business || 0,
+        vertical: p.specialty || "Epoxy",
+        specialty: p.specialty || "",
+        existing_products: p.current_products || "",
+        ai_insight: p.ai_summary || "",
+        ai_recommendation: p.ai_pitch || "",
+        notes: p.notes || "",
+        lead_type: "XPress",
+        logged: loggedSourceIds.has(p.id),
+        lastLog: logs.find(log => log.source_id === p.id),
+      });
+    });
+
     // Sort by priority descending
     queue.sort((a, b) => (b.priority || 0) - (a.priority || 0));
     setCallQueue(queue);
@@ -153,6 +188,7 @@ export default function CallCenterView() {
     called: callLogs.length,
     sold: callLogs.filter(l => l.call_outcome === "Sold").length,
     callbacks: callLogs.filter(l => ["Callback", "No Answer", "Voicemail"].includes(l.call_outcome)).length,
+    prospects: prospects.length,
   };
 
   return (
@@ -176,9 +212,10 @@ export default function CallCenterView() {
       </div>
 
       {/* Stats bar */}
-      <div className="grid grid-cols-4 gap-2">
+      <div className="grid grid-cols-5 gap-2">
         {[
           { label: "Total Queue", value: stats.total, color: "#d4af37" },
+          { label: "Prospect DB", value: stats.prospects, color: "#ef4444" },
           { label: "Calls Made", value: stats.called, color: "#3b82f6" },
           { label: "Closed Deals", value: stats.sold, color: "#22c55e" },
           { label: "Follow-Ups", value: stats.callbacks, color: "#f59e0b" },
@@ -215,6 +252,7 @@ export default function CallCenterView() {
       ) : (
         <>
           {tab === "active" && <CallListTab queue={callQueue} callLogs={callLogs} onRefresh={loadAll} />}
+          {tab === "prospects" && <ProspectDatabaseTab prospects={prospects} callLogs={callLogs} onRefresh={loadAll} />}
           {tab === "closed" && <ClosedDealsTab callLogs={callLogs.filter(l => l.call_outcome === "Sold")} onRefresh={loadAll} />}
           {tab === "followup" && <FollowUpTab callLogs={callLogs.filter(l => ["Callback", "No Answer", "Voicemail"].includes(l.call_outcome))} queue={callQueue} onRefresh={loadAll} />}
           {tab === "products" && <ProductReferencePanel />}

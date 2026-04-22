@@ -22,7 +22,8 @@
         "Lead",
         "Contractor",
         "ContractorCompany",
-        "CommercialJob"
+        "CommercialJob",
+        "ProspectCompany"
       ],
       "description": "Which entity this came from"
     },

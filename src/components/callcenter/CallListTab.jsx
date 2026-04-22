@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { Search, Filter, ArrowUpDown } from "lucide-react";
 import CallContactCard from "./CallContactCard";
 
-const SOURCE_FILTERS = ["All", "Lead", "Contractor", "ContractorCompany", "CommercialJob"];
+const SOURCE_FILTERS = ["All", "Lead", "Contractor", "ContractorCompany", "CommercialJob", "ProspectCompany"];
 const SORT_OPTIONS = [
   { id: "priority", label: "Priority" },
   { id: "score", label: "AI Score" },
@@ -71,7 +71,7 @@ export default function CallListTab({ queue, callLogs, onRefresh }) {
                 sourceFilter === f ? "metallic-gold-bg text-background" : "bg-secondary text-muted-foreground hover:text-foreground"
               }`}
             >
-              {f === "ContractorCompany" ? "GC" : f === "CommercialJob" ? "Job" : f}
+              {f === "ContractorCompany" ? "GC" : f === "CommercialJob" ? "Job" : f === "ProspectCompany" ? "Prospect" : f}
             </button>
           ))}
         </div>

@@ -1,0 +1,214 @@
+{
+  "name": "ProspectCompany",
+  "type": "object",
+  "properties": {
+    "company_name": {
+      "type": "string",
+      "description": "Registered business name"
+    },
+    "dba_name": {
+      "type": "string",
+      "description": "Doing business as name"
+    },
+    "owner_name": {
+      "type": "string",
+      "description": "Owner or registered agent name"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "website": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "zip": {
+      "type": "string"
+    },
+    "specialty": {
+      "type": "string",
+      "enum": [
+        "Epoxy",
+        "Decorative Concrete",
+        "Polished Concrete",
+        "Concrete Coatings",
+        "Garage Coatings",
+        "Industrial Coatings",
+        "Polyaspartic",
+        "Polyurea",
+        "Stained Concrete",
+        "Metallic Epoxy",
+        "General Flooring",
+        "Other"
+      ],
+      "default": "Epoxy",
+      "description": "Primary specialty"
+    },
+    "business_type": {
+      "type": "string",
+      "enum": [
+        "LLC",
+        "Corp",
+        "Sole Prop",
+        "Partnership",
+        "LP",
+        "LLP",
+        "Other"
+      ],
+      "default": "LLC"
+    },
+    "formation_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date business was formed/registered"
+    },
+    "years_in_business": {
+      "type": "number",
+      "description": "Calculated years since formation"
+    },
+    "license_number": {
+      "type": "string",
+      "description": "State contractor license number"
+    },
+    "license_status": {
+      "type": "string",
+      "enum": [
+        "Active",
+        "Expired",
+        "Suspended",
+        "Unknown"
+      ],
+      "default": "Unknown"
+    },
+    "employee_count": {
+      "type": "number"
+    },
+    "estimated_revenue": {
+      "type": "number"
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "State Registry",
+        "Secretary of State",
+        "Contractor License Board",
+        "Google Scrape",
+        "BBB",
+        "Yelp",
+        "Manual",
+        "AI Research",
+        "Other"
+      ],
+      "default": "State Registry"
+    },
+    "source_url": {
+      "type": "string"
+    },
+    "source_state_registry": {
+      "type": "string",
+      "description": "Which state registry this was found in"
+    },
+    "search_term_matched": {
+      "type": "string",
+      "description": "Which keyword matched (epoxy, polished concrete, etc.)"
+    },
+    "cold_call_priority": {
+      "type": "number",
+      "description": "Priority score 1-10 (10 = brand new company, highest priority)",
+      "default": 5
+    },
+    "cold_call_status": {
+      "type": "string",
+      "enum": [
+        "Not Contacted",
+        "Attempted",
+        "Contacted",
+        "Interested",
+        "Demo Scheduled",
+        "Sold",
+        "Not Interested",
+        "Wrong Number",
+        "Out of Business"
+      ],
+      "default": "Not Contacted"
+    },
+    "products_interested": {
+      "type": "string",
+      "description": "JSON array of products they are interested in"
+    },
+    "current_products": {
+      "type": "string",
+      "description": "What products/equipment they currently use"
+    },
+    "current_supplier": {
+      "type": "string",
+      "description": "Who they currently buy from"
+    },
+    "needs_training": {
+      "type": "boolean",
+      "default": false,
+      "description": "Do they need training?"
+    },
+    "needs_equipment": {
+      "type": "boolean",
+      "default": false,
+      "description": "Do they need equipment?"
+    },
+    "needs_products": {
+      "type": "boolean",
+      "default": false,
+      "description": "Do they need products/materials?"
+    },
+    "enriched": {
+      "type": "boolean",
+      "default": false,
+      "description": "Has this record been AI-enriched?"
+    },
+    "enrichment_data": {
+      "type": "string",
+      "description": "JSON blob of enriched data"
+    },
+    "ai_summary": {
+      "type": "string",
+      "description": "AI-generated company summary"
+    },
+    "ai_pitch": {
+      "type": "string",
+      "description": "AI-generated pitch recommendation"
+    },
+    "last_contacted": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "follow_up_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "call_count": {
+      "type": "number",
+      "default": 0
+    },
+    "deal_value": {
+      "type": "number",
+      "default": 0
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "company_name",
+    "state",
+    "specialty"
+  ]
+}

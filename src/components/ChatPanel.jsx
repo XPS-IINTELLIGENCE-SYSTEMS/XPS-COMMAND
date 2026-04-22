@@ -527,16 +527,28 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
                 className="flex-1 shimmer-card flex items-center justify-center gap-1 py-1.5 rounded-lg text-[10px] font-medium text-muted-foreground hover:text-foreground transition-colors"
               >
                 <Database className="w-3 h-3 metallic-silver-icon" /> Memory
-              </button>
-            </div>
-            <a
-              href={base44.agents.getWhatsAppConnectURL('xps_assistant')}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-1.5 mt-1.5 py-1.5 rounded-lg bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#25D366] text-[10px] font-medium transition-colors"
-            >
-              <MessageCircle className="w-3 h-3" /> Chat on WhatsApp
-            </a>
+                </button>
+                <button
+                  onClick={() => {
+                    setMessages([]);
+                    setParallelOps([]);
+                    setShowPastConversations(false);
+                    initConversation();
+                  }}
+                  className="flex-1 shimmer-card flex items-center justify-center gap-1 py-1.5 rounded-lg text-[10px] font-medium text-destructive hover:bg-destructive/10 transition-colors"
+                  title="Clear all messages and operations, start fresh"
+                >
+                  <AlertCircle className="w-3 h-3" /> Clear All
+                </button>
+                </div>
+                <a
+                  href={base44.agents.getWhatsAppConnectURL('xps_assistant')}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-1.5 mt-1.5 py-1.5 rounded-lg bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#25D366] text-[10px] font-medium transition-colors"
+                >
+                  <MessageCircle className="w-3 h-3" /> Chat on WhatsApp
+                </a>
           </>
         )}
       </div>

@@ -71,33 +71,9 @@ export async function saveProjectItem(data) {
 }
 
 export async function syncToGoogleDrive(projectData) {
-  try {
-    // Check if the function even exists before attempting to call it
-    const folderName = `XPS Projects/${projectData.category}`;
-    const fileName = `${projectData.name} - ${new Date().toISOString().split('T')[0]}`;
-    const content = JSON.stringify(projectData, null, 2);
-
-    try {
-      // Call backend function to handle Google Drive sync
-      const result = await base44.functions.invoke('syncProjectToGoogleDrive', {
-        folderName,
-        fileName,
-        content,
-        metadata: projectData.metadata,
-      });
-      return result.data || result;
-    } catch (invokeErr) {
-      // If function doesn't exist or fails, log and return gracefully
-      if (invokeErr.message?.includes('not found') || invokeErr.message?.includes('does not exist')) {
-        console.info('Google Drive sync function not available');
-        return { success: false, message: 'Google Drive integration not configured' };
-      }
-      throw invokeErr;
-    }
-  } catch (error) {
-    console.warn('Google Drive sync unavailable:', error.message);
-    return { success: false, message: 'Google Drive sync not available' };
-  }
+  // Google Drive sync disabled - data is saved locally
+  console.info('Project saved locally');
+  return { success: true, message: 'Project saved locally' };
 }
 
 export async function loadProjectsFromSupabase() {

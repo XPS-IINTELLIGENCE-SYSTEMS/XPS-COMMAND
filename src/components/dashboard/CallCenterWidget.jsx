@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 
 export default function CallCenterWidget() {
   const [queue, setQueue] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [currentCall, setCurrentCall] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [stats, setStats] = useState({ pending: 0, sold: 0, followup: 0 });
@@ -17,18 +17,19 @@ export default function CallCenterWidget() {
   const loadQueue = async () => {
     setLoading(true);
     try {
-      const res = await base44.functions.invoke("compileCallQueue", {});
-      const q = res.data?.queue || [];
-      setQueue(q);
+      // Fetch call logs to build queue
+      const logs = await base44.entities.CallLog.list();
+      const pending = logs.filter(l => !["Sold", "No"].includes(l.call_outcome));
+      setQueue(pending);
       
-      // Calculate stats
       setStats({
-        pending: q.filter(c => !c.logged).length,
-        sold: q.filter(c => c.call_outcome === "Sold").length,
-        followup: q.filter(c => ["Callback", "No Answer", "Voicemail"].includes(c.call_outcome)).length,
+        pending: pending.length,
+        sold: logs.filter(l => l.call_outcome === "Sold").length,
+        followup: logs.filter(l => ["Callback", "No Answer", "Voicemail"].includes(l.call_outcome)).length,
       });
     } catch (error) {
       console.error("Failed to load call queue:", error);
+      setQueue([]);
     }
     setLoading(false);
   };
@@ -42,13 +43,9 @@ export default function CallCenterWidget() {
     if (!currentCall) return;
     setSubmitting(true);
     try {
-      await base44.functions.invoke("logCallOutcome", {
-        contact: currentCall.contact_name,
-        company: currentCall.company_name,
-        phone: currentCall.phone,
-        outcome,
+      await base44.entities.CallLog.update(currentCall.id, {
+        call_outcome: outcome,
         deal_value: dealValue,
-        notes: "",
       });
       setCurrentCall(null);
       await loadQueue();

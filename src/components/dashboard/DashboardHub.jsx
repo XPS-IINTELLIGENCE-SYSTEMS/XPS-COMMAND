@@ -33,17 +33,7 @@ const DEFAULT_GREETING = "";
 const DEFAULT_SUBTITLE = "Here's your sales intelligence briefing for today.";
 
 const DEFAULT_SECTIONS = [
-  { id: "sec_callcenter", type: "callcenter", title: "Call Center — Operations Hub", size: "full", collapsed: false, pinned: true },
-  { id: "sec_greeting", type: "greeting", title: "Greeting", size: "full", collapsed: false },
-  { id: "sec_notepad", type: "command_notepad", title: "Command Notepad", size: "half", collapsed: false },
-  { id: "sec_workflow", type: "quick_workflow", title: "Quick Workflow", size: "half", collapsed: false },
-  { id: "sec_pipeline", type: "pipeline", title: "Pipeline", size: "full", collapsed: false },
-  { id: "sec_calendar", type: "calendar", title: "Calendar", size: "full", collapsed: false },
-  { id: "sec_summary", type: "summary", title: "Daily Summary", size: "half", collapsed: false },
-  { id: "sec_sidebar", type: "sidebar", title: "Scheduled Items", size: "half", collapsed: false },
-  { id: "sec_activity", type: "activity", title: "Activity Stream", size: "full", collapsed: false },
-  { id: "sec_favorites", type: "favorites", title: "Favorites", size: "full", collapsed: false },
-  { id: "sec_tools", type: "tools", title: "All Tools", size: "full", collapsed: false },
+  { id: "sec_callcenter", type: "callcenter", title: "Call Center — Operations Hub", size: "full", collapsed: false, pinned: true, locked: true },
 ];
 
 export default function DashboardHub({ onOpenTool }) {
@@ -161,6 +151,7 @@ export default function DashboardHub({ onOpenTool }) {
   };
 
   const removeSection = (sectionId) => {
+    if (sections.find(s => s.id === sectionId)?.locked) return; // Prevent removing locked sections
     const updated = sections.filter(s => s.id !== sectionId);
     setSections(updated);
     saveConfig({ sections: updated });
@@ -490,8 +481,8 @@ export default function DashboardHub({ onOpenTool }) {
                       >
                         <DashboardSection
                           section={section}
-                          editMode={editMode}
-                          dragHandleProps={prov.dragHandleProps}
+                          editMode={editMode && !section.locked}
+                          dragHandleProps={section.locked ? null : prov.dragHandleProps}
                           onRemove={() => removeSection(section.id)}
                           onToggleCollapse={() => updateSection(section.id, { collapsed: !section.collapsed })}
                           onToggleSize={() => updateSection(section.id, { size: section.size === "full" ? "half" : "full" })}

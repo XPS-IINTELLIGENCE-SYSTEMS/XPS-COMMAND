@@ -12,6 +12,8 @@ import TradeLog from "./TradeLog.jsx";
 import AIRecommendations from "./AIRecommendations.jsx";
 import AIReflectionLog from "./AIReflectionLog.jsx";
 import SandboxSchedulerStatus from "./SandboxSchedulerStatus.jsx";
+import BacktestResultsView from "./BacktestResultsView.jsx";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 export default function FinancialSandboxView() {
   const [portfolios, setPortfolios] = useState([]);
@@ -20,6 +22,7 @@ export default function FinancialSandboxView() {
   const [running, setRunning] = useState(false);
   const [initializing, setInitializing] = useState(false);
   const [selectedBucket, setSelectedBucket] = useState(null);
+  const [showBacktest, setShowBacktest] = useState(false);
 
   useEffect(() => { loadData(); }, []);
 
@@ -79,8 +82,25 @@ export default function FinancialSandboxView() {
 
   return (
     <div className="space-y-4 p-4 sm:p-6 max-w-[1200px] mx-auto">
-      <PortfolioHeader totalValue={totalValue} totalPnl={totalPnl} totalPnlPct={totalPnlPct}
-        totalDayPnl={totalDayPnl} totalTrades={totalTrades} running={running} onRunCycle={runCycle} />
+      <div className="flex items-center justify-between">
+        <div className="flex-1">
+          <PortfolioHeader totalValue={totalValue} totalPnl={totalPnl} totalPnlPct={totalPnlPct}
+            totalDayPnl={totalDayPnl} totalTrades={totalTrades} running={running} onRunCycle={runCycle} />
+        </div>
+        <Dialog open={showBacktest} onOpenChange={setShowBacktest}>
+          <DialogTrigger asChild>
+            <Button variant="outline" className="gap-2 ml-3">
+              📊 Backtest
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Historical Backtest — 30-Day Strategy Analysis</DialogTitle>
+            </DialogHeader>
+            <BacktestResultsView onClose={() => setShowBacktest(false)} />
+          </DialogContent>
+        </Dialog>
+      </div>
       
       {/* Realistic Performance Metrics */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">

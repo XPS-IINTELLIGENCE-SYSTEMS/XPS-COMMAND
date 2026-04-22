@@ -18,6 +18,7 @@ import BadDataTab from "../callcenter/BadDataTab";
 import LeadSniperSystem from "../leadsniper/LeadSniperSystem";
 import AutoWorkflowEngine from "../dashboard/AutoWorkflowEngine";
 import SimulationView from "../simulation/SimulationView";
+import SandboxRunner from "../simulation/SandboxRunner";
 import ApprovalQueueView from "../approvals/ApprovalQueueView";
 import AutoEnhanceView from "../enhance/AutoEnhanceView";
 import MediaHub from "../media/MediaHub";
@@ -151,7 +152,12 @@ export default function WarRoom() {
         </div>
       )}
 
-      {section === "sandbox" && <SimulationView />}
+      {section === "sandbox" && (
+        <div className="space-y-4">
+          <SandboxRunner />
+          <SimulationView />
+        </div>
+      )}
       {section === "approvals" && <ApprovalQueueView />}
       {section === "enhance" && <AutoEnhanceView />}
       {section === "analytics" && <PipelineCharts />}

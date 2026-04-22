@@ -45,6 +45,7 @@ import BidPipelineDashboard from "../components/bidpipeline/BidPipelineDashboard
 import SentimentAnalystView from "../components/sentiment/SentimentAnalystView";
 import DataQualityBar from "../components/commandhub/DataQualityBar";
 import SandboxSystem from "../components/sandbox/SandboxSystem";
+import SystemGuardian from "../components/guardian/SystemGuardian";
 
 // ── Section wrapper component ──────────────────────────────────────────────
 function DashSection({ id, icon: SectionIcon, title, badge, color = "#d4af37", children, defaultOpen = true, actions }) {
@@ -248,6 +249,11 @@ Recommend:
             </button>
           ))}
         </div>
+      </div>
+
+      {/* ── System Guardian ─────────────────────────────────────────── */}
+      <div className="px-4 pt-3">
+        <SystemGuardian onRefresh={loadAll} />
       </div>
 
       {/* ── Data Quality Bar ────────────────────────────────────────── */}

@@ -213,6 +213,9 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
     processedToolCallsRef.current = new Set();
     const agentCfg = AGENTS.find(a => a.id === currentAgentName) || AGENTS[0];
     try {
+      if (!base44.agents || typeof base44.agents.createConversation !== 'function') {
+        throw new Error('Agent API not available on base44 client');
+      }
       const conv = await base44.agents.createConversation({
         agent_name: currentAgentName,
         metadata: { name: `${agentCfg.fullName || currentAgentName} Session` },
@@ -221,6 +224,7 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
       conversationRef.current = conv;
     } catch (err) {
       console.error("Failed to create conversation:", err);
+      alert('Agent system unavailable. Please reload the page.');
     }
     setInitializing(false);
   };
@@ -231,6 +235,9 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
     setInput("");
     setLoading(true);
     try {
+      if (!base44.agents || typeof base44.agents.addMessage !== 'function') {
+        throw new Error('Agent API not available');
+      }
       await base44.agents.addMessage(conversation, { role: "user", content: msg });
     } catch (err) {
       console.error("Send message error:", err);
@@ -238,6 +245,8 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
         // Conversation belongs to another user session — create a fresh one
         await initConversation();
         setInput(msg); // restore the message so user can retry
+      } else {
+        alert(`Error sending message: ${err.message}`);
       }
       setLoading(false);
     }
@@ -245,16 +254,24 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
 
   const handleNewChat = async () => {
     setInitializing(true);
-    const agentCfg = AGENTS.find(a => a.id === currentAgentName) || AGENTS[0];
-    const conv = await base44.agents.createConversation({
-      agent_name: currentAgentName,
-      metadata: { name: `${agentCfg.fullName || currentAgentName} Session` },
-    });
-    setConversation(conv);
-    conversationRef.current = conv;
-    setMessages([]);
+    try {
+      const agentCfg = AGENTS.find(a => a.id === currentAgentName) || AGENTS[0];
+      if (!base44.agents || typeof base44.agents.createConversation !== 'function') {
+        throw new Error('Agent API not available');
+      }
+      const conv = await base44.agents.createConversation({
+        agent_name: currentAgentName,
+        metadata: { name: `${agentCfg.fullName || currentAgentName} Session` },
+      });
+      setConversation(conv);
+      conversationRef.current = conv;
+      setMessages([]);
+      loadPastConversations();
+    } catch (err) {
+      console.error('Failed to create new chat:', err);
+      alert(`Failed to create new chat: ${err.message}`);
+    }
     setInitializing(false);
-    loadPastConversations();
   };
 
   const loadPastConversation = async (convId) => {

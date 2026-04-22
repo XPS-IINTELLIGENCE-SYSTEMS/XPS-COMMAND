@@ -4,8 +4,7 @@ import {
   Target, Send, Clock, GitBranch,
   Upload, Database, Sprout, Sliders, Share2, Globe,
   Sparkles, Brain, TrendingUp, Heart, Wrench, MapPin, Crosshair,
-  Layers, Radar, Layout, Zap, Terminal,
-
+  Layers, Radar, Layout, Zap, Terminal, Phone,
 } from "lucide-react";
 
 // Master list of all available icons for the icon picker
@@ -44,7 +43,7 @@ export const ICON_OPTIONS = [
   { name: "Layout", icon: Layout },
   { name: "Zap", icon: Zap },
   { name: "Terminal", icon: Terminal },
-
+  { name: "Phone", icon: Phone },
 ];
 
 export const ICON_MAP = Object.fromEntries(ICON_OPTIONS.map(i => [i.name, i.icon]));
@@ -163,6 +162,7 @@ export const DEFAULT_TOOLS = [
   { id: "auto_dashboard", label: "Auto Dashboard", desc: "AI-powered dashboard layout generator — presets or custom AI", iconName: "Layout", color: "#d4af37" },
   { id: "auto_workflow_engine", label: "Auto Workflows", desc: "Scan system → AI generates smart workflows → preview → execute", iconName: "Zap", color: "#f59e0b" },
   { id: "call_center", label: "Call Center", desc: "AI-enhanced outbound call system — unified call log, scripts, products, invoicing", iconName: "Phone", color: "#22c55e" },
+  { id: "email_templates", label: "Email Templates", desc: "XPS branded outreach — GC bid list, contractor intro, epoxy intro, follow-up, sales", iconName: "Send", color: "#ec4899" },
   { id: "strategy_30day", label: "30-Day Strategy", desc: "Systematic launch plan — daily actions, progress tracking, AI priorities", iconName: "Target", color: "#d4af37" },
   { id: "workflow_simulator", label: "Workflow Simulator", desc: "Test, score, validate, auto-fix, and harden every workflow before launch", iconName: "Shield", color: "#8b5cf6" },
 ];
@@ -179,7 +179,7 @@ export const TOOL_CATEGORIES = [
     id: "outreach_revenue",
     title: "Outreach & Revenue",
     desc: "Automated campaigns, proposals, and follow-ups that turn leads into revenue.",
-    toolIds: ["get_work", "win_work", "bid_center", "outreach_automation", "sentiment_analyst", "gc_bid_pipeline", "master_pipeline", "call_center"],
+    toolIds: ["get_work", "win_work", "bid_center", "outreach_automation", "sentiment_analyst", "gc_bid_pipeline", "master_pipeline", "call_center", "email_templates"],
   },
   {
     id: "estimating_pricing",

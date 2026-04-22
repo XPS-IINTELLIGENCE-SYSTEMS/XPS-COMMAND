@@ -17,8 +17,11 @@
     "category": {
       "type": "string",
       "enum": [
-        "Initial Outreach",
+        "GC Bid List Intro",
+        "Contractor Intro",
+        "Epoxy Company Intro",
         "Follow-Up",
+        "Sales",
         "Proposal",
         "Thank You",
         "Reactivation",
@@ -28,7 +31,7 @@
         "Referral Ask",
         "Custom"
       ],
-      "default": "Initial Outreach"
+      "default": "Contractor Intro"
     },
     "subject": {
       "type": "string",

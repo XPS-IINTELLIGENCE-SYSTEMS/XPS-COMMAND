@@ -70,6 +70,7 @@ import AutoWorkflowEngine from "../dashboard/AutoWorkflowEngine";
 import CallCenterView from "../callcenter/CallCenterView";
 import StrategyView from "../strategy/StrategyView";
 import SimulationView from "../simulation/SimulationView";
+import EmailTemplatesView from "../outreach/EmailTemplatesView";
 
 export default function AppContent({ activeView, onChatCommand, onNavigate }) {
   switch (activeView) {
@@ -148,6 +149,7 @@ export default function AppContent({ activeView, onChatCommand, onNavigate }) {
     case "call_center": return <CallCenterView />;
     case "strategy_30day": return <StrategyView />;
     case "workflow_simulator": return <SimulationView />;
+    case "email_templates": return <EmailTemplatesView />;
     case "ui_builder": return null; // Opens as standalone page at /ui-builder
     case "agent_zero": return null; // Opens as standalone page at /agent-zero
     default: return <div className="text-center py-20 text-muted-foreground">View not found</div>;

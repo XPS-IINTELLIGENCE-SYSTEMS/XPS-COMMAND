@@ -5,7 +5,8 @@ Deno.serve(async (req) => {
   const user = await base44.auth.me();
   if (!user) return Response.json({ error: 'Unauthorized' }, { status: 401 });
 
-  const { action, contact, admin_email } = await req.json();
+  const { action, contact, admin_email: provided_email } = await req.json();
+  const admin_email = provided_email || user.email;
 
   const results = { stages: [], errors: [], success: true };
   const log = (stage, status, detail) => results.stages.push({ stage, status, detail, timestamp: new Date().toISOString() });

@@ -167,7 +167,8 @@ export const DEFAULT_TOOLS = [
   { id: "master_ops", label: "Master Ops", desc: "Full operations control center — all tools unified", iconName: "Zap", color: "#8b5cf6" },
   { id: "saved_dashboards", label: "Dashboards", desc: "Pre-built & custom dashboards", iconName: "LayoutDashboard", color: "#6366f1" },
   { id: "workflow_simulator", label: "Workflow Simulator", desc: "Test, score, validate, auto-fix, and harden every workflow before launch", iconName: "Shield", color: "#8b5cf6" },
-];
+  { id: "system_optimization", label: "System Optimization", desc: "Full system audit with validation, guardian, and orchestrator agents", iconName: "BarChart3", color: "#d4af37" },
+  ];
 
 // Tool categories with metallic gold headers & descriptions
 export const TOOL_CATEGORIES = [
@@ -223,6 +224,6 @@ export const TOOL_CATEGORIES = [
     id: "system_admin",
     title: "System & Admin",
     desc: "Platform configuration, user management, connectors, and system health.",
-    toolIds: ["admin", "settings", "connectors", "algorithm", "system_health", "system_guardian", "tool_creator", "system_index", "system_instructions", "page_builder", "auto_enhance", "templates_library", "github_explorer", "hyper_evolver", "supabase_control", "ui_builder", "open_claw", "agent_zero", "editor_workspace", "focus_dashboard", "financial_sandbox", "passive_intel", "crypto_simulation", "orchestrator", "auto_dashboard", "auto_workflow_engine"],
+    toolIds: ["admin", "settings", "connectors", "algorithm", "system_health", "system_guardian", "tool_creator", "system_index", "system_instructions", "page_builder", "auto_enhance", "templates_library", "github_explorer", "hyper_evolver", "supabase_control", "ui_builder", "open_claw", "agent_zero", "editor_workspace", "focus_dashboard", "financial_sandbox", "passive_intel", "crypto_simulation", "orchestrator", "auto_dashboard", "auto_workflow_engine", "system_optimization"],
   },
-];
+  ];

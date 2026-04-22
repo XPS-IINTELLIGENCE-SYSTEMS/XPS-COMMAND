@@ -6,7 +6,7 @@ Deno.serve(async (req) => {
   if (!user) return Response.json({ error: 'Unauthorized' }, { status: 401 });
 
   const { lead_id } = await req.json();
-  const myEmail = user.email;
+  const myEmail = "jeremy@shopxps.com";
   const myPhone = user.data?.phone || Deno.env.get("ADMIN_PHONE") || "";
   const myName = user.full_name || "Jeremy";
 
@@ -438,8 +438,8 @@ Return primary URL, secondary URLs, personalized share message, and product high
   try {
     await base44.asServiceRole.integrations.Core.SendEmail({
       to: myEmail,
-      from_name: "XPS Intelligence",
-      subject: `⚡ XPS Quality Test — ${company} — ${passCount}/${passCount + failCount} Passed ${failCount === 0 ? "✅" : "⚠️"}`,
+      from_name: "Jeremy Bensen — Xtreme Polishing Systems",
+      subject: `⚡ Xtreme Polishing Systems Quality Test — ${company} — ${passCount}/${passCount + failCount} Passed ${failCount === 0 ? "✅" : "⚠️"}`,
       body: masterEmailBody
     });
     log("MASTER EMAIL", "success", `Sent to ${myEmail}`);
@@ -450,8 +450,8 @@ Return primary URL, secondary URLs, personalized share message, and product high
     try {
       await base44.asServiceRole.integrations.Core.SendEmail({
         to: myEmail,
-        from_name: "Jeremy Bensen — XPS",
-        subject: introEmail.subject_line || `Introduction from XPS — ${company}`,
+        from_name: "Jeremy Bensen — Xtreme Polishing Systems",
+        subject: introEmail.subject_line || `Introduction from Xtreme Polishing Systems — ${company}`,
         body: introEmail.email_html || ""
       });
       log("INTRO EMAIL SENT", "success", `Standalone intro email sent to ${myEmail}`);
@@ -463,8 +463,8 @@ Return primary URL, secondary URLs, personalized share message, and product high
     try {
       await base44.asServiceRole.integrations.Core.SendEmail({
         to: myEmail,
-        from_name: "Jeremy Bensen — XPS",
-        subject: `Digital Business Card — Jeremy Bensen, XPS`,
+        from_name: "Jeremy Bensen — Xtreme Polishing Systems",
+        subject: `Digital Business Card — Jeremy Bensen, Xtreme Polishing Systems`,
         body: businessCard.html || ""
       });
       log("BUSINESS CARD SENT", "success", `Standalone business card sent to ${myEmail}`);

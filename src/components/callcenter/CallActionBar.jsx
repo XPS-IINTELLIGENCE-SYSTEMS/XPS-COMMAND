@@ -49,10 +49,10 @@ export default function CallActionBar({ contact, onOutcome, intel }) {
     if (!contact.phone) return;
     setSendingSMS(true);
     try {
-      await base44.functions.invoke("twilioMessenger", {
-        action: "send_sms",
-        to: contact.phone,
-        message: `Hi ${contact.contact_name || "there"}! This is XPS — America's #1 epoxy & polished concrete supplier. We have exclusive deals for contractors like you. Check out our products: xpsxpress.com — Reply YES for a free 7-day trial of our app!`,
+      await base44.functions.invoke("sendSms", {
+        to_phone: contact.phone,
+        to_name: contact.contact_name || "",
+        auto_generate: true,
       });
     } catch (err) { console.error(err); }
     setSendingSMS(false);

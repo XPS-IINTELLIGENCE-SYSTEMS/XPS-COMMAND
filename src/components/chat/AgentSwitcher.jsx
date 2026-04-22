@@ -4,6 +4,7 @@ import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/comp
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 const AGENTS = [
+  { id: "xps_ops_master", name: "OPS🔥", fullName: "XPS Ops Master", icon: Crown, desc: "Supreme admin: full system access, headless/headful browser automation, persistent memory, agent orchestration", color: "text-red-400" },
   { id: "xps_assistant", name: "XPS Ops", fullName: "Contractor Assist", icon: Bot, desc: "CRM, leads, emails, proposals, invoices — full pipeline", color: "text-primary" },
   { id: "ceo_orchestrator", name: "CEO", fullName: "CEO Orchestrator", icon: Crown, desc: "Delegates to all agents, multi-agent ops", color: "text-amber-400" },
   { id: "lead_gen", name: "Leads", fullName: "Lead Gen", icon: Users, desc: "Territory analysis, scraping, enrichment", color: "text-blue-400" },

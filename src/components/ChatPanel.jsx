@@ -245,6 +245,17 @@ const ChatPanel = forwardRef(function ChatPanel({ mobile = false, chatWidth }, r
   const activeAgentConfig = AGENTS.find(a => a.id === currentAgentName) || AGENTS[0];
 
   const agentQuickActions = {
+    xps_ops_master: [
+      { label: "🔥 Full system audit & health check", icon: Zap, cat: "system" },
+      { label: "🌐 Headless browser scrape URL", icon: Globe, cat: "browser" },
+      { label: "📋 Fill & submit form headfully", icon: FileText, cat: "browser" },
+      { label: "🔀 Orchestrate multi-agent task", icon: GitBranch, cat: "orchestration" },
+      { label: "💾 Retrieve persistent memory", icon: Database, cat: "memory" },
+      { label: "📸 Screenshot & extract data", icon: Search, cat: "browser" },
+      { label: "⚙️ Execute parallel operations", icon: Wrench, cat: "system" },
+      { label: "🔐 Full system admin access", icon: Code, cat: "admin" },
+      { label: "🤖 Spawn & coordinate sub-agents", icon: GitBranch, cat: "orchestration" },
+    ],
     xps_assistant: [
       { label: "🔍 Scrape 25 leads in Tampa", icon: Search, cat: "leads" },
       { label: "📊 Pipeline status", icon: BarChart3, cat: "analytics" },

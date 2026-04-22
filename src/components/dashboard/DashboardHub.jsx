@@ -495,9 +495,9 @@ export default function DashboardHub({ onOpenTool }) {
                         className={snap.isDragging ? "opacity-90 shadow-2xl" : ""}
                       >
                         <DashboardSection
-                          section={section}
-                          editMode={editMode && !section.locked}
-                          dragHandleProps={section.locked ? null : prov.dragHandleProps}
+                           section={section}
+                           editMode={editMode}
+                           dragHandleProps={editMode ? prov.dragHandleProps : null}
                           onRemove={() => removeSection(section.id)}
                           onToggleCollapse={() => updateSection(section.id, { collapsed: !section.collapsed })}
                           onToggleSize={() => updateSection(section.id, { size: section.size === "full" ? "half" : "full" })}

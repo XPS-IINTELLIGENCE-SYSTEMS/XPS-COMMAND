@@ -7,7 +7,7 @@ import {
   RefreshCcw, ChevronDown, ChevronUp, CheckCircle2, AlertTriangle, TrendingUp,
   Globe, Download, Upload, Share2, Bot, Activity, DollarSign, Clock,
   ArrowRight, Loader2, Star, Wrench, Eye, Play, Settings, Map, List,
-  LayoutDashboard, PieChart, Layers, HardHat, Briefcase, Archive, Bell
+  LayoutDashboard, PieChart, Layers, HardHat, Briefcase, Archive, Bell, Sparkles
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -40,6 +40,7 @@ import ScraperSchedulerView from "../components/scheduler/ScraperSchedulerView";
 import BidPipelineDashboard from "../components/bidpipeline/BidPipelineDashboard";
 import SentimentAnalystView from "../components/sentiment/SentimentAnalystView";
 import DataQualityBar from "../components/commandhub/DataQualityBar";
+import SandboxSystem from "../components/sandbox/SandboxSystem";
 
 // ── Section wrapper component ──────────────────────────────────────────────
 function DashSection({ id, icon: SectionIcon, title, badge, color = "#d4af37", children, defaultOpen = true, actions }) {
@@ -149,6 +150,7 @@ export default function MasterDashboard() {
     analytics: useRef(null),
     enhance: useRef(null),
     configurator: useRef(null),
+    sandbox: useRef(null),
   };
 
   const scrollTo = (key) => {
@@ -256,6 +258,7 @@ Recommend:
     { key: "analytics", label: "Analytics", icon: PieChart, color: "#3b82f6" },
     { key: "enhance", label: "AI Enhance", icon: Brain, color: "#10b981" },
     { key: "configurator", label: "Configurator", icon: Settings, color: "#94a3b8" },
+    { key: "sandbox", label: "⚡ Sandbox", icon: Activity, color: "#a855f7" },
   ];
 
   return (
@@ -370,7 +373,7 @@ Recommend:
             {/* Quick actions bar */}
             <div>
               <p className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider mb-2">Quick Actions</p>
-              <div className="grid grid-cols-4 sm:grid-cols-8 gap-2">
+              <div className="grid grid-cols-3 sm:grid-cols-9 gap-2">
                 <QuickAction icon={Bot} label="Run AI Scan" color="#d4af37" onClick={generateAiLayout} />
                 <QuickAction icon={Phone} label="Call Queue" color="#22c55e" onClick={() => scrollTo("call_center")} badge={callQueue.filter(c => !c.logged).length || null} />
                 <QuickAction icon={Mail} label="Email Daily" color="#ec4899" onClick={() => scrollTo("outreach")} />
@@ -379,6 +382,7 @@ Recommend:
                 <QuickAction icon={CheckCircle2} label="Approvals" color="#10b981" onClick={() => scrollTo("approvals")} badge={stats.proposals || null} />
                 <QuickAction icon={BarChart3} label="Analytics" color="#3b82f6" onClick={() => scrollTo("analytics")} />
                 <QuickAction icon={Globe} label="Google Suite" color="#4285f4" onClick={() => scrollTo("google")} />
+                <QuickAction icon={Sparkles} label="AI Sandbox" color="#a855f7" onClick={() => scrollTo("sandbox")} />
               </div>
             </div>
           </DashSection>
@@ -579,7 +583,23 @@ Recommend:
           </DashSection>
         </div>
 
-        {/* 21. Multi-Dashboard Configurator */}
+        {/* 21. Sandbox + AI Optimizer */}
+        <div ref={sectionRefs.sandbox}>
+          <DashSection id="sandbox" icon={Activity} title="Sandbox — AI Optimizer + Pipeline Tester" badge="Full system scan • Auto-ranked recs • 1-click auto-fix • Live pipeline simulation" color="#a855f7" defaultOpen={true}
+            actions={
+              <button
+                onClick={() => sectionRefs.sandbox?.current?.querySelector("button")?.click()}
+                className="flex items-center gap-1.5 px-3 py-1 rounded-lg metallic-gold-bg text-background text-[9px] font-black hover:brightness-110 transition-all"
+              >
+                <Activity className="w-3 h-3" /> Auto-Run
+              </button>
+            }
+          >
+            <SandboxSystem autoRun={false} onScrollTo={scrollTo} />
+          </DashSection>
+        </div>
+
+        {/* 22. Multi-Dashboard Configurator */}
         <div ref={sectionRefs.configurator}>
           <DashSection id="configurator" icon={Settings} title="Multi-Dashboard Configurator" badge="AI generates multiple configurations until you find your perfect setup" color="#94a3b8" defaultOpen={false}>
             <AutoDashboardConfigurator onApply={() => {}} />

@@ -13,7 +13,7 @@ import { MasterDashboardContext, MasterDashboardProvider } from "@/components/co
 import { base44 } from "@/api/base44Client";
 
 // All the tools imported as embedded sections
-import StrategyView from "../components/strategy/StrategyView";
+import EditableStrategyView from "../components/strategy/EditableStrategyView";
 import OrchestratorPanel from "../components/commandhub/OrchestratorPanel";
 import AutoWorkflowEngine from "../components/dashboard/AutoWorkflowEngine";
 import AutoDashboardConfigurator from "../components/dashboard/AutoDashboardConfigurator";
@@ -297,10 +297,15 @@ Recommend:
       <div className="px-3 sm:px-4 py-4 space-y-5 pb-24">
 
         <div ref={sectionRefs.strategy}>
-          <DashSection id="strategy" icon={Target} title="30-Day Launch Strategy" badge="Checklist • AI Priority" color="#d4af37" defaultOpen={true}
-            actions={<button onClick={() => scrollTo("orchestrator")} className="text-[9px] text-primary flex items-center gap-1 hover:underline">Next <ArrowRight className="w-2.5 h-2.5" /></button>}
+          <DashSection id="strategy" icon={Target} title="30-Day Launch Strategy" badge="Integrated • Auto-Execute" color="#d4af37" defaultOpen={true}
+            actions={<button onClick={() => scrollTo("orchestrator")} className="text-[9px] text-primary flex items-center gap-1 hover:underline">Orchestrator <ArrowRight className="w-2.5 h-2.5" /></button>}
           >
-            <StrategyView />
+            <EditableStrategyView 
+              data={data} 
+              onUpdate={loadAll}
+              orchestratorRecs={aiLayout?.focus_areas || []}
+              guardianRecs={aiLayout?.focus_areas || []}
+            />
           </DashSection>
         </div>
 

@@ -26,6 +26,7 @@ import BidCalcTool from "./modules/BidCalcTool";
 import InvoiceTool from "./modules/InvoiceTool";
 import JobSchedulerTool from "./modules/JobSchedulerTool";
 import GenericAITool from "./modules/GenericAITool";
+import SystemOptimizationAnalyzer from "../systemoptimization/SystemOptimizationAnalyzer";
 
 const REGISTRY = {
   // === CONTACT / GET_WORK ===
@@ -85,7 +86,10 @@ const REGISTRY = {
   review: { label: "AI Review Request", description: "Request client reviews", Icon: Star, Component: (props) => <GenericAITool {...props} toolName="Review Request" prompt="Send a review request to our last paid client" />, workflowId: "get_paid" },
   pnl: { label: "AI Job P&L", description: "Profit & loss analysis", Icon: BarChart3, Component: (props) => <GenericAITool {...props} toolName="Job P&L" prompt="Calculate profit/loss for all completed jobs" />, workflowId: "get_paid" },
   referral: { label: "AI Referral Engine", description: "Identify referral opportunities", Icon: RefreshCcw, Component: (props) => <GenericAITool {...props} toolName="Referral Engine" prompt="Identify past clients for referral outreach" />, workflowId: "get_paid" },
-};
+
+  // === SYSTEM OPTIMIZATION ===
+  system_optimization: { label: "System Optimization", description: "Full system audit with validation, guardian, and orchestrator agents", Icon: BarChart3, Component: SystemOptimizationAnalyzer, workflowId: "system_admin" },
+  };
 
 export function getToolById(id) {
   return REGISTRY[id] || null;

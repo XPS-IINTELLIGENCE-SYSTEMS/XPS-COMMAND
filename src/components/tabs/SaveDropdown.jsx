@@ -69,7 +69,8 @@ export default function SaveDropdown({ tab, onSave }) {
       <button
         onClick={() => setOpen(!open)}
         disabled={saving}
-        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg glass-card hover:bg-white/10 text-[11px] font-bold text-foreground transition-all disabled:opacity-50"
+        className="flex items-center gap-1.5 px-3 py-2 rounded-xl border glass-card hover:scale-105 text-muted-foreground hover:text-foreground transition-all text-xs font-medium disabled:opacity-50"
+        style={{ borderColor: "#22c55e", color: "#22c55e" }}
       >
         <Save className="w-3.5 h-3.5" />
         Save

@@ -15,6 +15,9 @@ import SandboxSchedulerStatus from "./SandboxSchedulerStatus.jsx";
 import BacktestResultsView from "./BacktestResultsView.jsx";
 import StressTestView from "./StressTestView.jsx";
 import MarketSentimentDashboard from "./MarketSentimentDashboard.jsx";
+import AssetAllocationRebalancer from "./AssetAllocationRebalancer.jsx";
+import TaxLossHarvestingView from "./TaxLossHarvestingView.jsx";
+import HedgingStrategyView from "./HedgingStrategyView.jsx";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -149,9 +152,12 @@ export default function FinancialSandboxView() {
 
       {/* Tabbed View */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-7">
           <TabsTrigger value="overview">Portfolio</TabsTrigger>
-          <TabsTrigger value="sentiment">Market Sentiment</TabsTrigger>
+          <TabsTrigger value="sentiment">Sentiment</TabsTrigger>
+          <TabsTrigger value="allocation">Rebalance</TabsTrigger>
+          <TabsTrigger value="harvest">Tax Loss</TabsTrigger>
+          <TabsTrigger value="hedging">Hedging</TabsTrigger>
           <TabsTrigger value="analysis">Analysis</TabsTrigger>
           <TabsTrigger value="logs">Activity</TabsTrigger>
         </TabsList>
@@ -173,6 +179,18 @@ export default function FinancialSandboxView() {
 
         <TabsContent value="sentiment">
           <MarketSentimentDashboard />
+        </TabsContent>
+
+        <TabsContent value="allocation">
+          <AssetAllocationRebalancer />
+        </TabsContent>
+
+        <TabsContent value="harvest">
+          <TaxLossHarvestingView />
+        </TabsContent>
+
+        <TabsContent value="hedging">
+          <HedgingStrategyView stressTestResults={null} />
         </TabsContent>
 
         <TabsContent value="analysis" className="space-y-4">

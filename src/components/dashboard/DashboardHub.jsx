@@ -492,7 +492,7 @@ export default function DashboardHub({ onOpenTool }) {
           <Droppable droppableId="sections" type="SECTION">
             {(provided) => (
               <div ref={provided.innerRef} {...provided.droppableProps} className="space-y-6">
-                {sections.map((section, index) => (
+                {sections.filter(s => s.type !== "callcenter").map((section, index) => (
                   <Draggable key={section.id} draggableId={section.id} index={index} isDragDisabled={!editMode}>
                     {(prov, snap) => (
                       <div

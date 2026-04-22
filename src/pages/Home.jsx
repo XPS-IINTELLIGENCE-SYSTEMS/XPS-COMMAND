@@ -227,7 +227,7 @@ export default function Home() {
         )}
 
         {/* Content: Dashboard Hub, Blank Workspace, or Tool View */}
-        <main className="flex-1 overflow-y-auto pb-16 lg:pb-0">
+        <main className="flex-1 overflow-y-auto pb-16 lg:pb-0 scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent hover:scrollbar-thumb-muted-foreground/40">
           <AnimatePresence mode="wait">
             {/* Non-default tabs: blank workspace (or tool view if a tool is open) */}
             {!workspace.activeTab?.isDefault && activeView === null ? (

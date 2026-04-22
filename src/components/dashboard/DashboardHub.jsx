@@ -446,7 +446,7 @@ export default function DashboardHub({ onOpenTool }) {
   return (
     <div className="max-w-[1100px] mx-auto">
       <HexPatternBanner />
-      <div className="px-3 sm:px-6 pb-8 -mt-4">
+      <div className="px-3 sm:px-6 pb-12 -mt-4">
 
         {/* Edit mode toggle */}
         <div className="flex items-center justify-end gap-2 mb-3">
@@ -474,7 +474,7 @@ export default function DashboardHub({ onOpenTool }) {
         <DragDropContext onDragEnd={onSectionDragEnd}>
           <Droppable droppableId="sections" type="SECTION">
             {(provided) => (
-              <div ref={provided.innerRef} {...provided.droppableProps} className="space-y-3">
+              <div ref={provided.innerRef} {...provided.droppableProps} className="space-y-6">
                 {sections.map((section, index) => (
                   <Draggable key={section.id} draggableId={section.id} index={index} isDragDisabled={!editMode}>
                     {(prov, snap) => (

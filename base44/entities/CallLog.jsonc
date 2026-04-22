@@ -1,0 +1,127 @@
+{
+  "name": "CallLog",
+  "type": "object",
+  "properties": {
+    "contact_name": {
+      "type": "string",
+      "description": "Person called"
+    },
+    "company_name": {
+      "type": "string",
+      "description": "Company name"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "source_type": {
+      "type": "string",
+      "enum": [
+        "Lead",
+        "Contractor",
+        "ContractorCompany",
+        "CommercialJob"
+      ],
+      "description": "Which entity this came from"
+    },
+    "source_id": {
+      "type": "string",
+      "description": "ID of the source entity"
+    },
+    "call_outcome": {
+      "type": "string",
+      "enum": [
+        "Pending",
+        "Sold",
+        "No",
+        "Callback",
+        "Best Lead",
+        "No Answer",
+        "Voicemail",
+        "Wrong Number"
+      ],
+      "default": "Pending"
+    },
+    "callback_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Scheduled callback date"
+    },
+    "priority": {
+      "type": "number",
+      "description": "Call priority 1-10 (10=highest)",
+      "default": 5
+    },
+    "notes": {
+      "type": "string",
+      "description": "Call notes"
+    },
+    "products_discussed": {
+      "type": "string",
+      "description": "JSON array of products discussed"
+    },
+    "products_sold": {
+      "type": "string",
+      "description": "JSON array of products sold"
+    },
+    "deal_value": {
+      "type": "number",
+      "default": 0
+    },
+    "call_duration_seconds": {
+      "type": "number",
+      "default": 0
+    },
+    "ai_summary": {
+      "type": "string",
+      "description": "AI-generated call summary"
+    },
+    "ai_pitch": {
+      "type": "string",
+      "description": "AI-generated pitch recommendation"
+    },
+    "business_summary": {
+      "type": "string",
+      "description": "AI summary about the business"
+    },
+    "employee_count": {
+      "type": "number"
+    },
+    "years_in_business": {
+      "type": "number"
+    },
+    "location": {
+      "type": "string"
+    },
+    "website": {
+      "type": "string"
+    },
+    "vertical": {
+      "type": "string"
+    },
+    "existing_products": {
+      "type": "string",
+      "description": "Current products/materials they use"
+    },
+    "invoice_created": {
+      "type": "boolean",
+      "default": false
+    },
+    "invoice_sent": {
+      "type": "boolean",
+      "default": false
+    },
+    "hubspot_synced": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "contact_name",
+    "company_name",
+    "source_type",
+    "call_outcome"
+  ]
+}

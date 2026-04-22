@@ -115,58 +115,174 @@ export function MasterDashboardProvider({ children }) {
     setLoading(false);
   }, [computeStats, buildQueue]);
 
+  // ─── Derived/filtered data (always computed from shared state) ────────────
+  const filteredLeads = data.leads.filter(l => {
+    if (filters.leadStage !== "all" && l.stage !== filters.leadStage) return false;
+    return true;
+  });
+
+  const filteredJobs = data.jobs.filter(j => {
+    if (filters.jobPhase !== "all" && j.project_phase !== filters.jobPhase) return false;
+    return true;
+  });
+
+  const filteredBids = data.bids.filter(b => {
+    if (filters.bidStatus !== "all" && b.send_status !== filters.bidStatus) return false;
+    return true;
+  });
+
+  const filteredProposals = data.proposals.filter(p => {
+    if (filters.emailStatus !== "all" && p.status !== filters.emailStatus) return false;
+    return true;
+  });
+
+  const followUps = data.callLogs.filter(l => ["Callback", "No Answer", "Voicemail"].includes(l.call_outcome));
+  const closedDeals = data.callLogs.filter(l => l.call_outcome === "Sold");
+
   // ─── Unified actions that update ALL related state ──────────────────────
   const actions = {
-    // Lead actions trigger CRM update + queue rebuild
+    // Lead actions trigger CRM update + queue rebuild + linking
     updateLead: async (id, updates) => {
       await base44.entities.Lead.update(id, updates);
       const updated = data.leads.map(l => l.id === id ? { ...l, ...updates } : l);
       setData(prev => ({ ...prev, leads: updated }));
       setStats(computeStats({ ...data, leads: updated }));
       setQueue(buildQueue({ ...data, leads: updated }, data.callLogs));
+      setSelectedLead(updated.find(l => l.id === id));
+      // Auto-advance phase if lead is qualified
+      if (updates.stage === "Qualified") setActivePhase("call_center");
     },
 
-    // Call log actions trigger follow-up tracking + queue updates
+    selectLead: (lead) => {
+      setSelectedLead(lead);
+      setActivePhase("crm");
+    },
+
+    // Call log actions cascade through entire pipeline
     logCall: async (call) => {
       const created = await base44.entities.CallLog.create(call);
       const newLogs = [created, ...data.callLogs];
       setData(prev => ({ ...prev, callLogs: newLogs }));
       setStats(computeStats({ ...data, callLogs: newLogs }));
       setQueue(buildQueue(data, newLogs));
-      setActivePhase("followup");
+      
+      // Auto-trigger workflow based on outcome
+      if (call.call_outcome === "Sold") {
+        setActivePhase("bidding"); // Move to proposal/bid
+      } else if (["Callback", "No Answer"].includes(call.call_outcome)) {
+        setActivePhase("followup");
+      }
+      
+      // Mark lead as contacted
+      if (call.source_type === "Lead" && call.source_id) {
+        const lead = data.leads.find(l => l.id === call.source_id);
+        if (lead) await actions.updateLead(call.source_id, { stage: "Contacted" });
+      }
+      
       return created;
     },
 
-    // Job actions trigger bid pipeline update
+    // Job actions trigger bid pipeline + proposal generation
     updateJob: async (id, updates) => {
       await base44.entities.CommercialJob.update(id, updates);
       const updated = data.jobs.map(j => j.id === id ? { ...j, ...updates } : j);
       setData(prev => ({ ...prev, jobs: updated }));
       setStats(computeStats({ ...data, jobs: updated }));
       setSelectedJob(updated.find(j => j.id === id));
+      
+      // Auto-create bid when job phase changes to pre_bid
+      if (updates.project_phase === "pre_bid" && !data.bids.find(b => b.job_id === id)) {
+        const newBid = await base44.entities.BidDocument.create({
+          job_id: id,
+          project_name: updated.find(j => j.id === id)?.job_name,
+          send_status: "draft",
+        });
+        setData(prev => ({ ...prev, bids: [newBid, ...prev.bids] }));
+      }
     },
 
-    // Bid actions trigger proposal generation + approval queue
+    selectJob: (job) => {
+      setSelectedJob(job);
+      setActivePhase("bidding");
+    },
+
+    // Bid actions cascade to approvals + invoices
     updateBid: async (id, updates) => {
       await base44.entities.BidDocument.update(id, updates);
       const updated = data.bids.map(b => b.id === id ? { ...b, ...updates } : b);
       setData(prev => ({ ...prev, bids: updated }));
       setStats(computeStats({ ...data, bids: updated }));
-      if (updates.send_status === "sent") setActivePhase("approvals");
       setSelectedBid(updated.find(b => b.id === id));
+      
+      // Cascade: send_status=sent → add to approvals
+      if (updates.send_status === "sent") {
+        setActivePhase("approvals");
+        // Create proposal from bid
+        const bid = updated.find(b => b.id === id);
+        if (bid && !data.proposals.find(p => p.lead_id === bid.job_id)) {
+          const newProp = await base44.entities.Proposal.create({
+            title: `Proposal for ${bid.project_name}`,
+            client_name: bid.recipient_company || "Client",
+            service_type: "Epoxy Floor Coating",
+            total_value: bid.total_bid_value || 0,
+            status: "Draft",
+            lead_id: bid.job_id,
+          });
+          setData(prev => ({ ...prev, proposals: [newProp, ...prev.proposals] }));
+        }
+      }
     },
 
-    // Proposal actions trigger invoice generation
+    selectBid: (bid) => {
+      setSelectedBid(bid);
+      setActivePhase("bidding");
+    },
+
+    // Proposal actions drive invoice generation + revenue tracking
     createProposal: async (proposal) => {
       const created = await base44.entities.Proposal.create(proposal);
       const updated = [created, ...data.proposals];
       setData(prev => ({ ...prev, proposals: updated }));
       setStats(computeStats({ ...data, proposals: updated }));
       setActivePhase("approvals");
+      
+      // Auto-create invoice when proposal is approved
+      if (proposal.status === "Approved") {
+        const inv = await base44.entities.Invoice.create({
+          proposal_id: created.id,
+          client_name: created.client_name,
+          total: created.total_value,
+          status: "Draft",
+        });
+        setData(prev => ({ ...prev, invoices: [inv, ...prev.invoices] }));
+      }
+      
       return created;
     },
 
-    // Email actions trigger outreach tracking
+    updateProposal: async (id, updates) => {
+      await base44.entities.Proposal.update(id, updates);
+      const updated = data.proposals.map(p => p.id === id ? { ...p, ...updates } : p);
+      setData(prev => ({ ...prev, proposals: updated }));
+      setStats(computeStats({ ...data, proposals: updated }));
+      
+      // If approved, cascade to invoice
+      if (updates.status === "Approved") {
+        const prop = updated.find(p => p.id === id);
+        if (prop && !data.invoices.find(i => i.proposal_id === id)) {
+          const inv = await base44.entities.Invoice.create({
+            proposal_id: id,
+            client_name: prop.client_name,
+            total: prop.total_value,
+            status: "Draft",
+          });
+          setData(prev => ({ ...prev, invoices: [inv, ...prev.invoices] }));
+          setStats(prev => ({ ...prev, invoices: prev.invoices + 1 }));
+        }
+      }
+    },
+
+    // Email actions link to outreach tracking
     sendEmail: async (email) => {
       const created = await base44.entities.OutreachEmail.create(email);
       const updated = [created, ...data.outreachEmails];
@@ -174,7 +290,7 @@ export function MasterDashboardProvider({ children }) {
       return created;
     },
 
-    // Prospect actions trigger cold call queue
+    // Prospect actions feed cold call queue
     updateProspect: async (id, updates) => {
       await base44.entities.ProspectCompany.update(id, updates);
       const updated = data.prospects.map(p => p.id === id ? { ...p, ...updates } : p);
@@ -182,20 +298,32 @@ export function MasterDashboardProvider({ children }) {
       setQueue(buildQueue({ ...data, prospects: updated }, data.callLogs));
     },
 
-    // Workflow actions update automation state
+    selectProspect: (prospect) => {
+      setQueue(prev => [
+        { ...prospect, source_type: "Prospect", source_id: prospect.id, priority: prospect.cold_call_priority || 5, score: 0 },
+        ...prev.filter(q => q.source_id !== prospect.id),
+      ]);
+      setActivePhase("call_center");
+    },
+
+    // Workflow actions
     updateWorkflow: async (id, updates) => {
       await base44.entities.Workflow.update(id, updates);
       const updated = data.workflows.map(w => w.id === id ? { ...w, ...updates } : w);
       setData(prev => ({ ...prev, workflows: updated }));
     },
 
-    // Bulk invoice generation from proposals
+    // Bulk invoice generation
     generateInvoices: async (proposalIds) => {
-      const invoices = proposalIds.map(pid => ({
-        proposal_id: pid,
-        status: "Draft",
-        total: 0,
-      }));
+      const invoices = proposalIds.map(pid => {
+        const prop = data.proposals.find(p => p.id === pid);
+        return {
+          proposal_id: pid,
+          client_name: prop?.client_name || "Client",
+          total: prop?.total_value || 0,
+          status: "Draft",
+        };
+      });
       const created = await Promise.all(invoices.map(inv => base44.entities.Invoice.create(inv)));
       const updated = [...created, ...data.invoices];
       setData(prev => ({ ...prev, invoices: updated }));
@@ -207,22 +335,28 @@ export function MasterDashboardProvider({ children }) {
       setFilters(prev => ({ ...prev, [filterKey]: value }));
     },
 
-    // Phase navigation with data sync
+    // Phase navigation with auto-data-sync
     goToPhase: async (phase) => {
       setActivePhase(phase);
       if (phase === "crm") setSelectedLead(null);
-      if (phase === "bidding") setSelectedJob(null);
+      if (phase === "bidding") {
+        const updated = await base44.entities.CommercialJob.list("-urgency_score", 50).catch(() => []);
+        setData(prev => ({ ...prev, jobs: updated }));
+      }
       if (phase === "approvals") {
-        // Refresh proposals when going to approvals
         const updated = await base44.entities.Proposal.list("-created_date", 100).catch(() => []);
         setData(prev => ({ ...prev, proposals: updated }));
       }
+      if (phase === "call_center") {
+        const logs = await base44.entities.CallLog.list("-created_date", 200).catch(() => []);
+        setData(prev => ({ ...prev, callLogs: logs }));
+        setQueue(buildQueue(data, logs));
+      }
     },
 
-    // Compile & dedup (from Orchestrator)
+    // Compile & dedup from Orchestrator
     compileAndDedup: async (queue) => {
       setQueue(queue);
-      // Merge into leads
       if (queue.length > 0) {
         const deduped = Array.from(new Map(queue.map(q => [q.company_name, q])).values());
         setQueue(deduped);
@@ -237,7 +371,16 @@ export function MasterDashboardProvider({ children }) {
 
   return (
     <MasterDashboardContext.Provider value={{
+      // Raw data
       data,
+      // Filtered data (derived from state + filters)
+      filteredLeads,
+      filteredJobs,
+      filteredBids,
+      filteredProposals,
+      followUps,
+      closedDeals,
+      // UI state
       stats,
       filters,
       queue,
@@ -247,6 +390,7 @@ export function MasterDashboardProvider({ children }) {
       selectedJob,
       selectedBid,
       activePhase,
+      // Actions (all cascading + linking)
       actions,
       loadAll,
       setSelectedLead,

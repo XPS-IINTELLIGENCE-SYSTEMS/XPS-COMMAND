@@ -18,9 +18,12 @@ import OrchestratorPanel from "../components/commandhub/OrchestratorPanel";
 import AutoWorkflowEngine from "../components/dashboard/AutoWorkflowEngine";
 import AutoDashboardConfigurator from "../components/dashboard/AutoDashboardConfigurator";
 import CRMView from "../components/dashboard/CRMView";
+import CRMIntegrated from "../components/crm/CRMIntegrated";
 import CallListTab from "../components/callcenter/CallListTab";
+import CallCenterIntegrated from "../components/callcenter/CallCenterIntegrated";
 import ProspectDatabaseTab from "../components/callcenter/ProspectDatabaseTab";
 import BidCommandCenter from "../components/bidcenter/BidCommandCenter";
+import BidPipelineIntegrated from "../components/bidding/BidPipelineIntegrated";
 import CompetitorComparisonView from "../components/competitor/CompetitorComparisonView";
 import ComplianceCheckerView from "../components/compliance/ComplianceCheckerView";
 import ApprovalQueueView from "../components/approvals/ApprovalQueueView";
@@ -335,13 +338,13 @@ Recommend:
 
         <div ref={sectionRefs.crm}>
           <DashSection id="crm" icon={Users} title="CRM — Contacts & Deals" badge="Full pipeline" color="#6366f1" defaultOpen={false}>
-            <CRMView />
+            <CRMIntegrated />
           </DashSection>
         </div>
 
         <div ref={sectionRefs.call_center}>
           <DashSection id="call_center" icon={Phone} title="Call Center" badge={`${callQueue.filter(c => !c.logged).length} in queue`} color="#22c55e" defaultOpen={false}>
-            <CallListTab queue={callQueue} callLogs={data.callLogs} onRefresh={loadAll} />
+            <CallCenterIntegrated />
           </DashSection>
         </div>
 
@@ -371,7 +374,7 @@ Recommend:
         <div ref={sectionRefs.bidding}>
           <DashSection id="bidding" icon={Briefcase} title="Bid Command Center" badge="National pricing" color="#06b6d4" defaultOpen={false}>
             <div className="space-y-6">
-              <BidPipelineDashboard />
+              <BidPipelineIntegrated />
               <BidCommandCenter />
             </div>
           </DashSection>

@@ -97,7 +97,7 @@ export default function BlankWorkspace({
   ];
 
   return (
-    <div className="flex-1 flex flex-col overflow-y-auto min-h-0">
+    <div className="flex-1 flex flex-col overflow-y-auto min-h-0 scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent">
       <div className="px-4 pt-6 pb-20 max-w-5xl mx-auto w-full">
 
         {/* Workspace Title */}
@@ -283,9 +283,6 @@ export default function BlankWorkspace({
           onClose={() => { setShowToolPicker(false); setToolPickerTarget(null); }}
         />
       )}
-
-      {/* Vertical Scroll Tool */}
-      <VerticalScrollTool />
     </div>
   );
 }

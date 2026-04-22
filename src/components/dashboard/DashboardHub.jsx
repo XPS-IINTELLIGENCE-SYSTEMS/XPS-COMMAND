@@ -34,6 +34,16 @@ const DEFAULT_SUBTITLE = "Here's your sales intelligence briefing for today.";
 
 const DEFAULT_SECTIONS = [
   { id: "sec_callcenter", type: "callcenter", title: "Call Center — Operations Hub", size: "full", collapsed: false, pinned: true, locked: true },
+  { id: "sec_greeting", type: "greeting", title: "Greeting", size: "full", collapsed: false },
+  { id: "sec_notepad", type: "command_notepad", title: "Command Notepad", size: "half", collapsed: false },
+  { id: "sec_workflow", type: "quick_workflow", title: "Quick Workflow", size: "half", collapsed: false },
+  { id: "sec_pipeline", type: "pipeline", title: "Pipeline", size: "full", collapsed: false },
+  { id: "sec_calendar", type: "calendar", title: "Calendar", size: "full", collapsed: false },
+  { id: "sec_summary", type: "summary", title: "Daily Summary", size: "half", collapsed: false },
+  { id: "sec_sidebar", type: "sidebar", title: "Scheduled Items", size: "half", collapsed: false },
+  { id: "sec_activity", type: "activity", title: "Activity Stream", size: "full", collapsed: false },
+  { id: "sec_favorites", type: "favorites", title: "Favorites", size: "full", collapsed: false },
+  { id: "sec_tools", type: "tools", title: "All Tools", size: "full", collapsed: false },
 ];
 
 export default function DashboardHub({ onOpenTool }) {
@@ -171,7 +181,12 @@ export default function DashboardHub({ onOpenTool }) {
     if (result.type === "SECTION") {
       const reordered = [...sections];
       const [moved] = reordered.splice(result.source.index, 1);
-      reordered.splice(result.destination.index, 0, moved);
+      // Prevent moving Call Center from top (locked section stays at index 0)
+      if (moved.locked) {
+        reordered.splice(0, 0, moved);
+      } else {
+        reordered.splice(result.destination.index, 0, moved);
+      }
       setSections(reordered);
       saveConfig({ sections: reordered });
       return;

@@ -20,6 +20,8 @@ import TaxLossHarvestingView from "./TaxLossHarvestingView.jsx";
 import HedgingStrategyView from "./HedgingStrategyView.jsx";
 import ScenarioSimulatorView from "./ScenarioSimulatorView.jsx";
 import PerformanceAttributionView from "./PerformanceAttributionView.jsx";
+import AutoRebalanceMonitorView from "./AutoRebalanceMonitorView.jsx";
+import AISentimentDashboard from "./AISentimentDashboard.jsx";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -154,12 +156,13 @@ export default function FinancialSandboxView() {
 
       {/* Tabbed View */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-9 text-xs">
+        <TabsList className="grid w-full grid-cols-11 text-xs">
           <TabsTrigger value="overview">Portfolio</TabsTrigger>
-          <TabsTrigger value="sentiment">Sentiment</TabsTrigger>
           <TabsTrigger value="allocation">Rebalance</TabsTrigger>
+          <TabsTrigger value="monitor">Monitor</TabsTrigger>
           <TabsTrigger value="harvest">Tax Loss</TabsTrigger>
           <TabsTrigger value="hedging">Hedging</TabsTrigger>
+          <TabsTrigger value="sentiment">AI Sentiment</TabsTrigger>
           <TabsTrigger value="scenario">What-If</TabsTrigger>
           <TabsTrigger value="attribution">Attribution</TabsTrigger>
           <TabsTrigger value="analysis">Analysis</TabsTrigger>
@@ -182,11 +185,15 @@ export default function FinancialSandboxView() {
         </TabsContent>
 
         <TabsContent value="sentiment">
-          <MarketSentimentDashboard />
+          <AISentimentDashboard />
         </TabsContent>
 
         <TabsContent value="allocation">
           <AssetAllocationRebalancer />
+        </TabsContent>
+
+        <TabsContent value="monitor">
+          <AutoRebalanceMonitorView />
         </TabsContent>
 
         <TabsContent value="harvest">

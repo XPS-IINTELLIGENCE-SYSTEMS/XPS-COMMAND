@@ -18,6 +18,8 @@ import MarketSentimentDashboard from "./MarketSentimentDashboard.jsx";
 import AssetAllocationRebalancer from "./AssetAllocationRebalancer.jsx";
 import TaxLossHarvestingView from "./TaxLossHarvestingView.jsx";
 import HedgingStrategyView from "./HedgingStrategyView.jsx";
+import ScenarioSimulatorView from "./ScenarioSimulatorView.jsx";
+import PerformanceAttributionView from "./PerformanceAttributionView.jsx";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -152,12 +154,14 @@ export default function FinancialSandboxView() {
 
       {/* Tabbed View */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-7">
+        <TabsList className="grid w-full grid-cols-9 text-xs">
           <TabsTrigger value="overview">Portfolio</TabsTrigger>
           <TabsTrigger value="sentiment">Sentiment</TabsTrigger>
           <TabsTrigger value="allocation">Rebalance</TabsTrigger>
           <TabsTrigger value="harvest">Tax Loss</TabsTrigger>
           <TabsTrigger value="hedging">Hedging</TabsTrigger>
+          <TabsTrigger value="scenario">What-If</TabsTrigger>
+          <TabsTrigger value="attribution">Attribution</TabsTrigger>
           <TabsTrigger value="analysis">Analysis</TabsTrigger>
           <TabsTrigger value="logs">Activity</TabsTrigger>
         </TabsList>
@@ -191,6 +195,14 @@ export default function FinancialSandboxView() {
 
         <TabsContent value="hedging">
           <HedgingStrategyView stressTestResults={null} />
+        </TabsContent>
+
+        <TabsContent value="scenario">
+          <ScenarioSimulatorView />
+        </TabsContent>
+
+        <TabsContent value="attribution">
+          <PerformanceAttributionView />
         </TabsContent>
 
         <TabsContent value="analysis" className="space-y-4">

@@ -31,13 +31,14 @@ export default function DashboardSection({
         collapsed && "opacity-70"
       )}
     >
-      {/* Section header — only in edit mode or if section has a title */}
-      {editMode && (
-        <div className="flex items-center gap-1.5 px-3 py-2 bg-white/[0.03] rounded-t-xl border-b border-white/[0.06]">
+      {/* Section header */}
+      <div className="flex items-center gap-1.5 px-3 py-2 bg-white/[0.03] rounded-t-xl border-b border-white/[0.06]">
           {/* Drag handle */}
-          <div {...dragHandleProps} className="cursor-grab active:cursor-grabbing p-1 -ml-1 rounded hover:bg-white/10">
-            <GripVertical className="w-3.5 h-3.5 text-muted-foreground/60" />
-          </div>
+          {dragHandleProps && (
+            <div {...dragHandleProps} className="cursor-grab active:cursor-grabbing p-1 -ml-1 rounded hover:bg-white/10">
+              <GripVertical className="w-3.5 h-3.5 text-muted-foreground/60" />
+            </div>
+          )}
 
           {/* Title */}
           {renaming ? (
@@ -54,22 +55,23 @@ export default function DashboardSection({
           )}
 
           {/* Actions */}
-          <div className="flex items-center gap-0.5 flex-shrink-0">
-            <button onClick={() => setRenaming(!renaming)} className="p-1 rounded hover:bg-white/10" title="Rename">
-              <Pencil className="w-3 h-3 text-muted-foreground/60" />
-            </button>
-            <button onClick={onToggleSize} className="p-1 rounded hover:bg-white/10" title={fullWidth ? "Half width" : "Full width"}>
-              {fullWidth ? <Minimize2 className="w-3 h-3 text-muted-foreground/60" /> : <Maximize2 className="w-3 h-3 text-muted-foreground/60" />}
-            </button>
-            <button onClick={onToggleCollapse} className="p-1 rounded hover:bg-white/10" title={collapsed ? "Expand" : "Collapse"}>
-              {collapsed ? <ChevronDown className="w-3 h-3 text-muted-foreground/60" /> : <ChevronUp className="w-3 h-3 text-muted-foreground/60" />}
-            </button>
-            <button onClick={onRemove} className="p-1 rounded hover:bg-red-500/20" title="Remove section">
-              <X className="w-3 h-3 text-red-400/60" />
-            </button>
+          {editMode && (
+            <div className="flex items-center gap-0.5 flex-shrink-0">
+              <button onClick={() => setRenaming(!renaming)} className="p-1 rounded hover:bg-white/10" title="Rename">
+                <Pencil className="w-3 h-3 text-muted-foreground/60" />
+              </button>
+              <button onClick={onToggleSize} className="p-1 rounded hover:bg-white/10" title={fullWidth ? "Half width" : "Full width"}>
+                {fullWidth ? <Minimize2 className="w-3 h-3 text-muted-foreground/60" /> : <Maximize2 className="w-3 h-3 text-muted-foreground/60" />}
+              </button>
+              <button onClick={onToggleCollapse} className="p-1 rounded hover:bg-white/10" title={collapsed ? "Expand" : "Collapse"}>
+                {collapsed ? <ChevronDown className="w-3 h-3 text-muted-foreground/60" /> : <ChevronUp className="w-3 h-3 text-muted-foreground/60" />}
+              </button>
+              <button onClick={onRemove} className="p-1 rounded hover:bg-red-500/20" title="Remove section">
+                <X className="w-3 h-3 text-red-400/60" />
+              </button>
+            </div>
+          )}
           </div>
-        </div>
-      )}
 
       {/* Content */}
       {!collapsed && (

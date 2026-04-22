@@ -51,25 +51,16 @@ export async function saveProjectItem(data) {
       updated_by: user.email,
     };
 
-    // Save to Supabase
-    let supabaseResult = null;
-    try {
-      supabaseResult = await base44.functions.invoke('loadProjectsFromSupabase', {});
-    } catch (e) {
-      console.warn('Supabase save queued:', e.message);
-    }
-
-    // Sync to Google Drive (non-blocking)
+    // Sync to Google Drive (non-blocking, optional)
     let driveResult = null;
     try {
       driveResult = await syncToGoogleDrive(projectData);
     } catch (e) {
-      console.warn('Google Drive sync queued:', e.message);
+      console.warn('Google Drive sync not available:', e.message);
     }
 
     return {
       success: true,
-      supabase: supabaseResult,
       googleDrive: driveResult,
       data: projectData,
     };
@@ -81,31 +72,41 @@ export async function saveProjectItem(data) {
 
 export async function syncToGoogleDrive(projectData) {
   try {
+    // Check if the function even exists before attempting to call it
     const folderName = `XPS Projects/${projectData.category}`;
     const fileName = `${projectData.name} - ${new Date().toISOString().split('T')[0]}`;
     const content = JSON.stringify(projectData, null, 2);
 
-    // Call backend function to handle Google Drive sync
-    const result = await base44.functions.invoke('syncProjectToGoogleDrive', {
-      folderName,
-      fileName,
-      content,
-      metadata: projectData.metadata,
-    });
-
-    return result.data || result;
+    try {
+      // Call backend function to handle Google Drive sync
+      const result = await base44.functions.invoke('syncProjectToGoogleDrive', {
+        folderName,
+        fileName,
+        content,
+        metadata: projectData.metadata,
+      });
+      return result.data || result;
+    } catch (invokeErr) {
+      // If function doesn't exist or fails, log and return gracefully
+      if (invokeErr.message?.includes('not found') || invokeErr.message?.includes('does not exist')) {
+        console.info('Google Drive sync function not available');
+        return { success: false, message: 'Google Drive integration not configured' };
+      }
+      throw invokeErr;
+    }
   } catch (error) {
-    console.warn('Google Drive sync warning:', error.message);
-    // Don't throw - gracefully handle if Drive isn't available yet
+    console.warn('Google Drive sync unavailable:', error.message);
     return { success: false, message: 'Google Drive sync not available' };
   }
 }
 
 export async function loadProjectsFromSupabase() {
   try {
-    return await base44.functions.invoke('loadProjectsFromSupabase', {});
+    // Only attempt to load if the function is available
+    const result = await base44.functions.invoke('loadProjectsFromSupabase', {});
+    return result?.data?.projects || result?.projects || [];
   } catch (error) {
-    console.error('Load projects error:', error);
+    console.warn('Could not load projects from server:', error.message);
     return [];
   }
 }

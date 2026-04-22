@@ -6,20 +6,16 @@ Deno.serve(async (req) => {
     const user = await base44.auth.me();
     if (!user) return Response.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const { folderName, fileName, content, metadata } = await req.json();
-
-    // Log for debugging
-    console.log('Project data queued:', { folderName, fileName });
-
-    // Return success - Google Drive sync is optional and handled separately
+    // This function is a stub - Google Docs operations should use the Google Docs connector
+    console.log('readWriteGoogleDocs called - using Google Docs connector instead');
+    
     return Response.json({
-      success: true,
-      message: 'Project saved',
-      projectName: fileName,
-      category: folderName,
+      success: false,
+      message: 'Please use the Google Docs connector for document operations',
+      connectorAvailable: true,
     });
   } catch (error) {
-    console.error('Project save error:', error);
+    console.error('Error:', error);
     return Response.json({ error: error.message }, { status: 500 });
   }
 });

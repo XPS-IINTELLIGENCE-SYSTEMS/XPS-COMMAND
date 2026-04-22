@@ -22,7 +22,7 @@ import FinancialSandboxView from "../financial/FinancialSandboxView";
 import OrchestratorDashboard from "../orchestrator/OrchestratorDashboard";
 import FocusDashboard from "../focus/FocusDashboard";
 import FocusToolbar from "../focus/FocusToolbar";
-import CallCenterDashboard from "../callcenter/CallCenterDashboard";
+
 import { DEFAULT_TOOLS } from "./dashboardDefaults";
 import ToolCategoryGrid from "./ToolCategoryGrid";
 import DashboardWorkflowCreator from "./DashboardWorkflowCreator";
@@ -168,8 +168,8 @@ export default function DashboardHub({ onOpenTool }) {
 
   const addSection = (type) => {
     const id = `sec_${type}_${Date.now()}`;
-    const titles = { calendar: "Weekly Calendar", summary: "Daily Summary", favorites: "Favorites", tools: "All Tools", sidebar: "Scheduled Items", notes: "Quick Notes", quicklinks: "Quick Links", activity: "Activity Stream", command_notepad: "Command Notepad", quick_workflow: "Quick Workflow", create_workflow: "Create Workflow", system_guardian: "System Guardian", financial_sandbox: "Financial Sandbox", orchestrator: "Orchestrator", focus_dashboard: "Focus Dashboard", auto_dashboard: "Auto Dashboard Configurator", auto_workflow_engine: "Auto Workflow Engine", callcenter: "Call Center — Operations Hub" };
-    const newSec = { id, type, title: titles[type] || type, size: ["calendar", "favorites", "tools", "callcenter"].includes(type) ? "full" : "half", collapsed: false };
+    const titles = { calendar: "Weekly Calendar", summary: "Daily Summary", favorites: "Favorites", tools: "All Tools", sidebar: "Scheduled Items", notes: "Quick Notes", quicklinks: "Quick Links", activity: "Activity Stream", command_notepad: "Command Notepad", quick_workflow: "Quick Workflow", create_workflow: "Create Workflow", system_guardian: "System Guardian", financial_sandbox: "Financial Sandbox", orchestrator: "Orchestrator", focus_dashboard: "Focus Dashboard", auto_dashboard: "Auto Dashboard Configurator", auto_workflow_engine: "Auto Workflow Engine" };
+    const newSec = { id, type, title: titles[type] || type, size: ["calendar", "favorites", "tools"].includes(type) ? "full" : "half", collapsed: false };
     const updated = [...sections, newSec];
     setSections(updated);
     saveConfig({ sections: updated });
@@ -419,8 +419,7 @@ export default function DashboardHub({ onOpenTool }) {
       case "auto_workflow_engine":
         return <AutoWorkflowEngine onOpenTool={onOpenTool} />;
 
-      case "callcenter":
-        return <CallCenterDashboard />;
+
 
       default:
         return <div className="text-xs text-muted-foreground p-4 text-center">Unknown section</div>;
@@ -481,18 +480,13 @@ export default function DashboardHub({ onOpenTool }) {
           )}
         </div>
 
-        {/* Fixed Call Center Dashboard */}
-        <div className="bg-background border-b border-border mb-6 sticky top-0 z-40 p-4 sm:p-6">
-          <div className="max-w-[1100px] mx-auto">
-            <CallCenterDashboard />
-          </div>
-        </div>
+  
 
         <DragDropContext onDragEnd={onSectionDragEnd}>
           <Droppable droppableId="sections" type="SECTION">
             {(provided) => (
               <div ref={provided.innerRef} {...provided.droppableProps} className="space-y-6">
-                {sections.filter(s => s.type !== "callcenter").map((section, index) => (
+                {sections.map((section, index) => (
                   <Draggable key={section.id} draggableId={section.id} index={index} isDragDisabled={!editMode}>
                     {(prov, snap) => (
                       <div

@@ -90,74 +90,42 @@ SOURCE: ${record.source_type || 'Unknown'}
 Research this project, owner, GC, and architect. Provide:`;
   }
 
-  const profile = await base44.asServiceRole.integrations.Core.InvokeLLM({
-    prompt: `${profilePrompt}
+  let profile;
+  try {
+    profile = await base44.asServiceRole.integrations.Core.InvokeLLM({
+      prompt: `${profilePrompt}
 
-YOU MUST RETURN ALL OF THE FOLLOWING — LEAVE NOTHING BLANK:
-
-1. COMPANY OVERVIEW: Full description, founding year, ownership, business model, market position, reputation
-2. CONTACT DIRECTORY: All discoverable contacts — names, titles, emails, phones, LinkedIn. If not known, state "NEEDS RESEARCH"
-3. SITE/FACILITY INFORMATION: Physical details, building specs, current conditions, infrastructure notes
-4. FINANCIAL PROFILE: Revenue, funding, growth trajectory, credit indicators, payment history if available
-5. OPERATIONAL DETAILS: Key services, capabilities, equipment, certifications, licenses, bonding capacity
-6. COMPETITIVE LANDSCAPE: Who they compete with, market share, strengths vs competitors
-7. DECISION MAKERS: Who makes purchasing/hiring decisions, org chart insights, procurement process
-8. PREVIOUS PROJECTS/HISTORY: Notable projects, track record, awards, litigation history
-9. TECHNOLOGY & DIGITAL PRESENCE: Tech stack, website quality, social media presence, online reviews
-10. XPS OPPORTUNITY ANALYSIS: How XPS can win this business — specific products, pricing strategy, approach timing
-11. RISK ASSESSMENT: Payment risk, project complexity risk, competition risk, timeline risk
-12. RECOMMENDATIONS: Top 3 specific action items with urgency ranking
-
-Be exhaustive. Use internet research to fill gaps. Every field must have content.`,
-    add_context_from_internet: true,
-    model: "gemini_3_flash",
-    response_json_schema: {
-      type: "object",
-      properties: {
-        company_overview: { type: "string" },
-        contact_directory: {
-          type: "array",
-          items: {
-            type: "object",
-            properties: {
-              name: { type: "string" },
-              title: { type: "string" },
-              email: { type: "string" },
-              phone: { type: "string" },
-              linkedin: { type: "string" },
-              role_in_decision: { type: "string" }
-            }
-          }
-        },
-        site_information: { type: "string" },
-        financial_profile: { type: "string" },
-        operational_details: { type: "string" },
-        competitive_landscape: { type: "string" },
-        decision_makers: { type: "string" },
-        previous_projects: { type: "string" },
-        technology_digital: { type: "string" },
-        xps_opportunity: { type: "string" },
-        risk_assessment: { type: "string" },
-        recommendations: {
-          type: "array",
-          items: {
-            type: "object",
-            properties: {
-              action: { type: "string" },
-              urgency: { type: "string" },
-              expected_outcome: { type: "string" }
-            }
-          }
-        },
-        overall_score: { type: "number" },
-        summary: { type: "string" },
-        missing_data_flags: {
-          type: "array",
-          items: { type: "string" }
+Provide:
+1. COMPANY OVERVIEW: Description, market position
+2. CONTACT DIRECTORY: Names, titles, emails if available
+3. XPS OPPORTUNITY ANALYSIS: How XPS can win this business
+4. RECOMMENDATIONS: Top 3 action items with urgency
+5. SUMMARY: 2-3 sentence summary`,
+      add_context_from_internet: false,
+      model: "gpt_5_mini",
+      response_json_schema: {
+        type: "object",
+        properties: {
+          company_overview: { type: "string" },
+          contact_directory: { type: "array", items: { type: "object" } },
+          xps_opportunity: { type: "string" },
+          recommendations: { type: "array", items: { type: "object" } },
+          summary: { type: "string" },
+          overall_score: { type: "number" }
         }
       }
-    }
-  });
+    });
+  } catch (e) {
+    // If credit limit hit or error, return minimal profile from existing data
+    profile = {
+      company_overview: `${record.company || record.company_name || record.job_name} - Limited profile due to credit limits`,
+      contact_directory: [],
+      xps_opportunity: "Needs deeper research when credits are available",
+      recommendations: [{ action: "Re-attempt full profile", urgency: "Medium" }],
+      summary: "Basic profile created - full enrichment pending",
+      overall_score: 30
+    };
+  }
 
   // Save profile data back to entity
   const profileJson = JSON.stringify(profile);

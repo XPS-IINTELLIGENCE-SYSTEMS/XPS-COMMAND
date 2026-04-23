@@ -3,8 +3,10 @@ import { base44 } from "@/api/base44Client";
 import { Building2, Search, Globe, Mail, Phone, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DataPageHeader, ScoreBadge, EmptyState } from "../shared/DataPageLayout";
+import ConcreteContractorFinder from "./ConcreteContractorFinder";
 
 const VERTICALS = ["All", "Retail", "Food & Bev", "Warehouse", "Automotive", "Healthcare", "Fitness", "Education", "Industrial", "Residential", "Government"];
 
@@ -32,6 +34,13 @@ export default function FindCompaniesView() {
     <div>
       <DataPageHeader title="Find Companies" subtitle="AI-powered company discovery" />
 
+      <Tabs defaultValue="general" className="w-full">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="general">General Search</TabsTrigger>
+          <TabsTrigger value="concrete">Concrete Contractors</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="general" className="space-y-4">
       {/* Search bar */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
         <Input placeholder="Keywords (e.g., epoxy flooring)" value={keywords} onChange={(e) => setKeywords(e.target.value)} className="bg-card border-border" />
@@ -90,6 +99,12 @@ export default function FindCompaniesView() {
       ) : !loading ? (
         <EmptyState icon={Building2} message="Search for companies by keyword, location, or industry" />
       ) : null}
+        </TabsContent>
+
+        <TabsContent value="concrete">
+          <ConcreteContractorFinder />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

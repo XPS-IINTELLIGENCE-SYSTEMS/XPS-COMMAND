@@ -36,59 +36,80 @@
         "ai_architecture",
         "idea_generation",
         "custom"
-      ],
-      "description": "Prompt category"
+      ]
     },
     "library_type": {
       "type": "string",
       "enum": [
         "xps_operations",
         "autonomous_ai_systems"
-      ],
-      "description": "Which library this belongs to"
+      ]
     },
     "subcategory": {
-      "type": "string",
-      "description": "Optional subcategory for deeper organization"
+      "type": "string"
     },
     "prompt_text": {
       "type": "string",
-      "description": "Full prompt content"
+      "description": "Full prompt content (current version)"
     },
     "use_case": {
-      "type": "string",
-      "description": "Specific use case or example"
+      "type": "string"
     },
     "variables": {
       "type": "string",
-      "description": "JSON array of placeholder variables {{variable_name}}"
+      "description": "JSON array of placeholder variable names"
     },
     "tags": {
       "type": "string",
-      "description": "Comma-separated tags for search"
+      "description": "Comma-separated tags"
     },
     "is_favorite": {
       "type": "boolean",
-      "default": false,
-      "description": "User has favorited this prompt"
+      "default": false
     },
     "usage_count": {
       "type": "number",
-      "default": 0,
-      "description": "Times this prompt has been used"
+      "default": 0
     },
     "last_used": {
       "type": "string",
-      "format": "date-time",
-      "description": "Last time this prompt was used"
-    },
-    "created_by": {
-      "type": "string",
-      "description": "Email of creator"
+      "format": "date-time"
     },
     "notes": {
+      "type": "string"
+    },
+    "version": {
+      "type": "number",
+      "default": 1,
+      "description": "Current version number"
+    },
+    "version_history": {
       "type": "string",
-      "description": "Internal notes about the prompt"
+      "description": "JSON array of previous versions: [{version, prompt_text, title, edited_at, edited_by, change_note}]"
+    },
+    "success_score": {
+      "type": "number",
+      "default": 0,
+      "description": "0-100 score calculated from feedback"
+    },
+    "feedback_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Total number of feedback entries"
+    },
+    "positive_feedback": {
+      "type": "number",
+      "default": 0,
+      "description": "Count of positive (thumbs up) feedback"
+    },
+    "negative_feedback": {
+      "type": "number",
+      "default": 0,
+      "description": "Count of negative (thumbs down) feedback"
+    },
+    "feedback_log": {
+      "type": "string",
+      "description": "JSON array of feedback entries: [{rating, comment, submitted_at}]"
     }
   },
   "required": [

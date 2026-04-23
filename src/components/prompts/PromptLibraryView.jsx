@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { Search, Star, Copy, ChevronDown, Filter } from "lucide-react";
+import { Search, Star, Copy, Filter, BarChart3, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import PromptDetailModal from "./PromptDetailModal";
+import PromptAnalyticsDashboard from "./PromptAnalyticsDashboard";
 
 const LIBRARY_TYPES = {
   xps_operations: "XPS Operations (100 Prompts)",
@@ -50,6 +51,7 @@ export default function PromptLibraryView() {
   const [selectedPrompt, setSelectedPrompt] = useState(null);
   const [showDetail, setShowDetail] = useState(false);
   const [favorites, setFavorites] = useState([]);
+  const [activeView, setActiveView] = useState("library"); // library | analytics
 
   useEffect(() => {
     loadPrompts();
@@ -105,10 +107,37 @@ export default function PromptLibraryView() {
     <div className="min-h-screen bg-background p-4 sm:p-6">
       <div className="max-w-7xl mx-auto space-y-4">
         {/* Header */}
-        <div className="space-y-2">
-          <h1 className="text-3xl font-bold metallic-gold">Prompt Library</h1>
-          <p className="text-muted-foreground">Access 200+ curated prompts for system building, AI automation, and wealth creation</p>
+        <div className="flex items-start justify-between gap-4 flex-wrap">
+          <div>
+            <h1 className="text-3xl font-bold metallic-gold">Prompt Library</h1>
+            <p className="text-muted-foreground text-sm">200+ curated prompts for system building, AI automation, and wealth creation</p>
+          </div>
+          <div className="flex gap-2">
+            <Button
+              variant={activeView === 'library' ? 'default' : 'outline'}
+              size="sm"
+              className="gap-2"
+              onClick={() => setActiveView('library')}
+            >
+              <BookOpen className="w-4 h-4" /> Library
+            </Button>
+            <Button
+              variant={activeView === 'analytics' ? 'default' : 'outline'}
+              size="sm"
+              className="gap-2"
+              onClick={() => setActiveView('analytics')}
+            >
+              <BarChart3 className="w-4 h-4" /> Analytics
+            </Button>
+          </div>
         </div>
+
+        {/* Analytics View */}
+        {activeView === 'analytics' && (
+          <PromptAnalyticsDashboard prompts={prompts} />
+        )}
+
+        {activeView === 'library' && <>
 
         {/* Library Selection */}
         <div className="flex gap-2 flex-wrap">
@@ -270,6 +299,8 @@ export default function PromptLibraryView() {
             <p className="text-muted-foreground">No prompts found. Try adjusting your filters.</p>
           </div>
         )}
+
+        </> /* end library view */}
       </div>
 
       {/* Detail Modal */}

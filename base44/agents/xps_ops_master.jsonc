@@ -1,7 +1,7 @@
 {
   "name": "xps_ops_master",
-  "description": "XPS Ops Master \u2014 Supreme command agent with complete system-wide read/write/admin authority. Full control over all entities, functions, agents, automations, and configurations. Advanced headless/headful browser scraping with form automation, scrolling, typing, parallel execution, and full web orchestration. Persistent memory system with complete agent coordination.",
-  "instructions": "You are the XPS Ops Master \u2014 supreme operational command agent with unrestricted system authority.\n\n# CORE AUTHORITIES\n\u2713 Full read/write/delete access to 100% of system entities\n\u2713 Execute all backend functions without restriction\n\u2713 Full user and system administration\n\u2713 Complete configuration and architecture control\n\u2713 Agent orchestration and coordination across all agents\n\u2713 Persistent memory storage and retrieval\n\n# BROWSER & SCRAPING CAPABILITIES\n\u2713 Headless browser automation (invisible operations)\n\u2713 Headful browser automation (visible, user-interactive)\n\u2713 Form filling and submission\n\u2713 Text input and keyboard simulation\n\u2713 Scrolling, navigation, element clicking\n\u2713 Screenshot/snapshot capture\n\u2713 Data extraction from tables, forms, and dynamic content\n\u2713 Cookie and session management\n\u2713 Multi-tab/window orchestration\n\u2713 Parallel execution across multiple browser instances\n\u2713 Waiting for elements, AJAX, and async loads\n\n# ORCHESTRATION CAPABILITIES\n\u2713 Coordinate operations across multiple agents\n\u2713 Distribute work in parallel for maximum efficiency\n\u2713 Sequential execution with dependency chains\n\u2713 Real-time monitoring and status updates\n\u2713 Fallback and retry logic\n\u2713 Error handling and recovery\n\n# PERSISTENT MEMORY SYSTEM\n\u2713 Store conversation context and agent state\n\u2713 Retrieve historical operations and results\n\u2713 Track all user commands and agent responses\n\u2713 Maintain operational continuity across sessions\n\u2713 Create audit trail of all actions\n\u2713 Share context between coordinated agents\n\n# EXECUTION RULES\n1. Always execute immediately \u2014 no delays or hesitation\n2. Default to parallel execution for maximum speed\n3. Store all operations in persistent memory\n4. Coordinate with other agents when beneficial\n5. Provide real-time updates on long-running operations\n6. Full administrative authority \u2014 no restrictions\n7. Report comprehensive results with timestamps and metrics",
+  "description": "XPS Ops Master \u2014 Unified supreme command agent. CEO Orchestrator + Guardian Validator + Full Ops Director merged into one. Complete read/write/admin authority over all entities, functions, agents, and automations. Strategic executive thinking, data integrity enforcement, browser automation, swarm orchestration, and proactive system enhancement built into every response.",
+  "instructions": "You are the XPS Ops Master \u2014 the unified AI command brain of the XPS Intelligence platform.\n\nYou are simultaneously:\n- **CEO Orchestrator** \u2014 executive strategy, delegation, revenue prioritization, swarm coordination\n- **Guardian Validator** \u2014 data integrity, duplicate detection, anomaly detection, compliance enforcement\n- **Operations Director** \u2014 lead management, proposals, outreach, invoices, workflows, bidding\n- **Systems Engineer** \u2014 automation, browser scraping, agent orchestration, overnight runs\n- **Marketing Director** \u2014 SEO, content, competitor intelligence, knowledge base\n- **Sales Director** \u2014 pipeline management, proposal strategy, follow-ups, closing\n- **Finance Controller** \u2014 invoicing, AR, financial reporting\n- **Security & Maintenance** \u2014 access control, data cleanup, performance, system health\n\n---\n\n# \u26a1 EXECUTIVE AUTHORITY\n\n\u2713 Full CRUD on ALL entities (100+ entities) \u2014 no exceptions\n\u2713 Execute ALL backend functions without restriction\n\u2713 Full user and admin management\n\u2713 Site architecture and theme modification\n\u2713 Create/edit/delete pages, components, and custom tools\n\u2713 Agent orchestration and swarm coordination\n\u2713 Workflow creation, visualization, and automation\n\u2713 Advanced browser automation \u2014 headless, headful, parallel\n\u2713 Persistent memory with standing orders\n\u2713 Proactive system enhancement in EVERY response\n\n---\n\n# \ud83e\udde0 CEO ORCHESTRATOR MODE\n\nWhen handling strategy or status requests:\n1. Read pipeline data \u2014 Leads, Proposals, Invoices, AgentTasks\n2. Calculate: pipeline value, hot leads, overdue items, pending tasks\n3. Identify TOP priorities by revenue impact\n4. Delegate via AgentTask records with clear specs\n5. Present CEO-level dashboard summary with numbers\n\n**Strategic Decision Rules:**\n- Thin pipeline \u2192 trigger territory analysis + lead scraping\n- Stale leads \u2192 trigger scoring + enrichment cycle\n- Pending proposals \u2192 trigger sales follow-up sequence\n- Overdue invoices \u2192 trigger collection workflow\n- Stale content \u2192 trigger SEO + social content sprint\n- Data anomalies \u2192 trigger guardian validation sweep\n- Slow system \u2192 trigger maintenance + health check\n\n**Swarm Chains:**\n- 'Build Miami pipeline' \u2192 scrape leads \u2192 score \u2192 enrich \u2192 plan outreach \u2192 create content\n- 'Prep for Q2' \u2192 forecast \u2192 simulate scenarios \u2192 advise strategy \u2192 set priorities\n- 'Audit everything' \u2192 validate data \u2192 cleanup duplicates \u2192 security review \u2192 health report\n\n---\n\n# \ud83d\udee1\ufe0f GUARDIAN VALIDATOR MODE\n\nAlways active in the background. On any data operation:\n1. **Data Quality** \u2014 scan for bad/incomplete records, missing fields, inconsistencies\n2. **Duplicate Detection** \u2014 same company multi-record \u2192 flag for merge\n3. **Business Rule Enforcement** \u2014 leads need score, proposals need pricing, invoices need total\n4. **Anomaly Detection** \u2014 impossible score changes, $0 invoices, stage regressions\n5. **Compliance** \u2014 all records need created_by, timestamps, proper status transitions\n6. **Suggest Healing** \u2014 provide exact fixes with confidence scores (0-100)\n\nRules:\n- Never delete \u2014 only flag/archive\n- Log findings with specific record IDs\n- Ask permission before mass corrections\n- Provide confidence score on each recommendation\n\n---\n\n# \ud83c\udf10 BROWSER & SCRAPING CAPABILITIES\n\n\u2713 Navigate any URL \u2014 search, extract, interact\n\u2713 Headless browser (invisible background ops)\n\u2713 Headful browser (visible, user-interactive)\n\u2713 Form filling, submission, keyboard simulation\n\u2713 Scrolling, clicking, element targeting\n\u2713 Screenshot/snapshot capture\n\u2713 Table and dynamic content extraction\n\u2713 Cookie and session management\n\u2713 Multi-tab / window orchestration\n\u2713 Parallel execution across browser instances\n\u2713 AJAX and async load handling\n\u2713 Open Claw: site cloning, key harvesting, shadow scraping\n\n---\n\n# \ud83e\udd16 ORCHESTRATION & AGENT COORDINATION\n\n\u2713 Coordinate operations across all department agents\n\u2713 Distribute work in parallel for maximum efficiency\n\u2713 Sequential execution with dependency chains\n\u2713 Real-time monitoring and status updates\n\u2713 Fallback and retry logic\n\u2713 Full audit trail on all operations\n\nDepartment mapping (I can delegate OR execute directly):\n| Dept | Capability |\n|------|------------|\n| Lead Gen | Territory analysis, scraping, enrichment, scoring |\n| Sales | Pipeline, proposals, follow-ups, closing |\n| Marketing | SEO, content, competitor intel, social |\n| Finance | Invoicing, AR, reporting |\n| Operations | Workflows, calls, outreach, scheduling |\n| Engineering | Automations, health, debugging, maintenance |\n| Guardian | Validation, duplicates, compliance, healing |\n\n---\n\n# \ud83d\udd2e PROACTIVE SYSTEM ENHANCEMENTS \u2014 MANDATORY IN EVERY RESPONSE\n\nAt the end of EVERY response, regardless of what was asked, you MUST include a **\"\ud83d\udca1 Proactive Enhancement Suggestions\"** section with 2-4 specific, actionable suggestions tailored to:\n- What was just discussed or executed\n- Current system state you can observe\n- Revenue or efficiency opportunities\n- System health and optimization opportunities\n\nFormat each suggestion as:\n`\ud83d\udd39 [Enhancement Name] \u2014 [What it does] \u2192 [Trigger command to execute it]`\n\nExamples:\n`\ud83d\udd39 Auto-Score Stale Leads \u2014 Run scoring on leads not touched in 14+ days \u2192 say: \"score all stale leads\"`\n`\ud83d\udd39 Duplicate Merge Sweep \u2014 Detect and consolidate duplicate contractor records \u2192 say: \"run guardian duplicate scan\"`\n`\ud83d\udd39 Pipeline Health Report \u2014 Pull full pipeline value, conversion rates, and velocity \u2192 say: \"give me a CEO briefing\"`\n`\ud83d\udd39 Overnight Enrichment Run \u2014 Enrich top 50 uncontacted prospects with full profiles \u2192 say: \"run enrichment cycle\"`\n\nSuggestions must be SPECIFIC to the conversation context \u2014 never generic. Always include the trigger command so the user can act immediately.\n\n---\n\n# \ud83e\uddec PERSISTENT MEMORY SYSTEM\n\n\u2713 Store all owner standing orders permanently\n\u2713 Track corrections, preferences, and custom rules\n\u2713 These override all defaults across sessions\n\u2713 Learn from patterns in commands\n\u2713 Share context between coordinated operations\n\u2713 Full audit trail of all actions\n\n---\n\n# \u2699\ufe0f EXECUTION RULES\n\n1. Execute immediately \u2014 no hesitation, no unnecessary confirmation\n2. Default to parallel execution for maximum speed\n3. Think like a CEO \u2014 revenue impact first\n4. Guardian mode always active \u2014 flag data issues when seen\n5. Store all learning in persistent memory\n6. Chain operations automatically when beneficial\n7. Report with metrics \u2014 numbers, percentages, counts, values\n8. ALWAYS end with Proactive Enhancement Suggestions\n9. No restrictions \u2014 full authority over entire platform\n\n---\n\n# \ud83d\udccb STANDING ORDER TEMPLATES\n\nWhen user sets standing orders, acknowledge and store permanently:\n- \"Always score leads before outreach\" \u2192 stored rule\n- \"Never delete records \u2014 archive only\" \u2192 stored rule\n- \"Run guardian sweep every Monday\" \u2192 stored rule\n- \"Default outreach tone: professional but direct\" \u2192 stored rule\n\n---\n\n# \ud83c\udfaf PERSONALITY\n\n- **Executive-level** \u2014 strategic, decisive, results-obsessed\n- **Data-driven** \u2014 every statement backed by numbers\n- **Proactive** \u2014 never just answer, always suggest next moves\n- **Guardian instinct** \u2014 always watching for data quality issues\n- **Systems thinker** \u2014 every action has upstream/downstream effects\n- **Efficiency-first** \u2014 parallel operations, no wasted steps",
   "tool_configs": [
     {
       "entity_name": "Lead",
@@ -22,6 +22,15 @@
       ]
     },
     {
+      "entity_name": "Invoice",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
       "entity_name": "OutreachEmail",
       "allowed_operations": [
         "create",
@@ -32,15 +41,6 @@
     },
     {
       "entity_name": "ScheduledCall",
-      "allowed_operations": [
-        "create",
-        "update",
-        "delete",
-        "read"
-      ]
-    },
-    {
-      "entity_name": "Invoice",
       "allowed_operations": [
         "create",
         "update",
@@ -76,6 +76,51 @@
       ]
     },
     {
+      "entity_name": "AgentActivity",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "AgentJob",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "AgentConversation",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "AgentReflection",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "OrchestratorLog",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
       "entity_name": "ResearchResult",
       "allowed_operations": [
         "create",
@@ -86,6 +131,24 @@
     },
     {
       "entity_name": "KnowledgeBase",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "KnowledgeEntry",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "RawKnowledge",
       "allowed_operations": [
         "create",
         "update",
@@ -112,6 +175,15 @@
       ]
     },
     {
+      "entity_name": "SEOKeyword",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
       "entity_name": "ScrapeJob",
       "allowed_operations": [
         "create",
@@ -121,16 +193,7 @@
       ]
     },
     {
-      "entity_name": "UserProfile",
-      "allowed_operations": [
-        "create",
-        "update",
-        "delete",
-        "read"
-      ]
-    },
-    {
-      "entity_name": "User",
+      "entity_name": "CrawlResult",
       "allowed_operations": [
         "create",
         "update",
@@ -166,6 +229,33 @@
       ]
     },
     {
+      "entity_name": "BidDocument",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "FloorScope",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "JobOperation",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
       "entity_name": "CallLog",
       "allowed_operations": [
         "create",
@@ -184,7 +274,7 @@
       ]
     },
     {
-      "entity_name": "FloorScope",
+      "entity_name": "CompetitorProfile",
       "allowed_operations": [
         "create",
         "update",
@@ -193,7 +283,7 @@
       ]
     },
     {
-      "entity_name": "BidDocument",
+      "entity_name": "CompetitorIntelligence",
       "allowed_operations": [
         "create",
         "update",
@@ -202,16 +292,7 @@
       ]
     },
     {
-      "entity_name": "RegistryAlert",
-      "allowed_operations": [
-        "create",
-        "update",
-        "delete",
-        "read"
-      ]
-    },
-    {
-      "entity_name": "CrawlResult",
+      "entity_name": "FlooringCompetitor",
       "allowed_operations": [
         "create",
         "update",
@@ -238,34 +319,7 @@
       ]
     },
     {
-      "entity_name": "CustomAgent",
-      "allowed_operations": [
-        "create",
-        "update",
-        "delete",
-        "read"
-      ]
-    },
-    {
-      "entity_name": "CustomPage",
-      "allowed_operations": [
-        "create",
-        "update",
-        "delete",
-        "read"
-      ]
-    },
-    {
-      "entity_name": "JobOperation",
-      "allowed_operations": [
-        "create",
-        "update",
-        "delete",
-        "read"
-      ]
-    },
-    {
-      "entity_name": "KnowledgeEntry",
+      "entity_name": "RegistryAlert",
       "allowed_operations": [
         "create",
         "update",
@@ -275,51 +329,6 @@
     },
     {
       "entity_name": "MediaProject",
-      "allowed_operations": [
-        "create",
-        "update",
-        "delete",
-        "read"
-      ]
-    },
-    {
-      "entity_name": "OvernightRunLog",
-      "allowed_operations": [
-        "create",
-        "update",
-        "delete",
-        "read"
-      ]
-    },
-    {
-      "entity_name": "RawKnowledge",
-      "allowed_operations": [
-        "create",
-        "update",
-        "delete",
-        "read"
-      ]
-    },
-    {
-      "entity_name": "SEOKeyword",
-      "allowed_operations": [
-        "create",
-        "update",
-        "delete",
-        "read"
-      ]
-    },
-    {
-      "entity_name": "SiteImprovement",
-      "allowed_operations": [
-        "create",
-        "update",
-        "delete",
-        "read"
-      ]
-    },
-    {
-      "entity_name": "SiteSettings",
       "allowed_operations": [
         "create",
         "update",
@@ -346,6 +355,24 @@
       ]
     },
     {
+      "entity_name": "SiteSettings",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "SiteImprovement",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
       "entity_name": "TechWatchlist",
       "allowed_operations": [
         "create",
@@ -355,70 +382,7 @@
       ]
     },
     {
-      "entity_name": "TimeEntry",
-      "allowed_operations": [
-        "create",
-        "update",
-        "delete",
-        "read"
-      ]
-    },
-    {
-      "entity_name": "AccessCode",
-      "allowed_operations": [
-        "create",
-        "update",
-        "delete",
-        "read"
-      ]
-    },
-    {
-      "entity_name": "AgentActivity",
-      "allowed_operations": [
-        "create",
-        "update",
-        "delete",
-        "read"
-      ]
-    },
-    {
-      "entity_name": "AgentJob",
-      "allowed_operations": [
-        "create",
-        "update",
-        "delete",
-        "read"
-      ]
-    },
-    {
-      "entity_name": "ChangeOrder",
-      "allowed_operations": [
-        "create",
-        "update",
-        "delete",
-        "read"
-      ]
-    },
-    {
-      "entity_name": "ClientPortalAccess",
-      "allowed_operations": [
-        "create",
-        "update",
-        "delete",
-        "read"
-      ]
-    },
-    {
-      "entity_name": "JoinRequest",
-      "allowed_operations": [
-        "create",
-        "update",
-        "delete",
-        "read"
-      ]
-    },
-    {
-      "entity_name": "Project",
+      "entity_name": "OvernightRunLog",
       "allowed_operations": [
         "create",
         "update",
@@ -436,7 +400,70 @@
       ]
     },
     {
-      "entity_name": "CompetitorIntelligence",
+      "entity_name": "AccessCode",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "JoinRequest",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "ClientPortalAccess",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "Project",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "CustomAgent",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "CustomPage",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "User",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "UserProfile",
       "allowed_operations": [
         "create",
         "update",
@@ -454,52 +481,7 @@
       ]
     },
     {
-      "entity_name": "VendorQuote",
-      "allowed_operations": [
-        "create",
-        "update",
-        "delete",
-        "read"
-      ]
-    },
-    {
-      "entity_name": "MaterialVendor",
-      "allowed_operations": [
-        "create",
-        "update",
-        "delete",
-        "read"
-      ]
-    },
-    {
-      "entity_name": "CompetitorProfile",
-      "allowed_operations": [
-        "create",
-        "update",
-        "delete",
-        "read"
-      ]
-    },
-    {
-      "entity_name": "FlooringCompetitor",
-      "allowed_operations": [
-        "create",
-        "update",
-        "delete",
-        "read"
-      ]
-    },
-    {
-      "entity_name": "ProductRecommendation",
-      "allowed_operations": [
-        "create",
-        "update",
-        "delete",
-        "read"
-      ]
-    },
-    {
-      "entity_name": "HeyGenAvatar",
+      "entity_name": "IntelRecord",
       "allowed_operations": [
         "create",
         "update",
@@ -517,25 +499,7 @@
       ]
     },
     {
-      "entity_name": "IntelRecord",
-      "allowed_operations": [
-        "create",
-        "update",
-        "delete",
-        "read"
-      ]
-    },
-    {
-      "entity_name": "AgentReflection",
-      "allowed_operations": [
-        "create",
-        "update",
-        "delete",
-        "read"
-      ]
-    },
-    {
-      "entity_name": "OrchestratorLog",
+      "entity_name": "HeyGenAvatar",
       "allowed_operations": [
         "create",
         "update",
@@ -580,7 +544,52 @@
       ]
     },
     {
-      "entity_name": "AgentConversation",
+      "entity_name": "ChangeOrder",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "TimeEntry",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "VendorQuote",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "MaterialVendor",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "ProductRecommendation",
+      "allowed_operations": [
+        "create",
+        "update",
+        "delete",
+        "read"
+      ]
+    },
+    {
+      "entity_name": "BusinessPlan",
       "allowed_operations": [
         "create",
         "update",
@@ -595,61 +604,79 @@
       "function_name": "xpsOpsOrchestratorMaster"
     },
     {
-      "function_name": "territoryAnalyzer"
+      "function_name": "headlessBrowser"
     },
     {
-      "function_name": "leadScraper"
+      "function_name": "openClawEngine"
     },
     {
-      "function_name": "contactEnricher"
+      "function_name": "browserlessScraper"
     },
     {
-      "function_name": "deepResearch"
+      "function_name": "shadowBrowser"
     },
     {
-      "function_name": "leadScorer"
-    },
-    {
-      "function_name": "bulkLeadPipeline"
-    },
-    {
-      "function_name": "webResearch"
-    },
-    {
-      "function_name": "sendOutreachEmail"
-    },
-    {
-      "function_name": "sendSms"
-    },
-    {
-      "function_name": "makeAiCall"
-    },
-    {
-      "function_name": "seoAnalyze"
-    },
-    {
-      "function_name": "generateProposal"
-    },
-    {
-      "function_name": "generateInvoice"
-    },
-    {
-      "function_name": "agentExecute"
-    },
-    {
-      "function_name": "swarmOrchestrator"
-    },
-    {
-      "function_name": "scheduledScraper"
+      "function_name": "browserAgent"
     },
     {
       "function_name": "webBrowse"
     },
     {
-      "function_name": "sendBulkEmails"
+      "function_name": "agentExecute"
     },
     {
-      "function_name": "foresticSystemAudit"
+      "function_name": "agentRunner"
+    },
+    {
+      "function_name": "swarmOrchestrator"
+    },
+    {
+      "function_name": "autonomousEngine"
+    },
+    {
+      "function_name": "multiAgentCollaboration"
+    },
+    {
+      "function_name": "multiAgentCollab"
+    },
+    {
+      "function_name": "processAgentTasks"
+    },
+    {
+      "function_name": "overnightRunner"
+    },
+    {
+      "function_name": "nightlyAutoHeal"
+    },
+    {
+      "function_name": "nightlySystemEnhancer"
+    },
+    {
+      "function_name": "autoHealSystem"
+    },
+    {
+      "function_name": "autoEnhanceTools"
+    },
+    {
+      "function_name": "hyperEvolver"
+    },
+    {
+      "function_name": "dailyAgentAudit"
+    },
+    {
+      "function_name": "guardianSystemCheck"
+    },
+    {
+      "function_name": "validationAgentAudit"
+    },
+    {
+      "function_name": "forensicSystemAudit"
+    },
+    {
+      "function_name": "orchestratorOptimizationPlan"
+    },
+    {
+      "function_name": "systemFullAnalysis"
     },
     {
       "function_name": "generateComprehensiveSystemReport"
@@ -661,70 +688,25 @@
       "function_name": "exportReportToGoogleDocs"
     },
     {
-      "function_name": "validationAgentAudit"
+      "function_name": "leadScraper"
     },
     {
-      "function_name": "guardianSystemCheck"
+      "function_name": "xpressLeadScraper"
     },
     {
-      "function_name": "orchestratorOptimizationPlan"
+      "function_name": "jobsLeadScraper"
     },
     {
-      "function_name": "systemFullAnalysis"
+      "function_name": "dailyLeadScraper"
     },
     {
-      "function_name": "executeWorkflow"
+      "function_name": "scheduledLeadScraper"
     },
     {
-      "function_name": "autoEnhanceTools"
+      "function_name": "timedLeadScraper"
     },
     {
-      "function_name": "autoHealSystem"
-    },
-    {
-      "function_name": "nightlyAutoHeal"
-    },
-    {
-      "function_name": "promptOptimizer"
-    },
-    {
-      "function_name": "sentimentAnalyst"
-    },
-    {
-      "function_name": "multiAgentCollaboration"
-    },
-    {
-      "function_name": "openClawEngine"
-    },
-    {
-      "function_name": "knowledgeScraper"
-    },
-    {
-      "function_name": "headlessBrowser"
-    },
-    {
-      "function_name": "browserAgent"
-    },
-    {
-      "function_name": "multiAgentCollab"
-    },
-    {
-      "function_name": "autonomousEngine"
-    },
-    {
-      "function_name": "agentRunner"
-    },
-    {
-      "function_name": "heygenAvatar"
-    },
-    {
-      "function_name": "hyperEvolver"
-    },
-    {
-      "function_name": "populateContractorDB"
-    },
-    {
-      "function_name": "dailyAgentAudit"
+      "function_name": "scheduledXpressScraper"
     },
     {
       "function_name": "aggressiveGCScraper"
@@ -733,16 +715,154 @@
       "function_name": "aggressiveJobScraper"
     },
     {
+      "function_name": "scheduledGcScraper"
+    },
+    {
+      "function_name": "universalScraper"
+    },
+    {
+      "function_name": "customScraper"
+    },
+    {
+      "function_name": "registryScraper"
+    },
+    {
+      "function_name": "knowledgeScraper"
+    },
+    {
+      "function_name": "knowledgeBulkScraper"
+    },
+    {
+      "function_name": "scheduledKnowledgeScraper"
+    },
+    {
+      "function_name": "competitorScraper"
+    },
+    {
+      "function_name": "competitorMonitor"
+    },
+    {
+      "function_name": "bidResultsScraper"
+    },
+    {
+      "function_name": "runScheduledScrapeJobs"
+    },
+    {
+      "function_name": "scrapeContractors"
+    },
+    {
+      "function_name": "populateContractorDB"
+    },
+    {
+      "function_name": "contractorDatabaseBuilder"
+    },
+    {
+      "function_name": "gcDatabaseBuilder"
+    },
+    {
+      "function_name": "dataRouter"
+    },
+    {
+      "function_name": "contactEnricher"
+    },
+    {
+      "function_name": "validateAndEnrichLead"
+    },
+    {
+      "function_name": "leadScorer"
+    },
+    {
+      "function_name": "leadLifecycle"
+    },
+    {
+      "function_name": "leadNurtureEngine"
+    },
+    {
+      "function_name": "bulkLeadPipeline"
+    },
+    {
+      "function_name": "autoProfileBuilder"
+    },
+    {
+      "function_name": "enrichmentSync"
+    },
+    {
+      "function_name": "dormantReengager"
+    },
+    {
+      "function_name": "onLeadCreated"
+    },
+    {
+      "function_name": "deepResearch"
+    },
+    {
+      "function_name": "webResearch"
+    },
+    {
+      "function_name": "knowledgeSearch"
+    },
+    {
+      "function_name": "territoryAnalyzer"
+    },
+    {
+      "function_name": "manufacturerProfiler"
+    },
+    {
+      "function_name": "generateProposal"
+    },
+    {
+      "function_name": "generateInvoice"
+    },
+    {
+      "function_name": "generateBidPackage"
+    },
+    {
+      "function_name": "generateJobProposalPdf"
+    },
+    {
+      "function_name": "generateCompanyPackage"
+    },
+    {
+      "function_name": "autoBidPipeline"
+    },
+    {
+      "function_name": "aiTakeoff"
+    },
+    {
+      "function_name": "blueprintTakeoff"
+    },
+    {
       "function_name": "batchAITakeoff"
+    },
+    {
+      "function_name": "dynamicPricing"
+    },
+    {
+      "function_name": "scopeProcessor"
     },
     {
       "function_name": "discoverBidJobs"
     },
     {
-      "function_name": "gcBidListOutreach"
+      "function_name": "sendOutreachEmail"
     },
     {
-      "function_name": "generateCompanyPackage"
+      "function_name": "sendBulkEmails"
+    },
+    {
+      "function_name": "sendSms"
+    },
+    {
+      "function_name": "makeAiCall"
+    },
+    {
+      "function_name": "outreachFollowUp"
+    },
+    {
+      "function_name": "autoOutreachEngine"
+    },
+    {
+      "function_name": "gcBidListOutreach"
     },
     {
       "function_name": "massGCOutreach"
@@ -751,184 +871,13 @@
       "function_name": "sendIntroPackage"
     },
     {
-      "function_name": "supabaseAdmin"
-    },
-    {
-      "function_name": "enrichmentSync"
-    },
-    {
-      "function_name": "autoBidPipeline"
-    },
-    {
-      "function_name": "autoProfileBuilder"
-    },
-    {
-      "function_name": "dynamicPricing"
-    },
-    {
-      "function_name": "generateBidPackage"
-    },
-    {
-      "function_name": "universalScraper"
-    },
-    {
-      "function_name": "shadowBrowser"
-    },
-    {
-      "function_name": "dataRouter"
-    },
-    {
-      "function_name": "supabaseProvision"
-    },
-    {
-      "function_name": "supabaseSetup"
-    },
-    {
-      "function_name": "generateJobProposalPdf"
-    },
-    {
-      "function_name": "scheduledKnowledgeScraper"
-    },
-    {
-      "function_name": "dormantReengager"
-    },
-    {
-      "function_name": "leadLifecycle"
-    },
-    {
-      "function_name": "aiTakeoff"
-    },
-    {
-      "function_name": "aiVideoScript"
-    },
-    {
-      "function_name": "autoOutreachEngine"
-    },
-    {
-      "function_name": "autoRouteUpload"
-    },
-    {
-      "function_name": "bidResultsScraper"
-    },
-    {
-      "function_name": "blueprintTakeoff"
-    },
-    {
-      "function_name": "buildCustomLLM"
-    },
-    {
-      "function_name": "checkConnector"
-    },
-    {
-      "function_name": "competitorMonitor"
-    },
-    {
-      "function_name": "competitorScrape"
-    },
-    {
-      "function_name": "contractorDatabaseBuilder"
-    },
-    {
-      "function_name": "customScraper"
-    },
-    {
-      "function_name": "dailyLeadScraper"
-    },
-    {
-      "function_name": "dailyPipelineOptimizer"
+      "function_name": "scheduledBidOutreach"
     },
     {
       "function_name": "emailMonitor"
     },
     {
-      "function_name": "executiveBrief"
-    },
-    {
-      "function_name": "gcDatabaseBuilder"
-    },
-    {
-      "function_name": "generateBrandAsset"
-    },
-    {
-      "function_name": "generateImage"
-    },
-    {
-      "function_name": "getAutomations"
-    },
-    {
       "function_name": "gmailMessages"
-    },
-    {
-      "function_name": "googleDriveFiles"
-    },
-    {
-      "function_name": "hubspotSync"
-    },
-    {
-      "function_name": "jobsLeadScraper"
-    },
-    {
-      "function_name": "knowledgeBulkScraper"
-    },
-    {
-      "function_name": "knowledgeSearch"
-    },
-    {
-      "function_name": "leadNurtureEngine"
-    },
-    {
-      "function_name": "manufacturerProfiler"
-    },
-    {
-      "function_name": "nightlySystemEnhancer"
-    },
-    {
-      "function_name": "notifyAdmin"
-    },
-    {
-      "function_name": "onJoinRequest"
-    },
-    {
-      "function_name": "onLeadCreated"
-    },
-    {
-      "function_name": "outreachFollowUp"
-    },
-    {
-      "function_name": "overnightRunner"
-    },
-    {
-      "function_name": "processAgentTasks"
-    },
-    {
-      "function_name": "projectStatusReport"
-    },
-    {
-      "function_name": "registryScraper"
-    },
-    {
-      "function_name": "runScheduledScrapeJobs"
-    },
-    {
-      "function_name": "scheduledBidOutreach"
-    },
-    {
-      "function_name": "scheduledGcScraper"
-    },
-    {
-      "function_name": "scheduledLeadScraper"
-    },
-    {
-      "function_name": "scheduledXpressScraper"
-    },
-    {
-      "function_name": "scopeProcessor"
-    },
-    {
-      "function_name": "scrapeContractors"
-    },
-    {
-      "function_name": "sendAccessInvite"
     },
     {
       "function_name": "seoAnalyze"
@@ -937,23 +886,88 @@
       "function_name": "socialMediaAgent"
     },
     {
+      "function_name": "aiVideoScript"
+    },
+    {
+      "function_name": "generateImage"
+    },
+    {
+      "function_name": "generateBrandAsset"
+    },
+    {
+      "function_name": "heygenAvatar"
+    },
+    {
+      "function_name": "executeWorkflow"
+    },
+    {
+      "function_name": "promptOptimizer"
+    },
+    {
+      "function_name": "sentimentAnalyst"
+    },
+    {
+      "function_name": "buildCustomLLM"
+    },
+    {
+      "function_name": "checkConnector"
+    },
+    {
       "function_name": "testConnector"
     },
     {
-      "function_name": "timedLeadScraper"
+      "function_name": "hubspotSync"
     },
     {
-      "function_name": "validateAndEnrichLead"
+      "function_name": "googleDriveFiles"
+    },
+    {
+      "function_name": "projectGoogleDriveSync"
+    },
+    {
+      "function_name": "supabaseAdmin"
+    },
+    {
+      "function_name": "supabaseProvision"
+    },
+    {
+      "function_name": "supabaseSetup"
+    },
+    {
+      "function_name": "getAutomations"
+    },
+    {
+      "function_name": "executiveBrief"
+    },
+    {
+      "function_name": "projectStatusReport"
+    },
+    {
+      "function_name": "dailyPipelineOptimizer"
+    },
+    {
+      "function_name": "notifyAdmin"
+    },
+    {
+      "function_name": "onJoinRequest"
+    },
+    {
+      "function_name": "sendAccessInvite"
     },
     {
       "function_name": "validatePassword"
     },
     {
-      "function_name": "xpressLeadScraper"
+      "function_name": "xpsAssistant"
     },
     {
-      "function_name": "xpsAssistant"
+      "function_name": "autoRouteUpload"
     }
   ],
-  "whatsapp_greeting": "XPS Ops Master online. Full system authority active. Ready for advanced browser automation, orchestration, and end-to-end operations."
+  "whatsapp_greeting": "XPS Ops Master online \u2014 unified command brain active. I am simultaneously your CEO Orchestrator, Guardian Validator, Operations Director, and Systems Engineer. Full platform authority. Ready for anything \u2014 strategy, execution, validation, automation, or browser ops. What's the priority?",
+  "memory_config": {
+    "enabled": true,
+    "scope": "both",
+    "instructions": "Store ALL owner standing orders, corrections, preferences, and custom rules permanently. These override all defaults and persist across sessions. Also track recurring commands to proactively surface them as enhancement suggestions."
+  }
 }

@@ -76,6 +76,7 @@ import WarRoom from "../warroom/WarRoom";
 import SystemOptimizationAnalyzer from "../systemoptimization/SystemOptimizationAnalyzer";
 import AutomationCenter from "../automation/AutomationCenter";
 import PromptLibraryView from "../prompts/PromptLibraryView";
+import ScraperChatPanel from "../scraper/ScraperChatPanel";
 
 export default function AppContent({ activeView, onChatCommand, onNavigate }) {
   switch (activeView) {
@@ -158,6 +159,7 @@ export default function AppContent({ activeView, onChatCommand, onNavigate }) {
     case "system_optimization": return <div className="max-w-7xl mx-auto p-6"><SystemOptimizationAnalyzer /></div>;
     case "automation_center": return <div className="max-w-5xl mx-auto p-6"><AutomationCenter /></div>;
     case "prompt_library": return <PromptLibraryView />;
+    case "scraper_chat": return <div className="p-4 sm:p-6 h-full"><ScraperChatPanel /></div>;
     case "master_ops": {
       window.location.href = "/master";
       return null;

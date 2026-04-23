@@ -170,6 +170,7 @@ export const DEFAULT_TOOLS = [
   { id: "system_optimization", label: "System Optimization", desc: "Full system audit with validation, guardian, and orchestrator agents", iconName: "BarChart3", color: "#d4af37" },
   { id: "automation_center", label: "Automation Center", desc: "Schedule PDF exports & create event-driven task automations", iconName: "Zap", color: "#f59e0b" },
   { id: "prompt_library", label: "Prompt Library", desc: "200+ AI prompts for operations, autonomous systems, wealth creation & AI engineering", iconName: "BookOpen", color: "#8b5cf6" },
+  { id: "scraper_chat", label: "Scraper Chat", desc: "Parallel headless scraper — search, crawl, extract & save to projects. No integrations needed.", iconName: "Globe", color: "#22c55e" },
   ];
 
 // Tool categories with metallic gold headers & descriptions
@@ -220,7 +221,7 @@ export const TOOL_CATEGORIES = [
     id: "automation_workflows",
     title: "Automation & Workflows",
     desc: "Drag-and-drop automation, scheduled scraping, and data routing pipelines.",
-    toolIds: ["workflows", "scheduler", "master_scraper", "approval_queue", "strategy_30day", "workflow_simulator", "automation_center"],
+    toolIds: ["workflows", "scheduler", "master_scraper", "approval_queue", "strategy_30day", "workflow_simulator", "automation_center", "scraper_chat"],
   },
   {
     id: "system_admin",

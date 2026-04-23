@@ -1,45 +1,16 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { Search, Star, Copy, Filter, BarChart3, BookOpen } from "lucide-react";
+import { Search, Star, Copy, BarChart3, BookOpen, ChevronDown, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import PromptDetailModal from "./PromptDetailModal";
 import PromptAnalyticsDashboard from "./PromptAnalyticsDashboard";
+import { CATEGORY_TREE, CATEGORIES } from "./categoryConfig";
 
 const LIBRARY_TYPES = {
-  xps_operations: "XPS Operations (100 Prompts)",
+  xps_operations: "XPS Operations",
   autonomous_ai_systems: "Autonomous AI Systems",
-};
-
-const CATEGORIES = {
-  leads_intelligence: "Leads & Intelligence",
-  outreach_campaigns: "Outreach Campaigns",
-  bid_pricing: "Bid & Pricing",
-  competitor_research: "Competitor Research",
-  content_creation: "Content Creation",
-  agent_building: "Agent Building",
-  automation_workflows: "Automation Workflows",
-  financial_ai: "Financial AI",
-  autonomous_systems: "Autonomous Systems",
-  wealth_creation: "Wealth Creation",
-  trading_systems: "Trading Systems",
-  simulation_systems: "Simulation Systems",
-  prediction_systems: "Prediction Systems",
-  recommendation_systems: "Recommendations",
-  scraping_harvesting: "Scraping & Harvesting",
-  system_cloning: "System Cloning",
-  invention_systems: "Invention Systems",
-  meta_systems: "Meta-Systems",
-  open_source_integration: "Open Source",
-  system_refactoring: "Refactoring",
-  recursive_building: "Recursive Building",
-  millionaire_paths: "Millionaire Paths",
-  pass_through_systems: "Pass-Through Systems",
-  consulting_systems: "Consulting Systems",
-  ai_architecture: "AI Architecture",
-  idea_generation: "Idea Generation",
-  custom: "Custom",
 };
 
 export default function PromptLibraryView() {
@@ -47,6 +18,8 @@ export default function PromptLibraryView() {
   const [loading, setLoading] = useState(true);
   const [selectedLibrary, setSelectedLibrary] = useState("xps_operations");
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedSubcategory, setSelectedSubcategory] = useState(null);
+  const [expandedCategory, setExpandedCategory] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedPrompt, setSelectedPrompt] = useState(null);
   const [showDetail, setShowDetail] = useState(false);
@@ -66,8 +39,10 @@ export default function PromptLibraryView() {
   const filteredPrompts = prompts.filter(p => {
     if (p.library_type !== selectedLibrary) return false;
     if (selectedCategory && p.category !== selectedCategory) return false;
+    if (selectedSubcategory && p.subcategory !== selectedSubcategory) return false;
     if (searchTerm && !p.title.toLowerCase().includes(searchTerm.toLowerCase()) && 
-        !p.prompt_text.toLowerCase().includes(searchTerm.toLowerCase())) return false;
+        !p.prompt_text.toLowerCase().includes(searchTerm.toLowerCase()) &&
+        !(p.subcategory || '').toLowerCase().includes(searchTerm.toLowerCase())) return false;
     return true;
   });
 
@@ -96,8 +71,29 @@ export default function PromptLibraryView() {
   };
 
   const categoriesInLibrary = [...new Set(
-    prompts.filter(p => p.library_type === selectedLibrary).map(p => p.category)
+    prompts.filter(p => p.library_type === selectedLibrary).map(p => p.category).filter(Boolean)
   )];
+
+  // Build subcategory counts per category
+  const subcategoryCounts = {};
+  prompts.filter(p => p.library_type === selectedLibrary).forEach(p => {
+    if (p.category && p.subcategory) {
+      const key = `${p.category}::${p.subcategory}`;
+      subcategoryCounts[key] = (subcategoryCounts[key] || 0) + 1;
+    }
+  });
+
+  const handleSelectCategory = (cat) => {
+    if (selectedCategory === cat) {
+      setSelectedCategory(null);
+      setSelectedSubcategory(null);
+      setExpandedCategory(null);
+    } else {
+      setSelectedCategory(cat);
+      setSelectedSubcategory(null);
+      setExpandedCategory(cat);
+    }
+  };
 
   if (loading) {
     return <div className="flex justify-center py-20"><div className="animate-spin w-6 h-6 border-2 border-primary rounded-full" /></div>;
@@ -159,57 +155,114 @@ export default function PromptLibraryView() {
           ))}
         </div>
 
-        {/* Search & Filter */}
-        <div className="flex gap-4 flex-col sm:flex-row">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input
-              placeholder="Search prompts..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
-            />
-          </div>
-          <Button variant="outline" className="gap-2">
-            <Filter className="w-4 h-4" />
-            Filters
-          </Button>
+        {/* Search */}
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Input
+            placeholder="Search prompts, subcategories..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10"
+          />
         </div>
 
-        {/* Category Filter */}
-        <div className="flex gap-2 flex-wrap">
-          <button
-            onClick={() => setSelectedCategory(null)}
-            className={`px-3 py-1 rounded-full text-sm transition-all ${
-              selectedCategory === null
-                ? "bg-primary text-primary-foreground"
-                : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-            }`}
-          >
-            All Categories
-          </button>
-          {categoriesInLibrary.map(cat => (
+        {/* Nested Category Filter */}
+        <div className="flex gap-6 flex-col lg:flex-row">
+          {/* Sidebar category tree */}
+          <div className="lg:w-52 flex-shrink-0 space-y-1">
             <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={`px-3 py-1 rounded-full text-sm transition-all ${
-                selectedCategory === cat
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+              onClick={() => { setSelectedCategory(null); setSelectedSubcategory(null); setExpandedCategory(null); }}
+              className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all font-medium ${
+                selectedCategory === null ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-secondary hover:text-foreground"
               }`}
             >
-              {CATEGORIES[cat] || cat}
+              All Categories
+              <span className="ml-2 text-xs opacity-60">({prompts.filter(p => p.library_type === selectedLibrary).length})</span>
             </button>
-          ))}
-        </div>
 
-        {/* Results Count */}
-        <div className="text-sm text-muted-foreground">
-          {filteredPrompts.length} prompt{filteredPrompts.length !== 1 ? 's' : ''} found
-        </div>
+            {categoriesInLibrary.map(cat => {
+              const catConfig = CATEGORY_TREE[cat];
+              const catCount = prompts.filter(p => p.library_type === selectedLibrary && p.category === cat).length;
+              const isExpanded = expandedCategory === cat;
+              const isSelected = selectedCategory === cat;
 
-        {/* Prompts Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              // Subcategories that actually exist in the data
+              const usedSubs = [...new Set(
+                prompts.filter(p => p.library_type === selectedLibrary && p.category === cat && p.subcategory).map(p => p.subcategory)
+              )];
+              // Also include defined subcategories from config that have prompts
+              const allSubs = [...new Set([...usedSubs])];
+
+              return (
+                <div key={cat}>
+                  <button
+                    onClick={() => handleSelectCategory(cat)}
+                    className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all flex items-center justify-between group ${
+                      isSelected ? "bg-primary/10 text-primary font-medium border border-primary/20" : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+                    }`}
+                  >
+                    <span className="flex items-center gap-1.5">
+                      {allSubs.length > 0 && (
+                        isExpanded
+                          ? <ChevronDown className="w-3 h-3 flex-shrink-0" />
+                          : <ChevronRight className="w-3 h-3 flex-shrink-0" />
+                      )}
+                      <span className="truncate">{catConfig?.label || cat}</span>
+                    </span>
+                    <span className="text-xs opacity-50 flex-shrink-0">{catCount}</span>
+                  </button>
+
+                  {/* Subcategories */}
+                  {isExpanded && allSubs.length > 0 && (
+                    <div className="ml-4 mt-0.5 space-y-0.5">
+                      <button
+                        onClick={() => setSelectedSubcategory(null)}
+                        className={`w-full text-left px-3 py-1.5 rounded-md text-xs transition-all ${
+                          !selectedSubcategory ? "text-primary font-medium" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+                        }`}
+                      >
+                        All ({catCount})
+                      </button>
+                      {allSubs.map(sub => {
+                        const subCount = subcategoryCounts[`${cat}::${sub}`] || 0;
+                        return (
+                          <button
+                            key={sub}
+                            onClick={() => setSelectedSubcategory(selectedSubcategory === sub ? null : sub)}
+                            className={`w-full text-left px-3 py-1.5 rounded-md text-xs transition-all flex justify-between ${
+                              selectedSubcategory === sub
+                                ? "bg-primary/10 text-primary font-medium"
+                                : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+                            }`}
+                          >
+                            <span className="truncate">{sub}</span>
+                            <span className="opacity-50 flex-shrink-0 ml-1">{subCount}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Main content */}
+          <div className="flex-1 min-w-0 space-y-4">
+
+          {/* Results Count */}
+          <div className="text-sm text-muted-foreground flex items-center gap-2">
+            {filteredPrompts.length} prompt{filteredPrompts.length !== 1 ? 's' : ''} found
+            {selectedSubcategory && (
+              <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">
+                {selectedSubcategory}
+                <button className="ml-1 hover:text-primary/60" onClick={() => setSelectedSubcategory(null)}>×</button>
+              </span>
+            )}
+          </div>
+
+          {/* Prompts Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {filteredPrompts.map((prompt) => (
             <Card
               key={prompt.id}
@@ -294,11 +347,14 @@ export default function PromptLibraryView() {
           ))}
         </div>
 
-        {filteredPrompts.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground">No prompts found. Try adjusting your filters.</p>
-          </div>
-        )}
+          {filteredPrompts.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">No prompts found. Try adjusting your filters.</p>
+            </div>
+          )}
+
+          </div> {/* end main content */}
+        </div> {/* end flex row */}
 
         </> /* end library view */}
       </div>

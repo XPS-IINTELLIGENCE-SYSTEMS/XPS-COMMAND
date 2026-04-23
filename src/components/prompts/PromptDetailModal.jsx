@@ -4,36 +4,11 @@ import { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import PromptVersionHistory from "./PromptVersionHistory";
 import PromptFeedback from "./PromptFeedback";
+import AICategorySuggester from "./AICategorySuggester";
+import { CATEGORY_TREE } from "./categoryConfig";
 
-const CATEGORIES = {
-  leads_intelligence: "Leads & Intelligence",
-  outreach_campaigns: "Outreach Campaigns",
-  bid_pricing: "Bid & Pricing",
-  competitor_research: "Competitor Research",
-  content_creation: "Content Creation",
-  agent_building: "Agent Building",
-  automation_workflows: "Automation Workflows",
-  financial_ai: "Financial AI",
-  autonomous_systems: "Autonomous Systems",
-  wealth_creation: "Wealth Creation",
-  trading_systems: "Trading Systems",
-  simulation_systems: "Simulation Systems",
-  prediction_systems: "Prediction Systems",
-  recommendation_systems: "Recommendations",
-  scraping_harvesting: "Scraping & Harvesting",
-  system_cloning: "System Cloning",
-  invention_systems: "Invention Systems",
-  meta_systems: "Meta-Systems",
-  open_source_integration: "Open Source",
-  system_refactoring: "Refactoring",
-  recursive_building: "Recursive Building",
-  millionaire_paths: "Millionaire Paths",
-  pass_through_systems: "Pass-Through Systems",
-  consulting_systems: "Consulting Systems",
-  ai_architecture: "AI Architecture",
-  idea_generation: "Idea Generation",
-  custom: "Custom",
-};
+// Use CATEGORY_TREE from config
+const CATEGORIES = Object.fromEntries(Object.entries(CATEGORY_TREE).map(([k, v]) => [k, v.label]));
 
 export default function PromptDetailModal({ prompt: initialPrompt, onClose, onCopy, isFavorite, onToggleFavorite }) {
   const [prompt, setPrompt] = useState(initialPrompt);
@@ -128,7 +103,12 @@ export default function PromptDetailModal({ prompt: initialPrompt, onClose, onCo
                   Autonomous AI
                 </span>
               )}
-              <span className="text-xs px-2 py-1 rounded-full bg-secondary text-muted-foreground">
+              {prompt.subcategory && (
+                <span className="text-xs px-2 py-1 rounded-full bg-secondary text-secondary-foreground">
+                  {prompt.subcategory}
+                </span>
+              )}
+              <span className="text-xs px-2 py-1 rounded-full bg-secondary/50 text-muted-foreground">
                 v{prompt.version || 1}
               </span>
               {prompt.success_score > 0 && (
@@ -173,6 +153,12 @@ export default function PromptDetailModal({ prompt: initialPrompt, onClose, onCo
                   <p className="text-sm text-foreground">{prompt.use_case}</p>
                 </div>
               )}
+
+              {/* AI Category Suggester */}
+              <AICategorySuggester
+                prompt={prompt}
+                onApply={(updates) => setPrompt(prev => ({ ...prev, ...updates }))}
+              />
 
               {/* Prompt Text — Editable */}
               <div className="space-y-2">

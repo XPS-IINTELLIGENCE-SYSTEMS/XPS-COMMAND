@@ -46,6 +46,7 @@ import SentimentAnalystView from "../components/sentiment/SentimentAnalystView";
 import DataQualityBar from "../components/commandhub/DataQualityBar";
 import SandboxSystem from "../components/sandbox/SandboxSystem";
 import SystemGuardian from "../components/guardian/SystemGuardian";
+import AuditReportViewer from "../components/audit/AuditReportViewer";
 
 // ── Section wrapper component ──────────────────────────────────────────────
 function DashSection({ id, icon: SectionIcon, title, badge, color = "#d4af37", children, defaultOpen = true, actions }) {
@@ -135,7 +136,7 @@ function MasterDashboardContent() {
     bidding: useRef(null), takeoff: useRef(null), competitor: useRef(null), compliance: useRef(null),
     approvals: useRef(null), outreach: useRef(null), followup: useRef(null), branding: useRef(null),
     scheduler: useRef(null), google: useRef(null), analytics: useRef(null), enhance: useRef(null),
-    configurator: useRef(null), sandbox: useRef(null),
+    configurator: useRef(null), sandbox: useRef(null), audit: useRef(null),
   };
 
   const scrollTo = (key) => {
@@ -211,6 +212,7 @@ Recommend:
     { key: "enhance", label: "AI Enhance", icon: Brain, color: "#10b981" },
     { key: "configurator", label: "Configurator", icon: Settings, color: "#94a3b8" },
     { key: "sandbox", label: "⚡ Sandbox", icon: Activity, color: "#a855f7" },
+    { key: "audit", label: "System Audit", icon: Shield, color: "#f97316" },
   ];
 
   return (
@@ -488,6 +490,12 @@ Recommend:
         <div ref={sectionRefs.configurator}>
           <DashSection id="configurator" icon={Settings} title="Dashboard Configurator" badge="AI generates configs" color="#94a3b8" defaultOpen={false}>
             <AutoDashboardConfigurator />
+          </DashSection>
+        </div>
+
+        <div ref={sectionRefs.audit}>
+          <DashSection id="audit" icon={Shield} title="System Forensic Audit" badge="Code quality • Refactor roadmap" color="#f97316" defaultOpen={false}>
+            <AuditReportViewer />
           </DashSection>
         </div>
 

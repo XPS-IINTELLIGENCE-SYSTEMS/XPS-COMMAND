@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Upload, X, Image, Loader2, Sparkles, User } from "lucide-react";
+import { Upload, X, Loader2, Sparkles, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { base44 } from "@/api/base44Client";
@@ -17,8 +17,12 @@ export default function PhotoUploader({ onAvatarCreated }) {
     const newPhotos = [];
     for (const file of Array.from(files)) {
       if (!file.type.startsWith("image/")) continue;
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
-      newPhotos.push({ url: file_url, name: file.name, preview: URL.createObjectURL(file) });
+      const dataUrl = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target.result);
+        reader.readAsDataURL(file);
+      });
+      newPhotos.push({ url: dataUrl, name: file.name, preview: URL.createObjectURL(file) });
     }
     setPhotos(prev => [...prev, ...newPhotos]);
     setUploading(false);

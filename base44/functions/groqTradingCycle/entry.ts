@@ -1,19 +1,36 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
+import Anthropic from 'npm:@anthropic-ai/sdk@0.24.0';
 import Groq from 'npm:groq-sdk@0.4.0';
+
+const anthropic = new Anthropic({
+  apiKey: Deno.env.get('ANTHROPIC_API_KEY'),
+});
 
 const groq = new Groq({
   apiKey: Deno.env.get('GROQ_API_KEY'),
 });
 
-// Mock market data (no expensive API calls)
-const getMockMarketData = () => ({
-  AAPL: 150 + Math.random() * 20,
-  TSLA: 220 + Math.random() * 30,
-  MSFT: 310 + Math.random() * 40,
-  GOOGL: 140 + Math.random() * 25,
-  NVDA: 520 + Math.random() * 80,
-  META: 300 + Math.random() * 35,
-});
+// Fetch real market data via Anthropic browser
+const fetchRealMarketData = async () => {
+  try {
+    const response = await anthropic.beta.messages.create({
+      model: 'claude-opus-4-1-20250805',
+      max_tokens: 1000,
+      messages: [{
+        role: 'user',
+        content: 'Search web for current stock prices: AAPL, TSLA, MSFT, GOOGL, NVDA, META. Return ONLY a JSON object with ticker: price pairs. Example: {"AAPL": 150.25, "TSLA": 220.50}',
+      }],
+      betas: ['interleaved-thinking-2025-05-14'],
+    });
+
+    const content = response.content.find(c => c.type === 'text')?.text || '{}';
+    const jsonMatch = content.match(/\{[\s\S]*\}/);
+    return jsonMatch ? JSON.parse(jsonMatch[0]) : {};
+  } catch (e) {
+    console.error('Market data fetch error:', e.message);
+    return {};
+  }
+};
 
 Deno.serve(async (req) => {
   const base44 = createClientFromRequest(req);
@@ -31,26 +48,29 @@ Deno.serve(async (req) => {
     const portfolio = portfolios[0];
     const cycleId = `cycle_${Date.now()}`;
 
-    // Use mock market data (no external API calls)
-    const liveMarketPrices = getMockMarketData();
+    // Fetch real market data via Anthropic browser
+    const liveMarketPrices = await fetchRealMarketData();
     
+    if (!Object.keys(liveMarketPrices).length) {
+      return Response.json({ error: 'Failed to fetch market data' }, { status: 500 });
+    }
+
     const priceContext = Object.entries(liveMarketPrices)
       .map(([ticker, price]) => `${ticker}: $${price.toFixed(2)}`)
       .join(', ');
 
-    // Single Groq call for trading decision (no external integrations)
+    // Groq for trading decision based on real market data
     const msg = await groq.chat.completions.create({
       messages: [{
         role: 'user',
-        content: `Market snapshot: ${priceContext}
+        content: `Real market data: ${priceContext}
 
-Portfolio balance: $${portfolio.current_balance.toFixed(2)}
-Current holdings: ${portfolio.holdings ? JSON.stringify(portfolio.holdings) : 'Cash only'}
+Portfolio: $${portfolio.current_balance.toFixed(2)}
 
-Generate 3 stock trades. Format EXACTLY as:
-[TRADE] TICKER: AAPL | ACTION: BUY | PRICE: ${liveMarketPrices.AAPL.toFixed(2)} | SHARES: 10 | CONFIDENCE: 85
-[TRADE] TICKER: TSLA | ACTION: SELL | PRICE: ${liveMarketPrices.TSLA.toFixed(2)} | SHARES: 5 | CONFIDENCE: 70
-[REFLECTION] Why you picked these trades.`,
+Generate 3 trades. Format:
+[TRADE] TICKER: AAPL | ACTION: BUY | PRICE: ${liveMarketPrices.AAPL?.toFixed(2) || '150'} | SHARES: 10 | CONFIDENCE: 85
+[TRADE] TICKER: TSLA | ACTION: SELL | PRICE: ${liveMarketPrices.TSLA?.toFixed(2) || '220'} | SHARES: 5 | CONFIDENCE: 70
+[REFLECTION] Why chosen.`,
       }],
       model: 'mixtral-8x7b-32768',
       max_tokens: 600,

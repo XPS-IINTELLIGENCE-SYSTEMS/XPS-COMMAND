@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { Crown, Play, Loader2, Brain, TrendingUp, Mail, Database, CheckCircle2, AlertTriangle, Zap, RefreshCcw, Users } from "lucide-react";
+import { Crown, Play, Loader2, Brain, TrendingUp, Mail, Database, CheckCircle2, AlertTriangle, Zap, RefreshCcw, Users, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CompileResultsPanel from "./CompileResultsPanel";
+import GroqAgentChat from "../chat/GroqAgentChat";
 
 const ACTIONS = [
   { id: "compile", label: "Compile & Dedup", icon: Database, desc: "Merge all 9 data sources, remove duplicates", color: "#d4af37", fn: "compileCallQueue" },
@@ -41,6 +43,18 @@ export default function OrchestratorPanel({ lastLog, onRefresh, onCompileComplet
 
   return (
     <div className="space-y-3">
+      {/* Tabs for Control vs Chat */}
+      <Tabs defaultValue="control" className="w-full">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="control" className="gap-2">
+            <Crown className="w-3 h-3" /> Control
+          </TabsTrigger>
+          <TabsTrigger value="chat" className="gap-2">
+            <MessageCircle className="w-3 h-3" /> Groq Agent
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="control" className="space-y-3">
       {/* Action Buttons Grid */}
       <div className="glass-card rounded-xl p-4 space-y-3">
         <div className="flex items-center justify-between">
@@ -110,6 +124,12 @@ export default function OrchestratorPanel({ lastLog, onRefresh, onCompileComplet
           Last orchestrator run: {new Date(lastLog.created_date).toLocaleString()} — {lastLog.status}
         </div>
       )}
+        </TabsContent>
+
+        <TabsContent value="chat" className="h-96">
+          <GroqAgentChat />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

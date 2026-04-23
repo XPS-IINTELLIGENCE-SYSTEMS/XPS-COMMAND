@@ -24,6 +24,7 @@ import PerformanceAttributionView from "./PerformanceAttributionView.jsx";
 import AutoRebalanceMonitorView from "./AutoRebalanceMonitorView.jsx";
 import AISentimentDashboard from "./AISentimentDashboard.jsx";
 import PerformanceDashboard from "./PerformanceDashboard.jsx";
+import PortfolioQueryInterface from "./PortfolioQueryInterface.jsx";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -158,8 +159,9 @@ export default function FinancialSandboxView() {
 
       {/* Tabbed View */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-11 text-xs overflow-x-auto">
+        <TabsList className="grid w-full grid-cols-12 text-xs overflow-x-auto">
           <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
+          <TabsTrigger value="query">Ask AI</TabsTrigger>
           <TabsTrigger value="overview">Portfolio</TabsTrigger>
           <TabsTrigger value="allocation">Rebalance</TabsTrigger>
           <TabsTrigger value="harvest">Tax Loss</TabsTrigger>
@@ -173,6 +175,10 @@ export default function FinancialSandboxView() {
 
         <TabsContent value="dashboard">
           <PerformanceDashboard />
+        </TabsContent>
+
+        <TabsContent value="query" className="space-y-4">
+          <PortfolioQueryInterface />
         </TabsContent>
 
         <TabsContent value="overview" className="space-y-4">

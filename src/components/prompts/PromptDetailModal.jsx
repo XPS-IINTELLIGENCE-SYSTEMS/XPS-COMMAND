@@ -5,6 +5,7 @@ import { base44 } from "@/api/base44Client";
 import PromptVersionHistory from "./PromptVersionHistory";
 import PromptFeedback from "./PromptFeedback";
 import AICategorySuggester from "./AICategorySuggester";
+import PromptRefactoringTool from "./PromptRefactoringTool";
 import { CATEGORY_TREE } from "./categoryConfig";
 
 // Use CATEGORY_TREE from config
@@ -83,6 +84,7 @@ export default function PromptDetailModal({ prompt: initialPrompt, onClose, onCo
 
   const tabs = [
     { id: "prompt", label: "Prompt" },
+    { id: "refactor", label: "✦ Refactor" },
     { id: "history", label: `History${(prompt.version || 1) > 1 ? ` (v${prompt.version})` : ''}` },
     { id: "feedback", label: `Feedback${prompt.feedback_count > 0 ? ` (${prompt.feedback_count})` : ''}` },
   ];
@@ -247,6 +249,18 @@ export default function PromptDetailModal({ prompt: initialPrompt, onClose, onCo
                 </div>
               </div>
             </>
+          )}
+
+          {activeTab === "refactor" && (
+            <PromptRefactoringTool
+              prompt={prompt}
+              onApplyRefactor={(newText, changeNote) => {
+                setEditText(newText);
+                setChangeNote(changeNote);
+                setActiveTab("prompt");
+                setEditing(true);
+              }}
+            />
           )}
 
           {activeTab === "history" && (

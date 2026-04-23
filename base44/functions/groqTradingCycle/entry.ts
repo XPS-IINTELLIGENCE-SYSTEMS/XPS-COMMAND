@@ -5,6 +5,16 @@ const groq = new Groq({
   apiKey: Deno.env.get('GROQ_API_KEY'),
 });
 
+// Mock market data (no expensive API calls)
+const getMockMarketData = () => ({
+  AAPL: 150 + Math.random() * 20,
+  TSLA: 220 + Math.random() * 30,
+  MSFT: 310 + Math.random() * 40,
+  GOOGL: 140 + Math.random() * 25,
+  NVDA: 520 + Math.random() * 80,
+  META: 300 + Math.random() * 35,
+});
+
 Deno.serve(async (req) => {
   const base44 = createClientFromRequest(req);
   const user = await base44.auth.me();
@@ -21,43 +31,29 @@ Deno.serve(async (req) => {
     const portfolio = portfolios[0];
     const cycleId = `cycle_${Date.now()}`;
 
-    // Fetch live market prices
-    const marketDataRes = await base44.asServiceRole.functions.invoke('marketDataFetcher', {
-      tickers: ['AAPL', 'TSLA', 'MSFT', 'GOOGL', 'NVDA', 'META'],
-    }).catch(() => ({ prices: {} }));
-    const liveMarketPrices = marketDataRes?.prices || {};
-
-    // Fetch news sentiment analysis
-    const sentimentRes = await base44.asServiceRole.functions.invoke('newsSentimentAnalysis', {
-      tickers: Object.keys(liveMarketPrices),
-    }).catch(() => ({ sentiment: {} }));
-    const newsSentiment = sentimentRes?.sentiment || {};
-
-    // Format live prices and sentiment for Groq context
+    // Use mock market data (no external API calls)
+    const liveMarketPrices = getMockMarketData();
+    
     const priceContext = Object.entries(liveMarketPrices)
       .map(([ticker, price]) => `${ticker}: $${price.toFixed(2)}`)
       .join(', ');
 
-    const sentimentContext = Object.entries(newsSentiment)
-      .map(([ticker, data]) => `${ticker}: ${data.sentiment} (${data.score}) - "${data.headline}"`)
-      .join('\n');
-
-    // Call Groq for trading decision with LIVE PRICES + NEWS SENTIMENT
+    // Single Groq call for trading decision (no external integrations)
     const msg = await groq.chat.completions.create({
       messages: [{
         role: 'user',
-        content: `LIVE MARKET PRICES: ${priceContext}
+        content: `Market snapshot: ${priceContext}
 
-NEWS SENTIMENT ANALYSIS:
-${sentimentContext}
+Portfolio balance: $${portfolio.current_balance.toFixed(2)}
+Current holdings: ${portfolio.holdings ? JSON.stringify(portfolio.holdings) : 'Cash only'}
 
-Generate 3 stock trades RIGHT NOW. Consider both price action and news sentiment. Format EXACTLY as:
-[TRADE] TICKER: AAPL | ACTION: BUY | PRICE: ${liveMarketPrices.AAPL || 150} | SHARES: 10 | CONFIDENCE: 85
-[TRADE] TICKER: TSLA | ACTION: SELL | PRICE: ${liveMarketPrices.TSLA || 220} | SHARES: 5 | CONFIDENCE: 70
-[REFLECTION] Picked trades based on price action and sentiment signals.`,
+Generate 3 stock trades. Format EXACTLY as:
+[TRADE] TICKER: AAPL | ACTION: BUY | PRICE: ${liveMarketPrices.AAPL.toFixed(2)} | SHARES: 10 | CONFIDENCE: 85
+[TRADE] TICKER: TSLA | ACTION: SELL | PRICE: ${liveMarketPrices.TSLA.toFixed(2)} | SHARES: 5 | CONFIDENCE: 70
+[REFLECTION] Why you picked these trades.`,
       }],
       model: 'mixtral-8x7b-32768',
-      max_tokens: 800,
+      max_tokens: 600,
       temperature: 0.5,
     });
 
@@ -68,21 +64,15 @@ Generate 3 stock trades RIGHT NOW. Consider both price action and news sentiment
     for (const match of tradeMatches) {
       const ticker = match.match(/TICKER:\s*(\w+)/)?.[1] || '';
       const action = match.match(/ACTION:\s*(BUY|SELL)/)?.[1] || 'BUY';
-      let price = parseFloat(match.match(/PRICE:\s*([\d.]+)/)?.[1] || '100');
+      const price = parseFloat(match.match(/PRICE:\s*([\d.]+)/)?.[1]) || liveMarketPrices[ticker] || 100;
       const shares = parseFloat(match.match(/SHARES:\s*([\d.]+)/)?.[1] || '1');
       const confidence = parseInt(match.match(/CONFIDENCE:\s*(\d+)/)?.[1] || '50');
 
-      // Use LIVE price if available, otherwise use parsed price
-      if (liveMarketPrices[ticker]) {
-        price = liveMarketPrices[ticker];
-      }
-
       if (ticker && price > 0) {
-        // More realistic P&L based on market volatility
+        // Realistic P&L simulation
         const volatilityFactor = (Math.random() - 0.5) * 0.04; // -2% to +2%
-        const pnl = (shares * price * volatilityFactor);
-        const pnlPct = (volatilityFactor * 100);
-        const win = pnl > 0;
+        const pnl = shares * price * volatilityFactor;
+        const pnlPct = volatilityFactor * 100;
         trades.push({
           ticker,
           action,
@@ -91,8 +81,7 @@ Generate 3 stock trades RIGHT NOW. Consider both price action and news sentiment
           confidence,
           pnl,
           pnl_pct: pnlPct,
-          win,
-          livePrice: true,
+          win: pnl > 0,
         });
       }
     }

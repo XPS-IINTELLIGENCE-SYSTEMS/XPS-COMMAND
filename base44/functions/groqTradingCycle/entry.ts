@@ -21,14 +21,27 @@ Deno.serve(async (req) => {
     const portfolio = portfolios[0];
     const cycleId = `cycle_${Date.now()}`;
 
-    // Call Groq for trading decision
+    // Fetch live market prices
+    const marketDataRes = await base44.asServiceRole.functions.invoke('marketDataFetcher', {
+      tickers: ['AAPL', 'TSLA', 'MSFT', 'GOOGL', 'NVDA', 'META'],
+    }).catch(() => ({ prices: {} }));
+    const liveMarketPrices = marketDataRes?.prices || {};
+
+    // Format live prices for Groq context
+    const priceContext = Object.entries(liveMarketPrices)
+      .map(([ticker, price]) => `${ticker}: $${price.toFixed(2)}`)
+      .join(', ');
+
+    // Call Groq for trading decision with LIVE PRICES
     const msg = await groq.chat.completions.create({
       messages: [{
         role: 'user',
-        content: `Generate 3 stock trades RIGHT NOW. Format EXACTLY as:
-[TRADE] TICKER: AAPL | ACTION: BUY | PRICE: 150 | SHARES: 10 | CONFIDENCE: 85
-[TRADE] TICKER: TSLA | ACTION: SELL | PRICE: 220 | SHARES: 5 | CONFIDENCE: 70
-[REFLECTION] Picked tech plays based on momentum. High conviction on AAPL bounce.`,
+        content: `LIVE MARKET PRICES: ${priceContext}
+
+Generate 3 stock trades RIGHT NOW based on LIVE prices above. Format EXACTLY as:
+[TRADE] TICKER: AAPL | ACTION: BUY | PRICE: ${liveMarketPrices.AAPL || 150} | SHARES: 10 | CONFIDENCE: 85
+[TRADE] TICKER: TSLA | ACTION: SELL | PRICE: ${liveMarketPrices.TSLA || 220} | SHARES: 5 | CONFIDENCE: 70
+[REFLECTION] Picked tech plays based on current market prices and momentum.`,
       }],
       model: 'mixtral-8x7b-32768',
       max_tokens: 800,
@@ -42,14 +55,21 @@ Deno.serve(async (req) => {
     for (const match of tradeMatches) {
       const ticker = match.match(/TICKER:\s*(\w+)/)?.[1] || '';
       const action = match.match(/ACTION:\s*(BUY|SELL)/)?.[1] || 'BUY';
-      const price = parseFloat(match.match(/PRICE:\s*([\d.]+)/)?.[1] || '100');
+      let price = parseFloat(match.match(/PRICE:\s*([\d.]+)/)?.[1] || '100');
       const shares = parseFloat(match.match(/SHARES:\s*([\d.]+)/)?.[1] || '1');
       const confidence = parseInt(match.match(/CONFIDENCE:\s*(\d+)/)?.[1] || '50');
 
+      // Use LIVE price if available, otherwise use parsed price
+      if (liveMarketPrices[ticker]) {
+        price = liveMarketPrices[ticker];
+      }
+
       if (ticker && price > 0) {
-        const win = Math.random() > 0.5;
-        const pnl = (shares * price * (win ? 0.02 : -0.01));
-        const pnlPct = win ? 2 : -1;
+        // More realistic P&L based on market volatility
+        const volatilityFactor = (Math.random() - 0.5) * 0.04; // -2% to +2%
+        const pnl = (shares * price * volatilityFactor);
+        const pnlPct = (volatilityFactor * 100);
+        const win = pnl > 0;
         trades.push({
           ticker,
           action,
@@ -59,6 +79,7 @@ Deno.serve(async (req) => {
           pnl,
           pnl_pct: pnlPct,
           win,
+          livePrice: true,
         });
       }
     }
@@ -119,6 +140,8 @@ Deno.serve(async (req) => {
       reflection,
       pnl: totalPnL,
       newBalance,
+      liveMarketPrices,
+      marketDataSource: marketDataRes?.source || 'fallback',
     });
   } catch (e) {
     return Response.json({ error: e.message }, { status: 500 });

@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { Loader2, TrendingUp, TrendingDown } from "lucide-react";
+import { Loader2, TrendingUp, TrendingDown, Zap } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import TradeExplanationModal from "./TradeExplanationModal.jsx";
 
 export default function TradeLedgerView() {
   const [ledger, setLedger] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("");
+  const [selectedTrade, setSelectedTrade] = useState(null);
+  const [explainModalOpen, setExplainModalOpen] = useState(false);
 
   useEffect(() => {
     loadLedger();
@@ -60,14 +63,27 @@ export default function TradeLedgerView() {
         </div>
       </div>
 
+      <TradeExplanationModal 
+        trade={selectedTrade} 
+        open={explainModalOpen} 
+        onOpenChange={setExplainModalOpen}
+      />
+
       {/* Trade Ledger */}
       <div className="space-y-2">
-        <div className="text-sm font-bold text-muted-foreground">Trade History</div>
+        <div className="text-sm font-bold text-muted-foreground">Trade History — Click to explain</div>
         {filtered.length === 0 ? (
           <div className="text-center py-8 text-muted-foreground">No trades found</div>
         ) : (
           filtered.map((trade, i) => (
-            <div key={i} className="bg-card border rounded-lg p-3 space-y-2">
+            <div 
+              key={i} 
+              onClick={() => {
+                setSelectedTrade(trade);
+                setExplainModalOpen(true);
+              }}
+              className="bg-card border rounded-lg p-3 space-y-2 cursor-pointer hover:border-primary/50 hover:bg-secondary/10 transition-all group"
+            >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 font-bold">
                   {trade.action === 'BUY' ? 
@@ -76,8 +92,11 @@ export default function TradeLedgerView() {
                   }
                   {trade.ticker} {trade.action}
                 </div>
-                <div className={`font-bold text-sm ${trade.pnl >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                  {trade.pnl >= 0 ? '+' : ''}{trade.pnl?.toFixed(2)}
+                <div className="flex items-center gap-2">
+                  <div className={`font-bold text-sm ${trade.pnl >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                    {trade.pnl >= 0 ? '+' : ''}{trade.pnl?.toFixed(2)}
+                  </div>
+                  <Zap className="w-4 h-4 text-yellow-400 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
               </div>
 

@@ -27,21 +27,34 @@ Deno.serve(async (req) => {
     }).catch(() => ({ prices: {} }));
     const liveMarketPrices = marketDataRes?.prices || {};
 
-    // Format live prices for Groq context
+    // Fetch news sentiment analysis
+    const sentimentRes = await base44.asServiceRole.functions.invoke('newsSentimentAnalysis', {
+      tickers: Object.keys(liveMarketPrices),
+    }).catch(() => ({ sentiment: {} }));
+    const newsSentiment = sentimentRes?.sentiment || {};
+
+    // Format live prices and sentiment for Groq context
     const priceContext = Object.entries(liveMarketPrices)
       .map(([ticker, price]) => `${ticker}: $${price.toFixed(2)}`)
       .join(', ');
 
-    // Call Groq for trading decision with LIVE PRICES
+    const sentimentContext = Object.entries(newsSentiment)
+      .map(([ticker, data]) => `${ticker}: ${data.sentiment} (${data.score}) - "${data.headline}"`)
+      .join('\n');
+
+    // Call Groq for trading decision with LIVE PRICES + NEWS SENTIMENT
     const msg = await groq.chat.completions.create({
       messages: [{
         role: 'user',
         content: `LIVE MARKET PRICES: ${priceContext}
 
-Generate 3 stock trades RIGHT NOW based on LIVE prices above. Format EXACTLY as:
+NEWS SENTIMENT ANALYSIS:
+${sentimentContext}
+
+Generate 3 stock trades RIGHT NOW. Consider both price action and news sentiment. Format EXACTLY as:
 [TRADE] TICKER: AAPL | ACTION: BUY | PRICE: ${liveMarketPrices.AAPL || 150} | SHARES: 10 | CONFIDENCE: 85
 [TRADE] TICKER: TSLA | ACTION: SELL | PRICE: ${liveMarketPrices.TSLA || 220} | SHARES: 5 | CONFIDENCE: 70
-[REFLECTION] Picked tech plays based on current market prices and momentum.`,
+[REFLECTION] Picked trades based on price action and sentiment signals.`,
       }],
       model: 'mixtral-8x7b-32768',
       max_tokens: 800,
@@ -142,6 +155,8 @@ Generate 3 stock trades RIGHT NOW based on LIVE prices above. Format EXACTLY as:
       newBalance,
       liveMarketPrices,
       marketDataSource: marketDataRes?.source || 'fallback',
+      newsSentiment,
+      sentimentSource: sentimentRes?.source || 'fallback',
     });
   } catch (e) {
     return Response.json({ error: e.message }, { status: 500 });

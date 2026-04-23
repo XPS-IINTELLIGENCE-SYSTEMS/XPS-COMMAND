@@ -2,6 +2,7 @@ import { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Play, Loader2, TrendingUp, TrendingDown, RefreshCw } from "lucide-react";
+import NewsSentimentPanel from "./NewsSentimentPanel.jsx";
 
 export default function LiveTradingSimulator() {
   const [trades, setTrades] = useState([]);
@@ -10,6 +11,7 @@ export default function LiveTradingSimulator() {
   const [pnl, setPnl] = useState(0);
   const [liveMarketPrices, setLiveMarketPrices] = useState({});
   const [marketSource, setMarketSource] = useState("");
+  const [newsSentiment, setNewsSentiment] = useState({});
 
   const runTrade = async () => {
     setLoading(true);
@@ -21,6 +23,7 @@ export default function LiveTradingSimulator() {
         setPnl(res.data.pnl);
         setLiveMarketPrices(res.data.liveMarketPrices || {});
         setMarketSource(res.data.marketDataSource || '');
+        setNewsSentiment(res.data.newsSentiment || {});
       }
     } catch (e) {
       console.error(e);
@@ -44,15 +47,20 @@ export default function LiveTradingSimulator() {
       )}
 
       {Object.keys(liveMarketPrices).length > 0 && (
-        <div className="bg-secondary/20 border rounded-lg p-3">
-          <div className="text-xs font-bold text-muted-foreground mb-2">Live Market Prices</div>
-          <div className="grid grid-cols-3 gap-2 text-xs">
-            {Object.entries(liveMarketPrices).map(([ticker, price]) => (
-              <div key={ticker} className="bg-background rounded px-2 py-1">
-                <div className="font-bold text-foreground">{ticker}</div>
-                <div className="text-primary">${price.toFixed(2)}</div>
-              </div>
-            ))}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+          <div className="bg-secondary/20 border rounded-lg p-3">
+            <div className="text-xs font-bold text-muted-foreground mb-2">Live Market Prices</div>
+            <div className="grid grid-cols-3 gap-2 text-xs">
+              {Object.entries(liveMarketPrices).map(([ticker, price]) => (
+                <div key={ticker} className="bg-background rounded px-2 py-1">
+                  <div className="font-bold text-foreground">{ticker}</div>
+                  <div className="text-primary">${price.toFixed(2)}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="bg-secondary/20 border rounded-lg p-3">
+            <NewsSentimentPanel sentiment={newsSentiment} />
           </div>
         </div>
       )}

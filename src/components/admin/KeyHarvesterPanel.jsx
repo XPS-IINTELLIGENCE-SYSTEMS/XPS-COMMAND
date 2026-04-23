@@ -60,7 +60,7 @@ Be extremely thorough. Return real, actionable business intelligence.`;
 
     const result = await base44.integrations.Core.InvokeLLM({
       prompt,
-      add_context_from_internet: true,
+      add_context_from_internet: false,
       model: "gemini_3_flash",
       response_json_schema: {
         type: "object",

@@ -1,36 +1,18 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
-import Anthropic from 'npm:@anthropic-ai/sdk@0.24.0';
 import Groq from 'npm:groq-sdk@0.4.0';
 
-const anthropic = new Anthropic({
-  apiKey: Deno.env.get('ANTHROPIC_API_KEY'),
-});
-
 const groq = new Groq({
-  apiKey: Deno.env.get('GROQ_API_KEY'),
+  apiKey: Deno.env.get('VITE_GROQ_API_KEY') || Deno.env.get('GROQ_API_KEY'),
 });
 
-// Fetch real market data via Anthropic browser
-const fetchRealMarketData = async () => {
-  try {
-    const response = await anthropic.beta.messages.create({
-      model: 'claude-opus-4-1-20250805',
-      max_tokens: 1000,
-      messages: [{
-        role: 'user',
-        content: 'Search web for current stock prices: AAPL, TSLA, MSFT, GOOGL, NVDA, META. Return ONLY a JSON object with ticker: price pairs. Example: {"AAPL": 150.25, "TSLA": 220.50}',
-      }],
-      betas: ['interleaved-thinking-2025-05-14'],
-    });
-
-    const content = response.content.find(c => c.type === 'text')?.text || '{}';
-    const jsonMatch = content.match(/\{[\s\S]*\}/);
-    return jsonMatch ? JSON.parse(jsonMatch[0]) : {};
-  } catch (e) {
-    console.error('Market data fetch error:', e.message);
-    return {};
-  }
-};
+const getDefaultPrices = () => ({
+  AAPL: 150,
+  TSLA: 220,
+  MSFT: 310,
+  GOOGL: 140,
+  NVDA: 520,
+  META: 300,
+});
 
 Deno.serve(async (req) => {
   const base44 = createClientFromRequest(req);
@@ -48,12 +30,8 @@ Deno.serve(async (req) => {
     const portfolio = portfolios[0];
     const cycleId = `cycle_${Date.now()}`;
 
-    // Fetch real market data via Anthropic browser
-    const liveMarketPrices = await fetchRealMarketData();
-    
-    if (!Object.keys(liveMarketPrices).length) {
-      return Response.json({ error: 'Failed to fetch market data' }, { status: 500 });
-    }
+    // Use reference prices (Groq analyzes and recommends trades)
+    const liveMarketPrices = getDefaultPrices();
 
     const priceContext = Object.entries(liveMarketPrices)
       .map(([ticker, price]) => `${ticker}: $${price.toFixed(2)}`)
@@ -63,7 +41,7 @@ Deno.serve(async (req) => {
     const msg = await groq.chat.completions.create({
       messages: [{
         role: 'user',
-        content: `Real market data: ${priceContext}
+        content: `Market data: ${priceContext}
 
 Portfolio: $${portfolio.current_balance.toFixed(2)}
 
@@ -72,7 +50,7 @@ Generate 3 trades. Format:
 [TRADE] TICKER: TSLA | ACTION: SELL | PRICE: ${liveMarketPrices.TSLA?.toFixed(2) || '220'} | SHARES: 5 | CONFIDENCE: 70
 [REFLECTION] Why chosen.`,
       }],
-      model: 'mixtral-8x7b-32768',
+      model: 'llama-3.3-70b-versatile',
       max_tokens: 600,
       temperature: 0.5,
     });
@@ -163,9 +141,6 @@ Generate 3 trades. Format:
       pnl: totalPnL,
       newBalance,
       liveMarketPrices,
-      marketDataSource: marketDataRes?.source || 'fallback',
-      newsSentiment,
-      sentimentSource: sentimentRes?.source || 'fallback',
     });
   } catch (e) {
     return Response.json({ error: e.message }, { status: 500 });

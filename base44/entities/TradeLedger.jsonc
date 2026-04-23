@@ -1,0 +1,91 @@
+{
+  "name": "TradeLedger",
+  "type": "object",
+  "properties": {
+    "portfolio_id": {
+      "type": "string",
+      "description": "Associated FinancialPortfolio ID"
+    },
+    "bucket": {
+      "type": "string",
+      "description": "Portfolio bucket (Growth, Conservative, etc)"
+    },
+    "execution_timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the trade was executed"
+    },
+    "cycle_id": {
+      "type": "string",
+      "description": "Unique ID for this trading cycle"
+    },
+    "ticker": {
+      "type": "string",
+      "description": "Stock symbol"
+    },
+    "action": {
+      "type": "string",
+      "enum": [
+        "BUY",
+        "SELL"
+      ],
+      "description": "Trade direction"
+    },
+    "entry_price": {
+      "type": "number",
+      "description": "Entry price"
+    },
+    "shares": {
+      "type": "number",
+      "description": "Number of shares"
+    },
+    "position_size": {
+      "type": "number",
+      "description": "Total position value"
+    },
+    "confidence": {
+      "type": "number",
+      "description": "0-100 confidence level"
+    },
+    "pnl": {
+      "type": "number",
+      "description": "Profit/loss from this trade"
+    },
+    "pnl_pct": {
+      "type": "number",
+      "description": "Percentage gain/loss"
+    },
+    "win": {
+      "type": "boolean",
+      "description": "Was this trade profitable"
+    },
+    "groq_reflection": {
+      "type": "string",
+      "description": "AI reflection on trades and market context"
+    },
+    "groq_prompt": {
+      "type": "string",
+      "description": "Prompt sent to Groq"
+    },
+    "groq_response": {
+      "type": "string",
+      "description": "Raw Groq response"
+    },
+    "portfolio_state": {
+      "type": "string",
+      "description": "JSON snapshot of portfolio state at execution"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Optional audit notes"
+    }
+  },
+  "required": [
+    "portfolio_id",
+    "ticker",
+    "action",
+    "entry_price",
+    "shares",
+    "execution_timestamp"
+  ]
+}

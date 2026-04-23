@@ -12,6 +12,7 @@ import TradeLog from "./TradeLog.jsx";
 import AIRecommendations from "./AIRecommendations.jsx";
 import AIReflectionLog from "./AIReflectionLog.jsx";
 import SandboxSchedulerStatus from "./SandboxSchedulerStatus.jsx";
+import TradeLedgerView from "./TradeLedgerView.jsx";
 import BacktestResultsView from "./BacktestResultsView.jsx";
 import StressTestView from "./StressTestView.jsx";
 import MarketSentimentDashboard from "./MarketSentimentDashboard.jsx";
@@ -156,7 +157,7 @@ export default function FinancialSandboxView() {
 
       {/* Tabbed View */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-9 text-xs overflow-x-auto">
+        <TabsList className="grid w-full grid-cols-10 text-xs overflow-x-auto">
           <TabsTrigger value="overview">Portfolio</TabsTrigger>
           <TabsTrigger value="allocation">Rebalance</TabsTrigger>
           <TabsTrigger value="harvest">Tax Loss</TabsTrigger>
@@ -165,6 +166,7 @@ export default function FinancialSandboxView() {
           <TabsTrigger value="attribution">Attribution</TabsTrigger>
           <TabsTrigger value="analysis">Analysis</TabsTrigger>
           <TabsTrigger value="logs">Activity</TabsTrigger>
+          <TabsTrigger value="ledger">Ledger</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-4">
@@ -215,6 +217,10 @@ export default function FinancialSandboxView() {
             <TradeLog portfolios={portfolios} selectedBucket={selectedBucket} />
             <AIReflectionLog portfolios={portfolios} intelRecords={intelRecords} selectedBucket={selectedBucket} />
           </div>
+        </TabsContent>
+
+        <TabsContent value="ledger">
+          <TradeLedgerView />
         </TabsContent>
       </Tabs>
     </div>
